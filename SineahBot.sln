@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SineahBot", "SineahBot\SineahBot.csproj", "{3AEAF738-CD79-4375-8193-5494403C8716}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3AEAF738-CD79-4375-8193-5494403C8716}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AEAF738-CD79-4375-8193-5494403C8716}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AEAF738-CD79-4375-8193-5494403C8716}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AEAF738-CD79-4375-8193-5494403C8716}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EA483EEA-FBD6-46A1-AC86-E17BA7B2328F}
+	EndGlobalSection
+EndGlobal
