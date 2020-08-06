@@ -1,4 +1,5 @@
-﻿using SineahBot.Interfaces;
+﻿using SineahBot.Commands;
+using SineahBot.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,15 +7,33 @@ using System.Text;
 
 namespace SineahBot.Data
 {
-    public class Room : IObservable
+    public class Room : DataItem, IObservable
     {
 
+        public bool isSpawnRoom { get; set; }
         public string description { get; set; }
 
-        List<Entity> entities;
-        List<Character> characters;
-        List<Player> players;
-        List<Item> items;
+        public List<Entity> entities = new List<Entity>();
+        public List<Character> characters = new List<Character>();
+        public List<Player> players = new List<Player>();
+        public List<Item> items = new List<Item>();
+
+        private Dictionary<MoveDirection, Room> directions = new Dictionary<MoveDirection, Room>();
+
+        public IEnumerable<MoveDirection> GetDirections()
+        {
+            return directions.Keys;
+        }
+        public void RegisterDirection(MoveDirection direction, Room room)
+        {
+            if (directions.ContainsKey(direction)) throw new Exception($"Direction duplicate for room {this.id}=>{direction}=>{room.id}X{directions[direction].id}");
+            directions[direction] = room;
+        }
+        public Room GetRoomInDirection(MoveDirection direction)
+        {
+            if (!directions.ContainsKey(direction)) throw new Exception($@"Direction {direction} not defined for room {id}");
+            return directions[direction];
+        }
 
         public IEnumerable<IObservable> observables
         {
@@ -56,6 +75,25 @@ namespace SineahBot.Data
         public void OnSearched(IAgent agent)
         {
             throw new NotImplementedException();
+        }
+
+        public void AddToRoom(Entity entity)
+        {
+            if (entity is IAgent)
+            {
+                var agent = entity as IAgent;
+                agent.Message(GetNormalDescription());
+            }
+            entity.currentRoomId = this.id;
+            entities.Add(entity);
+            // trigger stuff on entity entering
+        }
+
+        public void RemoveFromRoom(Entity entity)
+        {
+            entities.Remove(entity);
+            entity.currentRoomId = Guid.Empty;
+            // trigger stuff on entity leaving
         }
     }
 }
