@@ -10,10 +10,10 @@ namespace SineahBot.Data
     {
         public void LoadWorld()
         {
-            var r1 = new Room() { id = Guid.NewGuid(), name = "Spawn room", isSpawnRoom = true, description = "> A very simple, empty room. On the north wall, a door leads out of this room into a corridor." };
+            var r1 = new Room() { id = Guid.NewGuid(), name = "Storage room", isSpawnRoom = true, description = "> A very simple room, cramped with rows of barrels, boxes, and racks. In the north wall, a flight of stairs leads out of the room." };
             var r2 = new Room() { id = Guid.NewGuid(), name = "Corridor", description = "> A tight, poorly lit corridor. It extends north and south, with a door on the eastern wall." };
-            var r3 = new Room() { id = Guid.NewGuid(), name = "Bedroom", description = "> This small room only has a very old bed and a delapidated chest. It is dimly lit by a dirty window. The only door connects back into the corridor." };
-            var r4 = new Room() { id = Guid.NewGuid(), name = "Spicy boy arena", description = "> You don't want to know..." };
+            var r3 = new Room() { id = Guid.NewGuid(), name = "Owners bedroom", description = "> This small room only has a very old bed and a delapidated chest. It is dimly lit by a dirty window. The only door connects back into the corridor." };
+            var r4 = new Room() { id = Guid.NewGuid(), name = "Living room", description = "> Several tables and chairs take most of the space in this room. A fireplace enlight and warm the place up." };
 
             var c1 = new RoomConnection()
             {
@@ -37,8 +37,22 @@ namespace SineahBot.Data
                 directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.South }
             };
 
+            var i1 = new Item()
+            {
+                id = Guid.NewGuid(),
+                name = "Doll",
+                description = "A doll lies around.",
+                details = "A little doll shaped out of rags."
+            };
+
+
             RoomManager.LoadRooms(new Room[] { r1, r2, r3, r4 });
             RoomManager.LoadRoomConnections(new RoomConnection[] { c1, c2, c3 });
+            ItemManager.LoadItems(new Item[] { i1 });
+
+            r3.AddToRoom(i1);
         }
+
+        
     }
 }

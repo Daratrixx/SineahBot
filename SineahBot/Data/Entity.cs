@@ -11,7 +11,7 @@ namespace SineahBot.Data
         public Guid currentRoomId;
         public void OnInteracted(IAgent agent, Interaction interaction)
         {
-            switch (interaction)
+            /*switch (interaction)
             {
                 case Interaction.Look:
                     if (this is IObservable) (this as IObservable).OnObserved(agent);
@@ -42,7 +42,7 @@ namespace SineahBot.Data
                     else agent.Message("Impossible to equip at entity");
                     break;
                 default:break;
-            }
+            }*/
         }
     }
 }

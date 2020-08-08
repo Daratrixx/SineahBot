@@ -20,6 +20,11 @@ namespace SineahBot.Data
 
         private Dictionary<MoveDirection, Room> directions = new Dictionary<MoveDirection, Room>();
 
+        public Entity FindInRoom(string name)
+        {
+            return entities.FirstOrDefault(x => x.name.ToLower() == name.ToLower());
+        }
+
         public IEnumerable<MoveDirection> GetDirections()
         {
             return directions.Keys;
@@ -51,30 +56,27 @@ namespace SineahBot.Data
         {
             get { return entities.Where(x => x is IObserver).Select(x => x as IObserver); }
         }
-
-        public string GetNormalDescription()
+        public IEnumerable<IAgent> agents
         {
-            return description + String.Join(" ", observables.Select(x => x.GetNormalDescription()));
+            get { return entities.Where(x => x is IAgent).Select(x => x as IAgent); }
         }
 
-        public string GetSearchDescription()
+        public string GetShortDescription(IAgent agent = null)
         {
-            throw new NotImplementedException();
+            return description;
         }
 
-        public bool IsHidden(int detectionValue)
+        public string GetFullDescription(IAgent agent = null)
         {
-            return false;
+            return description + String.Concat(observables.Where(x => x != agent).Select(x => " " + x.GetShortDescription(agent)));
         }
 
-        public void OnObserved(IAgent agent)
+        public void DescribeAction(string action, IAgent agent = null)
         {
-            throw new NotImplementedException();
-        }
-
-        public void OnSearched(IAgent agent)
-        {
-            throw new NotImplementedException();
+            foreach (var a in agents.Where(x => x != agent))
+            {
+                a.Message(action);
+            }
         }
 
         public void AddToRoom(Entity entity)
@@ -82,11 +84,11 @@ namespace SineahBot.Data
             if (entity is IAgent)
             {
                 var agent = entity as IAgent;
-                agent.Message(GetNormalDescription());
+                agent.Message(GetFullDescription(agent));
             }
             entity.currentRoomId = this.id;
-            entities.Add(entity);
             // trigger stuff on entity entering
+            entities.Add(entity);
         }
 
         public void RemoveFromRoom(Entity entity)

@@ -6,10 +6,7 @@ namespace SineahBot.Interfaces
 {
     public interface IObservable
     {
-        void OnObserved(IAgent agent);
-        void OnSearched(IAgent agent);
-        string GetNormalDescription();
-        string GetSearchDescription();
-        bool IsHidden(int detectionValue);
+        string GetShortDescription(IAgent agent = null);
+        string GetFullDescription(IAgent agent = null);
     }
 }

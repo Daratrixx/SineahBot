@@ -18,7 +18,7 @@ namespace SineahBot.Commands
 
         public override void Run(IAgent agent, Room room)
         {
-            if (!(agent is Entity)) throw new Exception($@"Impossible to move non-entity agent");
+            if (!(agent is Entity)) throw new Exception($@"Impossible to move as non-entity agent");
             var entity = agent as Entity;
             string directionName = commandMatch.Groups[2].Value.ToLower();
             MoveDirection direction;

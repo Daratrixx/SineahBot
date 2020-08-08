@@ -1,30 +1,26 @@
 ﻿using SineahBot.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace SineahBot.Data
 {
-    public class Character : Entity, IAgent, IAttackable, IAttacker, IKillable, IObservable, IObserver, IDamageable
+    public class Character : Entity, IAgent, IAttackable, IAttacker, IKillable, IObservable, IObserver, IDamageable, IInventory
     {
         public IAgent agent;
         public string description { get; set; }
 
         public CharacterStatus characterStatus { get; set; }
 
-        public string GetNormalDescription()
+        public string GetShortDescription(IAgent agent = null)
         {
-            throw new NotImplementedException();
+            return $"Here is {name}.";
         }
 
-        public string GetSearchDescription()
+        public string GetFullDescription(IAgent agent = null)
         {
-            throw new NotImplementedException();
-        }
-
-        public bool IsHidden(int detectionValue)
-        {
-            throw new NotImplementedException();
+            return $"Here is a longer description of {name}.";
         }
 
         public void Message(string message)
@@ -52,19 +48,25 @@ namespace SineahBot.Data
             throw new NotImplementedException();
         }
 
-        public void OnObserved(IAgent agent)
-        {
-            throw new NotImplementedException();
-        }
-
         public void OnObserving(IObservable observable)
         {
             throw new NotImplementedException();
         }
 
-        public void OnSearched(IAgent agent)
+        private List<Item> inventory = new List<Item>();
+        public void AddToInventory(Item item)
         {
-            throw new NotImplementedException();
+            inventory.Add(item);
+        }
+
+        public Item FindInInventory(string name)
+        {
+            return inventory.FirstOrDefault(x => x.name.ToLower() == name.ToLower());
+        }
+
+        public void RemoveFromInventory(Item item)
+        {
+            inventory.Remove(item);
         }
     }
 

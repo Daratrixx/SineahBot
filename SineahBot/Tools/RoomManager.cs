@@ -41,6 +41,7 @@ namespace SineahBot.Tools
                 catch (Exception e)
                 {
                     // Log error: impossible to register the connection between the two rooms
+                    Logging.Log($"Impossible to register room connection: {e.Message}");
                 }
             }
         }

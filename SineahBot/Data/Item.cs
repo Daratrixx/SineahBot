@@ -5,7 +5,19 @@ using System.Text;
 
 namespace SineahBot.Data
 {
-    public class Item : Entity
+    public class Item : Entity, IObservable
     {
+        public string description { get; set; }
+        public string details { get; set; }
+
+        public string GetFullDescription(IAgent agent = null)
+        {
+            return details;
+        }
+
+        public string GetShortDescription(IAgent agent = null)
+        {
+            return description;
+        }
     }
 }
