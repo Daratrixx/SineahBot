@@ -9,7 +9,8 @@ namespace SineahBot.Data
     public class Character : Entity, IAgent, IAttackable, IAttacker, IKillable, IObservable, IObserver, IDamageable, IInventory
     {
         public IAgent agent;
-        public string description { get; set; }
+        //public string description { get; set; }
+        public int experience { get; set; }
 
         public CharacterStatus characterStatus { get; set; }
 

@@ -20,7 +20,7 @@ namespace SineahBot.Commands
         {
             if (!(agent is IInventory)) throw new Exception($@"Impossible to pick-up items as non-inventory agent");
             //var entity = agent as Entity;
-            var targetName = commandMatch.Groups[2].Value;
+            var targetName = GetArgument(2);
 
             if (String.IsNullOrWhiteSpace(targetName))
             {
@@ -38,6 +38,7 @@ namespace SineahBot.Commands
                     if (agent is Entity)
                         room.DescribeAction($"{(agent as Entity).name} picked up {itemTarget.name}.", agent);
                     inventory.AddToInventory(itemTarget);
+                    if (agent is Character) (agent as Character).experience += 1;
                 }
                 else
                 {

@@ -13,14 +13,14 @@ namespace SineahBot.Commands
 
         public CommandLook()
         {
-            commandRegex = new Regex(@"^(look|l) ?(.+)?$", RegexOptions.IgnoreCase);
+            commandRegex = new Regex(@"^(look|l)( .+)?$", RegexOptions.IgnoreCase);
         }
 
         public override void Run(IAgent agent, Room room)
         {
             if (!(agent is Entity)) throw new Exception($@"Impossible to move non-entity agent");
             //var entity = agent as Entity;
-            var targetName = commandMatch.Groups[2].Value;
+            var targetName = GetArgument(2);
 
             if (String.IsNullOrWhiteSpace(targetName))
             {
@@ -34,6 +34,7 @@ namespace SineahBot.Commands
                 {
                     var observableTarget = target as IObservable;
                     agent.Message(observableTarget.GetFullDescription(agent));
+                    if (agent is Character) (agent as Character).experience += 1;
                 }
                 else
                 {

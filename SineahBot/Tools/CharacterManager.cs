@@ -1,6 +1,7 @@
 ﻿using SineahBot.Data;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -19,6 +20,13 @@ namespace SineahBot.Tools
         }
         public static Character GetCharacter(Guid idCharacter)
         {
+            if (!characters.ContainsKey(idCharacter))
+            {
+                var character = Program.database.Characters.FirstOrDefault(x => x.id == idCharacter);
+                if (character == null) throw new Exception($"Impossible to fine character with id {idCharacter}");
+                characters[idCharacter] = character;
+                return character;
+            }
             return characters[idCharacter];
         }
 
@@ -28,8 +36,10 @@ namespace SineahBot.Tools
             character.id = Guid.NewGuid();
             character.name = player.characterName;
             character.agent = player;
+            player.idCharacter = character.id;
             player.character = character;
             characters[character.id] = character;
+            Program.database.Characters.Add(character);
             return character;
         }
 
@@ -42,7 +52,7 @@ namespace SineahBot.Tools
                     characterStatus = CharacterStatus.Normal,
                     id = Guid.NewGuid(),
                     name = "test character",
-                    description = "You notice the test character."
+                    //description = "You notice the test character."
                 };
             }
         }

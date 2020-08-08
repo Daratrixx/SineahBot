@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using SineahBot.Data;
+using SineahBot.DataContext;
 using SineahBot.Tools;
 using System;
 using System.Threading.Tasks;
@@ -9,7 +10,11 @@ namespace SineahBot
 {
     class Program
     {
+
+        // Scaffold-DbContext "DataSource=../SineahBot.sqlite" Microsoft.EntityFrameworkCore.Sqlite -ContextDir DataContext -OutputDir DataContext -Force
+
         public static readonly bool ONLINE = true;
+        public static readonly SineahBotContext database = new SineahBotContext();
 
         public static void Main(string[] args)
        => new Program().MainAsync().GetAwaiter().GetResult();

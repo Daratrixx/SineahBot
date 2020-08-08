@@ -20,7 +20,7 @@ namespace SineahBot.Commands
         {
             if (!(agent is Entity)) throw new Exception($@"Impossible to move as non-entity agent");
             var entity = agent as Entity;
-            string directionName = commandMatch.Groups[2].Value.ToLower();
+            string directionName = GetArgument(2);
             MoveDirection direction;
             switch (directionName)
             {
@@ -50,6 +50,7 @@ namespace SineahBot.Commands
                     throw new Exception($@"Can't move to unknown direction ""{directionName}""");
             }
             RoomManager.MoveFromRoom(entity, room, direction);
+            if (agent is Character) (agent as Character).experience += 1;
         }
 
 

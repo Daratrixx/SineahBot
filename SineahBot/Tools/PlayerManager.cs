@@ -1,6 +1,7 @@
 ﻿using SineahBot.Data;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace SineahBot.Tools
@@ -12,11 +13,27 @@ namespace SineahBot.Tools
         public static Player GetPlayer(ulong userId)
         {
             if (!players.ContainsKey(userId))
-                players[userId] = new Player()
+            {
+                Player player = Program.database.Players.FirstOrDefault(x => x.userId == userId);
+                if (player == null)
                 {
-                    userId = userId,
-                    playerStatus = PlayerStatus.None,
-                }; // todo: try loading from bdd
+                    player = players[userId] = new Player()
+                    {
+                        userId = userId,
+                        playerStatus = PlayerStatus.None,
+                    }; // todo: try loading from bdd
+                    Program.database.Players.Add(player);
+                }
+                else
+                {
+                    if (player.idCharacter != null)
+                    {
+                        player.character = CharacterManager.GetCharacter(player.idCharacter.Value);
+                        player.character.agent = player;
+                    }
+                }
+                return player;
+            }
             return players[userId];
         }
 
@@ -36,7 +53,7 @@ namespace SineahBot.Tools
                     character = character
                 };
                 character.agent = player;
-                
+
                 return player;
             }
         }

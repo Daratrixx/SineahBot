@@ -10,11 +10,84 @@ namespace SineahBot.Data
     {
         public void LoadWorld()
         {
-            var r1 = new Room() { id = Guid.NewGuid(), name = "Storage room", isSpawnRoom = true, description = "> A very simple room, cramped with rows of barrels, boxes, and racks. In the north wall, a flight of stairs leads out of the room." };
-            var r2 = new Room() { id = Guid.NewGuid(), name = "Corridor", description = "> A tight, poorly lit corridor. It extends north and south, with a door on the eastern wall." };
-            var r3 = new Room() { id = Guid.NewGuid(), name = "Owners bedroom", description = "> This small room only has a very old bed and a delapidated chest. It is dimly lit by a dirty window. The only door connects back into the corridor." };
-            var r4 = new Room() { id = Guid.NewGuid(), name = "Living room", description = "> Several tables and chairs take most of the space in this room. A fireplace enlight and warm the place up." };
+            // The Inn
+            #region ROOMS
+            var r1 = new Room()
+            {
+                id = Guid.NewGuid(),
+                name = "Storage room",
+                description = "A very simple room, cramped with rows of barrels, boxes, and racks. In the north wall, a flight of stairs leads out of the room."
+            };
+            var r2 = new Room()
+            {
+                id = Guid.NewGuid(),
+                name = "Corridor",
+                description = "A tight, poorly lit corridor. It extends north and south, with a door on the eastern wall."
+            };
+            var r3 = new Room()
+            {
+                id = Guid.NewGuid(),
+                name = "Innkeeper's quarters",
+                description = "This small room only has a very old bed and a delapidated chest. It is dimly lit by a dirty window. The only door connects back into the corridor."
+            };
+            var r4 = new Room()
+            {
+                id = Guid.NewGuid(),
+                name = "Common room",
+                isSpawnRoom = true,
+                description = "Several tables and chairs take most of the space in this room. A fireplace enlight and warm the place up."
+            };
+            var r5 = new Room()
+            {
+                id = Guid.NewGuid(),
+                name = "Backroom",
+                description = "TODO"
+            };
+            var r6 = new Room()
+            {
+                id = Guid.NewGuid(),
+                name = "Kitchen",
+                description = "TODO"
+            };
+            var r7 = new Room()
+            {
+                id = Guid.NewGuid(),
+                name = "Stables",
+                description = "TODO"
+            };
+            var r8 = new Room()
+            {
+                id = Guid.NewGuid(),
+                name = "Upstair corridor",
+                description = ""
+            };
+            var r9 = new Room()
+            {
+                id = Guid.NewGuid(),
+                name = "Room 1",
+                description = ""
+            };
+            var r10 = new Room()
+            {
+                id = Guid.NewGuid(),
+                name = "Room 2",
+                description = ""
+            };
+            var r11 = new Room()
+            {
+                id = Guid.NewGuid(),
+                name = "Room 3",
+                description = ""
+            };
+            var r12 = new Room()
+            {
+                id = Guid.NewGuid(),
+                name = "Room 4",
+                description = ""
+            };
+            #endregion
 
+            #region CONNECTIONS
             var c1 = new RoomConnection()
             {
                 idRoomA = r1.id,
@@ -36,6 +109,7 @@ namespace SineahBot.Data
                 directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.North },
                 directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.South }
             };
+            #endregion
 
             var i1 = new Item()
             {
@@ -53,6 +127,6 @@ namespace SineahBot.Data
             r3.AddToRoom(i1);
         }
 
-        
+
     }
 }

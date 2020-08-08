@@ -13,13 +13,15 @@ namespace SineahBot.Tools
     {
         public static void ParseUserMessage(ulong userId, string message, ulong? channelId = null)
         {
-            if(message == "!stop" && userId == 109406259643437056)
+            if (message == "!stop" && userId == 109406259643437056)
             {
                 Program.DiscordClient.StopAsync();
-                System.Environment.Exit(0);
+                Program.database.SaveChanges();
+                Environment.Exit(0);
             }
             var player = PlayerManager.GetPlayer(userId);
             if (channelId.HasValue) player.channelId = channelId.Value;
+            if (ParseMetaCommand(player, message)) return;
             switch (player.playerStatus)
             {
                 case PlayerStatus.InCharacter:
@@ -38,6 +40,14 @@ namespace SineahBot.Tools
                     ParseCharacterCreationMessage(player, message);
                     break;
             }
+        }
+
+        public static bool ParseMetaCommand(IAgent agent, string command)
+        {
+            var metaCommand = MetaCommands.FirstOrDefault(x => x.IsMessageMatchingCommand(command));
+            if (metaCommand == null) return false;
+            metaCommand.Run(agent);
+            return true;
         }
 
         public static void ParseNoCharacterMessage(IAgent agent, string command)
@@ -89,8 +99,9 @@ namespace SineahBot.Tools
             OutCharacterCommands.FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(agent);
         }
 
+        public static List<Command> MetaCommands = new List<Command>() { new CommandHelp() };
         public static List<Command> NoCharacterCommands = new List<Command>() { };
-        public static List<Command> InCharacterCommands = new List<Command>() { new CommandMove(), new CommandLook(), new CommandPickup(), new CommandDrop() };
+        public static List<Command> InCharacterCommands = new List<Command>() { new CommandMove(), new CommandLook(), new CommandPickup(), new CommandDrop(), new CommandDirection() };
         public static List<Command> OutCharacterCommands = new List<Command>() { };
     }
 }

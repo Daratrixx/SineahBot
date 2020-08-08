@@ -9,7 +9,14 @@ namespace SineahBot.Data
 {
     public class Room : DataItem, IObservable
     {
-
+        public Room() {
+            id = Guid.NewGuid();
+        }
+        public Room(string roomName)
+        {
+            id = Guid.NewGuid();
+            name = roomName;
+        }
         public bool isSpawnRoom { get; set; }
         public string description { get; set; }
 
@@ -29,6 +36,7 @@ namespace SineahBot.Data
         {
             return directions.Keys;
         }
+
         public void RegisterDirection(MoveDirection direction, Room room)
         {
             if (directions.ContainsKey(direction)) throw new Exception($"Direction duplicate for room {this.id}=>{direction}=>{room.id}X{directions[direction].id}");
@@ -63,12 +71,12 @@ namespace SineahBot.Data
 
         public string GetShortDescription(IAgent agent = null)
         {
-            return description;
+            return $"> **{name}**\n> *{description}*";
         }
 
         public string GetFullDescription(IAgent agent = null)
         {
-            return description + String.Concat(observables.Where(x => x != agent).Select(x => " " + x.GetShortDescription(agent)));
+            return $"{GetShortDescription(agent)}{String.Concat(observables.Where(x => x != agent).Select(x => " " + x.GetShortDescription(agent)))}";
         }
 
         public void DescribeAction(string action, IAgent agent = null)

@@ -13,14 +13,14 @@ namespace SineahBot.Commands
 
         public CommandDrop()
         {
-            commandRegex = new Regex(@"^(drop|d) ?(.+)$", RegexOptions.IgnoreCase);
+            commandRegex = new Regex(@"^(drop |d )(.+)$", RegexOptions.IgnoreCase);
         }
 
         public override void Run(IAgent agent, Room room)
         {
             if (!(agent is IInventory)) throw new Exception($@"Impossible to drop items as non-inventory agent");
             //var entity = agent as Entity;
-            var targetName = commandMatch.Groups[2].Value;
+            var targetName = GetArgument(2);
 
             if (String.IsNullOrWhiteSpace(targetName))
             {
@@ -39,6 +39,7 @@ namespace SineahBot.Commands
                     if (agent is Entity)
                         room.DescribeAction($"{(agent as Entity).name} dropped {itemTarget.name}.", agent);
                     room.AddToRoom(itemTarget);
+                    if (agent is Character) (agent as Character).experience += 1;
                 }
                 else
                 {
