@@ -9,7 +9,8 @@ namespace SineahBot.Data
 {
     public class Room : DataItem, IObservable
     {
-        public Room() {
+        public Room()
+        {
             id = Guid.NewGuid();
         }
         public Room(string roomName)
@@ -21,15 +22,18 @@ namespace SineahBot.Data
         public string description { get; set; }
 
         public List<Entity> entities = new List<Entity>();
-        public List<Character> characters = new List<Character>();
-        public List<Player> players = new List<Player>();
-        public List<Item> items = new List<Item>();
+        public IEnumerable<Character> characters { get { return entities.Where(x => x is Character).Select(x => x as Character); } }
+        public IEnumerable<Item> items { get { return entities.Where(x => x is Item).Select(x => x as Item); } }
 
-        private Dictionary<MoveDirection, Room> directions = new Dictionary<MoveDirection, Room>();
+        private Dictionary<MoveDirection, RoomConnectionState> directions = new Dictionary<MoveDirection, RoomConnectionState>();
 
         public Entity FindInRoom(string name)
         {
-            return entities.FirstOrDefault(x => x.name.ToLower() == name.ToLower());
+            name = name.ToLower();
+            var output = entities.FirstOrDefault(x => x.name.ToLower() == name);
+            if (output == null)
+                output = items.FirstOrDefault(x => x.alternativeNames.Contains(name));
+            return output;
         }
 
         public IEnumerable<MoveDirection> GetDirections()
@@ -37,12 +41,12 @@ namespace SineahBot.Data
             return directions.Keys;
         }
 
-        public void RegisterDirection(MoveDirection direction, Room room)
+        public void RegisterDirection(MoveDirection direction, RoomConnectionState roomConnection)
         {
-            if (directions.ContainsKey(direction)) throw new Exception($"Direction duplicate for room {this.id}=>{direction}=>{room.id}X{directions[direction].id}");
-            directions[direction] = room;
+            if (directions.ContainsKey(direction)) throw new Exception($"Direction duplicate for room {this.id}=>{direction}=>{roomConnection.toRoom.id}X{directions[direction].toRoom.id}");
+            directions[direction] = roomConnection;
         }
-        public Room GetRoomInDirection(MoveDirection direction)
+        public RoomConnectionState GetRoomConnectionInDirection(MoveDirection direction)
         {
             if (!directions.ContainsKey(direction)) throw new Exception($@"Direction {direction} not defined for room {id}");
             return directions[direction];
@@ -89,6 +93,7 @@ namespace SineahBot.Data
 
         public void AddToRoom(Entity entity)
         {
+            DescribeAction($"{entity.name} has entered the room.", entity as IAgent);
             if (entity is IAgent)
             {
                 var agent = entity as IAgent;
@@ -103,6 +108,8 @@ namespace SineahBot.Data
         {
             entities.Remove(entity);
             entity.currentRoomId = Guid.Empty;
+            if (entity is Character)
+                DescribeAction($"{entity.name} has left the room.", entity as IAgent);
             // trigger stuff on entity leaving
         }
     }

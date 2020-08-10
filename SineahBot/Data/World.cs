@@ -10,121 +10,146 @@ namespace SineahBot.Data
     {
         public void LoadWorld()
         {
+
+            #region ITEMS
             // The Inn
+            var innItems = new Item[] {
+                new Item("Innkeepers office key", new string[] { "key", "office key" }) {
+                    description = "A key is lying around.",
+                    details = "A key giving access to the Four Winds innkeepers office, behind the private meeting room."
+                },
+                new Item("Room #1 key", new string[] { "key", "room key" }) {
+                    description = "A key is lying around.",
+                    details = "A key giving access to the room #1 at the Four Winds inn, on the second floor."
+                },
+                new Item("Room #3 key", new string[] { "key", "room key" }) {
+                    description = "A key is lying around.",
+                    details = "A key giving access to the room #3 at the Four Winds inn, on the second floor."
+                },
+                new Item("Ragoll", new string[] { "doll" }) {
+                    description = "A ragdoll lies around.",
+                    details = "A little doll shaped out of rags."
+                }
+            };
+            #endregion
             #region ROOMS
-            var r1 = new Room()
+            // The Inn
+            var innRooms = new Room[]{
+                new Room("The Four Winds common room")
+                {
+                    isSpawnRoom = true,
+                    description = "Several tables and chairs take most of the space in this large room. Next to the eastern door leading to the back room, a fireplace warms the place. The large western door leads outside, the small northern door leads to the kitchen. On the south wall, a flight of stairs leads to the bedrooms upstairs."
+                },
+                new Room("Kitchen")
+                {
+                    description = "A room steaming with all the cooking taking place here. A large furnace and an imposing chauldron are actively exhaling the smell of food cooking. At the northern end of the room is a flight of stairs leading down to the cellar."
+                },
+                new Room("Cellar")
+                {
+                    description = "A very simple room, cramped with rows of barrels, boxes, and racks. In the north wall, a flight of stairs leads back to the kitchen."
+                },
+                new Room("Meeting room")
+                {
+                    description = "Only one large table occupy the space of this room reserved for private meetings and dinners. Cut from the main room by the eastern door, the northern door leads to the inkeepers office."
+                },
+                new Room("Innkeepers office")
+                {
+                    description = "This small room only has a chair, a desk, a simple but comfortable futon, and a heavy, solid looking, locked chest."
+                },
+                new Room("Second floor landing")
+                {
+                    description = "The start of the corridor has two doors for bedrooms #1 and #2 on the eastern and western wall respectively. A flight of stairs go south back down to the main hall, and the corridor extends north to more rooms."
+                },
+                new Room("Second floor corridor")
+                {
+                    description = "The end section of the corridor has two doors for bedrooms #3 and #4 on the eastern and western wall respectively."
+                },
+                new Room("Bedroom #1")
+                {
+                    description = "A smaller bedroom, granting privacy for up to two people."
+                },
+                new Room("Bedroom #2")
+                {
+                    description = "A larger shared dormitory, that can hold up to 8 people."
+                },
+                new Room("Bedroom #3")
+                {
+                    description = "A smaller bedroom, granting privacy for up to two people."
+                },
+                new Room("Bedroom #4")
             {
-                id = Guid.NewGuid(),
-                name = "Storage room",
-                description = "A very simple room, cramped with rows of barrels, boxes, and racks. In the north wall, a flight of stairs leads out of the room."
-            };
-            var r2 = new Room()
-            {
-                id = Guid.NewGuid(),
-                name = "Corridor",
-                description = "A tight, poorly lit corridor. It extends north and south, with a door on the eastern wall."
-            };
-            var r3 = new Room()
-            {
-                id = Guid.NewGuid(),
-                name = "Innkeeper's quarters",
-                description = "This small room only has a very old bed and a delapidated chest. It is dimly lit by a dirty window. The only door connects back into the corridor."
-            };
-            var r4 = new Room()
-            {
-                id = Guid.NewGuid(),
-                name = "Common room",
-                isSpawnRoom = true,
-                description = "Several tables and chairs take most of the space in this room. A fireplace enlight and warm the place up."
-            };
-            var r5 = new Room()
-            {
-                id = Guid.NewGuid(),
-                name = "Backroom",
-                description = "TODO"
-            };
-            var r6 = new Room()
-            {
-                id = Guid.NewGuid(),
-                name = "Kitchen",
-                description = "TODO"
-            };
-            var r7 = new Room()
-            {
-                id = Guid.NewGuid(),
-                name = "Stables",
-                description = "TODO"
-            };
-            var r8 = new Room()
-            {
-                id = Guid.NewGuid(),
-                name = "Upstair corridor",
-                description = ""
-            };
-            var r9 = new Room()
-            {
-                id = Guid.NewGuid(),
-                name = "Room 1",
-                description = ""
-            };
-            var r10 = new Room()
-            {
-                id = Guid.NewGuid(),
-                name = "Room 2",
-                description = ""
-            };
-            var r11 = new Room()
-            {
-                id = Guid.NewGuid(),
-                name = "Room 3",
-                description = ""
-            };
-            var r12 = new Room()
-            {
-                id = Guid.NewGuid(),
-                name = "Room 4",
-                description = ""
+                description = "A larger shared dormitory, that can hold up to 8 people."
+            },
             };
             #endregion
 
             #region CONNECTIONS
-            var c1 = new RoomConnection()
-            {
-                idRoomA = r1.id,
-                idRoomB = r2.id,
-                directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.North, Commands.MoveDirection.Out },
-                directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.South }
-            };
-            var c2 = new RoomConnection()
-            {
-                idRoomA = r2.id,
-                idRoomB = r3.id,
-                directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.East, Commands.MoveDirection.In },
-                directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.West, Commands.MoveDirection.Out }
-            };
-            var c3 = new RoomConnection()
-            {
-                idRoomA = r2.id,
-                idRoomB = r4.id,
-                directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.North },
-                directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.South }
+            // The Inn
+            var innConnections = new RoomConnection[] {
+                new RoomConnection(innRooms[0].id,innRooms[1].id) // to kitchen
+                {
+                    directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.North },
+                    directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.South, Commands.MoveDirection.Out }
+                },
+                new RoomConnection(innRooms[1].id, innRooms[2].id) // to cellar
+                {
+                    directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.North, Commands.MoveDirection.In, Commands.MoveDirection.Down },
+                    directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.North, Commands.MoveDirection.Out, Commands.MoveDirection.Up }
+                },
+                new RoomConnection(innRooms[0].id,innRooms[3].id) // to meeting room
+                {
+                    directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.East },
+                    directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.West, Commands.MoveDirection.Out }
+                },
+                new RoomConnection(innRooms[3].id,innRooms[4].id) // to inkeepers office
+                {
+                    directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.North, Commands.MoveDirection.In },
+                    directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.South, Commands.MoveDirection.Out },
+                    KeyItemName = "Innkeepers office key"
+                },
+                new RoomConnection(innRooms[0].id,innRooms[5].id) // to 2nd floor landing
+                {
+                    directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.South, Commands.MoveDirection.In, Commands.MoveDirection.Up },
+                    directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.South, Commands.MoveDirection.Out, Commands.MoveDirection.Down }
+                },
+                new RoomConnection(innRooms[5].id,innRooms[6].id) // to 2nd floor corridor
+                {
+                    directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.North, Commands.MoveDirection.In },
+                    directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.South, Commands.MoveDirection.Out }
+                },
+                new RoomConnection(innRooms[5].id,innRooms[7].id) // to bedroom 1
+                {
+                    directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.East },
+                    directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.West, Commands.MoveDirection.Out },
+                    KeyItemName = "Room #1 key"
+                },
+                new RoomConnection(innRooms[5].id,innRooms[8].id) // to bedroom 2
+                {
+                    directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.West },
+                    directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.East, Commands.MoveDirection.Out }
+                },
+                new RoomConnection(innRooms[6].id,innRooms[9].id) // to bedroom 3
+                {
+                    directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.East },
+                    directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.West, Commands.MoveDirection.Out },
+                    KeyItemName = "Room #3 key"
+                },
+                new RoomConnection(innRooms[6].id,innRooms[10].id) // to bedroom 4
+                {
+                    directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.West },
+                    directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.East, Commands.MoveDirection.Out }
+                }
             };
             #endregion
 
-            var i1 = new Item()
-            {
-                id = Guid.NewGuid(),
-                name = "Doll",
-                description = "A doll lies around.",
-                details = "A little doll shaped out of rags."
-            };
+            RoomManager.LoadRooms(innRooms);
+            RoomManager.LoadRoomConnections(innConnections);
+            ItemManager.LoadItems(innItems);
 
-
-            RoomManager.LoadRooms(new Room[] { r1, r2, r3, r4 });
-            RoomManager.LoadRoomConnections(new RoomConnection[] { c1, c2, c3 });
-            ItemManager.LoadItems(new Item[] { i1 });
-
-            r3.AddToRoom(i1);
+            innRooms[4].AddToRoom(innItems[0]);
+            innRooms[4].AddToRoom(innItems[1]);
+            innRooms[4].AddToRoom(innItems[2]);
+            innRooms[9].AddToRoom(innItems[3]);
         }
 
 

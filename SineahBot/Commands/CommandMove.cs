@@ -46,14 +46,20 @@ namespace SineahBot.Commands
                 case "out":
                     direction = MoveDirection.Out;
                     break;
+                case "up":
+                    direction = MoveDirection.Up;
+                    break;
+                case "down":
+                    direction = MoveDirection.Down;
+                    break;
                 default:
                     throw new Exception($@"Can't move to unknown direction ""{directionName}""");
             }
-            RoomManager.MoveFromRoom(entity, room, direction);
-            if (agent is Character) (agent as Character).experience += 1;
+            if(!RoomManager.MoveFromRoom(entity, room, direction)) {
+                agent.Message("This access is locked.");
+            }
+            else if (agent is Character) (agent as Character).experience += 1;
         }
-
-
     }
 
     public enum MoveDirection
@@ -63,6 +69,8 @@ namespace SineahBot.Commands
         South,
         West,
         In,
-        Out
+        Out,
+        Up,
+        Down
     }
 }

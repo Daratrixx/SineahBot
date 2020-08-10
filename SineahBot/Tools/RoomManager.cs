@@ -28,13 +28,18 @@ namespace SineahBot.Tools
                     var roomA = RoomManager.rooms[connection.idRoomA];
                     var roomB = RoomManager.rooms[connection.idRoomB];
 
+                    var connectionA = new RoomConnectionState(roomB) { keyItemName = connection.KeyItemName };
+                    var connectionB = new RoomConnectionState(roomA) { keyItemName = connection.KeyItemName };
+                    connectionA.mirrorConnection = connectionB;
+                    connectionB.mirrorConnection = connectionA;
+
                     foreach (var direction in connection.directionFromA)
                     {
-                        roomA.RegisterDirection(direction, roomB);
+                        roomA.RegisterDirection(direction, connectionA);
                     }
                     foreach (var direction in connection.directionFromB)
                     {
-                        roomB.RegisterDirection(direction, roomA);
+                        roomB.RegisterDirection(direction, connectionB);
                     }
 
                 }
@@ -58,11 +63,13 @@ namespace SineahBot.Tools
             RemoveFromCurrentRoom(entity);
             room.AddToRoom(entity);
         }
-        public static void MoveFromRoom(Entity entity, Room room, MoveDirection direction)
+        public static bool MoveFromRoom(Entity entity, Room room, MoveDirection direction)
         {
-            var destination = room.GetRoomInDirection(direction);
+            var destination = room.GetRoomConnectionInDirection(direction);
+            if (destination.locked) return false;
             room.RemoveFromRoom(entity);
-            destination.AddToRoom(entity);
+            destination.toRoom.AddToRoom(entity);
+            return true;
         }
         public static void RemoveFromCurrentRoom(Entity entity)
         {
@@ -76,7 +83,8 @@ namespace SineahBot.Tools
             return rooms[idRoom];
         }
 
-        public static Guid GetSpawnRoomId() {
+        public static Guid GetSpawnRoomId()
+        {
             return rooms.Values.First(x => x.isSpawnRoom).id;
         }
 

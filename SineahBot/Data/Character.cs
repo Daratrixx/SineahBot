@@ -62,7 +62,14 @@ namespace SineahBot.Data
 
         public Item FindInInventory(string name)
         {
-            return inventory.FirstOrDefault(x => x.name.ToLower() == name.ToLower());
+            name = name.ToLower();
+            return inventory.FirstOrDefault(x => x.name.ToLower() == name || x.alternativeNames.Contains(name));
+        }
+
+        public bool IsItemInInventory(string name)
+        {
+            name = name.ToLower();
+            return inventory.FirstOrDefault(x => x.name.ToLower() == name || x.alternativeNames.Contains(name)) != null;
         }
 
         public void RemoveFromInventory(Item item)

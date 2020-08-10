@@ -9,6 +9,7 @@ namespace SineahBot.Interfaces
     {
         void AddToInventory(Item pickable);
         Item FindInInventory(string name);
+        bool IsItemInInventory(string name);
         void RemoveFromInventory(Item pickable);
     }
 }
