@@ -30,7 +30,7 @@ namespace SineahBot.Tools
                     if (character.currentRoomId == Guid.Empty)
                     {
                         room = RoomManager.GetRoom(RoomManager.GetSpawnRoomId());
-                        room.AddToRoom(character);
+                        room.AddToRoom(character, false); // add player to room but don't show it to the player
                     }
                     else
                     {

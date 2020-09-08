@@ -91,10 +91,10 @@ namespace SineahBot.Data
             }
         }
 
-        public void AddToRoom(Entity entity)
+        public void AddToRoom(Entity entity, bool feedback = true)
         {
             DescribeAction($"{entity.name} has entered the room.", entity as IAgent);
-            if (entity is IAgent)
+            if (entity is IAgent && feedback)
             {
                 var agent = entity as IAgent;
                 agent.Message(GetFullDescription(agent));
