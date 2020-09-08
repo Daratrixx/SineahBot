@@ -90,13 +90,13 @@ namespace SineahBot
                 // create permissions for user
                 CreatePrivateChannelpermission(privateChanel, arg).Wait();
                 // send the welcome message
-                return privateChanel.SendMessageAsync($"Hello <@{userId}>!\nYou can talk to me here or in private messages to start your adventure!");
+                return privateChanel.SendMessageAsync($"Hello <@{userId}>!\nYou can talk to me here or in private messages to start your adventure!\n> Type anywhere to start.");
             }
             else
             {
                 // renew user permissions
                 CreatePrivateChannelpermission(existingChannel, arg).Wait();
-                return existingChannel.SendMessageAsync($"Welcome back <@{userId}>!\nYou can resume your adventure by talking to me here or in private messages!");
+                return existingChannel.SendMessageAsync($"Welcome back <@{userId}>!\nYou can resume your adventure by talking to me here or in private messages!\n> Type anywhere to start.");
             }
         }
 
