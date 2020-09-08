@@ -7,5 +7,6 @@ namespace SineahBot.Interfaces
     public interface IAttacker : IObservable
     {
         void OnAttacking(IAttackable attackable);
+        int GetWeaponDamage();
     }
 }

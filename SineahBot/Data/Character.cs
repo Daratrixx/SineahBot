@@ -11,7 +11,8 @@ namespace SineahBot.Data
         public IAgent agent;
         //public string description { get; set; }
         public int experience { get; set; }
-
+        public int maxHealth { get; set; }
+        public int health { get; set; }
         public CharacterStatus characterStatus { get; set; }
 
         public string GetShortDescription(IAgent agent = null)
@@ -41,7 +42,8 @@ namespace SineahBot.Data
 
         public bool OnDamage(int damageAmount)
         {
-            throw new NotImplementedException();
+            health = Math.Max(0, health - damageAmount);
+            return health == 0;
         }
 
         public void OnKilled(IAgent agent)
@@ -80,6 +82,11 @@ namespace SineahBot.Data
         public string GetName(IAgent agent = null)
         {
             return name;
+        }
+
+        public int GetWeaponDamage()
+        {
+            return new Random().Next(5, 10);
         }
     }
 

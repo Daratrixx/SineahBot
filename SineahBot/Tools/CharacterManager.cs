@@ -36,6 +36,7 @@ namespace SineahBot.Tools
             character.id = Guid.NewGuid();
             character.name = player.characterName;
             character.agent = player;
+            character.maxHealth = character.health = 30;
             player.idCharacter = character.id;
             player.character = character;
             characters[character.id] = character;
