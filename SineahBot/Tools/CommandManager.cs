@@ -25,11 +25,17 @@ namespace SineahBot.Tools
             switch (player.playerStatus)
             {
                 case PlayerStatus.InCharacter:
-                    var character = player.character;
+                    Character character = player.character;
+                    Room room = null;
                     if (character.currentRoomId == Guid.Empty)
-                        character.currentRoomId = RoomManager.GetSpawnRoomId();
-
-                    var room = RoomManager.GetRoom(character.currentRoomId);
+                    {
+                        room = RoomManager.GetRoom(RoomManager.GetSpawnRoomId());
+                        room.AddToRoom(character);
+                    }
+                    else
+                    {
+                        room = RoomManager.GetRoom(character.currentRoomId);
+                    }
                     ParseInCharacterMessage(character, message, room);
                     break;
                 case PlayerStatus.OutCharacter:
@@ -95,9 +101,10 @@ namespace SineahBot.Tools
             var characterStatus = CharacterStatus.Unknown;
             if (agent is Player) characterStatus = (agent as Player).character.characterStatus;
             if (agent is Character) characterStatus = (agent as Character).characterStatus;
-            switch(characterStatus) {
+            switch (characterStatus)
+            {
                 case CharacterStatus.Normal:
-                    InCharacterCommands.Where(x=>x.IsNormalCommand(agent)).FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(agent, room);
+                    InCharacterCommands.Where(x => x.IsNormalCommand(agent)).FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(agent, room);
                     break;
                 case CharacterStatus.Combat:
                     InCharacterCommands.Where(x => x.IsCombatCommand(agent)).FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(agent, room);
