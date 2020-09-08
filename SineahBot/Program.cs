@@ -4,6 +4,7 @@ using SineahBot.Data;
 using SineahBot.DataContext;
 using SineahBot.Tools;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SineahBot
@@ -44,11 +45,6 @@ namespace SineahBot
                 CommandManager.ParseUserMessage(0, input);
             }
         }
-        private async Task MessageReceived(SocketMessage message)
-        {
-            if (message.Author.Id != DiscordClient.CurrentUser.Id)
-                CommandManager.ParseUserMessage(message.Author.Id, message.Content, message.Channel.Id);
-        }
         public static DiscordSocketClient DiscordClient;
         private async Task OnlinePlay()
         {
@@ -56,21 +52,75 @@ namespace SineahBot
 
             DiscordClient.Log += Log;
 
-            // Remember to keep token private or to read it from an 
-            // external source! In this case, we are reading the token 
-            // from an environment variable. If you do not know how to set-up
-            // environment variables, you may find more information on the 
-            // Internet or by using other methods such as reading from 
-            // a configuration.
-            await DiscordClient.LoginAsync(TokenType.Bot, "MjYwMTQxOTY1NTU3ODkxMDcz.CziE_A.mfrsPm2LYOALVQSWC5LKdudW8nI");
+            await DiscordClient.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("SineahBotToken"));
             await DiscordClient.StartAsync();
 
+            DiscordClient.UserJoined += UserJoined;
             DiscordClient.MessageReceived += MessageReceived;
             DiscordClient.Disconnected += OnDisconnected;
             // Block this task until the program is closed.
             await Task.Delay(-1);
         }
-        private Task OnDisconnected(Exception e) {
+        private ulong[] ignoredChannels = new ulong[] { 741728973318389790 };
+        private Task MessageReceived(SocketMessage message)
+        {
+            if (message.Author.Id != DiscordClient.CurrentUser.Id && !ignoredChannels.Contains(message.Channel.Id))
+                CommandManager.ParseUserMessage(message.Author.Id, message.Content, message.Channel.Id);
+            return Task.CompletedTask;
+        }
+
+        private Task UserJoined(SocketGuildUser arg)
+        {
+            var userId = arg.Id;
+            var guild = arg.Guild;
+            // look for an existing channel for the user
+            var existingChannel = guild.TextChannels.FirstOrDefault(x => x.Topic == userId.ToString());
+            if (existingChannel == null)
+            {
+                // get the private room category
+                var privateRooms = guild.CategoryChannels.FirstOrDefault(x => x.Name == "private-rooms");
+                // create a new private channel for the user
+                var privateChanel = guild.CreateTextChannelAsync("private-" + arg.Username.Split(" ")[0] + "-" + (userId % 10000),
+                (properties) =>
+                {
+                    properties.CategoryId = privateRooms.Id;
+                    properties.Name = "private-" + arg.Username.Split(" ")[0] + "-" + (userId % 10000);
+                    properties.Topic = userId.ToString();
+                }).Result;
+                // create permissions for user
+                CreatePrivateChannelpermission(privateChanel, arg).Wait();
+                // send the welcome message
+                return privateChanel.SendMessageAsync($"Hello <@{userId}>!\nYou can talk to me here or in private messages to start your adventure!");
+            }
+            else
+            {
+                // renew user permissions
+                CreatePrivateChannelpermission(existingChannel, arg).Wait();
+                return existingChannel.SendMessageAsync($"Welcome back <@{userId}>!\nYou can resume your adventure by talking to me here or in private messages!");
+            }
+        }
+
+        private Task CreatePrivateChannelpermission(IGuildChannel channel, IGuildUser user)
+        {
+            return channel.AddPermissionOverwriteAsync(user,
+                new OverwritePermissions(
+                    PermValue.Inherit, // create instant invite
+                    PermValue.Inherit, // manage channel
+                    PermValue.Allow, // add reactions
+                    PermValue.Allow, // view channel
+                    PermValue.Allow, // send messages
+                    PermValue.Inherit, // send TTS
+                    PermValue.Inherit, // manage message
+                    PermValue.Allow, // embed links
+                    PermValue.Allow, // attach files
+                    PermValue.Allow, // read message history
+                    PermValue.Inherit, // mention @everyone
+                    PermValue.Allow // use external emojis
+                ));
+        }
+
+        private Task OnDisconnected(Exception e)
+        {
             return Task.CompletedTask;
         }
     }
