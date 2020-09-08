@@ -40,5 +40,6 @@ namespace SineahBot.Commands
 > - Type **d**rop **[item name]** to drop the specified item from your inventory.
 > - **[SOON]** Type **!help [full command]** to have a detailed description of the specified command.
 ";
+
     }
 }

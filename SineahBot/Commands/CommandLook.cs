@@ -42,5 +42,11 @@ namespace SineahBot.Commands
                 }
             }
         }
+
+        public override bool IsWorkbenchCommand(IAgent agent = null)
+        {
+            return false;
+        }
+
     }
 }

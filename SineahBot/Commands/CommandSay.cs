@@ -31,5 +31,6 @@ namespace SineahBot.Commands
                 if (agent is Character) (agent as Character).experience += 1;
             }
         }
+
     }
 }

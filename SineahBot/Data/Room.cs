@@ -112,5 +112,10 @@ namespace SineahBot.Data
                 DescribeAction($"{entity.name} has left the room.", entity as IAgent);
             // trigger stuff on entity leaving
         }
+
+        public string GetName(IAgent agent = null)
+        {
+            return name;
+        }
     }
 }

@@ -92,7 +92,22 @@ namespace SineahBot.Tools
         }
         public static void ParseInCharacterMessage(IAgent agent, string command, Room room)
         {
-            InCharacterCommands.FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(agent, room);
+            var characterStatus = CharacterStatus.Unknown;
+            if (agent is Player) characterStatus = (agent as Player).character.characterStatus;
+            if (agent is Character) characterStatus = (agent as Character).characterStatus;
+            switch(characterStatus) {
+                case CharacterStatus.Normal:
+                    InCharacterCommands.Where(x=>x.IsNormalCommand(agent)).FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(agent, room);
+                    break;
+                case CharacterStatus.Combat:
+                    InCharacterCommands.Where(x => x.IsCombatCommand(agent)).FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(agent, room);
+                    break;
+                case CharacterStatus.Workbench:
+                    InCharacterCommands.Where(x => x.IsWorkbenchCommand(agent)).FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(agent, room);
+                    break;
+                default:
+                    throw new Exception($"Impossible to parse an in-character command for a character in the unsupported character state : {characterStatus}");
+            }
         }
         public static void ParseOutCharacterMessage(IAgent agent, string command)
         {
@@ -101,7 +116,7 @@ namespace SineahBot.Tools
 
         public static List<Command> MetaCommands = new List<Command>() { new CommandHelp() };
         public static List<Command> NoCharacterCommands = new List<Command>() { };
-        public static List<Command> InCharacterCommands = new List<Command>() { new CommandMove(), new CommandLook(), new CommandPickup(), new CommandDrop(), new CommandLock(), new CommandUnlock(), new CommandSay(), new CommandDirection() };
+        public static List<Command> InCharacterCommands = new List<Command>() { new CommandMove(), new CommandLook(), new CommandPickup(), new CommandDrop(), new CommandLock(), new CommandUnlock(), new CommandSay(), new CommandDirection(), new CommandCombatAttack() };
         public static List<Command> OutCharacterCommands = new List<Command>() { };
     }
 }

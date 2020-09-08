@@ -22,6 +22,17 @@ namespace SineahBot.Commands
         }
 
         public abstract void Run(IAgent agent, Room room = null);
-
+        public virtual bool IsNormalCommand(IAgent agent = null)
+        {
+            return true;
+        }
+        public virtual bool IsCombatCommand(IAgent agent = null)
+        {
+            return true;
+        }
+        public virtual bool IsWorkbenchCommand(IAgent agent = null)
+        {
+            return true;
+        }
     }
 }

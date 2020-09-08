@@ -21,5 +21,11 @@ namespace SineahBot.Commands
         {
             agent.Message(String.Join(", ", room.GetDirections().Select(x => x.ToString())) + '.');
         }
+
+        public override bool IsWorkbenchCommand(IAgent agent = null)
+        {
+            return false;
+        }
+
     }
 }

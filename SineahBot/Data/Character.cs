@@ -76,12 +76,18 @@ namespace SineahBot.Data
         {
             inventory.Remove(item);
         }
+
+        public string GetName(IAgent agent = null)
+        {
+            return name;
+        }
     }
 
     public enum CharacterStatus
     {
         Normal,
         Combat,
-        Workbench
+        Workbench,
+        Unknown
     }
 }

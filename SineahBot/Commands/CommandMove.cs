@@ -60,6 +60,16 @@ namespace SineahBot.Commands
             }
             else if (agent is Character) (agent as Character).experience += 1;
         }
+
+        public override bool IsCombatCommand(IAgent agent = null)
+        {
+            return false;
+        }
+        public override bool IsWorkbenchCommand(IAgent agent = null)
+        {
+            return false;
+        }
+
     }
 
     public enum MoveDirection

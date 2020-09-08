@@ -8,5 +8,6 @@ namespace SineahBot.Interfaces
     {
         string GetShortDescription(IAgent agent = null);
         string GetFullDescription(IAgent agent = null);
+        string GetName(IAgent agent = null);
     }
 }
