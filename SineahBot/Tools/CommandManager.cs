@@ -65,23 +65,20 @@ namespace SineahBot.Tools
             switch (player.playerCharacterCreationStatus)
             {
                 case PlayerCharacterCreationStatus.None:
-                    player.Message("You are about to start your adventure. What is your **name**, mortal ?");
+                    player.Message("You are about to start your adventure.\n> What is your **name**, mortal ?");
                     player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.Naming;
                     break;
                 case PlayerCharacterCreationStatus.Naming:
                     player.characterName = command;
-                    player.Message($@"""{command}""... Is this how youi will be called from now on ? [**y**es/**n**o]");
+                    player.Message($@"""{command}""... Is this how you will be called from now on ? [**y**es/**n**o]");
                     player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.NamingConfirmation;
                     break;
                 case PlayerCharacterCreationStatus.NamingConfirmation:
                     if (command == "yes" || command == "y")
                     {
-                        player.Message($@"You are now ready to walk the world. Type **!help** to learn how to play. Farewell for now, mortal.");
-                        player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.NamingConfirmation;
-                        var character = CharacterManager.CreateCharacterForPlayer(player);
-                        character.currentRoomId = RoomManager.GetSpawnRoomId();
-                        RoomManager.GetRoom(character.currentRoomId).AddToRoom(character);
-                        player.playerStatus = PlayerStatus.InCharacter;
+                        player.Message($@"""{player.characterName}"" will now be your name in this world.
+> What will be your starting class ? [{ClassProgressionManager.GetStartClassListString()}]");
+                        player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.Classing;
                     }
                     else if (command == "no" || command == "n")
                     {
@@ -94,7 +91,43 @@ namespace SineahBot.Tools
                         player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.Naming;
                     }
                     break;
+                case PlayerCharacterCreationStatus.Classing:
+                    if (Enum.TryParse(command, true, out player.characterClass) && ClassProgressionManager.IsStartingClass(player.characterClass))
+                    {
+                        player.Message($@"""{player.characterClass}""... will this be your starting class, your initial role in this world ? [**y**es/**n**o]");
+                        player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.ClassingConfirmation;
+                    }
+                    else
+                    {
+                        player.Message($@"""{command}"" is not a recognized starting class. Type one of the following : [{ClassProgressionManager.GetStartClassListString()}]");
+                    }
+                    break;
+                case PlayerCharacterCreationStatus.ClassingConfirmation:
+                    if (command == "yes" || command == "y")
+                    {
+                        FinishCharacterCreation(player);
+                    }
+                    else if (command == "no" || command == "n")
+                    {
+                        player.Message("What is your **class**, mortal ?");
+                        player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.Classing;
+                    }
+                    else
+                    {
+                        player.Message($@"Type **yes** to confirm that ""{player.characterClass}"" will be your class, or **no** to choose a new class.");
+                        player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.Classing;
+                    }
+                    break;
             }
+        }
+        public static void FinishCharacterCreation(Player player)
+        {
+            player.Message($@"You are now ready to walk the world. Type **!help** to learn how to play. Farewell for now, mortal.");
+            player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.None;
+            var character = CharacterManager.CreateCharacterForPlayer(player);
+            character.currentRoomId = RoomManager.GetSpawnRoomId();
+            RoomManager.GetRoom(character.currentRoomId).AddToRoom(character);
+            player.playerStatus = PlayerStatus.InCharacter;
         }
         public static void ParseInCharacterMessage(IAgent agent, string command, Room room)
         {

@@ -11,21 +11,24 @@ namespace SineahBot.Data
 {
     public class Player : IAgent
     {
-        [Key]
-        public ulong userId { get; set; }
+        // character creation temporary values
         public ulong channelId;
         public string characterName;
+        public CharacterClass characterClass;
+        public PlayerStatus playerStatus;
+        public PlayerCharacterCreationStatus playerCharacterCreationStatus;
+
+        [Key]
+        public ulong userId { get; set; }
         [NotMapped]
         public string name { get; set; }
-        public PlayerStatus playerStatus { get; set; }
-        public PlayerCharacterCreationStatus playerCharacterCreationStatus { get; set; }
         public Guid? idCharacter { get; set; }
 
         public Character character;
 
         public void Message(string message)
         {
-            if (Program.ONLINE)
+            if (Program.ONLINE && message != null)
             {
                 var channel = Program.DiscordClient.GetChannel(channelId) as IMessageChannel;
                 var result = channel.SendMessageAsync(message).Result;
@@ -48,6 +51,8 @@ namespace SineahBot.Data
     {
         None,
         Naming,
-        NamingConfirmation
+        NamingConfirmation,
+        Classing,
+        ClassingConfirmation,
     }
 }

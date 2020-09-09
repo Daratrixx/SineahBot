@@ -10,21 +10,23 @@ namespace SineahBot.Data
     public class Character : Entity, IAgent, IAttackable, IAttacker, IKillable, IObservable, IObserver, IDamageable, IInventory
     {
         public IAgent agent;
+        public CharacterStatus characterStatus;
+        public int maxHealth;
+        public int maxMana;
 
-        //public CharacterClass characterClass { get; set; }
-        public int experience { get; set; }
+        public CharacterClass characterClass { get; set; }
         public int level { get; set; }
-        public int maxHealth { get; set; }
+        public int experience { get; set; }
         public int health { get; set; }
+        public int mana { get; set; }
         public int gold { get; set; }
-        public CharacterStatus characterStatus { get; set; }
 
-        public string GetShortDescription(IAgent agent = null)
+        public virtual string GetShortDescription(IAgent agent = null)
         {
             return $"Here is {name}.";
         }
 
-        public string GetFullDescription(IAgent agent = null)
+        public virtual string GetFullDescription(IAgent agent = null)
         {
             return $"Here is a longer description of {name}.";
         }
@@ -44,17 +46,20 @@ namespace SineahBot.Data
             throw new NotImplementedException();
         }
 
-        public bool OnDamage(int damageAmount)
+        public bool OnDamage(int damageAmount, IAttacker attacker = null)
         {
             health = Math.Max(0, health - damageAmount);
             if (agent != null)
             {
-                agent.Message($"You took {damageAmount} damage.");
+                if (attacker != null)
+                    agent.Message($"You took {damageAmount} damage from {attacker.GetName()}.");
+                else
+                    agent.Message($"You took {damageAmount} damage.");
             }
             return health == 0;
         }
 
-        public void OnKilled(IAgent agent)
+        public void OnKilled(IAgent agent = null)
         {
             RoomManager.RemoveFromCurrentRoom(this, false);
             if (this.agent != null)
@@ -119,5 +124,36 @@ namespace SineahBot.Data
         Combat,
         Workbench,
         Unknown
+    }
+
+    public enum CharacterClass
+    {
+        None,
+        // physical origin
+        Militian,
+        // melee progression
+        Guard,
+        Footman,
+        Knight,
+        // range progression
+        Ranger,
+        Archer,
+        Sharpshooter,
+
+        // mental origin
+        Scholar,
+        // faith progression
+        Abbot,
+        Prelate,
+        Bishop,
+        // magic progression
+        Enchanter,
+        Mage,
+        Wizard,
+
+        // hybrid classes
+        Paladin, // Knight, faith augmentation
+        Fanatic, // Bishop, melee augmentation
+        Heretic, // Bishop, magic augmentation
     }
 }

@@ -24,6 +24,7 @@ namespace SineahBot.Data
         public List<Entity> entities = new List<Entity>();
         public IEnumerable<Character> characters { get { return entities.Where(x => x is Character).Select(x => x as Character); } }
         public IEnumerable<Item> items { get { return entities.Where(x => x is Item).Select(x => x as Item); } }
+        public IEnumerable<NPC> npcs { get { return entities.Where(x => x is NPC).Select(x => x as NPC); } }
 
         private Dictionary<MoveDirection, RoomConnectionState> directions = new Dictionary<MoveDirection, RoomConnectionState>();
 
@@ -33,6 +34,8 @@ namespace SineahBot.Data
             var output = entities.FirstOrDefault(x => x.name.ToLower() == name);
             if (output == null)
                 output = items.FirstOrDefault(x => x.alternativeNames.Contains(name));
+            if (output == null)
+                output = npcs.FirstOrDefault(x => x.alternativeNames.Contains(name));
             return output;
         }
 
@@ -83,9 +86,9 @@ namespace SineahBot.Data
             return $"{GetShortDescription(agent)}{String.Concat(observables.Where(x => x != agent).Select(x => " " + x.GetShortDescription(agent)))}";
         }
 
-        public void DescribeAction(string action, IAgent agent = null)
+        public void DescribeAction(string action, params IAgent[] agent)
         {
-            foreach (var a in agents.Where(x => x != agent))
+            foreach (var a in agents.Where(x => !agent.Contains(x)))
             {
                 a.Message(action);
             }

@@ -6,6 +6,6 @@ namespace SineahBot.Interfaces
 {
     interface IKillable : IDamageable
     {
-        void OnKilled(IAgent agent);
+        void OnKilled(IAgent agent = null);
     }
 }

@@ -142,9 +142,45 @@ namespace SineahBot.Data
             };
             #endregion
 
+            #region CHARACTERS
+
+            var innCharacters = new Character[]{
+                new NPC() {
+                    id = Guid.NewGuid(),
+                    characterStatus = CharacterStatus.Normal,
+                    level = 1,
+                    maxHealth = 50,
+                    health = 50,
+                    gold = 100,
+                    name = "Bartender",
+                    shortDescription = "The bartender is ready to serve drinks at the bars",
+                    longDescription = "The bartender hangs behind the bar, cleaning glasses and serving drinks to the customers of the inn.",
+                    alternativeNames = new string[] { "host" }
+                },
+                new NPC() {
+                    id = Guid.NewGuid(),
+                    characterStatus = CharacterStatus.Normal,
+                    level = 1,
+                    maxHealth = 11,
+                    health = 11,
+                    gold = 0,
+                    name = "Giant rat",
+                    shortDescription = "A giant rat prowls in the room.",
+                    longDescription = "A huge ass rat. Dangerous enough to take out an adventurer.",
+                    alternativeNames = new string[] { "rat", "huge rat" }
+                },
+            };
+
+            #endregion
+
             RoomManager.LoadRooms(innRooms);
             RoomManager.LoadRoomConnections(innConnections);
             ItemManager.LoadItems(innItems);
+            CharacterManager.LoadCharacters(innCharacters);
+
+
+            innRooms[0].AddToRoom(innCharacters[0]);
+            innRooms[2].AddToRoom(innCharacters[1]);
 
             innRooms[4].AddToRoom(innItems[0]);
             innRooms[4].AddToRoom(innItems[1]);

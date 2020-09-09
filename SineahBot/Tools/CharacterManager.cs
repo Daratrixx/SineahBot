@@ -23,8 +23,9 @@ namespace SineahBot.Tools
             if (!characters.ContainsKey(idCharacter))
             {
                 var character = Program.database.Characters.FirstOrDefault(x => x.id == idCharacter);
-                if (character == null) throw new Exception($"Impossible to fine character with id {idCharacter}");
+                if (character == null) throw new Exception($"Impossible to find character with id {idCharacter}");
                 characters[idCharacter] = character;
+                ClassProgressionManager.ApplyClassProgressionForCharacter(character);
                 return character;
             }
             return characters[idCharacter];
@@ -36,24 +37,31 @@ namespace SineahBot.Tools
             character.id = Guid.NewGuid();
             character.name = player.characterName;
             character.agent = player;
-            character.maxHealth = character.health = 30;
-            player.idCharacter = character.id;
-            player.character = character;
+            character.characterClass = player.characterClass;
+            character.level = 1;
+            character.experience = 0;
+            ClassProgressionManager.ApplyClassProgressionForCharacter(character, true);
             characters[character.id] = character;
             Program.database.Characters.Add(character);
+            player.idCharacter = character.id;
+            player.character = character;
             return character;
         }
 
-        public static void DeletePlayerCharacter(Player player) {
+        public static void DeletePlayerCharacter(Player player)
+        {
             if (player == null) throw new Exception("Player cannot be null.");
             if (player.character == null || player.idCharacter == null) throw new Exception("This player doesn't have a character to be deleted.");
+            var character = player.character;
+            character.agent = null;
+            characters.Remove(character.id);
+            Program.database.Characters.Remove(character);
             player.idCharacter = null;
+            player.character = null;
             player.playerStatus = PlayerStatus.CharacterCreation;
             player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.None;
             player.characterName = null;
-            var character = player.character;
-            characters.Remove(character.id);
-            Program.database.Characters.Remove(character);
+            player.characterClass = CharacterClass.None;
         }
 
         public static Character TestCharacter

@@ -30,6 +30,7 @@ namespace SineahBot.Tools
                     {
                         player.character = CharacterManager.GetCharacter(player.idCharacter.Value);
                         player.character.agent = player;
+                        player.playerStatus = PlayerStatus.InCharacter;
                     }
                 }
                 return player;

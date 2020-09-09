@@ -37,19 +37,19 @@ namespace SineahBot.Commands
                         var damageableTarget = target as IDamageable;
                         var damage = attacker.GetWeaponDamage();
                         agent.Message($"You attacked {attackableTarget.GetName()} for {damage} damages.");
-                        room.DescribeAction($"{attacker.GetName()} attacked {attackableTarget.GetName()}.", agent);
-                        if (damageableTarget.OnDamage(damage))
+                        room.DescribeAction($"{attacker.GetName()} attacked {attackableTarget.GetName()}.", agent, attackableTarget as IAgent);
+                        if (damageableTarget.OnDamage(damage, attacker))
                         {
                             if (damageableTarget is IDestructible)
                             {
                                 agent.Message($"You destroyed {attackableTarget.GetName()}!");
-                                room.DescribeAction($"{attacker.GetName()} destroyed {attackableTarget.GetName()}!", agent);
+                                room.DescribeAction($"{attacker.GetName()} destroyed {attackableTarget.GetName()}!", agent, attackableTarget as IAgent);
                                 (damageableTarget as IDestructible).OnDestroyed();
                             }
                             if (damageableTarget is IKillable)
                             {
                                 agent.Message($"You killed {attackableTarget.GetName()}!");
-                                room.DescribeAction($"{attacker.GetName()} killed {attackableTarget.GetName()}!", agent);
+                                room.DescribeAction($"{attacker.GetName()} killed {attackableTarget.GetName()}!", agent, attackableTarget as IAgent);
                                 (damageableTarget as IKillable).OnKilled(agent);
                             }
                         }
@@ -57,7 +57,7 @@ namespace SineahBot.Commands
                     else
                     {
                         agent.Message($"You attacked {attackableTarget.GetName()}.");
-                        room.DescribeAction($"{attacker.GetName()} attacked {attackableTarget.GetName()}.", agent);
+                        room.DescribeAction($"{attacker.GetName()} attacked {attackableTarget.GetName()}.", agent, attackableTarget as IAgent);
                     }
 
                     if (agent is Character) (agent as Character).experience += 1;

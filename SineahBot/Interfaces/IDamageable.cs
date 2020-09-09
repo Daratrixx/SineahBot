@@ -6,6 +6,6 @@ namespace SineahBot.Interfaces
 {
     interface IDamageable
     {
-        bool OnDamage(int damageAmount);
+        bool OnDamage(int damageAmount, IAttacker attacker = null);
     }
 }
