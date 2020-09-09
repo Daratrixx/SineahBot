@@ -18,29 +18,30 @@ namespace SineahBot.Commands
 
         public override void Run(IAgent agent, Room room)
         {
-            if (!(agent is Entity)) throw new Exception($@"Impossible to get information as non-entity agent");
+            if (!(agent is Entity)) throw new Exception($@"Impossible to get information as non-entity agent.");
             if (agent is Player)
             {
                 var player = agent as Player;
                 var character = player.character;
-                agent.Message($@"
-> INFORMATION
-> Health : {character.health}/{character.maxHealth}
-");
-
+                agent.Message(GetCharacterInformation(character));
             }
             else if (agent is Character)
             {
                 var character = agent as Character;
-                agent.Message($@"
-> INFORMATION
-> Health : {character.health}/{character.maxHealth}
-");
+                agent.Message(GetCharacterInformation(character));
             }
             else
             {
-
+                throw new Exception("Unsupported agent type, can't display information.");
             }
+        }
+
+        public string GetCharacterInformation(Character character) {
+            return $@"
+```INFORMATION```
+> {character.name.ToUpper()} - lvl.{1} ({character.experience} exp)
+> Health : {character.health}/{character.maxHealth}
+";
         }
 
     }

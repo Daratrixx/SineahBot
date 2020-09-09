@@ -71,11 +71,11 @@ namespace SineahBot.Tools
             destination.toRoom.AddToRoom(entity);
             return true;
         }
-        public static void RemoveFromCurrentRoom(Entity entity)
+        public static void RemoveFromCurrentRoom(Entity entity, bool feedback = true)
         {
             if (entity.currentRoomId != Guid.Empty)
             {
-                rooms[entity.currentRoomId].RemoveFromRoom(entity);
+                rooms[entity.currentRoomId].RemoveFromRoom(entity, feedback);
             }
         }
         public static Room GetRoom(Guid idRoom)

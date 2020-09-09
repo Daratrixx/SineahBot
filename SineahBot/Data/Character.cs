@@ -1,4 +1,5 @@
 ﻿using SineahBot.Interfaces;
+using SineahBot.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,13 @@ namespace SineahBot.Data
     public class Character : Entity, IAgent, IAttackable, IAttacker, IKillable, IObservable, IObserver, IDamageable, IInventory
     {
         public IAgent agent;
-        //public string description { get; set; }
+
+        //public CharacterClass characterClass { get; set; }
         public int experience { get; set; }
+        public int level { get; set; }
         public int maxHealth { get; set; }
         public int health { get; set; }
+        public int gold { get; set; }
         public CharacterStatus characterStatus { get; set; }
 
         public string GetShortDescription(IAgent agent = null)
@@ -43,12 +47,31 @@ namespace SineahBot.Data
         public bool OnDamage(int damageAmount)
         {
             health = Math.Max(0, health - damageAmount);
+            if (agent != null)
+            {
+                agent.Message($"You took {damageAmount} damage.");
+            }
             return health == 0;
         }
 
         public void OnKilled(IAgent agent)
         {
-            throw new NotImplementedException();
+            RoomManager.RemoveFromCurrentRoom(this, false);
+            if (this.agent != null)
+            {
+                if (agent != null)
+                {
+                    this.agent.Message($"You have been killed by {agent.name}!");
+                }
+                else
+                {
+                    this.agent.Message($"You died!");
+                }
+                if (this.agent is Player)
+                {
+                    CharacterManager.DeletePlayerCharacter(this.agent as Player);
+                }
+            }
         }
 
         public void OnObserving(IObservable observable)

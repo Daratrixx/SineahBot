@@ -104,11 +104,11 @@ namespace SineahBot.Data
             entities.Add(entity);
         }
 
-        public void RemoveFromRoom(Entity entity)
+        public void RemoveFromRoom(Entity entity, bool feedback = true)
         {
             entities.Remove(entity);
             entity.currentRoomId = Guid.Empty;
-            if (entity is Character)
+            if (feedback && entity is Character)
                 DescribeAction($"{entity.name} has left the room.", entity as IAgent);
             // trigger stuff on entity leaving
         }

@@ -44,6 +44,18 @@ namespace SineahBot.Tools
             return character;
         }
 
+        public static void DeletePlayerCharacter(Player player) {
+            if (player == null) throw new Exception("Player cannot be null.");
+            if (player.character == null || player.idCharacter == null) throw new Exception("This player doesn't have a character to be deleted.");
+            player.idCharacter = null;
+            player.playerStatus = PlayerStatus.CharacterCreation;
+            player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.None;
+            player.characterName = null;
+            var character = player.character;
+            characters.Remove(character.id);
+            Program.database.Characters.Remove(character);
+        }
+
         public static Character TestCharacter
         {
             get

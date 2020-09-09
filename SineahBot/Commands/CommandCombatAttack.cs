@@ -36,25 +36,22 @@ namespace SineahBot.Commands
                     {
                         var damageableTarget = target as IDamageable;
                         var damage = attacker.GetWeaponDamage();
+                        agent.Message($"You attacked {attackableTarget.GetName()} for {damage} damages.");
+                        room.DescribeAction($"{attacker.GetName()} attacked {attackableTarget.GetName()}.", agent);
                         if (damageableTarget.OnDamage(damage))
                         {
-                            agent.Message($"You attacked {attackableTarget.GetName()} for {damage} damages.");
-                            room.DescribeAction($"{attacker.GetName()} attacked {attackableTarget.GetName()}.", agent);
                             if (damageableTarget is IDestructible)
                             {
                                 agent.Message($"You destroyed {attackableTarget.GetName()}!");
                                 room.DescribeAction($"{attacker.GetName()} destroyed {attackableTarget.GetName()}!", agent);
+                                (damageableTarget as IDestructible).OnDestroyed();
                             }
                             if (damageableTarget is IKillable)
                             {
                                 agent.Message($"You killed {attackableTarget.GetName()}!");
                                 room.DescribeAction($"{attacker.GetName()} killed {attackableTarget.GetName()}!", agent);
+                                (damageableTarget as IKillable).OnKilled(agent);
                             }
-                        }
-                        else
-                        {
-                            agent.Message($"You attacked {attackableTarget.GetName()} for {damage} damages.");
-                            room.DescribeAction($"{attacker.GetName()} attacked {attackableTarget.GetName()}.", agent);
                         }
                     }
                     else
