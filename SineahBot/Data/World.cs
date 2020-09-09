@@ -148,11 +148,12 @@ namespace SineahBot.Data
                 new NPC() {
                     id = Guid.NewGuid(),
                     characterStatus = CharacterStatus.Normal,
-                    level = 1,
+                    level = 3,
                     maxHealth = 50,
                     health = 50,
-                    gold = 100,
+                    gold = 50,
                     name = "Bartender",
+                    experience = 50,
                     shortDescription = "The bartender is ready to serve drinks at the bars",
                     longDescription = "The bartender hangs behind the bar, cleaning glasses and serving drinks to the customers of the inn.",
                     alternativeNames = new string[] { "host" }

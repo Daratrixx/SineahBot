@@ -8,6 +8,6 @@ namespace SineahBot.Interfaces
     public interface IAgent
     {
         void Message(string message);
-        public string name{ get; set; }
+        public string name { get; set; }
     }
 }

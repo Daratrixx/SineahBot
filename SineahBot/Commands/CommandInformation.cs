@@ -36,12 +36,14 @@ namespace SineahBot.Commands
             }
         }
 
-        public string GetCharacterInformation(Character character) {
+        public string GetCharacterInformation(Character character)
+        {
             return $@"
-```INFORMATION```
-> {character.name.ToUpper()} - lvl.{1} ({character.experience} exp)
+```
+INFORMATION
+> {character.name} - {character.characterClass.ToString().ToUpper()} level {character.level} ({character.experience}/{ClassProgressionManager.ExperienceForNextLevel(character.level)} exp)
 > Health : {character.health}/{character.maxHealth}
-";
+```";
         }
 
     }

@@ -59,7 +59,7 @@ namespace SineahBot.Tools
         }
         public static int ExperienceForNextLevel(int level)
         {
-            return level * 100;
+            return level * 200;
         }
 
         public class ClassProgression

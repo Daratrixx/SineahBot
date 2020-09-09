@@ -59,7 +59,7 @@ namespace SineahBot.Data
             return health == 0;
         }
 
-        public void OnKilled(IAgent agent = null)
+        public virtual void OnKilled(IAgent agent = null)
         {
             RoomManager.RemoveFromCurrentRoom(this, false);
             if (this.agent != null)
