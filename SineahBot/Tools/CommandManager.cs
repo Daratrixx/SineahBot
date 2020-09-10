@@ -20,6 +20,12 @@ namespace SineahBot.Tools
                 Environment.Exit(0);
             }
             var player = PlayerManager.GetPlayer(userId);
+            if (message == "!boost" && userId == 109406259643437056 && player.character != null)
+            {
+                var exp = ClassProgressionManager.ExperienceForNextLevel(player.character.level);
+                player.character.experience += exp;
+                player.Message($"Earned {exp} experience.");
+            }
             if (channelId.HasValue) player.channelId = channelId.Value;
             if (ParseMetaCommand(player, message)) return;
             switch (player.playerStatus)
@@ -162,7 +168,8 @@ namespace SineahBot.Tools
         new CommandLock(), new CommandUnlock(),
         new CommandSay(),
         new CommandInformation(),
-        new CommandCombatAttack() };
+        new CommandCombatAttack(),
+        new CommandLevel()};
         public static List<Command> OutCharacterCommands = new List<Command>() { };
     }
 }

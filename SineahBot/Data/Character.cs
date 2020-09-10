@@ -114,7 +114,14 @@ namespace SineahBot.Data
 
         public int GetWeaponDamage()
         {
-            return new Random().Next(5, 10);
+            var bonusDamage = ClassProgressionManager.IsPhysicalClass(characterClass) ? level * 2 : level;
+            return bonusDamage + new Random().Next(5, 10);
+        }
+
+        public int GetMagicDamage()
+        {
+            var bonusDamage = ClassProgressionManager.IsMagicalClass(characterClass) ? level * 2 : level;
+            return bonusDamage + new Random().Next(5, 10);
         }
     }
 

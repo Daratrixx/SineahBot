@@ -12,12 +12,14 @@ namespace SineahBot.Commands
         protected Regex commandRegex;
         protected Match commandMatch;
 
-        public bool IsMessageMatchingCommand(string message) {
+        public bool IsMessageMatchingCommand(string message)
+        {
             commandMatch = commandRegex.Match(message);
             return commandMatch != null && commandMatch.Success;
         }
 
-        protected string GetArgument(int argumentGroupIndex) {
+        protected string GetArgument(int argumentGroupIndex)
+        {
             return commandMatch.Groups[argumentGroupIndex].Value?.Trim();
         }
 
