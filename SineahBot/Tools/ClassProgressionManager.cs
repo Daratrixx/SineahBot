@@ -10,19 +10,22 @@ namespace SineahBot.Tools
     public static class ClassProgressionManager
     {
         public static CharacterClass[] starterClass = new CharacterClass[] { CharacterClass.Militian, CharacterClass.Scholar };
+        public static CharacterClass[] secretClass = new CharacterClass[] { CharacterClass.Druid };
         public static CharacterClass[] physicalClass = new CharacterClass[] { CharacterClass.Militian,
         CharacterClass.Guard, CharacterClass.Footman, CharacterClass.Knight,
-        CharacterClass.Ranger, CharacterClass.Archer, CharacterClass.Sharpshooter};
+        CharacterClass.Ranger, CharacterClass.Archer, CharacterClass.Sharpshooter,
+        CharacterClass.Druid };
         public static CharacterClass[] magicalClass = new CharacterClass[] { CharacterClass.Scholar,
         CharacterClass.Abbot, CharacterClass.Prelate, CharacterClass.Bishop,
-        CharacterClass.Enchanter, CharacterClass.Mage, CharacterClass.Wizard};
+        CharacterClass.Enchanter, CharacterClass.Mage, CharacterClass.Wizard,
+        CharacterClass.Druid };
         public static string GetStartClassListString()
         {
             return String.Join('/', starterClass.Select(x => x.ToString()));
         }
         public static bool IsStartingClass(CharacterClass characterClass)
         {
-            return starterClass.Contains(characterClass);
+            return starterClass.Contains(characterClass) || secretClass.Contains(characterClass);
         }
         public static bool IsPhysicalClass(CharacterClass characterClass)
         {
@@ -58,7 +61,10 @@ namespace SineahBot.Tools
             // magic path
             { CharacterClass.Enchanter, new ClassProgression(CharacterClass.Enchanter, 20, 10, 20, 4).RegisterSubclass(CharacterClass.Mage, 4) },
             { CharacterClass.Mage, new ClassProgression(CharacterClass.Mage, 24, 11, 20, 4).RegisterSubclass(CharacterClass.Wizard, 7) },
-            { CharacterClass.Wizard, new ClassProgression(CharacterClass.Wizard, 28, 12, 20, 4) }
+            { CharacterClass.Wizard, new ClassProgression(CharacterClass.Wizard, 28, 12, 20, 4) },
+
+            // secret class
+            { CharacterClass.Druid, new ClassProgression(CharacterClass.Druid, 25, 12, 15, 3) },
         };
         public static void ApplyClassProgressionForCharacter(Character character, bool maximize = false)
         {

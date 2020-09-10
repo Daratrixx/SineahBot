@@ -51,8 +51,12 @@ namespace SineahBot.Data
         }
         public RoomConnectionState GetRoomConnectionInDirection(MoveDirection direction)
         {
-            if (!directions.ContainsKey(direction)) throw new Exception($@"Direction {direction} not defined for room {id}");
+            if (!directions.ContainsKey(direction)) throw new Exception($@"Direction ""{direction}"" not defined for room {name} ({id})");
             return directions[direction];
+        }
+        public bool IsValidDirection(MoveDirection direction)
+        {
+            return directions.ContainsKey(direction);
         }
 
         public IEnumerable<IObservable> observables

@@ -53,9 +53,16 @@ namespace SineahBot.Commands
                     direction = MoveDirection.Down;
                     break;
                 default:
+                    agent.Message($@"Can't move to unknown direction ""{directionName}""");
                     throw new Exception($@"Can't move to unknown direction ""{directionName}""");
             }
-            if(!RoomManager.MoveFromRoom(entity, room, direction)) {
+            if (!room.IsValidDirection(direction))
+            {
+                agent.Message($@"This room doesn't have a ""{direction}"" access.");
+                return;
+            }
+            if (!RoomManager.MoveFromRoom(entity, room, direction))
+            {
                 agent.Message("This access is locked.");
             }
             else if (agent is Character) (agent as Character).experience += 1;

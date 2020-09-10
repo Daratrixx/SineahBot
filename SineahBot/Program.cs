@@ -64,8 +64,15 @@ namespace SineahBot
         private ulong[] ignoredChannels = new ulong[] { 741728973318389790 };
         private Task MessageReceived(SocketMessage message)
         {
-            if (message.Author.Id != DiscordClient.CurrentUser.Id && !ignoredChannels.Contains(message.Channel.Id))
-                CommandManager.ParseUserMessage(message.Author.Id, message.Content, message.Channel.Id);
+            try
+            {
+                if (message.Author.Id != DiscordClient.CurrentUser.Id && !ignoredChannels.Contains(message.Channel.Id))
+                    CommandManager.ParseUserMessage(message.Author.Id, message.Content, message.Channel.Id);
+            }
+            catch (Exception e)
+            {
+                message.Channel.SendMessageAsync("Error : " + e.Message);
+            }
             return Task.CompletedTask;
         }
 

@@ -50,7 +50,13 @@ namespace SineahBot.Commands
                     direction = MoveDirection.Down;
                     break;
                 default:
+                    agent.Message($@"Can't lock unknown direction ""{directionName}""");
                     throw new Exception($@"Can't lock unknown direction ""{directionName}""");
+            }
+            if (!room.IsValidDirection(direction))
+            {
+                agent.Message($@"This room doesn't have a ""{direction}"" access.");
+                return;
             }
             var connection = room.GetRoomConnectionInDirection(direction);
             if (connection.locked)

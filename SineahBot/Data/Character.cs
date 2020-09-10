@@ -162,5 +162,8 @@ namespace SineahBot.Data
         Paladin, // Knight, faith augmentation
         Fanatic, // Bishop, melee augmentation
         Heretic, // Bishop, magic augmentation
+
+        // secret class
+        Druid,
     }
 }
