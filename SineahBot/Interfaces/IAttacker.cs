@@ -4,9 +4,8 @@ using System.Text;
 
 namespace SineahBot.Interfaces
 {
-    public interface IAttacker : IObservable
+    public interface IAttacker : IObservable, INamed
     {
-        void OnAttacking(IAttackable attackable);
         int GetWeaponDamage();
     }
 }

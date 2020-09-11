@@ -26,7 +26,7 @@ namespace SineahBot.Commands
             }
             else
             {
-                room.DescribeAction($@"**{agent.name}** said: ""{speach}""", agent);
+                room.DescribeAction($@"**{agent.GetName()}** said: ""{speach}""", agent);
                 agent.Message($@"You said: ""{speach}""");
                 if (agent is Character) (agent as Character).experience += 1;
             }

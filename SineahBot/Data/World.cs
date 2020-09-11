@@ -38,7 +38,7 @@ namespace SineahBot.Data
                 new Room("The Four Winds common room")
                 {
                     isSpawnRoom = true,
-                    description = "Several tables and chairs take most of the space in this large room. Next to the eastern door leading to the back room, a fireplace warms the place. The large western door leads outside, the small northern door leads to the kitchen. On the south wall, a flight of stairs leads to the bedrooms upstairs."
+                    description = "Several tables and chairs take most of the space in this large room. Next to the eastern door leading to the back room, a fireplace warms the body and soul on weary travellers. The large western door leads outside, the small northern door leads to the kitchen. On the south wall, a flight of stairs leads to the bedrooms upstairs."
                 },
                 new Room("Kitchen")
                 {

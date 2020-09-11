@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SineahBot.Interfaces
 {
-    interface IKillable : IDamageable
+    interface IKillable : IDamageable, INamed
     {
         void OnKilled(IAgent agent = null);
     }

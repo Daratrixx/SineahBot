@@ -69,7 +69,7 @@ namespace SineahBot.Commands
                 if (agentInventory.IsItemInInventory(connection.keyItemName))
                 {
                     connection.Lock();
-                    room.DescribeAction($"{agent.name} has locked the access ({direction})", agent);
+                    room.DescribeAction($"{agent.GetName()} has locked the access ({direction})", agent);
                     connection.toRoom.DescribeAction($"Someone locked the access from the other side.");
                     agent.Message($"You locked the access ({direction})");
                 }
@@ -81,7 +81,7 @@ namespace SineahBot.Commands
             else
             {
                 connection.Lock();
-                room.DescribeAction($"{agent.name} has locked the access ({direction})", agent);
+                room.DescribeAction($"{agent.GetName()} has locked the access ({direction})", agent);
                 connection.toRoom.DescribeAction($"Someone locked the access from the other side.");
                 agent.Message($"You locked the access ({direction})");
                 if (agent is Character) (agent as Character).experience += 1;

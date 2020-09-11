@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SineahBot.Interfaces
 {
-    interface IConsumable
+    interface IConsumable : INamed
     {
         void OnConsumed(IAgent agent);
     }

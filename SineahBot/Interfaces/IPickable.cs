@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SineahBot.Interfaces
 {
-    public interface IPickable
+    public interface IPickable : INamed
     {
         void OnPicked(IAgent agent);
     }

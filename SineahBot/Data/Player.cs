@@ -20,8 +20,6 @@ namespace SineahBot.Data
 
         [Key]
         public ulong userId { get; set; }
-        [NotMapped]
-        public string name { get; set; }
         public Guid? idCharacter { get; set; }
 
         public Character character;
@@ -35,6 +33,11 @@ namespace SineahBot.Data
             }
             else
                 Console.WriteLine(message);
+        }
+
+        public string GetName(IAgent agent = null)
+        {
+            return character?.GetName(agent);
         }
     }
 

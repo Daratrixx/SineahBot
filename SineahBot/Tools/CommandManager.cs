@@ -169,6 +169,7 @@ namespace SineahBot.Tools
         new CommandSay(),
         new CommandInformation(),
         new CommandCombatAttack(),
+        new CommandCastOn(), new CommandCast(),
         new CommandLevel()};
         public static List<Command> OutCharacterCommands = new List<Command>() { };
     }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SineahBot.Interfaces
 {
-    interface ICarryable
+    interface ICarryable : INamed
     {
         void OnCarried(IAgent agent);
     }

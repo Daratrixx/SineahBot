@@ -7,19 +7,20 @@ using System.Text;
 
 namespace SineahBot.Data
 {
-    public class Character : Entity, IAgent, IAttackable, IAttacker, IKillable, IObservable, IObserver, IDamageable, IInventory
+    public class Character : Entity, IAgent, IAttackable, IAttacker, IKillable, IObservable, IObserver, IDamageable, IInventory, ICaster, IHealable
     {
         public IAgent agent;
         public CharacterStatus characterStatus;
         public int maxHealth;
         public int maxMana;
+        public Spell[] spells = new Spell[] { Spell.MinorHealing, Spell.MagicDart };
 
         public CharacterClass characterClass { get; set; }
-        public int level { get; set; }
-        public int experience { get; set; }
-        public int health { get; set; }
-        public int mana { get; set; }
-        public int gold { get; set; }
+        public int level { get; set; } = 1;
+        public int experience { get; set; } = 0;
+        public int health { get; set; } = 20;
+        public int mana { get; set; } = 10;
+        public int gold { get; set; } = 0;
 
         public virtual string GetShortDescription(IAgent agent = null)
         {
@@ -41,22 +42,29 @@ namespace SineahBot.Data
             throw new NotImplementedException();
         }
 
-        public void OnAttacking(IAttackable attackable)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool OnDamage(int damageAmount, IAttacker attacker = null)
+        public bool OnDamage(int damageAmount, INamed source = null)
         {
             health = Math.Max(0, health - damageAmount);
             if (agent != null)
             {
-                if (attacker != null)
-                    agent.Message($"You took {damageAmount} damage from {attacker.GetName()}.");
+                if (source != null)
+                    agent.Message($"You took {damageAmount} damage from {source.GetName()}.");
                 else
                     agent.Message($"You took {damageAmount} damage.");
             }
             return health == 0;
+        }
+
+        public void OnHeal(int healAmount, INamed source = null)
+        {
+            health = Math.Min(maxHealth, health + healAmount);
+            if (agent != null)
+            {
+                if (source != null)
+                    agent.Message($"{source.GetName()} healed you for {healAmount} health points.");
+                else
+                    agent.Message($"You were healed for {healAmount} health points.");
+            }
         }
 
         public virtual void OnKilled(IAgent agent = null)
@@ -66,7 +74,7 @@ namespace SineahBot.Data
             {
                 if (agent != null)
                 {
-                    this.agent.Message($"You have been killed by {agent.name}!");
+                    this.agent.Message($"You have been killed by {agent.GetName()}!");
                 }
                 else
                 {
@@ -107,7 +115,7 @@ namespace SineahBot.Data
             inventory.Remove(item);
         }
 
-        public string GetName(IAgent agent = null)
+        public override string GetName(IAgent agent = null)
         {
             return name;
         }
@@ -118,7 +126,26 @@ namespace SineahBot.Data
             return bonusDamage + new Random().Next(5, 10);
         }
 
-        public int GetMagicDamage()
+        public Spell GetSpell(string spellName)
+        {
+            spellName = spellName.ToLower();
+            var output = spells.FirstOrDefault(x => x.name.ToLower() == spellName);
+            if (output == null)
+                output = spells.FirstOrDefault(x => x.alternativeNames.Contains(spellName));
+            return output;
+        }
+
+        public bool CastSpell(Spell spell)
+        {
+            return CastSpellOn(spell, this);
+        }
+
+        public bool CastSpellOn(Spell spell, Entity target)
+        {
+            return spell.Cast(this, target);
+        }
+
+        public int GetSpellPower()
         {
             var bonusDamage = ClassProgressionManager.IsMagicalClass(characterClass) ? level * 2 : level;
             return bonusDamage + new Random().Next(5, 10);

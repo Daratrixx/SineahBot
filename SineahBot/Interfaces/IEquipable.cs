@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SineahBot.Interfaces
 {
-    interface IEquipable
+    interface IEquipable : INamed
     {
         void OnEquipped(IAgent agent);
     }

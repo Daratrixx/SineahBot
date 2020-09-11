@@ -4,8 +4,8 @@ using System.Text;
 
 namespace SineahBot.Interfaces
 {
-    public interface IAttackable : IObservable, INamed
+    public interface INamed
     {
-        void OnAttacked(IAgent agent);
+        string GetName(IAgent agent = null);
     }
 }

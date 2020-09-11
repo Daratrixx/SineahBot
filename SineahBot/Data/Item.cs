@@ -31,10 +31,5 @@ namespace SineahBot.Data
         {
             return description;
         }
-
-        public string GetName(IAgent agent = null)
-        {
-            return name;
-        }
     }
 }

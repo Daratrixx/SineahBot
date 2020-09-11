@@ -6,9 +6,15 @@ using System.Text;
 
 namespace SineahBot.Data
 {
-    public class Entity : DataItem, IInteractable
+    public class Entity : DataItem, IInteractable, INamed
     {
         public Guid currentRoomId;
+
+        public virtual string GetName(IAgent agent = null)
+        {
+            return name;
+        }
+
         public void OnInteracted(IAgent agent, Interaction interaction)
         {
             /*switch (interaction)

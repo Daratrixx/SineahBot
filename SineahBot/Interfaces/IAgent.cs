@@ -5,9 +5,8 @@ using System.Text;
 
 namespace SineahBot.Interfaces
 {
-    public interface IAgent
+    public interface IAgent : INamed
     {
         void Message(string message);
-        public string name { get; set; }
     }
 }

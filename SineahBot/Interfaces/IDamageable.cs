@@ -4,8 +4,8 @@ using System.Text;
 
 namespace SineahBot.Interfaces
 {
-    interface IDamageable
+    interface IDamageable : IAttackable
     {
-        bool OnDamage(int damageAmount, IAttacker attacker = null);
+        bool OnDamage(int damageAmount, INamed source = null);
     }
 }
