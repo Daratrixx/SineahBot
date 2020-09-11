@@ -75,6 +75,23 @@ namespace SineahBot.Data
                 if (agent != null)
                 {
                     this.agent.Message($"You have been killed by {agent.GetName()}!");
+                    int rewardExp = ClassProgressionManager.ExperienceForNextLevel(this.level) / 10;
+                    if (this.agent is Player)
+                        rewardExp += rewardExp / 10;
+                    else
+                        rewardExp += experience;
+                    if (agent is Player)
+                    {
+                        var player = agent as Player;
+                        player.character.experience += (rewardExp * Math.Max(this.level, 1)) / Math.Max(player.character.level, 1);
+                        player.character.gold += this.gold;
+                    }
+                    if (agent is Character)
+                    {
+                        var character = agent as Character;
+                        character.experience += (rewardExp * Math.Max(this.level, 1)) / Math.Max(character.level, 1);
+                        character.gold += this.gold;
+                    }
                 }
                 else
                 {

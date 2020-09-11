@@ -8,12 +8,12 @@ using System.Text.RegularExpressions;
 
 namespace SineahBot.Commands
 {
-    public class CommandInformation : Command
+    public class CommandMetaInformation : Command
     {
 
-        public CommandInformation()
+        public CommandMetaInformation()
         {
-            commandRegex = new Regex(@"^(i|info|self|information)$", RegexOptions.IgnoreCase);
+            commandRegex = new Regex(@"^!(i|info|self|information)$", RegexOptions.IgnoreCase);
         }
 
         public override void Run(IAgent agent, Room room)
@@ -39,11 +39,12 @@ namespace SineahBot.Commands
         public string GetCharacterInformation(Character character)
         {
             return $@"
-```
-INFORMATION
-> {character.name} - {character.characterClass.ToString().ToUpper()} level {character.level} ({character.experience}/{ClassProgressionManager.ExperienceForNextLevel(character.level)} exp)
-> Health : {character.health}/{character.maxHealth}
-```";
+**INFORMATION** - ***{character.name}***
+> *{character.characterClass.ToString().ToUpper()}* *level **{character.level}*** (*{character.experience}/{ClassProgressionManager.ExperienceForNextLevel(character.level)} exp*)
+> *Health* : **{character.health}/{character.maxHealth}**
+> *Mana* : **{character.mana}/{character.maxMana}**
+{(character.experience >= ClassProgressionManager.ExperienceForNextLevel(character.level) ? "*You have enough experience to level up! Type **!level***" : "")}
+";
         }
 
     }

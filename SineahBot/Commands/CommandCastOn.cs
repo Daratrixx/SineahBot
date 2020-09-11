@@ -66,7 +66,12 @@ namespace SineahBot.Commands
                 room.DescribeAction($"{caster.GetName()} casted {spell.GetName()} on {target.name}!", agent);
                 if (caster.CastSpellOn(spell, target)) // true if target died
                 {
-                    if (target is IKillable) (target as IKillable).OnKilled(agent);
+                    if (target is IKillable)
+                    {
+                        (target as IKillable).OnKilled(agent);
+                        agent.Message($"You killed {target.GetName()}!");
+                        room.DescribeAction($"{caster.GetName()} killed {target.GetName()}!", agent, target as IAgent);
+                    }
                 }
             }
             else

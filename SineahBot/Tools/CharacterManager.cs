@@ -25,7 +25,7 @@ namespace SineahBot.Tools
                 var character = Program.database.Characters.FirstOrDefault(x => x.id == idCharacter);
                 if (character == null) throw new Exception($"Impossible to find character with id {idCharacter}");
                 characters[idCharacter] = character;
-                ClassProgressionManager.ApplyClassProgressionForCharacter(character);
+                ClassProgressionManager.ApplyClassProgressionForCharacter(character, true);
                 return character;
             }
             return characters[idCharacter];

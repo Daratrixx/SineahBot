@@ -154,7 +154,7 @@ namespace SineahBot.Data
                     gold = 50,
                     name = "Bartender",
                     experience = 50,
-                    shortDescription = "The bartender is ready to serve drinks at the bars",
+                    shortDescription = "The bartender is ready to serve drinks at the bar.",
                     longDescription = "The bartender hangs behind the bar, cleaning glasses and serving drinks to the customers of the inn.",
                     alternativeNames = new string[] { "host" }
                 },

@@ -27,22 +27,6 @@ namespace SineahBot.Data
         public override void OnKilled(IAgent agent = null)
         {
             base.OnKilled(agent);
-            if (agent != null)
-            {
-                int rewardExp = this.experience + ClassProgressionManager.ExperienceForNextLevel(this.level) / 10;
-                if (agent is Player)
-                {
-                    var player = agent as Player;
-                    player.character.experience += (rewardExp * this.level) / player.character.level;
-                    player.character.gold += this.gold;
-                }
-                if (agent is Character)
-                {
-                    var character = agent as Character;
-                    character.experience += (rewardExp * this.level) / character.level;
-                    character.gold += this.gold;
-                }
-            }
         }
     }
 }

@@ -44,12 +44,12 @@ namespace SineahBot.Data
 
         public static Spell MagicDart = new SpellDamage("Magic dart",
         new string[] { "magicdart", "magicd", "mdart", "magd", "md" })
-        { baseDamage = 15, manaCost = 10 };
+        { baseDamage = 15, manaCost = 10, CanSelfCast = false };
         public static Spell ArcaneBlast = new SpellDamage("Arcane blast",
         new string[] { "arcanblast", "arcanb", "ablast", "arcb", "ab" })
-        { baseDamage = 30, manaCost = 15 };
+        { baseDamage = 30, manaCost = 15, CanSelfCast = false };
         public static Spell Overcharge = new SpellDamage("Overcharge",
         new string[] { "overc", "ocharge", "oc" })
-        { baseDamage = 5, manaCost = 5 };
+        { baseDamage = 5, manaCost = 5, CanSelfCast = false };
     }
 }

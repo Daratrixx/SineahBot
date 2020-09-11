@@ -31,12 +31,12 @@ namespace SineahBot.Tools
             switch (player.playerStatus)
             {
                 case PlayerStatus.InCharacter:
-                    Character character = player.character;
                     Room room = null;
+                    var character = player.character;
                     if (character.currentRoomId == Guid.Empty)
                     {
                         room = RoomManager.GetRoom(RoomManager.GetSpawnRoomId());
-                        room.AddToRoom(character, false); // add player to room but don't show it to the player
+                        room.AddToRoom(character, false); // add the player character to room but don't show it to the player
                     }
                     else
                     {
@@ -58,7 +58,11 @@ namespace SineahBot.Tools
         {
             var metaCommand = MetaCommands.FirstOrDefault(x => x.IsMessageMatchingCommand(command));
             if (metaCommand == null) return false;
-            metaCommand.Run(agent);
+            var character = (agent as Player)?.character;
+            if (character != null)
+                metaCommand.Run(character);
+            else
+                metaCommand.Run(agent);
             return true;
         }
 
@@ -160,14 +164,13 @@ namespace SineahBot.Tools
             OutCharacterCommands.FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(agent);
         }
 
-        public static List<Command> MetaCommands = new List<Command>() { new CommandHelp() };
+        public static List<Command> MetaCommands = new List<Command>() { new CommandMetaInformation(), new CommandMetaSpells(), new CommandMetaHelp() };
         public static List<Command> NoCharacterCommands = new List<Command>() { };
         public static List<Command> InCharacterCommands = new List<Command>() {
         new CommandMove(), new CommandLook(), new CommandDirection(),
         new CommandPickup(), new CommandDrop(),
         new CommandLock(), new CommandUnlock(),
         new CommandSay(),
-        new CommandInformation(),
         new CommandCombatAttack(),
         new CommandCastOn(), new CommandCast(),
         new CommandLevel()};
