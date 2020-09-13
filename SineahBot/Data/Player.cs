@@ -24,17 +24,33 @@ namespace SineahBot.Data
 
         public Character character;
 
+
+        protected List<string> messageMuffer = new List<string>();
         public void Message(string message)
         {
-            if (Program.ONLINE && message != null)
+            messageMuffer.Add(message);
+            if (!playerMessageBuffers.Contains(this)) playerMessageBuffers.Add(this);
+        }
+        public void CommitMessageBuffer()
+        {
+            var output = String.Join('\n', messageMuffer);
+            if (Program.ONLINE && output != null)
             {
                 var channel = Program.DiscordClient.GetChannel(channelId) as IMessageChannel;
-                var result = channel.SendMessageAsync(message).Result;
+                var result = channel.SendMessageAsync(output).Result;
             }
             else
-                Console.WriteLine(message);
+                Console.WriteLine(output);
+            messageMuffer.Clear();
         }
 
+        private static List<Player> playerMessageBuffers = new List<Player>();
+        public static void CommitPlayerMessageBuffers()
+        {
+            foreach (var p in playerMessageBuffers)
+                p.CommitMessageBuffer();
+            playerMessageBuffers.Clear();
+        }
         public string GetName(IAgent agent = null)
         {
             return character?.GetName(agent);
