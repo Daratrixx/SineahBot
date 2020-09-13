@@ -27,6 +27,10 @@ namespace SineahBot.Tools
         {
             return starterClass.Contains(characterClass) || secretClass.Contains(characterClass);
         }
+        public static bool IsSecretClass(CharacterClass characterClass)
+        {
+            return secretClass.Contains(characterClass);
+        }
         public static bool IsPhysicalClass(CharacterClass characterClass)
         {
             return physicalClass.Contains(characterClass);

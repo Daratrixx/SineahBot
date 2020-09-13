@@ -23,7 +23,7 @@ namespace SineahBot.Data
 
         public override string GetFullDescription(IAgent agent = null)
         {
-            return longDescription;
+            return longDescription + "\n" + GetStateDescription(agent);
         }
 
         public override bool OnDamage(int damageAmount, INamed source = null)

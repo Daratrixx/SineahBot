@@ -31,7 +31,27 @@ namespace SineahBot.Data
 
         public virtual string GetFullDescription(IAgent agent = null)
         {
-            return $"Here is a longer description of {name}.";
+            List<string> output = new List<string>();
+            output.Add($"**{GetName(agent).ToUpper()}**");
+            if (ClassProgressionManager.IsPhysicalClass(characterClass))
+                output.Add("> They seem to have a powerful body.");
+            if (ClassProgressionManager.IsMagicalClass(characterClass))
+                output.Add("> Their eyes glow with knowledge and power.");
+            if (ClassProgressionManager.IsSecretClass(characterClass))
+                output.Add("> They are shrouded my an aura of mistery.");
+            output.Add(GetStateDescription(agent));
+            return String.Join("\n", output);
+        }
+
+        public string GetStateDescription(IAgent agent = null)
+        {
+            if (health <= (maxHealth * 1) / 4)
+                return $"> {GetName(agent)} is at the doors gate.";
+            if (health <= (maxHealth * 2) / 4)
+                return $"> {GetName(agent)} is badly injured.";
+            if (health <= (maxHealth * 3) / 4)
+                return $"> {GetName(agent)} is lightly bruised.";
+            return $"> {GetName(agent)} seems in good shape.";
         }
 
         public void Message(string message)
