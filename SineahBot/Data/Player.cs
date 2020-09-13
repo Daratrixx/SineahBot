@@ -6,6 +6,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SineahBot.Data
 {
@@ -28,8 +30,14 @@ namespace SineahBot.Data
         protected List<string> messageMuffer = new List<string>();
         public void Message(string message)
         {
-            messageMuffer.Add(message);
-            if (!playerMessageBuffers.Contains(this)) playerMessageBuffers.Add(this);
+            Task.Run(() =>
+            {
+                //if (!Monitor.IsEntered(playerMessageBuffers))
+                //    Monitor.TryEnter(playerMessageBuffers, 5000);
+                messageMuffer.Add(message);
+                if (!playerMessageBuffers.Contains(this)) playerMessageBuffers.Add(this);
+                //Monitor.Exit(playerMessageBuffers);
+            }).Wait();
         }
         public void CommitMessageBuffer()
         {
@@ -45,11 +53,17 @@ namespace SineahBot.Data
         }
 
         private static List<Player> playerMessageBuffers = new List<Player>();
-        public static void CommitPlayerMessageBuffers()
+        public static async Task CommitPlayerMessageBuffers()
         {
-            foreach (var p in playerMessageBuffers)
-                p.CommitMessageBuffer();
-            playerMessageBuffers.Clear();
+            await Task.Run(() =>
+            {
+                if (!Monitor.IsEntered(playerMessageBuffers))
+                    Monitor.TryEnter(playerMessageBuffers, 5000);
+                foreach (var p in playerMessageBuffers)
+                    p.CommitMessageBuffer();
+                playerMessageBuffers.Clear();
+                Monitor.Exit(playerMessageBuffers);
+            });
         }
         public string GetName(IAgent agent = null)
         {

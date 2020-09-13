@@ -14,6 +14,8 @@ namespace SineahBot.Data
         public string longDescription { get; set; }
         public string[] alternativeNames { get; set; }
 
+        public Guid idSpawnRoom { get; set; }
+
         public override string GetShortDescription(IAgent agent = null)
         {
             return shortDescription;
@@ -27,6 +29,14 @@ namespace SineahBot.Data
         public override void OnKilled(IAgent agent = null)
         {
             base.OnKilled(agent);
+            new MudTimer(2, () =>
+            {
+                health = maxHealth;
+                mana = maxMana;
+                var room = RoomManager.GetRoom(idSpawnRoom);
+                RoomManager.MoveToRoom(this, room);
+                Player.CommitPlayerMessageBuffers().Wait();
+            });
         }
     }
 }

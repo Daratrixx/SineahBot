@@ -43,7 +43,7 @@ namespace SineahBot
             {
                 input = Console.ReadLine();
                 CommandManager.ParseUserMessage(0, input);
-                Player.CommitPlayerMessageBuffers();
+                Player.CommitPlayerMessageBuffers().Wait();
             }
         }
         public static DiscordSocketClient DiscordClient;
@@ -74,7 +74,7 @@ namespace SineahBot
             {
                 message.Channel.SendMessageAsync("Error : " + e.Message);
             }
-            Player.CommitPlayerMessageBuffers();
+            Player.CommitPlayerMessageBuffers().Wait();
             return Task.CompletedTask;
         }
 

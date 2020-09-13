@@ -109,6 +109,12 @@ namespace SineahBot.Data
             entity.currentRoomId = this.id;
             // trigger stuff on entity entering
             entities.Add(entity);
+            if (entity is NPC)
+            {
+                var npc = entity as NPC;
+                if (npc.idSpawnRoom == Guid.Empty)
+                    npc.idSpawnRoom = this.id;
+            }
         }
 
         public void RemoveFromRoom(Entity entity, bool feedback = true)
