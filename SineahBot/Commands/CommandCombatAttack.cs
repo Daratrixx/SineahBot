@@ -40,7 +40,7 @@ namespace SineahBot.Commands
                     if (attackableTarget is IDamageable)
                     {
                         var damageableTarget = target as IDamageable;
-                        var damage = attacker.GetWeaponDamage();
+                        var damage = attacker.GetWeaponDamage() + new Random().Next(5, 10);
                         agent.Message($"You attacked {attackableTarget.GetName()} for {damage} damages.");
                         room.DescribeAction($"{attacker.GetName()} attacked {attackableTarget.GetName()}.", agent, attackableTarget as IAgent);
                         if (damageableTarget.OnDamage(damage, attacker))

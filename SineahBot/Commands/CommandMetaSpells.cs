@@ -40,6 +40,11 @@ namespace SineahBot.Commands
         }
         public void DisplayinformationForCharacter(Character character, string spellName)
         {
+            if (character.spells.Length == 0)
+            {
+                character.Message($@"> You do not know any spells.");
+                return;
+            }
             if (!String.IsNullOrEmpty(spellName))
             {
                 var spell = character.GetSpell(spellName);
@@ -49,7 +54,7 @@ namespace SineahBot.Commands
                 }
                 else
                 {
-                    character.Message(GetSpellDetails(spell, character.GetSpellPower()));
+                    character.Message(GetSpellDetails(spell, character as ICaster));
                 }
             }
             else
@@ -61,21 +66,21 @@ namespace SineahBot.Commands
         public string GetCharacterSpells(Character character)
         {
             return "SPELLS\n"
-            + String.Join('\n', character.spells.Select(x => GetSpellInformation(x)))
+            + String.Join('\n', character.spells.Select(x => GetSpellInformation(x, character as ICaster)))
             + "\n *Type **!spells [spell name]** to get more informations about the specified spell.*";
         }
-        public string GetSpellInformation(Spell spell)
+        public string GetSpellInformation(Spell spell, ICaster caster)
         {
-            return $"> {spell.GetName()} - {spell.description}";
+            return $"> {spell.GetName()} - {spell.GetDescription(caster)}";
         }
-        public string GetSpellDetails(Spell spell, int spellPower)
+        public string GetSpellDetails(Spell spell, ICaster caster)
         {
             return $@"
 **{spell.GetName().ToUpper()}** *(alt: {String.Join(", ", spell.alternativeNames)})*
-> {spell.description}
+> {spell.GetDescription(caster)}
 > {(spell.NeedsTarget ? "Needs target" : "No target")}, {(spell.CanSelfCast ? "Can self cast" : "Can't self cast")}
 > Mana cost : {spell.manaCost}
-> Effects : {spell.GetEffectDescription()}
+> Effects : {spell.GetEffectDescription(caster)}
 ";
         }
 

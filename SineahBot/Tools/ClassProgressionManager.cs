@@ -55,22 +55,42 @@ namespace SineahBot.Tools
             .RegisterSubclass(CharacterClass.Abbot, 2)
             .RegisterSubclass(CharacterClass.Enchanter, 2) },
             // faith path
-            { CharacterClass.Abbot, new ClassProgression(CharacterClass.Abbot, 20, 10, 15, 3).RegisterSubclass(CharacterClass.Prelate, 4) },
-            { CharacterClass.Prelate, new ClassProgression(CharacterClass.Prelate, 25, 12, 15, 3).RegisterSubclass(CharacterClass.Bishop, 7) },
-            { CharacterClass.Bishop, new ClassProgression(CharacterClass.Bishop, 30, 14, 15, 3) },
+            { CharacterClass.Abbot, new ClassProgression(CharacterClass.Abbot, 20, 10, 15, 3)
+            .RegisterSpell(Spell.MinorHealing, 2)
+            .RegisterSubclass(CharacterClass.Prelate, 4) },
+            { CharacterClass.Prelate, new ClassProgression(CharacterClass.Prelate, 25, 12, 15, 3)
+            .RegisterSpell(Spell.MinorHealing, 2)
+            .RegisterSpell(Spell.MajorHealing, 4)
+            .RegisterSubclass(CharacterClass.Bishop, 7) },
+            { CharacterClass.Bishop, new ClassProgression(CharacterClass.Bishop, 30, 14, 15, 3)
+            .RegisterSpell(Spell.MinorHealing, 2)
+            .RegisterSpell(Spell.MajorHealing, 4)
+            .RegisterSpell(Spell.DivineHand, 7) },
             // magic path
-            { CharacterClass.Enchanter, new ClassProgression(CharacterClass.Enchanter, 20, 10, 20, 4).RegisterSubclass(CharacterClass.Mage, 4) },
-            { CharacterClass.Mage, new ClassProgression(CharacterClass.Mage, 24, 11, 20, 4).RegisterSubclass(CharacterClass.Wizard, 7) },
-            { CharacterClass.Wizard, new ClassProgression(CharacterClass.Wizard, 28, 12, 20, 4) },
+            { CharacterClass.Enchanter, new ClassProgression(CharacterClass.Enchanter, 20, 10, 20, 4)
+            .RegisterSpell(Spell.MagicDart, 2)
+            .RegisterSubclass(CharacterClass.Mage, 4) },
+            { CharacterClass.Mage, new ClassProgression(CharacterClass.Mage, 24, 11, 20, 4)
+            .RegisterSpell(Spell.MagicDart, 2)
+            .RegisterSpell(Spell.ArcaneBlast, 4)
+            .RegisterSubclass(CharacterClass.Wizard, 7) },
+            { CharacterClass.Wizard, new ClassProgression(CharacterClass.Wizard, 28, 12, 20, 4)
+            .RegisterSpell(Spell.MagicDart, 2)
+            .RegisterSpell(Spell.ArcaneBlast, 4)
+            .RegisterSpell(Spell.Overcharge, 7) },
 
             // secret class
-            { CharacterClass.Druid, new ClassProgression(CharacterClass.Druid, 25, 12, 15, 3) },
+            { CharacterClass.Druid, new ClassProgression(CharacterClass.Druid, 25, 12, 15, 3)
+            .RegisterSpell(Spell.MinorHealing, 2)
+            .RegisterSpell(Spell.MagicDart, 4)
+            .RegisterSpell(Spell.MajorHealing, 6) },
         };
         public static void ApplyClassProgressionForCharacter(Character character, bool maximize = false)
         {
             var progression = classProgressions[character.characterClass];
             character.maxHealth = progression.baseHealth + character.level * progression.levelHealth;
             character.maxMana = progression.baseMana + character.level * progression.levelMana;
+            character.spells = progression.availableSpells.Where(x => x.Value <= character.level).Select(x => x.Key).ToArray();
             if (maximize)
             {
                 character.health = character.maxHealth;
@@ -107,10 +127,16 @@ namespace SineahBot.Tools
             public int baseMana;
             public int levelMana;
             public Dictionary<CharacterClass, int> subclassAtLevel = new Dictionary<CharacterClass, int>();
+            public Dictionary<Spell, int> availableSpells = new Dictionary<Spell, int>();
 
             public ClassProgression RegisterSubclass(CharacterClass subclass, int level)
             {
                 subclassAtLevel[subclass] = level;
+                return this;
+            }
+            public ClassProgression RegisterSpell(Spell spell, int level)
+            {
+                availableSpells[spell] = level;
                 return this;
             }
             public KeyValuePair<CharacterClass, int>[] GetSubClass()

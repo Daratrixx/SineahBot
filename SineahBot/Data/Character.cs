@@ -47,6 +47,7 @@ namespace SineahBot.Data
         public bool OnDamage(int damageAmount, INamed source = null)
         {
             health = Math.Max(0, health - damageAmount);
+            if (source == this) return health == 0;
             if (agent != null)
             {
                 if (source != null)
@@ -60,6 +61,7 @@ namespace SineahBot.Data
         public void OnHeal(int healAmount, INamed source = null)
         {
             health = Math.Min(maxHealth, health + healAmount);
+            if (source == this) return;
             if (agent != null)
             {
                 if (source != null)
@@ -76,23 +78,30 @@ namespace SineahBot.Data
             {
                 if (agent != null)
                 {
-                    this.agent.Message($"You have been killed by {agent.GetName()}!");
-                    int rewardExp = ClassProgressionManager.ExperienceForNextLevel(this.level) / 10;
-                    if (this.agent is Player)
-                        rewardExp += rewardExp / 10;
-                    else
-                        rewardExp += experience;
-                    if (agent is Player)
+                    if (agent != this.agent)
                     {
-                        var player = agent as Player;
-                        player.character.experience += (rewardExp * Math.Max(this.level, 1)) / Math.Max(player.character.level, 1);
-                        player.character.gold += this.gold;
+                        this.agent.Message($"You have been killed by {agent.GetName()}!");
+                        int rewardExp = ClassProgressionManager.ExperienceForNextLevel(this.level) / 10;
+                        if (this.agent is Player)
+                            rewardExp += rewardExp / 10;
+                        else
+                            rewardExp += experience;
+                        if (agent is Player)
+                        {
+                            var player = agent as Player;
+                            player.character.experience += (rewardExp * Math.Max(this.level, 1)) / Math.Max(player.character.level, 1);
+                            player.character.gold += this.gold;
+                        }
+                        if (agent is Character)
+                        {
+                            var character = agent as Character;
+                            character.experience += (rewardExp * Math.Max(this.level, 1)) / Math.Max(character.level, 1);
+                            character.gold += this.gold;
+                        }
                     }
-                    if (agent is Character)
+                    else
                     {
-                        var character = agent as Character;
-                        character.experience += (rewardExp * Math.Max(this.level, 1)) / Math.Max(character.level, 1);
-                        character.gold += this.gold;
+                        this.agent.Message($"You killed yourself!");
                     }
                 }
                 else
@@ -142,7 +151,7 @@ namespace SineahBot.Data
         public int GetWeaponDamage()
         {
             var bonusDamage = ClassProgressionManager.IsPhysicalClass(characterClass) ? level * 2 : level;
-            return bonusDamage + new Random().Next(5, 10);
+            return bonusDamage;
         }
 
         public Spell GetSpell(string spellName)
@@ -167,7 +176,7 @@ namespace SineahBot.Data
         public int GetSpellPower()
         {
             var bonusDamage = ClassProgressionManager.IsMagicalClass(characterClass) ? level * 2 : level;
-            return bonusDamage + new Random().Next(5, 10);
+            return bonusDamage;
         }
 
         public void OnAttacking()
