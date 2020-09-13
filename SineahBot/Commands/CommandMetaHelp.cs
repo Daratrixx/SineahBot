@@ -19,7 +19,7 @@ namespace SineahBot.Commands
         public override void Run(IAgent agent, Room room)
         {
             //var entity = agent as Entity;
-            var targetName = commandMatch.Groups[2].Value?.Trim().ToLower();
+            var targetName = GetArgument(2);
 
             if (String.IsNullOrWhiteSpace(targetName))
             {

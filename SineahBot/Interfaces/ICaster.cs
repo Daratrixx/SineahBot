@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SineahBot.Interfaces
 {
-    public interface ICaster : INamed
+    public interface ICaster : INamed, IActionRateLimited
     {
         int GetSpellPower();
         Spell GetSpell(string spellName);

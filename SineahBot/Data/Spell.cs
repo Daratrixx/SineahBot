@@ -22,7 +22,10 @@ namespace SineahBot.Data
         }
         public string[] alternativeNames = new string[] { };
         public string description { get; set; }
-        public string details { get; set; }
+        public string GetEffectDescription()
+        {
+            return "";
+        }
 
         public abstract bool Cast(ICaster caster, Entity target); // returns true if the target died
 

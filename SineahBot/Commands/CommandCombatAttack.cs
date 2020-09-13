@@ -19,6 +19,12 @@ namespace SineahBot.Commands
         public override void Run(IAgent agent, Room room)
         {
             if (!(agent is IAttacker)) throw new Exception($@"Impossible to attack as non-attacker agent");
+            var attacker = agent as IAttacker;
+            if (!attacker.ActionCooldownOver())
+            {
+                return;
+            }
+
             var targetName = GetArgument(2);
 
             if (String.IsNullOrWhiteSpace(targetName))
@@ -27,7 +33,6 @@ namespace SineahBot.Commands
             }
             else
             {
-                var attacker = agent as IAttacker;
                 var target = room.FindInRoom(targetName);
                 if (target != null && target is IAttackable)
                 {
@@ -53,6 +58,7 @@ namespace SineahBot.Commands
                                 (damageableTarget as IKillable).OnKilled(agent);
                             }
                         }
+                        attacker.StartActionCooldown();
                     }
                     else
                     {

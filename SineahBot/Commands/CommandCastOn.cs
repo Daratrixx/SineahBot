@@ -20,6 +20,11 @@ namespace SineahBot.Commands
         {
             if (!(agent is ICaster)) throw new Exception($@"Impossible to cast a spell as non-caster agent");
             var caster = agent as ICaster;
+            if (!caster.ActionCooldownOver())
+            {
+                return;
+            }
+
             var spellName = GetArgument(1);
 
             if (String.IsNullOrWhiteSpace(spellName))
@@ -72,6 +77,7 @@ namespace SineahBot.Commands
                         agent.Message($"You killed {target.GetName()}!");
                         room.DescribeAction($"{caster.GetName()} killed {target.GetName()}!", agent, target as IAgent);
                     }
+                    caster.StartActionCooldown();
                 }
             }
             else

@@ -20,6 +20,11 @@ namespace SineahBot.Commands
         {
             if (!(agent is ICaster)) throw new Exception($@"Impossible to cast a spell as non-caster agent");
             var caster = agent as ICaster;
+            if (!caster.ActionCooldownOver())
+            {
+                return;
+            }
+
             var spellName = GetArgument(1);
 
             if (String.IsNullOrWhiteSpace(spellName))
@@ -57,6 +62,7 @@ namespace SineahBot.Commands
                         room.DescribeAction($"{caster.GetName()} killed {target.GetName()}!", agent, target as IAgent);
                     }
                 }
+                caster.StartActionCooldown();
             }
             else
             {
@@ -71,6 +77,7 @@ namespace SineahBot.Commands
                         room.DescribeAction($"{caster.GetName()} killed themselves!", agent);
                     }
                 }
+                caster.StartActionCooldown();
             }
 
             if (agent is Character) (agent as Character).experience += 1;

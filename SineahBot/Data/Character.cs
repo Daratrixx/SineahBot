@@ -22,6 +22,8 @@ namespace SineahBot.Data
         public int mana { get; set; } = 10;
         public int gold { get; set; } = 0;
 
+        public MudTimer actionCooldown = null;
+
         public virtual string GetShortDescription(IAgent agent = null)
         {
             return $"Here is {name}.";
@@ -166,6 +168,20 @@ namespace SineahBot.Data
         {
             var bonusDamage = ClassProgressionManager.IsMagicalClass(characterClass) ? level * 2 : level;
             return bonusDamage + new Random().Next(5, 10);
+        }
+
+        public void OnAttacking()
+        {
+
+        }
+
+        public bool ActionCooldownOver()
+        {
+            return actionCooldown == null;
+        }
+        public void StartActionCooldown()
+        {
+            actionCooldown = new MudTimer(5, () => { actionCooldown = null; });
         }
     }
 
