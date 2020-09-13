@@ -9,6 +9,16 @@ namespace SineahBot.Tools
 {
     public static class CharacterManager
     {
+        static CharacterManager()
+        {
+            new MudInterval(2, () =>
+            {
+                foreach (var c in characters)
+                {
+                    c.Value.Regenerate();
+                }
+            });
+        }
         public static Dictionary<Guid, Character> characters = new Dictionary<Guid, Character>();
 
         public static void LoadCharacters(IEnumerable<Character> characters)

@@ -46,12 +46,12 @@ namespace SineahBot.Data
 
         public void RegisterDirection(MoveDirection direction, RoomConnectionState roomConnection)
         {
-            if (directions.ContainsKey(direction)) throw new Exception($"Direction duplicate for room {this.id}=>{direction}=>{roomConnection.toRoom.id}X{directions[direction].toRoom.id}");
+            if (directions.ContainsKey(direction)) throw new Exception($"Direction duplicate for room {name}=>{direction}=>{roomConnection.toRoom.name} X {directions[direction].toRoom.name}");
             directions[direction] = roomConnection;
         }
         public RoomConnectionState GetRoomConnectionInDirection(MoveDirection direction)
         {
-            if (!directions.ContainsKey(direction)) throw new Exception($@"Direction ""{direction}"" not defined for room {name} ({id})");
+            if (!directions.ContainsKey(direction)) throw new Exception($@"Direction ""{direction}"" not defined for room {name}");
             return directions[direction];
         }
         public bool IsValidDirection(MoveDirection direction)
@@ -87,7 +87,7 @@ namespace SineahBot.Data
 
         public string GetFullDescription(IAgent agent = null)
         {
-            return $"{GetShortDescription(agent)}{String.Concat(observables.Where(x => x != agent).Select(x => " " + x.GetShortDescription(agent)))}";
+            return $"{GetShortDescription(agent)}{(observables.Count() > 0 ? $"\n> \\> {String.Concat(observables.Where(x => x != agent).Select(x => " " + x.GetShortDescription(agent)))}" : "")}";
         }
 
         public void DescribeAction(string action, params IAgent[] agent)

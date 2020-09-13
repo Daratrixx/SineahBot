@@ -32,7 +32,14 @@ namespace SineahBot.Data.Spells
         }
         public override string GetEffectDescription(ICaster caster = null)
         {
-            return base.GetEffectDescription(caster) + $"\n> Healing potential : **{baseHeal} + ({(caster != null ? caster.GetSpellPower().ToString() : "spell power")})**";
+            if (caster != null)
+            {
+                return base.GetEffectDescription(caster) + $"Heals target\n> Healing potential : **{baseHeal + caster.GetSpellPower()} ({baseHeal} + [spell power])**";
+            }
+            else
+            {
+                return base.GetEffectDescription(caster) + $"Heals target\n> Healing potential : **{baseHeal} +  [spell power]**";
+            }
         }
     }
 }

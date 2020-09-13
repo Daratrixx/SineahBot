@@ -33,7 +33,14 @@ namespace SineahBot.Data.Spells
         }
         public override string GetEffectDescription(ICaster caster = null)
         {
-            return base.GetEffectDescription(caster) + $"\n> Damaging potential : **{baseDamage} + ({(caster != null ? caster.GetSpellPower().ToString() : "spell power")})**";
+            if (caster != null)
+            {
+                return base.GetEffectDescription(caster) + $"Damages target\n> Damaging potential : **{baseDamage + caster.GetSpellPower()} ({baseDamage} + [spell power])**";
+            }
+            else
+            {
+                return base.GetEffectDescription(caster) + $"Damages target\n> Damaging potential : **{baseDamage} +  [spell power]**";
+            }
         }
     }
 }

@@ -55,5 +55,29 @@ namespace SineahBot.Data
                 Player.CommitPlayerMessageBuffers().Wait();
             });
         }
+
+
+        public NPC Clone()
+        {
+            return new NPC()
+            {
+                id = Guid.NewGuid(),
+                name = name,
+                shortDescription = shortDescription,
+                longDescription = longDescription,
+                level = level,
+                experience = experience,
+                gold = gold,
+                maxHealth = maxHealth,
+                health = health,
+                maxMana = maxMana,
+                mana = mana,
+                spells = spells,
+                alternativeNames = alternativeNames,
+                characterClass = characterClass,
+                characterStatus = characterStatus,
+                agent = agent
+            };
+        }
     }
 }

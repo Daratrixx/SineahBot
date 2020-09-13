@@ -57,14 +57,18 @@ namespace SineahBot.Data
         {
             await Task.Run(() =>
             {
-                if (!Monitor.IsEntered(playerMessageBuffers))
-                    Monitor.TryEnter(playerMessageBuffers, 5000);
+                if (Messaging) return;
+                //if (!Monitor.IsEntered(playerMessageBuffers))
+                //    Monitor.TryEnter(playerMessageBuffers, 5000);
+                Messaging = true;
                 foreach (var p in playerMessageBuffers)
                     p.CommitMessageBuffer();
                 playerMessageBuffers.Clear();
-                Monitor.Exit(playerMessageBuffers);
+                Messaging = false;
+                //Monitor.Exit(playerMessageBuffers);
             });
         }
+        public static bool Messaging { get; private set; }
         public string GetName(IAgent agent = null)
         {
             return character?.GetName(agent);

@@ -38,7 +38,7 @@ HELP
 > - Type move/go **[direction]** to move in the specified direction.
 > - Type **g**et **[item name]** to pick up the specified item. It will then be in your inventory.
 > - Type **d**rop **[item name]** to drop the specified item from your inventory.
-> - Type **look** **[direction]** to lock the access in the specified direction. Some access might require an item to lock them.
+> - Type **lock** **[direction]** to lock the access in the specified direction. Some access might require an item to lock them.
 > - Type **unlock** **[direction]** to unlock the access in the specified direction. Some access might require an item to unlock them.
 > - Type **attack** **[direction]** to attack the designated character or object.
 > - Type **cast [spell name] on [target name]** to cast the specified spell on the specified target.

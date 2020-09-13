@@ -38,7 +38,7 @@ namespace SineahBot.Data
             if (ClassProgressionManager.IsMagicalClass(characterClass))
                 output.Add("> Their eyes glow with knowledge and power.");
             if (ClassProgressionManager.IsSecretClass(characterClass))
-                output.Add("> They are shrouded my an aura of mistery.");
+                output.Add("> They are shrouded by an aura of mistery.");
             output.Add(GetStateDescription(agent));
             return String.Join("\n", output);
         }
@@ -76,6 +76,11 @@ namespace SineahBot.Data
                     agent.Message($"You took {damageAmount} damage.");
             }
             return health == 0;
+        }
+
+        public void Regenerate()
+        {
+            health = Math.Min(maxHealth, health + 2);
         }
 
         public void OnHeal(int healAmount, INamed source = null)

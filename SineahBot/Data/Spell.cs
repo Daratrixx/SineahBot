@@ -43,7 +43,7 @@ namespace SineahBot.Data
         { description = "Heal the targeted character for a small amount of health.", baseHeal = 5, manaCost = 5 };
         public static Spell MajorHealing = new SpellHeal("Major healing",
         new string[] { "majh", "majheal", "heal", "h", "bh" })
-        { description = "Heal the targeted character for a small moderate of health.", baseHeal = 15, manaCost = 10 };
+        { description = "Heal the targeted character for a moderate amount of health.", baseHeal = 15, manaCost = 10 };
         public static Spell DivineHand = new SpellHeal("Divine hand",
         new string[] { "divh", "divhand", "dh" })
         { description = "Heal the targeted character for a high amount of health.", baseHeal = 40, manaCost = 20 };

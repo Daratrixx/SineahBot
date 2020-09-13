@@ -13,6 +13,10 @@ namespace SineahBot.Tools
     {
         public static void ParseUserMessage(ulong userId, string message, ulong? channelId = null)
         {
+            if (message == "!save" && userId == 109406259643437056)
+            {
+                Program.database.SaveChanges();
+            }
             if (message == "!stop" && userId == 109406259643437056)
             {
                 Program.DiscordClient.StopAsync();
@@ -25,6 +29,14 @@ namespace SineahBot.Tools
                 var exp = ClassProgressionManager.ExperienceForNextLevel(player.character.level);
                 player.character.experience += exp;
                 player.Message($"Earned {exp} experience.");
+            }
+            if (message == "!boosts" && userId == 109406259643437056)
+            {
+                foreach (var c in Program.database.Characters)
+                {
+                    var exp = ClassProgressionManager.ExperienceForNextLevel(c.level);
+                    c.experience += exp;
+                }
             }
             if (channelId.HasValue) player.channelId = channelId.Value;
             if (ParseMetaCommand(player, message)) return;

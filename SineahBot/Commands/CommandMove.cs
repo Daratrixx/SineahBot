@@ -22,7 +22,7 @@ namespace SineahBot.Commands
             var entity = agent as Entity;
             string directionName = GetArgument(2);
             MoveDirection direction;
-            switch (directionName)
+            switch (directionName.ToLower())
             {
                 case "n":
                 case "north":

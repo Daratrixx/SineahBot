@@ -24,10 +24,19 @@ namespace SineahBot
         {
             var world = new World();
             world.LoadWorld();
-            if (ONLINE)
-                await OnlinePlay();
-            else
-                OfflinePlay();
+            try
+            {
+                if (ONLINE)
+                    await OnlinePlay();
+                else
+                    OfflinePlay();
+            }
+            catch (Exception e)
+            {
+                Logging.Log(e.Message);
+                Logging.Log(e.StackTrace);
+                database.SaveChanges();
+            }
         }
         private Task Log(LogMessage msg)
         {
@@ -99,13 +108,13 @@ namespace SineahBot
                 // create permissions for user
                 CreatePrivateChannelpermission(privateChanel, arg).Wait();
                 // send the welcome message
-                return privateChanel.SendMessageAsync($"Hello <@{userId}>!\nYou can talk to me here or in private messages to start your adventure!\n> Type anywhere to start.");
+                return privateChanel.SendMessageAsync($"Hello <@{userId}> and welcome to the server!\nPlease checkout <#754769525584560349> to know what's up.\nYou can talk to me here or in private messages to start your adventure!\n> Type anywhere to start.");
             }
             else
             {
                 // renew user permissions
                 CreatePrivateChannelpermission(existingChannel, arg).Wait();
-                return existingChannel.SendMessageAsync($"Welcome back <@{userId}>!\nYou can resume your adventure by talking to me here or in private messages!\n> Type anywhere to start.");
+                return existingChannel.SendMessageAsync($"Welcome back <@{userId}>!\nPlease checkout <#754769525584560349> again!\nYou can resume your adventure by talking to me here or in private messages!\n> Type anywhere to start.");
             }
         }
 
