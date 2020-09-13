@@ -26,10 +26,27 @@ namespace SineahBot.Data
             return longDescription;
         }
 
+        public override bool OnDamage(int damageAmount, INamed source = null)
+        {
+            var output = base.OnDamage(damageAmount, source);
+            if (!output)
+            {
+                new MudTimer(1, () =>
+                {
+                    if (health > 0)
+                    {
+                        CommandManager.ParseInCharacterMessage(this, $"atk {source.GetName()}", RoomManager.GetRoom(currentRoomId));
+                        Player.CommitPlayerMessageBuffers().Wait();
+                    }
+                });
+            }
+            return output;
+        }
+
         public override void OnKilled(IAgent agent = null)
         {
             base.OnKilled(agent);
-            new MudTimer(2, () =>
+            new MudTimer(30, () =>
             {
                 health = maxHealth;
                 mana = maxMana;

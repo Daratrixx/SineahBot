@@ -44,7 +44,7 @@ namespace SineahBot.Data
             throw new NotImplementedException();
         }
 
-        public bool OnDamage(int damageAmount, INamed source = null)
+        public virtual bool OnDamage(int damageAmount, INamed source = null)
         {
             health = Math.Max(0, health - damageAmount);
             if (source == this) return health == 0;
