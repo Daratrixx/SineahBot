@@ -74,7 +74,7 @@ namespace SineahBot.Data
             if (agent != null)
             {
                 if (source != null)
-                    agent.Message($"You took {damageAmount} damage from {source.GetName()}.");
+                    agent.Message($"You took {damageAmount} damage from {source.GetName()}.", source is NPC);
                 else
                     agent.Message($"You took {damageAmount} damage.");
             }
@@ -127,7 +127,7 @@ namespace SineahBot.Data
             if (agent != null)
             {
                 if (source != null)
-                    agent.Message($"{source.GetName()} healed you for {healAmount} health points.");
+                    agent.Message($"{source.GetName()} healed you for {healAmount} health points.", source is NPC);
                 else
                     agent.Message($"You were healed for {healAmount} health points.");
             }
@@ -140,7 +140,7 @@ namespace SineahBot.Data
             {
                 if (agent != this.agent)
                 {
-                    Message($"You have been killed by {agent.GetName()}!");
+                    Message($"You have been killed by {agent.GetName()}!", agent is NPC);
                     int rewardExp = ClassProgressionManager.ExperienceForNextLevel(this.level) / 10;
                     if (this.agent is Player)
                         rewardExp += rewardExp / 10;
@@ -151,12 +151,14 @@ namespace SineahBot.Data
                         var player = agent as Player;
                         player.character.experience += (rewardExp * Math.Max(this.level, 1)) / Math.Max(player.character.level, 1);
                         player.character.gold += this.gold;
+                        agent.Message($"Reward: {(rewardExp * Math.Max(this.level, 1)) / Math.Max(player.character.level, 1)} exp, {this.gold} gold.");
                     }
                     if (agent is Character)
                     {
                         var character = agent as Character;
                         character.experience += (rewardExp * Math.Max(this.level, 1)) / Math.Max(character.level, 1);
                         character.gold += this.gold;
+                        agent.Message($"Reward: {(rewardExp * Math.Max(this.level, 1)) / Math.Max(character.level, 1)} exp, {this.gold} gold.");
                     }
                 }
                 else

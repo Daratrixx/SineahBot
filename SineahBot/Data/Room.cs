@@ -110,9 +110,9 @@ namespace SineahBot.Data
         public void AddToRoom(Entity entity, bool feedback = true)
         {
             if (entity is NPC)
-                DescribeActionNow($"{entity.name} has entered the room.", entity as IAgent);
+                DescribeActionNow($"{entity.GetName()} has entered the room.", entity as IAgent);
             else if (entity is Character)
-                DescribeAction($"{entity.name} has entered the room.", entity as IAgent);
+                DescribeAction($"{entity.GetName()} has entered the room.", entity as IAgent);
             if (entity is IAgent && feedback)
             {
                 var agent = entity as IAgent;
