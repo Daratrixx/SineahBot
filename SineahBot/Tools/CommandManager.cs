@@ -6,36 +6,48 @@ using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace SineahBot.Tools
 {
     public static class CommandManager
     {
+        private static Regex createPrivateChannelRegex = new Regex(@"!create (\d+) (\d+)");
         public static void ParseUserMessage(ulong userId, string message, ulong? channelId = null)
         {
-            if (message == "!save" && userId == 109406259643437056)
-            {
-                Program.database.SaveChanges();
-            }
-            if (message == "!stop" && userId == 109406259643437056)
-            {
-                Program.DiscordClient.StopAsync();
-                Program.database.SaveChanges();
-                Environment.Exit(0);
-            }
             var player = PlayerManager.GetPlayer(userId);
-            if (message == "!boost" && userId == 109406259643437056 && player.character != null)
+            if (message.StartsWith("!") && userId == 109406259643437056)
             {
-                var exp = ClassProgressionManager.ExperienceForNextLevel(player.character.level);
-                player.character.experience += exp;
-                player.Message($"Earned {exp} experience.");
-            }
-            if (message == "!boosts" && userId == 109406259643437056)
-            {
-                foreach (var c in Program.database.Characters)
+                var create = createPrivateChannelRegex.Match(message);
+                if(create.Success)
                 {
-                    var exp = ClassProgressionManager.ExperienceForNextLevel(c.level);
-                    c.experience += exp;
+                    ulong createGuildId = ulong.Parse(create.Groups[1].Value);
+                    ulong createUserId = ulong.Parse(create.Groups[2].Value);
+                    Program.CreatePrivateChannel(createGuildId, createUserId);
+                }
+                if (message == "!save")
+                {
+                    Program.database.SaveChanges();
+                }
+                if (message == "!stop")
+                {
+                    Program.DiscordClient.StopAsync();
+                    Program.database.SaveChanges();
+                    Environment.Exit(0);
+                }
+                if (message == "!boost" && player.character != null)
+                {
+                    var exp = ClassProgressionManager.ExperienceForNextLevel(player.character.level);
+                    player.character.experience += exp;
+                    player.Message($"Earned {exp} experience.");
+                }
+                if (message == "!boosts")
+                {
+                    foreach (var c in Program.database.Characters)
+                    {
+                        var exp = ClassProgressionManager.ExperienceForNextLevel(c.level);
+                        c.experience += exp;
+                    }
                 }
             }
             if (channelId.HasValue) player.channelId = channelId.Value;

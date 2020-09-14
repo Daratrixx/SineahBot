@@ -118,7 +118,38 @@ namespace SineahBot
             }
         }
 
-        private Task CreatePrivateChannelpermission(IGuildChannel channel, IGuildUser user)
+        public static Task CreatePrivateChannel(ulong guildId, ulong userId)
+        {
+            var guild = DiscordClient.GetGuild(guildId);
+            var user = guild.GetUser(userId);
+            // look for an existing channel for the user
+            var existingChannel = guild.TextChannels.FirstOrDefault(x => x.Topic == userId.ToString());
+            if (existingChannel == null)
+            {
+                // get the private room category
+                var privateRooms = guild.CategoryChannels.FirstOrDefault(x => x.Name == "private-rooms");
+                // create a new private channel for the user
+                var privateChanel = guild.CreateTextChannelAsync("private-" + user.Username.Split(" ")[0] + "-" + (userId % 10000),
+                (properties) =>
+                {
+                    properties.CategoryId = privateRooms.Id;
+                    properties.Name = "private-" + user.Username.Split(" ")[0] + "-" + (userId % 10000);
+                    properties.Topic = userId.ToString();
+                }).Result;
+                // create permissions for user
+                CreatePrivateChannelpermission(privateChanel, user).Wait();
+                // send the welcome message
+                return privateChanel.SendMessageAsync($"Hello <@{userId}> and welcome to the server!\nPlease checkout <#754769525584560349> to know what's up.\nYou can talk to me here or in private messages to start your adventure!\n> Type anywhere to start.");
+            }
+            else
+            {
+                // renew user permissions
+                CreatePrivateChannelpermission(existingChannel, user).Wait();
+                return existingChannel.SendMessageAsync($"Welcome back <@{userId}>!\nPlease checkout <#754769525584560349> again!\nYou can resume your adventure by talking to me here or in private messages!\n> Type anywhere to start.");
+            }
+        }
+
+        private static Task CreatePrivateChannelpermission(IGuildChannel channel, IGuildUser user)
         {
             return channel.AddPermissionOverwriteAsync(user,
                 new OverwritePermissions(

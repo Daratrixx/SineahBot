@@ -11,7 +11,7 @@ namespace SineahBot.Tools
     {
         static CharacterManager()
         {
-            new MudInterval(2, () =>
+            new MudInterval(10, () =>
             {
                 foreach (var c in characters)
                 {

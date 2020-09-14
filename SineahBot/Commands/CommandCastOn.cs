@@ -77,8 +77,8 @@ namespace SineahBot.Commands
                         agent.Message($"You killed {target.GetName()}!");
                         room.DescribeAction($"{caster.GetName()} killed {target.GetName()}!", agent, target as IAgent);
                     }
-                    caster.StartActionCooldown();
                 }
+                caster.StartActionCooldown();
             }
             else
             {

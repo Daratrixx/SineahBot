@@ -19,7 +19,7 @@ namespace SineahBot.Data.Spells
             {
                 var damageAmount = baseDamage + caster.GetSpellPower() + new Random().Next(5, 10);
                 var returnValue = (target as IDamageable).OnDamage(damageAmount, caster);
-                if (caster is IAgent && caster != target)
+                if (caster is IAgent)
                 {
                     (caster as IAgent).Message($"You dealt {damageAmount} damage to {target.GetName()}.");
                 }
