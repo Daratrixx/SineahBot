@@ -108,13 +108,14 @@ namespace SineahBot.Tools
                     player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.NamingConfirmation;
                     break;
                 case PlayerCharacterCreationStatus.NamingConfirmation:
-                    if (command == "yes" || command == "y")
+                    command = command.ToLower();
+                    if (command == "yes" || command == "y" || command == "yep" || command == "affirmative")
                     {
                         player.Message($@"""{player.characterName}"" will now be your name in this world.
 > What will be your starting class ? [{ClassProgressionManager.GetStartClassListString()}]");
                         player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.Classing;
                     }
-                    else if (command == "no" || command == "n")
+                    else if (command == "no" || command == "n" || command == "nope" || command == "negative")
                     {
                         player.Message("What is your **name**, mortal ?");
                         player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.Naming;
@@ -122,7 +123,6 @@ namespace SineahBot.Tools
                     else
                     {
                         player.Message($@"Type **yes** to confirm that ""{player.characterName}"" will be your name, or **no** to enter a new name.");
-                        player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.Naming;
                     }
                     break;
                 case PlayerCharacterCreationStatus.Classing:
@@ -137,11 +137,12 @@ namespace SineahBot.Tools
                     }
                     break;
                 case PlayerCharacterCreationStatus.ClassingConfirmation:
-                    if (command == "yes" || command == "y")
+                    command = command.ToLower();
+                    if (command == "yes" || command == "y" || command == "yep" || command == "affirmative")
                     {
                         FinishCharacterCreation(player);
                     }
-                    else if (command == "no" || command == "n")
+                    else if (command == "no" || command == "n" || command == "nope" || command == "negative")
                     {
                         player.Message("What is your **class**, mortal ?");
                         player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.Classing;
@@ -149,7 +150,6 @@ namespace SineahBot.Tools
                     else
                     {
                         player.Message($@"Type **yes** to confirm that ""{player.characterClass}"" will be your class, or **no** to choose a new class.");
-                        player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.Classing;
                     }
                     break;
             }
