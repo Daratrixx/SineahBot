@@ -132,7 +132,8 @@ namespace SineahBot.Tools
                 case PlayerCharacterCreationStatus.Classing:
                     if (Enum.TryParse(command, true, out player.characterClass) && ClassProgressionManager.IsStartingClass(player.characterClass))
                     {
-                        player.Message($@"""{player.characterClass}""... will this be your starting class, your initial role in this world ? [**y**es/**n**o]");
+                        player.Message($@"""{player.characterClass}""... will this be your starting class, your initial role in this world ? [**y**es/**n**o]
+> **{player.characterClass}**: *{ClassProgressionManager.GetClassDescription(player.characterClass)}*");
                         player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.ClassingConfirmation;
                     }
                     else
@@ -190,7 +191,10 @@ namespace SineahBot.Tools
             //OutCharacterCommands.FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(agent);
         }
 
-        public static List<Command> MetaCommands = new List<Command>() { new CommandMetaInformation(), new CommandMetaSpells(), new CommandMetaHelp() };
+        public static List<Command> MetaCommands = new List<Command>() {
+        new CommandMetaInformation(),
+        new CommandMetaSpells(), new CommandMetaClass(),
+        new CommandMetaHelp() };
         public static List<Command> NoCharacterCommands = new List<Command>() { };
         public static List<Command> InCharacterCommands = new List<Command>() {
         new CommandMove(), new CommandLook(), new CommandDirection(),
