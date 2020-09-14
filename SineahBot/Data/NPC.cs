@@ -36,7 +36,7 @@ namespace SineahBot.Data
                     if (health > 0)
                     {
                         CommandManager.ParseInCharacterMessage(this, $"atk {source.GetName()}", RoomManager.GetRoom(currentRoomId));
-                        Player.CommitPlayerMessageBuffers().Wait();
+                        //Player.CommitPlayerMessageBuffers().Wait();
                     }
                 });
             }
@@ -52,7 +52,7 @@ namespace SineahBot.Data
                 mana = maxMana;
                 var room = RoomManager.GetRoom(idSpawnRoom);
                 RoomManager.MoveToRoom(this, room);
-                Player.CommitPlayerMessageBuffers().Wait();
+                //Player.CommitPlayerMessageBuffers().Wait();
             });
         }
 

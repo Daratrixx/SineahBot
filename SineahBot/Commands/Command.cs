@@ -23,16 +23,16 @@ namespace SineahBot.Commands
             return commandMatch.Groups[argumentGroupIndex].Value?.Trim();
         }
 
-        public abstract void Run(IAgent agent, Room room = null);
-        public virtual bool IsNormalCommand(IAgent agent = null)
+        public abstract void Run(Character character, Room room = null);
+        public virtual bool IsNormalCommand(Character character = null)
         {
             return true;
         }
-        public virtual bool IsCombatCommand(IAgent agent = null)
+        public virtual bool IsCombatCommand(Character character = null)
         {
             return true;
         }
-        public virtual bool IsWorkbenchCommand(IAgent agent = null)
+        public virtual bool IsWorkbenchCommand(Character character = null)
         {
             return true;
         }

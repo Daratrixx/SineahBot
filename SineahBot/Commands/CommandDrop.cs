@@ -16,39 +16,45 @@ namespace SineahBot.Commands
             commandRegex = new Regex(@"^(drop |d )(.+)$", RegexOptions.IgnoreCase);
         }
 
-        public override void Run(IAgent agent, Room room)
+        public override void Run(Character character, Room room)
         {
-            if (!(agent is IInventory)) throw new Exception($@"Impossible to drop items as non-inventory agent");
-            //var entity = agent as Entity;
+            if (character.sleeping)
+            {
+                character.Message("You are asleep.");
+                return;
+            }
+            bool direct = character is NPC;
             var targetName = GetArgument(2);
 
             if (String.IsNullOrWhiteSpace(targetName))
             {
-                agent.Message("What are you trying to drop ?");
+                character.Message("What are you trying to drop ?");
             }
             else
             {
-                var inventory = agent as IInventory;
+                var inventory = character as IInventory;
                 var target = room.FindInRoom(targetName);
-                if (target == null && (agent is IInventory)) target = (agent as IInventory).FindInInventory(targetName);
+                if (target == null && (character is IInventory)) target = (character as IInventory).FindInInventory(targetName);
                 if (target != null && target is Item)
                 {
                     var itemTarget = target as Item;
                     inventory.RemoveFromInventory(itemTarget);
-                    agent.Message($"You dropped {itemTarget.name}.");
-                    if (agent is Entity)
-                        room.DescribeAction($"{(agent as Entity).name} dropped {itemTarget.name}.", agent);
+                    character.Message($"You dropped {itemTarget.name}.");
+                    if (direct)
+                        room.DescribeActionNow($"{character.GetName()} dropped {itemTarget.name}.", character);
+                    else
+                        room.DescribeAction($"{character.GetName()} dropped {itemTarget.name}.", character);
                     room.AddToRoom(itemTarget);
-                    if (agent is Character) (agent as Character).experience += 1;
+                    character.experience += 1;
                 }
                 else
                 {
-                    agent.Message($@"Can't find any ""{targetName}""!");
+                    character.Message($@"Can't find any ""{targetName}""!");
                 }
             }
         }
 
-        public override bool IsWorkbenchCommand(IAgent agent = null)
+        public override bool IsWorkbenchCommand(Character character = null)
         {
             return false;
         }

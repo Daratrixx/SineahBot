@@ -15,8 +15,14 @@ namespace SineahBot.Commands
             commandRegex = new Regex(@"^(lock) (north|n|east|e|south|s|west|w|in|out)$", RegexOptions.IgnoreCase);
         }
 
-        public override void Run(IAgent agent, Room room)
+        public override void Run(Character character, Room room)
         {
+            if (character.sleeping)
+            {
+                character.Message("You are asleep.");
+                return;
+            }
+            bool direct = character is NPC;
             string directionName = GetArgument(2);
             MoveDirection direction;
             switch (directionName)
@@ -50,49 +56,66 @@ namespace SineahBot.Commands
                     direction = MoveDirection.Down;
                     break;
                 default:
-                    agent.Message($@"Can't lock unknown direction ""{directionName}""");
+                    character.Message($@"Can't lock unknown direction ""{directionName}""");
                     throw new Exception($@"Can't lock unknown direction ""{directionName}""");
             }
             if (!room.IsValidDirection(direction))
             {
-                agent.Message($@"This room doesn't have a ""{direction}"" access.");
+                character.Message($@"This room doesn't have a ""{direction}"" access.");
                 return;
             }
             var connection = room.GetRoomConnectionInDirection(direction);
             if (connection.locked)
             {
-                agent.Message("This access is already locked.");
+                character.Message("This access is already locked.");
             }
-            else if (connection.keyItemName != null && agent is IInventory)
+            else if (connection.keyItemName != null)
             {
-                var agentInventory = agent as IInventory;
+                var agentInventory = character as IInventory;
                 if (agentInventory.IsItemInInventory(connection.keyItemName))
                 {
                     connection.Lock();
-                    room.DescribeAction($"{agent.GetName()} has locked the access ({direction})", agent);
-                    connection.toRoom.DescribeAction($"Someone locked the access from the other side.");
-                    agent.Message($"You locked the access ({direction})");
+                    // describe in current room
+                    if (direct)
+                        room.DescribeActionNow($"{character.GetName()} has locked the access ({direction})", character);
+                    else
+                        room.DescribeAction($"{character.GetName()} has locked the access ({direction})", character);
+                    // describe in adjacent room
+                    if (direct)
+                        connection.toRoom.DescribeActionNow($"Someone locked the access from the other side.");
+                    else
+                        connection.toRoom.DescribeAction($"Someone locked the access from the other side.");
+                    character.Message($"You locked the access ({direction})");
+                    character.experience += 1;
                 }
                 else
                 {
-                    agent.Message("You ned a key for that.");
+                    character.Message("You ned a key for that.");
                 }
             }
             else
             {
                 connection.Lock();
-                room.DescribeAction($"{agent.GetName()} has locked the access ({direction})", agent);
-                connection.toRoom.DescribeAction($"Someone locked the access from the other side.");
-                agent.Message($"You locked the access ({direction})");
-                if (agent is Character) (agent as Character).experience += 1;
+                // describe in current room
+                if (direct)
+                    room.DescribeActionNow($"{character.GetName()} has locked the access ({direction})", character);
+                else
+                    room.DescribeAction($"{character.GetName()} has locked the access ({direction})", character);
+                // describe in adjacent room
+                if (direct)
+                    connection.toRoom.DescribeActionNow($"Someone locked the access from the other side.");
+                else
+                    connection.toRoom.DescribeAction($"Someone locked the access from the other side.");
+                character.Message($"You locked the access ({direction})");
+                character.experience += 1;
             }
         }
 
-        public override bool IsCombatCommand(IAgent agent = null)
+        public override bool IsCombatCommand(Character character = null)
         {
             return false;
         }
-        public override bool IsWorkbenchCommand(IAgent agent = null)
+        public override bool IsWorkbenchCommand(Character character = null)
         {
             return false;
         }

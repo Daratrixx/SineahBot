@@ -18,12 +18,8 @@ namespace SineahBot.Commands
             commandRegex = new Regex(@"^(!level)( .+)?$", RegexOptions.IgnoreCase);
         }
 
-        public override void Run(IAgent agent, Room room)
+        public override void Run(Character character, Room room)
         {
-            Character character = null;
-            if (agent is Player) character = (agent as Player).character;
-            else if (agent is Character) character = agent as Character;
-            else throw new Exception($"Unsuported level up operation for agant type {agent}");
             var className = GetArgument(2);
             if (character.experience >= ClassProgressionManager.ExperienceForNextLevel(character.level))
             {
@@ -32,14 +28,14 @@ namespace SineahBot.Commands
                 {
                     if (className == "")
                     {
-                        agent.Message($"You have to indicate what subclass you wish to level up as [**!level** {subclasses.Select(x => x.Key.ToString()).Aggregate((a, b) => a + "/" + b)}]\n> To keep your current class, type **!level {character.characterClass}**");
+                        character.Message($"You have to indicate what subclass you wish to level up as [**!level** {subclasses.Select(x => x.Key.ToString()).Aggregate((a, b) => a + "/" + b)}]\n> To keep your current class, type **!level {character.characterClass}**");
                     }
                     else
                     {
                         CharacterClass targetClass;
                         if (!Enum.TryParse(className, true, out targetClass))
                         {
-                            agent.Message($"\"className\" is not a valid class name. Possible values are [{subclasses.Select(x => x.Key.ToString()).Aggregate((a, b) => a + "/" + b)}]\n> To keep your current class, type **!level {character.characterClass}**");
+                            character.Message($"\"className\" is not a valid class name. Possible values are [{subclasses.Select(x => x.Key.ToString()).Aggregate((a, b) => a + "/" + b)}]\n> To keep your current class, type **!level {character.characterClass}**");
                         }
                         else
                         {
@@ -53,7 +49,7 @@ namespace SineahBot.Commands
                             }
                             else
                             {
-                                agent.Message($"\"targetClass\" is not a valid class name. Possible values are [{subclasses.Select(x => x.Key.ToString()).Aggregate((a, b) => a + "/" + b)}]\n> To keep your current class, type **!level {character.characterClass}**");
+                                character.Message($"\"targetClass\" is not a valid class name. Possible values are [{subclasses.Select(x => x.Key.ToString()).Aggregate((a, b) => a + "/" + b)}]\n> To keep your current class, type **!level {character.characterClass}**");
                             }
                         }
                     }
@@ -62,7 +58,7 @@ namespace SineahBot.Commands
                 {
                     if (className != "")
                     {
-                        agent.Message("You can't level up with an alternative class. Type **!level** to level up normally.");
+                        character.Message("You can't level up with an alternative class. Type **!level** to level up normally.");
                     }
                     else
                     {
@@ -72,7 +68,7 @@ namespace SineahBot.Commands
             }
             else
             {
-                agent.Message($"You don't have enough experience to level up ({character.experience}/{ClassProgressionManager.ExperienceForNextLevel(character.level)})");
+                character.Message($"You don't have enough experience to level up ({character.experience}/{ClassProgressionManager.ExperienceForNextLevel(character.level)})");
             }
         }
 

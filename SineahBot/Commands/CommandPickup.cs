@@ -16,42 +16,48 @@ namespace SineahBot.Commands
             commandRegex = new Regex(@"^(get|g|pickup|pick up|grab|take) (.+)$", RegexOptions.IgnoreCase);
         }
 
-        public override void Run(IAgent agent, Room room)
+        public override void Run(Character character, Room room)
         {
-            if (!(agent is IInventory)) throw new Exception($@"Impossible to pick-up items as non-inventory agent");
-            //var entity = agent as Entity;
+            if (character.sleeping)
+            {
+                character.Message("You are asleep.");
+                return;
+            }
+            bool direct = character is NPC;
             var targetName = GetArgument(2);
 
             if (String.IsNullOrWhiteSpace(targetName))
             {
-                agent.Message("What are you trying to get ?");
+                character.Message("What are you trying to get ?");
             }
             else
             {
-                var inventory = agent as IInventory;
+                var inventory = character as IInventory;
                 var target = room.FindInRoom(targetName);
                 if (target != null && target is Item)
                 {
                     var itemTarget = target as Item;
                     room.RemoveFromRoom(itemTarget);
-                    agent.Message($"You picked up {itemTarget.name}.");
-                    if (agent is Entity)
-                        room.DescribeAction($"{(agent as Entity).name} picked up {itemTarget.name}.", agent);
+                    character.Message($"You picked up {itemTarget.name}.");
+                    if (direct)
+                        room.DescribeActionNow($"{character.GetName()} picked up {itemTarget.name}.", character);
+                    else
+                        room.DescribeAction($"{character.GetName()} picked up {itemTarget.name}.", character);
                     inventory.AddToInventory(itemTarget);
-                    if (agent is Character) (agent as Character).experience += 1;
+                    character.experience += 1;
                 }
                 else
                 {
-                    agent.Message($@"Can't find any ""{targetName}"" here !");
+                    character.Message($@"Can't find any ""{targetName}"" here !");
                 }
             }
         }
 
-        public override bool IsCombatCommand(IAgent agent = null)
+        public override bool IsCombatCommand(Character character = null)
         {
             return false;
         }
-        public override bool IsWorkbenchCommand(IAgent agent = null)
+        public override bool IsWorkbenchCommand(Character character = null)
         {
             return false;
         }

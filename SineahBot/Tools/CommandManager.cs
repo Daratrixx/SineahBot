@@ -19,7 +19,7 @@ namespace SineahBot.Tools
             if (message.StartsWith("!") && userId == 109406259643437056)
             {
                 var create = createPrivateChannelRegex.Match(message);
-                if(create.Success)
+                if (create.Success)
                 {
                     ulong createGuildId = ulong.Parse(create.Groups[1].Value);
                     ulong createUserId = ulong.Parse(create.Groups[2].Value);
@@ -84,15 +84,19 @@ namespace SineahBot.Tools
             if (metaCommand == null) return false;
             var character = (agent as Player)?.character;
             if (character != null)
+            {
                 metaCommand.Run(character);
+            }
             else
-                metaCommand.Run(agent);
+            {
+                agent.Message("Impossible to run this command without a character.");
+            }
             return true;
         }
 
         public static void ParseNoCharacterMessage(IAgent agent, string command)
         {
-            NoCharacterCommands.FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(agent);
+            //NoCharacterCommands.FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(agent);
         }
         public static void ParseCharacterCreationMessage(Player player, string command)
         {
@@ -163,21 +167,19 @@ namespace SineahBot.Tools
             RoomManager.GetRoom(character.currentRoomId).AddToRoom(character);
             player.playerStatus = PlayerStatus.InCharacter;
         }
-        public static void ParseInCharacterMessage(IAgent agent, string command, Room room)
+        public static void ParseInCharacterMessage(Character character, string command, Room room)
         {
-            var characterStatus = CharacterStatus.Unknown;
-            if (agent is Player) characterStatus = (agent as Player).character.characterStatus;
-            if (agent is Character) characterStatus = (agent as Character).characterStatus;
+            var characterStatus = character.characterStatus;
             switch (characterStatus)
             {
                 case CharacterStatus.Normal:
-                    InCharacterCommands.Where(x => x.IsNormalCommand(agent)).FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(agent, room);
+                    InCharacterCommands.Where(x => x.IsNormalCommand(character)).FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(character, room);
                     break;
                 case CharacterStatus.Combat:
-                    InCharacterCommands.Where(x => x.IsCombatCommand(agent)).FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(agent, room);
+                    InCharacterCommands.Where(x => x.IsCombatCommand(character)).FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(character, room);
                     break;
                 case CharacterStatus.Workbench:
-                    InCharacterCommands.Where(x => x.IsWorkbenchCommand(agent)).FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(agent, room);
+                    InCharacterCommands.Where(x => x.IsWorkbenchCommand(character)).FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(character, room);
                     break;
                 default:
                     throw new Exception($"Impossible to parse an in-character command for a character in the unsupported character state : {characterStatus}");
@@ -185,7 +187,7 @@ namespace SineahBot.Tools
         }
         public static void ParseOutCharacterMessage(IAgent agent, string command)
         {
-            OutCharacterCommands.FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(agent);
+            //OutCharacterCommands.FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(agent);
         }
 
         public static List<Command> MetaCommands = new List<Command>() { new CommandMetaInformation(), new CommandMetaSpells(), new CommandMetaHelp() };
@@ -197,7 +199,9 @@ namespace SineahBot.Tools
         new CommandSay(),
         new CommandCombatAttack(),
         new CommandCastOn(), new CommandCast(),
-        new CommandLevel()};
+        new CommandLevel(),
+        new CommandSleep(),
+        };
         public static List<Command> OutCharacterCommands = new List<Command>() { };
     }
 }

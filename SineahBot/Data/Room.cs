@@ -2,6 +2,7 @@
 using SineahBot.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Mapping;
 using System.Linq;
 using System.Text;
 
@@ -98,9 +99,20 @@ namespace SineahBot.Data
             }
         }
 
+        public void DescribeActionNow(string action, params IAgent[] agent)
+        {
+            foreach (var a in agents.Where(x => !agent.Contains(x)))
+            {
+                a.Message(action, true);
+            }
+        }
+
         public void AddToRoom(Entity entity, bool feedback = true)
         {
-            DescribeAction($"{entity.name} has entered the room.", entity as IAgent);
+            if (entity is NPC)
+                DescribeActionNow($"{entity.name} has entered the room.", entity as IAgent);
+            else if (entity is Character)
+                DescribeAction($"{entity.name} has entered the room.", entity as IAgent);
             if (entity is IAgent && feedback)
             {
                 var agent = entity as IAgent;
@@ -121,8 +133,13 @@ namespace SineahBot.Data
         {
             entities.Remove(entity);
             entity.currentRoomId = Guid.Empty;
-            if (feedback && entity is Character)
-                DescribeAction($"{entity.name} has left the room.", entity as IAgent);
+            if (feedback)
+            {
+                if (entity is NPC)
+                    DescribeActionNow($"{entity.name} has left the room.", entity as IAgent);
+                else if (entity is Character)
+                    DescribeAction($"{entity.name} has left the room.", entity as IAgent);
+            }
             // trigger stuff on entity leaving
         }
 

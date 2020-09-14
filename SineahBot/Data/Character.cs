@@ -1,4 +1,5 @@
-﻿using SineahBot.Interfaces;
+﻿using SineahBot.Commands;
+using SineahBot.Interfaces;
 using SineahBot.Tools;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,8 @@ namespace SineahBot.Data
         public int health { get; set; } = 20;
         public int mana { get; set; } = 10;
         public int gold { get; set; } = 0;
+
+        public bool sleeping;
 
         public MudTimer actionCooldown = null;
 
@@ -54,9 +57,9 @@ namespace SineahBot.Data
             return $"> {GetName(agent)} seems in good shape.";
         }
 
-        public void Message(string message)
+        public void Message(string message, bool direct = false)
         {
-            if (agent != null) agent.Message(message);
+            if (agent != null) agent.Message(message, direct);
         }
 
         public void OnAttacked(IAgent agent)
@@ -75,12 +78,46 @@ namespace SineahBot.Data
                 else
                     agent.Message($"You took {damageAmount} damage.");
             }
+            if (sleeping)
+            {
+                CommandSleep.Awake(this, RoomManager.GetRoom(currentRoomId), this is NPC);
+            }
             return health == 0;
+        }
+
+        public bool Sleep()
+        {
+            if (sleeping) return false;
+            sleeping = true;
+            return true;
+        }
+
+        public bool Awake()
+        {
+            if (!sleeping) return false;
+            sleeping = false;
+            return true;
         }
 
         public void Regenerate()
         {
-            health = Math.Min(maxHealth, health + 2);
+            if (health == maxHealth)
+            {
+                if (sleeping)
+                {
+                    CommandSleep.Awake(this, RoomManager.GetRoom(currentRoomId), true);
+                }
+                return;
+            }
+            if (sleeping)
+            {
+                health = Math.Min(maxHealth, health + 10);
+                Message("You recovered 10 health points while sleeping.", true);
+            }
+            else
+            {
+                health = Math.Min(maxHealth, health + 2);
+            }
         }
 
         public void OnHeal(int healAmount, INamed source = null)
@@ -216,6 +253,10 @@ namespace SineahBot.Data
         public void StartActionCooldown()
         {
             actionCooldown = new MudTimer(5, () => { actionCooldown = null; });
+            if (sleeping)
+            {
+                CommandSleep.Awake(this, RoomManager.GetRoom(currentRoomId), this is NPC);
+            }
         }
     }
 

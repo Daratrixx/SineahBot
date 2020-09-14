@@ -16,24 +16,9 @@ namespace SineahBot.Commands
             commandRegex = new Regex(@"^!(i|info|self|information)$", RegexOptions.IgnoreCase);
         }
 
-        public override void Run(IAgent agent, Room room)
+        public override void Run(Character character, Room room)
         {
-            if (!(agent is Entity)) throw new Exception($@"Impossible to get information as non-entity agent.");
-            if (agent is Player)
-            {
-                var player = agent as Player;
-                var character = player.character;
-                agent.Message(GetCharacterInformation(character));
-            }
-            else if (agent is Character)
-            {
-                var character = agent as Character;
-                agent.Message(GetCharacterInformation(character));
-            }
-            else
-            {
-                throw new Exception("Unsupported agent type, can't display information.");
-            }
+            character.Message(GetCharacterInformation(character));
         }
 
         public string GetCharacterInformation(Character character)

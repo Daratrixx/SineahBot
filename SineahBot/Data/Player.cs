@@ -28,16 +28,29 @@ namespace SineahBot.Data
 
 
         protected List<string> messageMuffer = new List<string>();
-        public void Message(string message)
+        public void Message(string message, bool direct = false)
         {
-            Task.Run(() =>
+            if (direct)
             {
-                //if (!Monitor.IsEntered(playerMessageBuffers))
-                //    Monitor.TryEnter(playerMessageBuffers, 5000);
-                messageMuffer.Add(message);
-                if (!playerMessageBuffers.Contains(this)) playerMessageBuffers.Add(this);
-                //Monitor.Exit(playerMessageBuffers);
-            }).Wait();
+                if (Program.ONLINE && !string.IsNullOrWhiteSpace(message))
+                {
+                    var channel = Program.DiscordClient.GetChannel(channelId) as IMessageChannel;
+                    var result = channel.SendMessageAsync(message).Result;
+                }
+                else
+                    Console.WriteLine(message);
+            }
+            else
+            {
+                Task.Run(() =>
+                {
+                    //if (!Monitor.IsEntered(playerMessageBuffers))
+                    //    Monitor.TryEnter(playerMessageBuffers, 5000);
+                    messageMuffer.Add(message);
+                    if (!playerMessageBuffers.Contains(this)) playerMessageBuffers.Add(this);
+                    //Monitor.Exit(playerMessageBuffers);
+                }).Wait();
+            }
         }
         public void CommitMessageBuffer()
         {

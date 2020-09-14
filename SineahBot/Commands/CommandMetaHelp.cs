@@ -16,18 +16,18 @@ namespace SineahBot.Commands
             commandRegex = new Regex(@"^(!help)( .+)?$", RegexOptions.IgnoreCase);
         }
 
-        public override void Run(IAgent agent, Room room)
+        public override void Run(Character character, Room room)
         {
             //var entity = agent as Entity;
             var targetName = GetArgument(2);
 
             if (String.IsNullOrWhiteSpace(targetName))
             {
-                agent.Message(HelpMessage);
+                character.Message(HelpMessage);
             }
             else
             {
-                agent.Message(HelpMessage);
+                character.Message(HelpMessage);
             }
         }
 

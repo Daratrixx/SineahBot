@@ -16,34 +16,37 @@ namespace SineahBot.Commands
             commandRegex = new Regex(@"^(look|l)( .+)?$", RegexOptions.IgnoreCase);
         }
 
-        public override void Run(IAgent agent, Room room)
+        public override void Run(Character character, Room room)
         {
-            if (!(agent is Entity)) throw new Exception($@"Impossible to move non-entity agent");
-            //var entity = agent as Entity;
+            if (character.sleeping)
+            {
+                character.Message("You are asleep.");
+                return;
+            }
             var targetName = GetArgument(2);
 
             if (String.IsNullOrWhiteSpace(targetName))
             {
-                agent.Message(room.GetFullDescription(agent));
+                character.Message(room.GetFullDescription(character));
             }
             else
             {
                 var target = room.FindInRoom(targetName);
-                if (target == null && agent is IInventory) target = (agent as IInventory).FindInInventory(targetName);
+                if (target == null && character is IInventory) target = (character as IInventory).FindInInventory(targetName);
                 if (target != null && target is IObservable)
                 {
                     var observableTarget = target as IObservable;
-                    agent.Message(observableTarget.GetFullDescription(agent));
-                    if (agent is Character) (agent as Character).experience += 1;
+                    character.Message(observableTarget.GetFullDescription(character));
+                    character.experience += 1;
                 }
                 else
                 {
-                    agent.Message($@"Can't find any ""{targetName}"" here !");
+                    character.Message($@"Can't find any ""{targetName}"" here !");
                 }
             }
         }
 
-        public override bool IsWorkbenchCommand(IAgent agent = null)
+        public override bool IsWorkbenchCommand(Character character = null)
         {
             return false;
         }

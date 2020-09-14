@@ -16,19 +16,28 @@ namespace SineahBot.Commands
             commandRegex = new Regex(@"^(talk |say |t |"" ?)(.+)$", RegexOptions.IgnoreCase);
         }
 
-        public override void Run(IAgent agent, Room room)
+        public override void Run(Character character, Room room)
         {
+            if (character.sleeping)
+            {
+                character.Message("You are asleep.");
+                return;
+            }
+            bool direct = character is NPC;
             var speach = GetArgument(2);
 
             if (String.IsNullOrWhiteSpace(speach))
             {
-                agent.Message("What are you trying to say ?");
+                character.Message("What are you trying to say ?");
             }
             else
             {
-                room.DescribeAction($@"**{agent.GetName()}** said: ""{speach}""", agent);
-                agent.Message($@"You said: ""{speach}""");
-                if (agent is Character) (agent as Character).experience += 1;
+                if (direct)
+                    room.DescribeActionNow($@"**{character.GetName()}** said: ""{speach}""", character);
+                else
+                    room.DescribeAction($@"**{character.GetName()}** said: ""{speach}""", character);
+                character.Message($@"You said: ""{speach}""");
+                character.experience += 1;
             }
         }
 

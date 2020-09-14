@@ -16,10 +16,13 @@ namespace SineahBot.Commands
             commandRegex = new Regex(@"^(move |go |move to |go to )?(north|n|east|e|south|s|west|w|in|out)$", RegexOptions.IgnoreCase);
         }
 
-        public override void Run(IAgent agent, Room room)
+        public override void Run(Character character, Room room)
         {
-            if (!(agent is Entity)) throw new Exception($@"Impossible to move as non-entity agent");
-            var entity = agent as Entity;
+            if (character.sleeping)
+            {
+                character.Message("You are asleep.");
+                return;
+            }
             string directionName = GetArgument(2);
             MoveDirection direction;
             switch (directionName.ToLower())
@@ -53,26 +56,26 @@ namespace SineahBot.Commands
                     direction = MoveDirection.Down;
                     break;
                 default:
-                    agent.Message($@"Can't move to unknown direction ""{directionName}""");
+                    character.Message($@"Can't move to unknown direction ""{directionName}""");
                     throw new Exception($@"Can't move to unknown direction ""{directionName}""");
             }
             if (!room.IsValidDirection(direction))
             {
-                agent.Message($@"This room doesn't have a ""{direction}"" access.");
+                character.Message($@"This room doesn't have a ""{direction}"" access.");
                 return;
             }
-            if (!RoomManager.MoveFromRoom(entity, room, direction))
+            if (!RoomManager.MoveFromRoom(character, room, direction))
             {
-                agent.Message("This access is locked.");
+                character.Message("This access is locked.");
             }
-            else if (agent is Character) (agent as Character).experience += 1;
+            else character.experience += 1;
         }
 
-        public override bool IsCombatCommand(IAgent agent = null)
+        public override bool IsCombatCommand(Character character = null)
         {
             return false;
         }
-        public override bool IsWorkbenchCommand(IAgent agent = null)
+        public override bool IsWorkbenchCommand(Character character = null)
         {
             return false;
         }
