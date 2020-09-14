@@ -196,7 +196,7 @@ namespace SineahBot.Tools
         new CommandMove(), new CommandLook(), new CommandDirection(),
         new CommandPickup(), new CommandDrop(),
         new CommandLock(), new CommandUnlock(),
-        new CommandSay(),
+        new CommandSay(), new CommandAct(),
         new CommandCombatAttack(),
         new CommandCastOn(), new CommandCast(),
         new CommandLevel(),
