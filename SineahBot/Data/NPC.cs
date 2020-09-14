@@ -15,6 +15,7 @@ namespace SineahBot.Data
         public string[] alternativeNames { get; set; }
 
         public Guid idSpawnRoom { get; set; }
+        public bool elite;
 
         public override string GetShortDescription(IAgent agent = null)
         {
@@ -56,6 +57,16 @@ namespace SineahBot.Data
             });
         }
 
+        public override int GetWeaponDamage()
+        {
+            return level * (elite ? 3 : 2);
+        }
+
+        public override int GetSpellPower()
+        {
+            return level * (elite ? 3 : 2);
+        }
+
 
         public NPC Clone()
         {
@@ -65,6 +76,7 @@ namespace SineahBot.Data
                 name = name,
                 shortDescription = shortDescription,
                 longDescription = longDescription,
+                elite = elite,
                 level = level,
                 experience = experience,
                 gold = gold,

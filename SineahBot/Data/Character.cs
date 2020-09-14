@@ -209,7 +209,7 @@ namespace SineahBot.Data
             return name;
         }
 
-        public int GetWeaponDamage()
+        public virtual int GetWeaponDamage()
         {
             var bonusDamage = ClassProgressionManager.IsPhysicalClass(characterClass) ? level * 2 : level;
             return bonusDamage;
@@ -234,7 +234,7 @@ namespace SineahBot.Data
             return spell.Cast(this, target);
         }
 
-        public int GetSpellPower()
+        public virtual int GetSpellPower()
         {
             var bonusDamage = ClassProgressionManager.IsMagicalClass(characterClass) ? level * 2 : level;
             return bonusDamage;
