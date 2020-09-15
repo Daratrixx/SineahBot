@@ -87,7 +87,7 @@ namespace SineahBot.Tools
             .RegisterSpell(Spell.Overcharge, 7) },
 
             // secret class
-            { CharacterClass.Druid, new ClassProgression(CharacterClass.Druid, 25, 12, 15, 3)
+            { CharacterClass.Druid, new ClassProgression(CharacterClass.Druid, 20, 15, 15, 3)
             .RegisterSpell(Spell.MinorHealing, 2)
             .RegisterSpell(Spell.MagicDart, 4)
             .RegisterSpell(Spell.MajorHealing, 6) },
