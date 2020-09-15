@@ -100,7 +100,7 @@ namespace SineahBot.Data
 
         public void Regenerate()
         {
-            if (health == maxHealth)
+            if (health == maxHealth && mana == maxMana)
             {
                 if (sleeping)
                 {
@@ -110,11 +110,13 @@ namespace SineahBot.Data
             }
             if (sleeping)
             {
-                health = Math.Min(maxHealth, health + 10);
-                Message("You recovered 10 health points while sleeping.", true);
+                health = Math.Min(maxHealth, health + 4);
+                mana = Math.Min(maxMana, mana + 8);
+                Message("You recovered 8 health and 4 mana while sleeping.", true);
             }
             else
             {
+                mana = Math.Min(maxMana, mana + 1);
                 health = Math.Min(maxHealth, health + 2);
             }
         }
