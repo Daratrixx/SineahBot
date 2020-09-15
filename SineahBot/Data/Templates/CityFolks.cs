@@ -8,7 +8,6 @@ namespace SineahBot.Data.Templates
     {
         public static NPC Drunk = new NPC()
         {
-            characterStatus = CharacterStatus.Normal,
             level = 3,
             maxHealth = 50,
             health = 50,
@@ -21,20 +20,18 @@ namespace SineahBot.Data.Templates
         };
         public static NPC Customer = new NPC()
         {
-            characterStatus = CharacterStatus.Normal,
             level = 2,
             maxHealth = 30,
             health = 30,
             gold = 10,
-            name = "Customer",
             experience = 0,
+            name = "Customer",
             shortDescription = "A customer enjoys the establishment.",
             longDescription = "This okay-looking individual is relaxing, not causing troubles.",
             alternativeNames = new string[] { "consumer" }
         };
         public static NPC ShadyConsumer = new NPC()
         {
-            characterStatus = CharacterStatus.Normal,
             level = 4,
             elite = true,
             maxHealth = 100,
@@ -48,7 +45,6 @@ namespace SineahBot.Data.Templates
         };
         public static NPC Bartender = new NPC()
         {
-            characterStatus = CharacterStatus.Normal,
             level = 2,
             maxHealth = 20,
             health = 20,
@@ -61,13 +57,12 @@ namespace SineahBot.Data.Templates
         };
         public static NPC Militian = new NPC()
         {
-            characterStatus = CharacterStatus.Normal,
             level = 3,
             maxHealth = 50,
             health = 50,
             gold = 5,
-            name = "Militian",
             experience = 0,
+            name = "Militian",
             shortDescription = "A militian patrols the area.",
             longDescription = "Citizen enlisted in the city defence. Lightly armed and protected, but can easily dispatch trouble makers.",
             alternativeNames = new string[] { "militia" }
@@ -78,8 +73,8 @@ namespace SineahBot.Data.Templates
             maxHealth = 90,
             health = 90,
             gold = 15,
-            name = "Guard",
             experience = 0,
+            name = "Guard",
             shortDescription = "A guard patrols the area.",
             longDescription = "Defender of the city. Heavily armed, well protected, and military trained.",
             alternativeNames = new string[] { "guard", "grd" }
@@ -91,8 +86,8 @@ namespace SineahBot.Data.Templates
             maxHealth = 200,
             health = 200,
             gold = 500,
-            name = "Captain",
             experience = 5000,
+            name = "Captain",
             shortDescription = "The captain is ordering the guards.",
             longDescription = "The captain of the city guards. Their equipment is of the highest quality, and their are a renowned fighter.",
             alternativeNames = new string[] { "captain", "cpt" }
