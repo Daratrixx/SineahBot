@@ -48,7 +48,7 @@ namespace SineahBot.Data
         public string GetStateDescription(IAgent agent = null)
         {
             if (health <= (maxHealth * 1) / 4)
-                return $"> {GetName(agent)} is at the doors gate.";
+                return $"> {GetName(agent)} is at death's door.";
             if (health <= (maxHealth * 2) / 4)
                 return $"> {GetName(agent)} is badly injured.";
             if (health <= (maxHealth * 3) / 4)
