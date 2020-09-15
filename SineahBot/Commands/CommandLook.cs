@@ -36,7 +36,7 @@ namespace SineahBot.Commands
                 if (target != null && target is IObservable)
                 {
                     var observableTarget = target as IObservable;
-                    character.Message(observableTarget.GetFullDescription(character));
+                    character.Message($"**{observableTarget.GetName(character)}**\n> {observableTarget.GetFullDescription(character)}");
                     character.experience += 1;
                 }
                 else

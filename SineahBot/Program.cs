@@ -22,8 +22,7 @@ namespace SineahBot
 
         public async Task MainAsync()
         {
-            var world = new World();
-            world.LoadWorld();
+            Worlds.LoadWorlds();
             try
             {
                 if (ONLINE)
