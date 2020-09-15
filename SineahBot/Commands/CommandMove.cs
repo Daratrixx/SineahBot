@@ -13,7 +13,7 @@ namespace SineahBot.Commands
 
         public CommandMove()
         {
-            commandRegex = new Regex(@"^(move |go |move to |go to )?(north|n|east|e|south|s|west|w|in|out)$", RegexOptions.IgnoreCase);
+            commandRegex = new Regex(@"^(move |go |move to |go to )?(north|n|east|e|south|s|west|w|in|out|up|down)$", RegexOptions.IgnoreCase);
         }
 
         public override void Run(Character character, Room room)

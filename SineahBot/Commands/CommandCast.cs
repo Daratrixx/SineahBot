@@ -56,6 +56,12 @@ namespace SineahBot.Commands
                     return;
                 }
 
+                if(!character.CanCastSpell(spell))
+                {
+                    character.Message($@"Not enough mana to cast {spell.GetName()}.");
+                    return;
+                }
+
                 character.Message($"You casted {spell.GetName()} on {target.name}!");
                 if (direct)
                     room.DescribeActionNow($"{caster.GetName()} casted {spell.GetName()} on {target.name}!", character);
@@ -78,6 +84,12 @@ namespace SineahBot.Commands
             }
             else
             {
+                if (!character.CanCastSpell(spell))
+                {
+                    character.Message($@"Not enough mana to cast {spell.GetName()}.");
+                    return;
+                }
+
                 character.Message($"You casted {spell.GetName()}!");
                 if (direct)
                     room.DescribeActionNow($"{caster.GetName()} casted {spell.GetName()}!", character);

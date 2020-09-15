@@ -56,7 +56,6 @@ namespace SineahBot.Commands
                 if (targetName == "self" && spell.CanSelfCast)
                 {
                     target = caster as Entity;
-
                 }
                 else
                 {
@@ -70,6 +69,12 @@ namespace SineahBot.Commands
                         character.Message($@"Can't find any ""{targetName}"" to cast on here !");
                         return;
                     }
+                }
+
+                if (!character.CanCastSpell(spell))
+                {
+                    character.Message($@"Not enough mana to cast {spell.GetName()}.");
+                    return;
                 }
 
                 character.Message($"You casted {spell.GetName()} on {target.name}!");

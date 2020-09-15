@@ -225,6 +225,11 @@ namespace SineahBot.Data
             return output;
         }
 
+        public bool CanCastSpell(Spell spell)
+        {
+            return mana > spell.manaCost;
+        }
+
         public bool CastSpell(Spell spell)
         {
             return CastSpellOn(spell, this);
@@ -232,6 +237,7 @@ namespace SineahBot.Data
 
         public bool CastSpellOn(Spell spell, Entity target)
         {
+            mana -= spell.manaCost;
             return spell.Cast(this, target);
         }
 
