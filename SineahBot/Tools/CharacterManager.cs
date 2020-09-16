@@ -36,6 +36,24 @@ namespace SineahBot.Tools
                 if (character == null) throw new Exception($"Impossible to find character with id {idCharacter}");
                 characters[idCharacter] = character;
                 ClassProgressionManager.ApplyClassProgressionForCharacter(character, true);
+                if (ClassProgressionManager.IsPhysicalClass(character.characterClass))
+                {
+                    character.AddToInventory(Data.Templates.Consumables.Bread);
+                    character.AddToInventory(Data.Templates.Consumables.Bread);
+                    character.AddToInventory(Data.Templates.Consumables.Bread);
+                    character.AddToInventory(Data.Templates.Consumables.DriedMeat);
+                }
+                if (ClassProgressionManager.IsMagicalClass(character.characterClass))
+                {
+                    character.AddToInventory(Data.Templates.Consumables.Bread);
+                    character.AddToInventory(Data.Templates.Consumables.Bread);
+                    character.AddToInventory(Data.Templates.Consumables.Bread);
+                    character.AddToInventory(Data.Templates.Consumables.Water);
+                }
+                if (ClassProgressionManager.IsSecretClass(character.characterClass))
+                {
+                    character.AddToInventory(Data.Templates.Consumables.Candy);
+                }
                 return character;
             }
             return characters[idCharacter];
@@ -51,6 +69,24 @@ namespace SineahBot.Tools
             character.level = 1;
             character.experience = 0;
             ClassProgressionManager.ApplyClassProgressionForCharacter(character, true);
+            if (ClassProgressionManager.IsPhysicalClass(character.characterClass))
+            {
+                character.AddToInventory(Data.Templates.Consumables.Bread);
+                character.AddToInventory(Data.Templates.Consumables.Bread);
+                character.AddToInventory(Data.Templates.Consumables.Bread);
+                character.AddToInventory(Data.Templates.Consumables.DriedMeat);
+            }
+            if (ClassProgressionManager.IsMagicalClass(character.characterClass))
+            {
+                character.AddToInventory(Data.Templates.Consumables.Bread);
+                character.AddToInventory(Data.Templates.Consumables.Bread);
+                character.AddToInventory(Data.Templates.Consumables.Bread);
+                character.AddToInventory(Data.Templates.Consumables.Water);
+            }
+            if (ClassProgressionManager.IsSecretClass(character.characterClass))
+            {
+                character.AddToInventory(Data.Templates.Consumables.Candy);
+            }
             characters[character.id] = character;
             Program.database.Characters.Add(character);
             player.idCharacter = character.id;

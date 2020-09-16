@@ -18,7 +18,7 @@ namespace SineahBot.Data.Spells
             if (target is IHealable)
             {
                 var healingAmount = baseHeal + caster.GetSpellPower() + new Random().Next(5, 10);
-                (target as IHealable).OnHeal(healingAmount, caster);
+                (target as IHealable).RestoreHealth(healingAmount, caster);
                 if (caster is IAgent)
                 {
                     (caster as IAgent).Message($"You healed {target.GetName()} for {healingAmount} health points.");

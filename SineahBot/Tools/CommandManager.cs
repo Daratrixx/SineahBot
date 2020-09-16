@@ -198,7 +198,7 @@ namespace SineahBot.Tools
         public static List<Command> NoCharacterCommands = new List<Command>() { };
         public static List<Command> InCharacterCommands = new List<Command>() {
         new CommandMove(), new CommandLook(), new CommandDirection(),
-        new CommandPickup(), new CommandDrop(),
+        new CommandPickup(), new CommandDrop(), new CommandConsume(),
         new CommandLock(), new CommandUnlock(),
         new CommandSay(), new CommandAct(),
         new CommandCombatAttack(),

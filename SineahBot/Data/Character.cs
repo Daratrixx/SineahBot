@@ -110,8 +110,8 @@ namespace SineahBot.Data
             }
             if (sleeping)
             {
-                health = Math.Min(maxHealth, health + 4);
-                mana = Math.Min(maxMana, mana + 8);
+                health = Math.Min(maxHealth, health + 8);
+                mana = Math.Min(maxMana, mana + 4);
                 Message("You recovered 8 health and 4 mana while sleeping.", true);
             }
             else
@@ -121,16 +121,28 @@ namespace SineahBot.Data
             }
         }
 
-        public void OnHeal(int healAmount, INamed source = null)
+        public void RestoreHealth(int healthAmount, INamed source = null)
         {
-            health = Math.Min(maxHealth, health + healAmount);
+            health = Math.Min(maxHealth, health + healthAmount);
             if (source == this) return;
             if (agent != null)
             {
                 if (source != null)
-                    agent.Message($"{source.GetName()} healed you for {healAmount} health points.", source is NPC);
+                    agent.Message($"You recovered {healthAmount} health from {source.GetName(this)}.", source is NPC);
                 else
-                    agent.Message($"You were healed for {healAmount} health points.");
+                    agent.Message($"You recovered {healthAmount} health.");
+            }
+        }
+        public void RestoreMana(int manaAmount, INamed source = null)
+        {
+            mana = Math.Min(maxMana, mana + manaAmount);
+            if (source == this) return;
+            if (agent != null)
+            {
+                if (source != null)
+                    agent.Message($"You recovered {manaAmount} mana from {source.GetName(this)}.", source is NPC);
+                else
+                    agent.Message($"You recovered {manaAmount} mana.");
             }
         }
 

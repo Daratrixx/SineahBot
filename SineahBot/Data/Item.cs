@@ -8,13 +8,12 @@ namespace SineahBot.Data
 {
     public class Item : Entity, IObservable
     {
-        public Item()
+        public Item() : base()
         {
 
         }
-        public Item(string itemName, string[] alternativeNames = null)
+        public Item(string itemName, string[] alternativeNames = null) : base()
         {
-            id = Guid.NewGuid();
             name = itemName;
             if (alternativeNames != null) this.alternativeNames = alternativeNames.Select(x => x.ToLower()).ToArray();
         }
@@ -30,6 +29,18 @@ namespace SineahBot.Data
         public string GetShortDescription(IAgent agent = null)
         {
             return description;
+        }
+
+        public Item Clone()
+        {
+            return new Item()
+            {
+                id = Guid.NewGuid(),
+                name = name,
+                alternativeNames = alternativeNames,
+                description = description,
+                details = details,
+            };
         }
     }
 }

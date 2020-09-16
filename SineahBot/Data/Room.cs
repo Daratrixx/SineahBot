@@ -47,7 +47,8 @@ namespace SineahBot.Data
 
         public void RegisterDirection(MoveDirection direction, RoomConnectionState roomConnection)
         {
-            if (directions.ContainsKey(direction)) throw new Exception($"Direction duplicate for room {name}=>{direction}=>{roomConnection.toRoom.name} X {directions[direction].toRoom.name}");
+            if (directions.ContainsKey(direction))
+                throw new Exception($"Direction duplicate for room {name}=>{direction}=>{roomConnection.toRoom.name} X {directions[direction].toRoom.name}");
             directions[direction] = roomConnection;
         }
         public RoomConnectionState GetRoomConnectionInDirection(MoveDirection direction)

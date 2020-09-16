@@ -7,6 +7,6 @@ namespace SineahBot.Interfaces
 {
     interface IHealable : IAttackable, INamed
     {
-        void OnHeal(int healAmount, INamed source = null);
+        void RestoreHealth(int healAmount, INamed source = null);
     }
 }

@@ -8,6 +8,10 @@ namespace SineahBot.Data
 {
     public class Entity : DataItem, IInteractable, INamed
     {
+        public Entity()
+        {
+            id = Guid.NewGuid();
+        }
         public Guid currentRoomId;
 
         public virtual string GetName(IAgent agent = null)

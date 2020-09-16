@@ -26,7 +26,7 @@ namespace SineahBot.Commands
         {
             if (character.spells.Length == 0)
             {
-                character.Message($@"> You do not know any spells.");
+                character.Message($@"> You do not know any spells yet.");
                 return;
             }
             if (!String.IsNullOrEmpty(spellName))
