@@ -7,9 +7,9 @@ namespace SineahBot.Interfaces
 {
     interface IInventory
     {
-        void AddToInventory(Item pickable);
+        void AddToInventory(Item item, int count = 1);
         Item FindInInventory(string name);
         bool IsItemInInventory(string name);
-        void RemoveFromInventory(Item pickable);
+        void RemoveFromInventory(Item item, int count = 1);
     }
 }

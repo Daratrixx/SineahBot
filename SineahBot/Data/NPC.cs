@@ -17,6 +17,13 @@ namespace SineahBot.Data
         public Guid idSpawnRoom { get; set; }
         public bool elite;
 
+        public Shop shop { get; private set; }
+        public NPC RegisterShop(Shop shop)
+        {
+            this.shop = shop;
+            shop.RegisterOwner(this);
+            return this;
+        }
         public override string GetShortDescription(IAgent agent = null)
         {
             return shortDescription;
@@ -46,6 +53,7 @@ namespace SineahBot.Data
 
         public override void OnKilled(IAgent agent = null)
         {
+            if (shop != null) shop.CloseShop();
             base.OnKilled(agent);
             new MudTimer(30, () =>
             {

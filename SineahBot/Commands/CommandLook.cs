@@ -16,6 +16,17 @@ namespace SineahBot.Commands
             commandRegex = new Regex(@"^(look|l)( .+)?$", RegexOptions.IgnoreCase);
         }
 
+        public override bool IsWorkbenchCommand(Character character = null)
+        {
+            return false;
+        }
+
+        public override bool IsTradeCommand(Character character = null)
+        {
+            return false;
+        }
+
+
         public override void Run(Character character, Room room)
         {
             if (character.sleeping)
@@ -23,33 +34,27 @@ namespace SineahBot.Commands
                 character.Message("You are asleep.");
                 return;
             }
+
             var targetName = GetArgument(2);
 
             if (String.IsNullOrWhiteSpace(targetName))
             {
                 character.Message(room.GetFullDescription(character));
+                return;
             }
-            else
+
+            var target = room.FindInRoom(targetName) as IObservable;
+            if (target == null && character is IInventory) target = (character as IInventory).FindInInventory(targetName) as IObservable;
+            if (target == null)
             {
-                var target = room.FindInRoom(targetName);
-                if (target == null && character is IInventory) target = (character as IInventory).FindInInventory(targetName);
-                if (target != null && target is IObservable)
-                {
-                    var observableTarget = target as IObservable;
-                    character.Message($"**{observableTarget.GetName(character)}**\n> {observableTarget.GetFullDescription(character)}");
-                    character.experience += 1;
-                }
-                else
-                {
-                    character.Message($@"Can't find any ""{targetName}"" here !");
-                }
+                character.Message($@"Can't find any ""{targetName}"" here !");
+                return;
             }
-        }
 
-        public override bool IsWorkbenchCommand(Character character = null)
-        {
-            return false;
-        }
+            var observableTarget = target;
+            character.Message($"**{observableTarget.GetName(character)}**\n> {observableTarget.GetFullDescription(character)}");
 
+            character.RewardExperience(1);
+        }
     }
 }

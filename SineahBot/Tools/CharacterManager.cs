@@ -9,6 +9,9 @@ namespace SineahBot.Tools
 {
     public static class CharacterManager
     {
+
+        public static int ExpMultiplier = 5;
+        public static int GoldMultiplier = 5;
         static CharacterManager()
         {
             new MudInterval(10, () =>
@@ -38,16 +41,12 @@ namespace SineahBot.Tools
                 ClassProgressionManager.ApplyClassProgressionForCharacter(character, true);
                 if (ClassProgressionManager.IsPhysicalClass(character.characterClass))
                 {
-                    character.AddToInventory(Data.Templates.Consumables.Bread);
-                    character.AddToInventory(Data.Templates.Consumables.Bread);
-                    character.AddToInventory(Data.Templates.Consumables.Bread);
+                    character.AddToInventory(Data.Templates.Consumables.Bread, 3);
                     character.AddToInventory(Data.Templates.Consumables.DriedMeat);
                 }
                 if (ClassProgressionManager.IsMagicalClass(character.characterClass))
                 {
-                    character.AddToInventory(Data.Templates.Consumables.Bread);
-                    character.AddToInventory(Data.Templates.Consumables.Bread);
-                    character.AddToInventory(Data.Templates.Consumables.Bread);
+                    character.AddToInventory(Data.Templates.Consumables.Bread, 3);
                     character.AddToInventory(Data.Templates.Consumables.Water);
                 }
                 if (ClassProgressionManager.IsSecretClass(character.characterClass))

@@ -19,22 +19,22 @@ namespace SineahBot.Commands
         public override void Run(Character character, Room room)
         {
             var className = GetArgument(2);
+
             if (string.IsNullOrWhiteSpace(className))
             {
                 character.Message("Type **!class [class name]** to get some details about the specified class.");
+                return;
             }
-            else
+
+            CharacterClass characterClass;
+
+            if (!Enum.TryParse(className, true, out characterClass))
             {
-                CharacterClass characterClass;
-                if (Enum.TryParse(className, true, out characterClass))
-                {
-                    character.Message($"**CLASS** - *{characterClass}*\n> *{ClassProgressionManager.GetClassDescription(characterClass)}*");
-                }
-                else
-                {
-                    character.Message($@"Unknown class ""{className}"".");
-                }
+                character.Message($@"Unknown class ""{className}"".");
+                return;
             }
+
+            character.Message($"**CLASS** - *{characterClass}*\n> *{ClassProgressionManager.GetClassDescription(characterClass)}*");
         }
 
         public string GetCharacterInformation(Character character)
@@ -49,6 +49,5 @@ namespace SineahBot.Commands
 {(character.experience >= ClassProgressionManager.ExperienceForNextLevel(character.level) ? "*You have enough experience to level up! Type **!level***" : "")}
 ";
         }
-
     }
 }

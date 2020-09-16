@@ -29,17 +29,16 @@ namespace SineahBot.Commands
             if (String.IsNullOrWhiteSpace(speach))
             {
                 character.Message("What are you trying to say ?");
+                return;
             }
-            else
-            {
-                if (direct)
-                    room.DescribeActionNow($@"**{character.GetName()}** said: ""{speach}""", character);
-                else
-                    room.DescribeAction($@"**{character.GetName()}** said: ""{speach}""", character);
-                character.Message($@"You said: ""{speach}""");
-                character.experience += 1;
-            }
-        }
 
+            if (direct)
+                room.DescribeActionNow($@"**{character.GetName()}** said: ""{speach}""", character);
+            else
+                room.DescribeAction($@"**{character.GetName()}** said: ""{speach}""", character);
+            character.Message($@"You said: ""{speach}""");
+
+            character.RewardExperience(1);
+        }
     }
 }

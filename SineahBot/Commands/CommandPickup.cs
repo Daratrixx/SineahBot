@@ -16,6 +16,21 @@ namespace SineahBot.Commands
             commandRegex = new Regex(@"^(get|g|pickup|pick up|grab|take) (.+)$", RegexOptions.IgnoreCase);
         }
 
+        public override bool IsCombatCommand(Character character = null)
+        {
+            return false;
+        }
+
+        public override bool IsWorkbenchCommand(Character character = null)
+        {
+            return false;
+        }
+
+        public override bool IsTradeCommand(Character character = null)
+        {
+            return false;
+        }
+
         public override void Run(Character character, Room room)
         {
             if (character.sleeping)
@@ -23,44 +38,34 @@ namespace SineahBot.Commands
                 character.Message("You are asleep.");
                 return;
             }
+
             bool direct = character is NPC;
             var targetName = GetArgument(2);
 
             if (String.IsNullOrWhiteSpace(targetName))
             {
                 character.Message("What are you trying to get ?");
+                return;
             }
-            else
+
+            var inventory = character as IInventory;
+            var item = room.FindInRoom(targetName) as Item;
+
+            if (item == null)
             {
-                var inventory = character as IInventory;
-                var target = room.FindInRoom(targetName);
-                if (target != null && target is Item)
-                {
-                    var itemTarget = target as Item;
-                    room.RemoveFromRoom(itemTarget);
-                    character.Message($"You picked up {itemTarget.name}.");
-                    if (direct)
-                        room.DescribeActionNow($"{character.GetName()} picked up {itemTarget.name}.", character);
-                    else
-                        room.DescribeAction($"{character.GetName()} picked up {itemTarget.name}.", character);
-                    inventory.AddToInventory(itemTarget);
-                    character.experience += 1;
-                }
-                else
-                {
-                    character.Message($@"Can't find any ""{targetName}"" here !");
-                }
+                character.Message($@"Can't find any ""{targetName}"" here !");
+                return;
             }
-        }
 
-        public override bool IsCombatCommand(Character character = null)
-        {
-            return false;
-        }
-        public override bool IsWorkbenchCommand(Character character = null)
-        {
-            return false;
-        }
+            room.RemoveFromRoom(item);
+            character.Message($"You picked up {item.GetName()}.");
+            if (direct)
+                room.DescribeActionNow($"{character.GetName()} picked up {item.GetName()}.", character);
+            else
+                room.DescribeAction($"{character.GetName()} picked up {item.GetName()}.", character);
+            inventory.AddToInventory(item);
 
+            character.RewardExperience(1);
+        }
     }
 }

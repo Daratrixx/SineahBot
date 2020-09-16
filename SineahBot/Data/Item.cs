@@ -20,27 +20,16 @@ namespace SineahBot.Data
         public string[] alternativeNames = new string[] { };
         public string description { get; set; }
         public string details { get; set; }
+        public bool permanant = true;
 
         public string GetFullDescription(IAgent agent = null)
         {
-            return details;
+            return details + (permanant ? "" : " (*Will be lost upon bot restart*)");
         }
 
         public string GetShortDescription(IAgent agent = null)
         {
             return description;
-        }
-
-        public Item Clone()
-        {
-            return new Item()
-            {
-                id = Guid.NewGuid(),
-                name = name,
-                alternativeNames = alternativeNames,
-                description = description,
-                details = details,
-            };
         }
     }
 }

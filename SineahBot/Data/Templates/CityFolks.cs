@@ -39,7 +39,7 @@ namespace SineahBot.Data.Templates
             gold = 100,
             name = "Shady consumer",
             experience = 1000,
-            shortDescription = "A shady looking consumer is brooming in a corner.",
+            shortDescription = "A shady looking consumer is brooding in a corner.",
             longDescription = "This individual radiates danger. They are most likely armed, and better left alone.",
             alternativeNames = new string[] { "shady looking consumer", "shadyconsumer", "shadycons", "shadyc", "sconsumer", "scons", "sc" }
         };

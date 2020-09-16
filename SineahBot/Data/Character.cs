@@ -12,8 +12,10 @@ namespace SineahBot.Data
     {
         public IAgent agent;
         public CharacterStatus characterStatus;
+        public Shop currentShop = null;
         public int maxHealth;
         public int maxMana;
+        public Dictionary<Item, int> items = new Dictionary<Item, int>();
         public Spell[] spells = new Spell[] { Spell.MinorHealing, Spell.MagicDart };
 
         public CharacterClass characterClass { get; set; }
@@ -26,6 +28,17 @@ namespace SineahBot.Data
         public bool sleeping;
 
         public MudTimer actionCooldown = null;
+
+        public int RewardExperience(int amount)
+        {
+            experience += amount * CharacterManager.ExpMultiplier;
+            return amount * CharacterManager.ExpMultiplier;
+        }
+        public int RewardGold(int amount)
+        {
+            gold += amount * CharacterManager.GoldMultiplier;
+            return amount * CharacterManager.GoldMultiplier;
+        }
 
         public virtual string GetShortDescription(IAgent agent = null)
         {
@@ -88,6 +101,8 @@ namespace SineahBot.Data
         {
             if (sleeping) return false;
             sleeping = true;
+            if (currentShop != null) currentShop.RemoveClient(this);
+            if (characterStatus != CharacterStatus.Normal) characterStatus = CharacterStatus.Normal;
             return true;
         }
 
@@ -162,16 +177,12 @@ namespace SineahBot.Data
                     if (agent is Player)
                     {
                         var player = agent as Player;
-                        player.character.experience += (rewardExp * Math.Max(this.level, 1)) / Math.Max(player.character.level, 1);
-                        player.character.gold += this.gold;
-                        agent.Message($"Reward: {(rewardExp * Math.Max(this.level, 1)) / Math.Max(player.character.level, 1)} exp, {this.gold} gold.");
+                        agent.Message($"Reward: {player.character.RewardExperience(rewardExp * Math.Max(this.level, 1) / Math.Max(player.character.level, 1))} exp, {player.character.RewardGold(this.gold)} gold.");
                     }
                     if (agent is Character)
                     {
                         var character = agent as Character;
-                        character.experience += (rewardExp * Math.Max(this.level, 1)) / Math.Max(character.level, 1);
-                        character.gold += this.gold;
-                        agent.Message($"Reward: {(rewardExp * Math.Max(this.level, 1)) / Math.Max(character.level, 1)} exp, {this.gold} gold.");
+                        agent.Message($"Reward: {character.RewardExperience(rewardExp * Math.Max(this.level, 1) / Math.Max(character.level, 1))} exp, {character.RewardGold(this.gold)} gold.");
                     }
                 }
                 else
@@ -194,27 +205,51 @@ namespace SineahBot.Data
             throw new NotImplementedException();
         }
 
-        private List<Item> inventory = new List<Item>();
-        public void AddToInventory(Item item)
+        public void AddToInventory(Item item, int count = 1)
         {
-            inventory.Add(item);
+            if (IsItemInInventory(item.GetName()))
+            {
+                items[item] += count;
+            }
+            else
+            {
+                items[item] = count;
+            }
         }
 
         public Item FindInInventory(string name)
         {
             name = name.ToLower();
-            return inventory.FirstOrDefault(x => x.name.ToLower() == name || x.alternativeNames.Contains(name));
+            return items.Keys.FirstOrDefault(x => x.name.ToLower() == name || x.alternativeNames.Contains(name));
         }
 
         public bool IsItemInInventory(string name)
         {
             name = name.ToLower();
-            return inventory.FirstOrDefault(x => x.name.ToLower() == name || x.alternativeNames.Contains(name)) != null;
+            var existing = items.Keys.FirstOrDefault(x => x.name.ToLower() == name || x.alternativeNames.Contains(name));
+            return existing != null;
+
         }
 
-        public void RemoveFromInventory(Item item)
+        public int CountInInventory(string name)
         {
-            inventory.Remove(item);
+            var existing = FindInInventory(name);
+            return existing != null ? items[existing] : 0;
+        }
+
+        public int CountInInventory(Item item)
+        {
+            return item != null ? items[item] : 0;
+        }
+
+        public void RemoveFromInventory(Item item, int count = 1)
+        {
+            if (IsItemInInventory(item.GetName()))
+            {
+                items[item] -= count;
+                if (items[item] <= 0)
+                    items.Remove(item);
+            }
         }
 
         public override string GetName(IAgent agent = null)
@@ -282,6 +317,7 @@ namespace SineahBot.Data
     {
         Normal,
         Combat,
+        Trade,
         Workbench,
         Unknown
     }

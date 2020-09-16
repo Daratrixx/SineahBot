@@ -48,6 +48,12 @@ namespace SineahBot.Data.World
         }
         public static class Inn
         {
+            public static class Shops {
+                public static Shop Bartender = new Shop()
+                .RegisterEntry(Templates.Consumables.Water, 1, null)
+                .RegisterEntry(Templates.Consumables.Beer, 2, null)
+                .RegisterEntry(Templates.Consumables.Wine, 4, null);
+            }
             public static class Rooms
             {
                 public static Room CommonRoom = new Room("The Four Winds common room")
@@ -187,7 +193,7 @@ namespace SineahBot.Data.World
 
             public static class Characters
             {
-                public static Character Bartender = Templates.CityFolks.Bartender.Clone();
+                public static Character Bartender = Templates.CityFolks.Bartender.Clone().RegisterShop(Shops.Bartender);
                 public static Character Drunk = Templates.CityFolks.Drunk.Clone();
                 public static Character Customer = Templates.CityFolks.Customer.Clone();
                 public static Character ShadyConsumer = Templates.CityFolks.ShadyConsumer.Clone();
@@ -213,22 +219,26 @@ namespace SineahBot.Data.World
                 public static Item OfficeKey = new Item("Innkeepers office key", new string[] { "key", "office key" })
                 {
                     description = "An ornate key is lying around.",
-                    details = "A key giving access to the Four Winds innkeepers office, behind the private meeting room."
+                    details = "A key giving access to the Four Winds innkeepers office, behind the private meeting room.",
+                    permanant = false
                 };
                 public static Item Room1Key = new Item("Room #1 key", new string[] { "key", "room key" })
                 {
                     description = "A room key is lying around.",
-                    details = "A key giving access to the room #1 at the Four Winds inn, on the second floor."
+                    details = "A key giving access to the room #1 at the Four Winds inn, on the second floor.",
+                    permanant = false
                 };
                 public static Item Room3Key = new Item("Room #3 key", new string[] { "key", "room key" })
                 {
                     description = "A room key is lying around.",
-                    details = "A key giving access to the room #3 at the Four Winds inn, on the second floor."
+                    details = "A key giving access to the room #3 at the Four Winds inn, on the second floor.",
+                    permanant = false
                 };
                 public static Item Ragdoll = new Item("Ragdoll", new string[] { "doll", "rdoll" })
                 {
                     description = "A ragdoll lies around.",
-                    details = "A little doll shaped out of rags."
+                    details = "A little doll shaped out of rags.",
+                    permanant = false
                 };
             }
             public static Item[] GetItems()

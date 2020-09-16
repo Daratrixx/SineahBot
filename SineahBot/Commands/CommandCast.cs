@@ -16,6 +16,16 @@ namespace SineahBot.Commands
             commandRegex = new Regex(@"^cast (.+)$", RegexOptions.IgnoreCase);
         }
 
+        public override bool IsWorkbenchCommand(Character character = null)
+        {
+            return false;
+        }
+
+        public override bool IsTradeCommand(Character character = null)
+        {
+            return false;
+        }
+
         public override void Run(Character character, Room room)
         {
             if (character.sleeping)
@@ -23,8 +33,10 @@ namespace SineahBot.Commands
                 character.Message("You are asleep.");
                 return;
             }
+
             bool direct = character is NPC;
             var caster = character as ICaster;
+
             if (!caster.ActionCooldownOver())
             {
                 return;
@@ -37,12 +49,15 @@ namespace SineahBot.Commands
                 character.Message("What are you trying to cast ?");
                 return;
             }
+
             var spell = caster.GetSpell(spellName);
+
             if (spell == null)
             {
                 character.Message($@"Can't cast unknown spell ""{spellName}"". Type **!spells** to get a list of spells you can cast.");
                 return;
             }
+
             if (spell.NeedsTarget)
             {
                 Entity target = null;
@@ -80,7 +95,6 @@ namespace SineahBot.Commands
                     }
                 }
                 caster.StartActionCooldown();
-                character.experience += 1;
             }
             else
             {
@@ -108,15 +122,9 @@ namespace SineahBot.Commands
                     }
                 }
                 caster.StartActionCooldown();
-                character.experience += 1;
             }
 
+            character.RewardExperience(1);
         }
-
-        public override bool IsWorkbenchCommand(Character character = null)
-        {
-            return false;
-        }
-
     }
 }

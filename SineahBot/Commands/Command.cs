@@ -36,5 +36,9 @@ namespace SineahBot.Commands
         {
             return true;
         }
+        public virtual bool IsTradeCommand(Character character = null)
+        {
+            return true;
+        }
     }
 }

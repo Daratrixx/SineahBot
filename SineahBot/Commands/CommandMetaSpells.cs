@@ -29,17 +29,17 @@ namespace SineahBot.Commands
                 character.Message($@"> You do not know any spells yet.");
                 return;
             }
+
             if (!String.IsNullOrEmpty(spellName))
             {
                 var spell = character.GetSpell(spellName);
                 if (spell == null)
                 {
                     character.Message($@"Impossible to display information for unknown spell ""{spellName}""");
+                    return;
                 }
-                else
-                {
-                    character.Message(GetSpellDetails(spell, character as ICaster));
-                }
+
+                character.Message(GetSpellDetails(spell, character as ICaster));
             }
             else
             {
@@ -49,7 +49,7 @@ namespace SineahBot.Commands
 
         public string GetCharacterSpells(Character character)
         {
-            return "SPELLS\n"
+            return "**SPELLS**\n"
             + String.Join('\n', character.spells.Select(x => GetSpellInformation(x, character as ICaster)))
             + "\n *Type **!spells [spell name]** to get more informations about the specified spell.*";
         }
@@ -67,6 +67,5 @@ namespace SineahBot.Commands
 > Effects : {spell.GetEffectDescription(caster)}
 ";
         }
-
     }
 }

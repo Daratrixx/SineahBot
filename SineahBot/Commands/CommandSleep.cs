@@ -16,26 +16,31 @@ namespace SineahBot.Commands
             commandRegex = new Regex(@"^sleep$", RegexOptions.IgnoreCase);
         }
 
-        public override void Run(Character character, Room room)
-        {
-            bool direct = character is NPC;
-            if (Sleep(character, room, direct))
-            {
-                character.experience += 1;
-            }
-            else
-            {
-                character.Message($@"You are already asleep.");
-            }
-        }
-
         public override bool IsCombatCommand(Character character = null)
         {
             return false;
         }
+
         public override bool IsWorkbenchCommand(Character character = null)
         {
             return false;
+        }
+
+        public override bool IsTradeCommand(Character character = null)
+        {
+            return false;
+        }
+
+        public override void Run(Character character, Room room)
+        {
+            bool direct = character is NPC;
+            if (!Sleep(character, room, direct))
+            {
+                character.Message($@"You are already asleep.");
+                return;
+            }
+
+            character.RewardExperience(1);
         }
 
         public static bool Sleep(Character character, Room room, bool direct)

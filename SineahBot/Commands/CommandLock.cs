@@ -15,6 +15,21 @@ namespace SineahBot.Commands
             commandRegex = new Regex(@"^(lock) (north|n|east|e|south|s|west|w|in|out)$", RegexOptions.IgnoreCase);
         }
 
+        public override bool IsCombatCommand(Character character = null)
+        {
+            return false;
+        }
+
+        public override bool IsWorkbenchCommand(Character character = null)
+        {
+            return false;
+        }
+
+        public override bool IsTradeCommand(Character character = null)
+        {
+            return false;
+        }
+
         public override void Run(Character character, Room room)
         {
             if (character.sleeping)
@@ -65,33 +80,33 @@ namespace SineahBot.Commands
                 return;
             }
             var connection = room.GetRoomConnectionInDirection(direction);
+
             if (connection.locked)
             {
                 character.Message("This access is already locked.");
+                return;
             }
-            else if (connection.keyItemName != null)
+
+            if (connection.keyItemName != null)
             {
-                var agentInventory = character as IInventory;
-                if (agentInventory.IsItemInInventory(connection.keyItemName))
+                if (!character.IsItemInInventory(connection.keyItemName))
                 {
-                    connection.Lock();
-                    // describe in current room
-                    if (direct)
-                        room.DescribeActionNow($"{character.GetName()} has locked the access ({direction})", character);
-                    else
-                        room.DescribeAction($"{character.GetName()} has locked the access ({direction})", character);
-                    // describe in adjacent room
-                    if (direct)
-                        connection.toRoom.DescribeActionNow($"Someone locked the access from the other side.");
-                    else
-                        connection.toRoom.DescribeAction($"Someone locked the access from the other side.");
-                    character.Message($"You locked the access ({direction})");
-                    character.experience += 1;
+                    character.Message("You need a key for that.");
+                    return;
                 }
+
+                connection.Lock();
+                // describe in current room
+                if (direct)
+                    room.DescribeActionNow($"{character.GetName()} has locked the access ({direction})", character);
                 else
-                {
-                    character.Message("You ned a key for that.");
-                }
+                    room.DescribeAction($"{character.GetName()} has locked the access ({direction})", character);
+                // describe in adjacent room
+                if (direct)
+                    connection.toRoom.DescribeActionNow($"Someone locked the access from the other side.");
+                else
+                    connection.toRoom.DescribeAction($"Someone locked the access from the other side.");
+                character.Message($"You locked the access ({direction})");
             }
             else
             {
@@ -107,18 +122,9 @@ namespace SineahBot.Commands
                 else
                     connection.toRoom.DescribeAction($"Someone locked the access from the other side.");
                 character.Message($"You locked the access ({direction})");
-                character.experience += 1;
             }
-        }
 
-        public override bool IsCombatCommand(Character character = null)
-        {
-            return false;
+            character.RewardExperience(1);
         }
-        public override bool IsWorkbenchCommand(Character character = null)
-        {
-            return false;
-        }
-
     }
 }

@@ -16,6 +16,16 @@ namespace SineahBot.Commands
             commandRegex = new Regex(@"^cast (.+) on (.+)$", RegexOptions.IgnoreCase);
         }
 
+        public override bool IsWorkbenchCommand(Character character = null)
+        {
+            return false;
+        }
+
+        public override bool IsTradeCommand(Character character = null)
+        {
+            return false;
+        }
+
         public override void Run(Character character, Room room)
         {
             if (character.sleeping)
@@ -43,72 +53,63 @@ namespace SineahBot.Commands
                 character.Message($@"Can't cast unknown spell ""{spellName}"". Type **!spells** to get a list of spells you can cast.");
                 return;
             }
-            if (spell.NeedsTarget)
-            {
-                var targetName = GetArgument(2);
-                if (String.IsNullOrWhiteSpace(targetName) && !spell.CanSelfCast)
-                {
-                    character.Message("What are you trying to cast on ?");
-                    return;
-                }
-
-                Entity target = null;
-                if (targetName == "self" && spell.CanSelfCast)
-                {
-                    target = caster as Entity;
-                }
-                else
-                {
-                    target = room.FindInRoom(targetName);
-                    if (target == null && spell.CanSelfCast)
-                    {
-                        target = caster as Entity;
-                    }
-                    if (target == null && !spell.CanSelfCast)
-                    {
-                        character.Message($@"Can't find any ""{targetName}"" to cast on here !");
-                        return;
-                    }
-                }
-
-                if (!character.CanCastSpell(spell))
-                {
-                    character.Message($@"Not enough mana to cast {spell.GetName()}.");
-                    return;
-                }
-
-                character.Message($"You casted {spell.GetName()} on {target.name}!");
-                if (direct)
-                    room.DescribeActionNow($"{caster.GetName()} casted {spell.GetName()} on {target.name}!", character);
-                else
-                    room.DescribeAction($"{caster.GetName()} casted {spell.GetName()} on {target.name}!", character);
-                if (caster.CastSpellOn(spell, target)) // true if target died
-                {
-                    if (target is IKillable)
-                    {
-                        (target as IKillable).OnKilled(character);
-                        character.Message($"You killed {target.GetName()}!");
-                        if (direct)
-                            room.DescribeActionNow($"{caster.GetName()} killed {target.GetName()}!", character, target as IAgent);
-                        else
-                            room.DescribeAction($"{caster.GetName()} killed {target.GetName()}!", character, target as IAgent);
-                    }
-                }
-                caster.StartActionCooldown();
-                character.experience += 1;
-            }
-            else
+            if (!spell.NeedsTarget)
             {
                 character.Message($"This spell doesn't need a target! Type **cast {spellName}** instead.");
                 return;
             }
+            var targetName = GetArgument(2);
+            if (String.IsNullOrWhiteSpace(targetName) && !spell.CanSelfCast)
+            {
+                character.Message("What are you trying to cast on ?");
+                return;
+            }
 
+            Entity target = null;
+            if (targetName == "self" && spell.CanSelfCast)
+            {
+                target = caster as Entity;
+            }
+            else
+            {
+                target = room.FindInRoom(targetName);
+                if (target == null && spell.CanSelfCast)
+                {
+                    target = caster as Entity;
+                }
+                if (target == null && !spell.CanSelfCast)
+                {
+                    character.Message($@"Can't find any ""{targetName}"" to cast on here !");
+                    return;
+                }
+            }
+
+            if (!character.CanCastSpell(spell))
+            {
+                character.Message($@"Not enough mana to cast {spell.GetName()}.");
+                return;
+            }
+
+            character.Message($"You casted {spell.GetName()} on {target.name}!");
+            if (direct)
+                room.DescribeActionNow($"{caster.GetName()} casted {spell.GetName()} on {target.name}!", character);
+            else
+                room.DescribeAction($"{caster.GetName()} casted {spell.GetName()} on {target.name}!", character);
+            if (caster.CastSpellOn(spell, target)) // true if target died
+            {
+                if (target is IKillable)
+                {
+                    (target as IKillable).OnKilled(character);
+                    character.Message($"You killed {target.GetName()}!");
+                    if (direct)
+                        room.DescribeActionNow($"{caster.GetName()} killed {target.GetName()}!", character, target as IAgent);
+                    else
+                        room.DescribeAction($"{caster.GetName()} killed {target.GetName()}!", character, target as IAgent);
+                }
+            }
+            caster.StartActionCooldown();
+
+            character.RewardExperience(1);
         }
-
-        public override bool IsWorkbenchCommand(Character character = null)
-        {
-            return false;
-        }
-
     }
 }

@@ -29,15 +29,30 @@ namespace SineahBot.Data
 
         private Dictionary<MoveDirection, RoomConnectionState> directions = new Dictionary<MoveDirection, RoomConnectionState>();
 
-        public Entity FindInRoom(string name)
+        public Entity FindInRoom(string entityName)
         {
-            name = name.ToLower();
-            var output = entities.FirstOrDefault(x => x.name.ToLower() == name);
+            entityName = entityName.ToLower();
+            var output = entities.FirstOrDefault(x => x.name.ToLower() == entityName);
             if (output == null)
-                output = items.FirstOrDefault(x => x.alternativeNames.Contains(name));
+                output = items.FirstOrDefault(x => x.alternativeNames.Contains(entityName));
             if (output == null)
-                output = npcs.FirstOrDefault(x => x.alternativeNames.Contains(name));
+                output = npcs.FirstOrDefault(x => x.alternativeNames.Contains(entityName));
             return output;
+        }
+        public Shop FindShopInRoom(string shopName)
+        {
+            if (!string.IsNullOrWhiteSpace(""))
+            {
+                shopName = shopName.ToLower();
+                var output = npcs.FirstOrDefault(x => x.name.ToLower() == shopName);
+                if (output == null)
+                    output = npcs.FirstOrDefault(x => x.alternativeNames.Contains(shopName));
+                return output?.shop;
+            }
+            else
+            {
+                return npcs.FirstOrDefault(x => x.shop != null)?.shop;
+            }
         }
 
         public IEnumerable<MoveDirection> GetDirections()

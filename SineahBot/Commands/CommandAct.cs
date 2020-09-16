@@ -23,23 +23,22 @@ namespace SineahBot.Commands
                 character.Message("You are asleep.");
                 return;
             }
+
             bool direct = character is NPC;
             var act = GetArgument(2);
 
             if (String.IsNullOrWhiteSpace(act))
             {
                 character.Message("What are you trying to act ?");
+                return;
             }
-            else
-            {
-                if (direct)
-                    room.DescribeActionNow($@"***{character.GetName()}** {act}*", character);
-                else
-                    room.DescribeAction($@"***{character.GetName()}** {act}*", character);
-                character.Message($@"***{character.GetName()}** {act}*");
-                character.experience += 1;
-            }
-        }
 
+            if (direct)
+                room.DescribeActionNow($@"***{character.GetName()}** {act}*", character);
+            else
+                room.DescribeAction($@"***{character.GetName()}** {act}*", character);
+            character.Message($@"***{character.GetName()}** {act}*");
+            character.RewardExperience(1);
+        }
     }
 }

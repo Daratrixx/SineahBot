@@ -182,6 +182,9 @@ namespace SineahBot.Tools
                 case CharacterStatus.Workbench:
                     InCharacterCommands.Where(x => x.IsWorkbenchCommand(character)).FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(character, room);
                     break;
+                case CharacterStatus.Trade:
+                    InCharacterCommands.Where(x => x.IsTradeCommand(character)).FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(character, room);
+                    break;
                 default:
                     throw new Exception($"Impossible to parse an in-character command for a character in the unsupported character state : {characterStatus}");
             }
@@ -192,19 +195,20 @@ namespace SineahBot.Tools
         }
 
         public static List<Command> MetaCommands = new List<Command>() {
-        new CommandMetaInformation(),
-        new CommandMetaSpells(), new CommandMetaClass(),
-        new CommandMetaHelp() };
+            new CommandMetaInformation(), new CommandMetaInventory(),
+            new CommandMetaLevel(),
+            new CommandMetaSpells(), new CommandMetaClass(),
+            new CommandMetaHelp() };
         public static List<Command> NoCharacterCommands = new List<Command>() { };
         public static List<Command> InCharacterCommands = new List<Command>() {
-        new CommandMove(), new CommandLook(), new CommandDirection(),
-        new CommandPickup(), new CommandDrop(), new CommandConsume(),
-        new CommandLock(), new CommandUnlock(),
-        new CommandSay(), new CommandAct(),
-        new CommandCombatAttack(),
-        new CommandCastOn(), new CommandCast(),
-        new CommandLevel(),
-        new CommandSleep(),
+            new CommandMove(), new CommandLook(), new CommandDirection(),
+            new CommandPickup(), new CommandDrop(), new CommandConsume(),
+            new CommandLock(), new CommandUnlock(),
+            new CommandSay(), new CommandAct(),
+            new CommandCombatAttack(),
+            new CommandCastOn(), new CommandCast(),
+            new CommandSleep(),
+            new CommandTrade(), new CommandTradeList(), new CommandTradeBuy(), new CommandTradeSell(), new CommandTradeLeave(),
         };
         public static List<Command> OutCharacterCommands = new List<Command>() { };
     }

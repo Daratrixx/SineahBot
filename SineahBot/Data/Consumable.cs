@@ -18,18 +18,5 @@ namespace SineahBot.Data
         }
 
         public Action<Character> OnConsumed;
-
-        public new Consumable Clone()
-        {
-            return new Consumable()
-            {
-                id = Guid.NewGuid(),
-                name = name,
-                alternativeNames = alternativeNames,
-                description = description,
-                details = details,
-                OnConsumed = OnConsumed
-            };
-        }
     }
 }

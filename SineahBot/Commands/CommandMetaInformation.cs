@@ -30,9 +30,9 @@ namespace SineahBot.Commands
 > *Mana* : **{character.mana}/{character.maxMana}**
 > *Spell power* : **{character.GetSpellPower()}** ({(ClassProgressionManager.IsMagicalClass(character.characterClass) ? "2" : "1")} x level)
 > *Physical power* : **{character.GetWeaponDamage()}** ({(ClassProgressionManager.IsPhysicalClass(character.characterClass) ? "2" : "1")} x level)
+> *Gold*: **{character.gold}**
 {(character.experience >= ClassProgressionManager.ExperienceForNextLevel(character.level) ? "*You have enough experience to level up! Type **!level***" : "")}
 ";
         }
-
     }
 }

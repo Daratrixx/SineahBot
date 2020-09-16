@@ -15,6 +15,21 @@ namespace SineahBot.Commands
             commandRegex = new Regex(@"^(unlock) (north|n|east|e|south|s|west|w|in|out)$", RegexOptions.IgnoreCase);
         }
 
+        public override bool IsCombatCommand(Character character = null)
+        {
+            return false;
+        }
+
+        public override bool IsWorkbenchCommand(Character character = null)
+        {
+            return false;
+        }
+
+        public override bool IsTradeCommand(Character character = null)
+        {
+            return false;
+        }
+
         public override void Run(Character character, Room room)
         {
             if (character.sleeping)
@@ -22,6 +37,7 @@ namespace SineahBot.Commands
                 character.Message("You are asleep.");
                 return;
             }
+
             bool direct = character is NPC;
             string directionName = GetArgument(2);
             MoveDirection direction;
@@ -59,37 +75,39 @@ namespace SineahBot.Commands
                     character.Message($@"Can't unlock unknown direction ""{directionName}""");
                     throw new Exception($@"Can't unlock unknown direction ""{directionName}""");
             }
+
             if (!room.IsValidDirection(direction))
             {
                 character.Message($@"This room doesn't have a ""{direction}"" access.");
                 return;
             }
+
             var connection = room.GetRoomConnectionInDirection(direction);
+
             if (!connection.locked)
             {
                 character.Message("This access is already unlocked.");
+                return;
             }
-            else if (connection.keyItemName != null)
+
+            if (connection.keyItemName != null)
             {
-                var agentInventory = character as IInventory;
-                if (agentInventory.IsItemInInventory(connection.keyItemName))
-                {
-                    connection.Unlock();
-                    if (direct)
-                        room.DescribeActionNow($"{character.GetName()} has unlocked the access ({direction})", character);
-                    else
-                        room.DescribeAction($"{character.GetName()} has unlocked the access ({direction})", character);
-                    if (direct)
-                        connection.toRoom.DescribeActionNow($"Someone unlocked the access from the other side.");
-                    else
-                        connection.toRoom.DescribeAction($"Someone unlocked the access from the other side.");
-                    character.Message($"You unlocked the access ({direction})");
-                    character.experience += 1;
-                }
-                else
+                if (!character.IsItemInInventory(connection.keyItemName))
                 {
                     character.Message("You ned a key for that.");
+                    return;
                 }
+
+                connection.Unlock();
+                if (direct)
+                    room.DescribeActionNow($"{character.GetName()} has unlocked the access ({direction})", character);
+                else
+                    room.DescribeAction($"{character.GetName()} has unlocked the access ({direction})", character);
+                if (direct)
+                    connection.toRoom.DescribeActionNow($"Someone unlocked the access from the other side.");
+                else
+                    connection.toRoom.DescribeAction($"Someone unlocked the access from the other side.");
+                character.Message($"You unlocked the access ({direction})");
             }
             else
             {
@@ -103,18 +121,9 @@ namespace SineahBot.Commands
                 else
                     connection.toRoom.DescribeAction($"Someone unlocked the access from the other side.");
                 character.Message($"You unlocked the access ({direction})");
-                character.experience += 1;
             }
-        }
 
-        public override bool IsCombatCommand(Character character = null)
-        {
-            return false;
+            character.RewardExperience(1);
         }
-        public override bool IsWorkbenchCommand(Character character = null)
-        {
-            return false;
-        }
-
     }
 }

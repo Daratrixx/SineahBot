@@ -17,15 +17,19 @@ namespace SineahBot.Commands
             commandRegex = new Regex(@"^(dir|directions?)$", RegexOptions.IgnoreCase);
         }
 
-        public override void Run(Character character, Room room)
-        {
-            character.Message(String.Join(", ", room.GetDirections().Select(x => x.ToString())) + '.');
-        }
-
         public override bool IsWorkbenchCommand(Character character = null)
         {
             return false;
         }
 
+        public override bool IsTradeCommand(Character character = null)
+        {
+            return false;
+        }
+
+        public override void Run(Character character, Room room)
+        {
+            character.Message(String.Join(", ", room.GetDirections().Select(x => x.ToString())) + '.');
+        }
     }
 }
