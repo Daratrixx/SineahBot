@@ -922,7 +922,7 @@ namespace SineahBot.Data.World
             Streets.Rooms.WGate.AddToRoom(Streets.Characters.plazaGuard2); // guard at plaza
             Streets.Rooms.WGate.AddToRoom(Streets.Characters.plazaMilitian1); // militian at plaza
             Streets.Rooms.WGate.AddToRoom(Streets.Characters.plazaMilitian2); // militian at plaza
-            Streets.Rooms.WGate.AddToRoom(Streets.Characters.shadyRat); // rat at shady
+            Streets.Rooms.shady.AddToRoom(Streets.Characters.shadyRat); // rat at shady
             Streets.Rooms.outerCommercial.AddToRoom(Streets.Characters.baker); // baker at commercial
         }
     }

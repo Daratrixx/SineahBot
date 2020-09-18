@@ -55,7 +55,7 @@ namespace SineahBot.Commands
                 return;
             }
 
-            if (!item.combatConsumable)
+            if (!item.combatConsumable && character.characterStatus == CharacterStatus.Combat)
             {
                 character.Message($@"Can't consume ""{item.GetName()}"" during combat!");
                 return;

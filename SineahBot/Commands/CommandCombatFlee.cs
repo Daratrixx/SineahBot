@@ -8,15 +8,15 @@ using System.Text.RegularExpressions;
 
 namespace SineahBot.Commands
 {
-    public class CommandMove : Command
+    public class CommandCombatFlee : Command
     {
 
-        public CommandMove()
+        public CommandCombatFlee()
         {
-            commandRegex = new Regex(@"^(move |go |move to |go to )?(north|n|east|e|south|s|west|w|in|out|up|down)$", RegexOptions.IgnoreCase);
+            commandRegex = new Regex(@"^(flee) (north|n|east|e|south|s|west|w|in|out|up|down)$", RegexOptions.IgnoreCase);
         }
 
-        public override bool IsCombatCommand(Character character = null)
+        public override bool IsNormalCommand(Character character = null)
         {
             return false;
         }
@@ -39,6 +39,7 @@ namespace SineahBot.Commands
                 return;
             }
 
+            bool direct = character is NPC;
             string directionName = GetArgument(2);
             MoveDirection direction;
             switch (directionName.ToLower())
@@ -88,19 +89,9 @@ namespace SineahBot.Commands
                 return;
             }
 
+            CombatManager.RemoveFromCombat(character, direct);
+
             character.RewardExperience(1);
         }
-    }
-
-    public enum MoveDirection
-    {
-        North,
-        East,
-        South,
-        West,
-        In,
-        Out,
-        Up,
-        Down
     }
 }

@@ -205,7 +205,7 @@ namespace SineahBot.Tools
             new CommandPickup(), new CommandDrop(), new CommandConsume(),
             new CommandLock(), new CommandUnlock(),
             new CommandSay(), new CommandAct(),
-            new CommandCombatAttack(),
+            new CommandCombatAttack(), new CommandCombatFlee(),
             new CommandCastOn(), new CommandCast(),
             new CommandSleep(),
             new CommandTrade(), new CommandTradeList(), new CommandTradeBuy(), new CommandTradeSell(), new CommandTradeLeave(),

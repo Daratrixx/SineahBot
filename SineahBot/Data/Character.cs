@@ -281,7 +281,7 @@ namespace SineahBot.Data
 
         public bool CanCastSpell(Spell spell)
         {
-            return mana > spell.manaCost;
+            return mana >= spell.manaCost;
         }
 
         public void CastSpell(Spell spell)

@@ -38,15 +38,26 @@ namespace SineahBot.Tools
             foreach (var c in enemies)
             {
                 c.Message($"Reward: {c.RewardExperience(expReward / c.level)} exp, {c.RewardGold(goldReward)} gold.");
-                CombatManager.enemies[c].Remove(killed);
+            }
+            RemoveFromCombat(killed, direct);
+        }
+
+        public static void RemoveFromCombat(Character character, bool direct)
+        {
+            var enemies = CombatManager.enemies[character];
+            foreach (var c in enemies)
+            {
+                CombatManager.enemies[c].Remove(character);
                 if (CombatManager.enemies[c].Count == 0)
                 {
-                    c.Message($"You are no longer in combat.", direct);
-                    c.characterStatus = CharacterStatus.Normal;
                     CombatManager.enemies.Remove(c);
+                    c.characterStatus = CharacterStatus.Normal;
+                    c.Message($"You are no longer in combat.", direct);
                 }
             }
-            enemies.Remove(killed);
+            CombatManager.enemies.Remove(character);
+            character.characterStatus = CharacterStatus.Normal;
+            character.Message($"You are no longer in combat.", direct);
         }
 
     }
