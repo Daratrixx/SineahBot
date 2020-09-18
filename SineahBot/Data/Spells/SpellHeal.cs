@@ -13,7 +13,7 @@ namespace SineahBot.Data.Spells
         {
 
         }
-        public override bool Cast(ICaster caster, Entity target)
+        public override void Cast(ICaster caster, Entity target)
         {
             if (target is IHealable)
             {
@@ -24,7 +24,6 @@ namespace SineahBot.Data.Spells
                     (caster as IAgent).Message($"You healed {target.GetName()} for {healingAmount} health points.");
                 }
             }
-            return false;
         }
         public override string GetDescription(ICaster caster = null)
         {

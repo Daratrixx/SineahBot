@@ -35,9 +35,8 @@ namespace SineahBot.Commands
             }
 
             bool direct = character is NPC;
-            var attacker = character as IAttacker;
 
-            if (!attacker.ActionCooldownOver())
+            if (!character.ActionCooldownOver())
             {
                 return;
             }
@@ -62,42 +61,49 @@ namespace SineahBot.Commands
             if (target is IDamageable)
             {
                 var damageableTarget = target as IDamageable;
-                var damage = attacker.GetWeaponDamage() + new Random().Next(5, 10);
+                var damage = character.GetWeaponDamage() + new Random().Next(5, 10);
                 character.Message($"You attacked {target.GetName()} for {damage} damages.");
                 if (direct)
-                    room.DescribeActionNow($"{attacker.GetName()} attacked {target.GetName()}.", character, target as IAgent);
+                    room.DescribeActionNow($"{character.GetName()} attacked {target.GetName()}.", character, target as IAgent);
                 else
-                    room.DescribeAction($"{attacker.GetName()} attacked {target.GetName()}.", character, target as IAgent);
-                if (damageableTarget.OnDamage(damage, attacker))
+                    room.DescribeAction($"{character.GetName()} attacked {target.GetName()}.", character, target as IAgent);
+
+                damageableTarget.OnDamage(damage, character);
+                character.StartActionCooldown();
+
+                if (damageableTarget is IDestructible)
                 {
-                    if (damageableTarget is IDestructible)
+                    if ((damageableTarget as IDestructible).IsDestroyed())
                     {
                         character.Message($"You destroyed {target.GetName()}!");
                         if (direct)
-                            room.DescribeActionNow($"{attacker.GetName()} destroyed {target.GetName()}!", character, target as IAgent);
+                            room.DescribeActionNow($"{character.GetName()} destroyed {target.GetName()}!", character, target as IAgent);
                         else
-                            room.DescribeAction($"{attacker.GetName()} destroyed {target.GetName()}!", character, target as IAgent);
+                            room.DescribeAction($"{character.GetName()} destroyed {target.GetName()}!", character, target as IAgent);
                         (damageableTarget as IDestructible).OnDestroyed();
                     }
-                    if (damageableTarget is IKillable)
+                }
+
+                if (damageableTarget is IKillable)
+                {
+                    if ((damageableTarget as IKillable).IsDead())
                     {
                         character.Message($"You killed {target.GetName()}!");
                         if (direct)
-                            room.DescribeActionNow($"{attacker.GetName()} killed {target.GetName()}!", character, target as IAgent);
+                            room.DescribeActionNow($"{character.GetName()} killed {target.GetName()}!", character, target as IAgent);
                         else
-                            room.DescribeAction($"{attacker.GetName()} killed {target.GetName()}!", character, target as IAgent);
+                            room.DescribeAction($"{character.GetName()} killed {target.GetName()}!", character, target as IAgent);
                         (damageableTarget as IKillable).OnKilled(character);
                     }
                 }
-                attacker.StartActionCooldown();
             }
             else
             {
                 character.Message($"You attacked {target.GetName()}.");
                 if (direct)
-                    room.DescribeActionNow($"{attacker.GetName()} attacked {target.GetName()}.", character, target as IAgent);
+                    room.DescribeActionNow($"{character.GetName()} attacked {target.GetName()}.", character, target as IAgent);
                 else
-                    room.DescribeAction($"{attacker.GetName()} attacked {target.GetName()}.", character, target as IAgent);
+                    room.DescribeAction($"{character.GetName()} attacked {target.GetName()}.", character, target as IAgent);
             }
 
             character.RewardExperience(1);

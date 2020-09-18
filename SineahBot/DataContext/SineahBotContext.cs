@@ -17,6 +17,7 @@ namespace SineahBot.DataContext
 
         public virtual DbSet<Data.Character> Characters { get; set; }
         public virtual DbSet<Data.Player> Players { get; set; }
+        public virtual DbSet<Data.CharacterItem> CharacterItems { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -47,6 +48,11 @@ namespace SineahBot.DataContext
 
                 entity.HasIndex(e => e.idCharacter)
                     .IsUnique();
+            });
+
+            modelBuilder.Entity<Data.CharacterItem>(entity =>
+            {
+                entity.HasIndex(e => e.id);
             });
 
             OnModelCreatingPartial(modelBuilder);

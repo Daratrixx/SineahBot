@@ -52,7 +52,15 @@ namespace SineahBot.Data.World
                 public static Shop Bartender = new Shop()
                 .RegisterEntry(Templates.Consumables.Water, 1, null)
                 .RegisterEntry(Templates.Consumables.Beer, 2, null)
-                .RegisterEntry(Templates.Consumables.Wine, 4, null);
+                .RegisterEntry(Templates.Consumables.Wine, 8, null);
+                public static Shop Waiter = new Shop()
+                .RegisterEntry(Templates.Consumables.Water, 1, null)
+                .RegisterEntry(Templates.Consumables.Beer, 2, null)
+                .RegisterEntry(Templates.Consumables.Wine, 8, null)
+                .RegisterEntry(Templates.Consumables.FourWindsBlanquette, 10, null);
+                public static Shop Cook = new Shop()
+                .RegisterEntry(Templates.Goods.BreadBundle, null, 10)
+                .RegisterEntry(Templates.Goods.MeatPackage, null, 20);
             }
             public static class Rooms
             {
@@ -194,6 +202,8 @@ namespace SineahBot.Data.World
             public static class Characters
             {
                 public static Character Bartender = Templates.CityFolks.Bartender.Clone().RegisterShop(Shops.Bartender);
+                public static Character Waiter = Templates.CityFolks.Waiter.Clone().RegisterShop(Shops.Waiter);
+                public static Character Cook = Templates.CityFolks.Cook.Clone().RegisterShop(Shops.Cook);
                 public static Character Drunk = Templates.CityFolks.Drunk.Clone();
                 public static Character Customer = Templates.CityFolks.Customer.Clone();
                 public static Character ShadyConsumer = Templates.CityFolks.ShadyConsumer.Clone();
@@ -560,6 +570,12 @@ namespace SineahBot.Data.World
         }
         public static class Streets
         {
+            public static class Shops
+            {
+                public static Shop Baker = new Shop()
+                .RegisterEntry(Templates.Consumables.Bread, 1, null)
+                .RegisterEntry(Templates.Goods.BreadBundle, 8, null);
+            }
             public static class Rooms
             {
                 public static Room WGate = new Room("Sineah western city gate")
@@ -600,7 +616,7 @@ namespace SineahBot.Data.World
                 public static Room outerCommercial = new Room("Sineah commercial street")
                 {
                     isSpawnRoom = false,
-                    description = "This street is a direct access from the southern gate to the central plaza. East is a Shop [CLOSED]. To the south is the city gate. North is the plaza."
+                    description = "The nice smell of freshly baked bread fills the street. This street is a direct access from the southern gate to the central plaza. East is a Shop [CLOSED]. To the south is the city gate. North is the plaza."
                 };
                 public static Room innerScience = new Room("Sineah inner science district")
                 {
@@ -745,6 +761,7 @@ namespace SineahBot.Data.World
                 public static Character plazaMilitian1 = Templates.CityFolks.Militian.Clone();
                 public static Character plazaMilitian2 = Templates.CityFolks.Militian.Clone();
                 public static Character shadyRat = Templates.Critters.Rat.Clone();
+                public static Character baker = Templates.CityFolks.Baker.Clone().RegisterShop(Shops.Baker);
             }
             public static Character[] GetCharacters()
             {
@@ -836,18 +853,15 @@ namespace SineahBot.Data.World
             // load inn
             RoomManager.LoadRooms(Inn.GetRooms());
             RoomManager.LoadRoomConnections(Inn.GetConnections());
-            ItemManager.LoadItems(Inn.GetItems());
             CharacterManager.LoadCharacters(Inn.GetCharacters());
             // load underground
             RoomManager.LoadRooms(Underground.GetRooms());
             RoomManager.LoadRoomConnections(Underground.GetConnections());
-            ItemManager.LoadItems(Underground.GetItems());
             CharacterManager.LoadCharacters(Underground.GetCharacters());
 
             // LOAD STREETS
             RoomManager.LoadRooms(Streets.GetRooms());
             RoomManager.LoadRoomConnections(Streets.GetConnections());
-            ItemManager.LoadItems(Streets.GetItems());
             CharacterManager.LoadCharacters(Streets.GetCharacters());
 
             // CONNECT BUILDINGS TO STREETS
@@ -862,9 +876,11 @@ namespace SineahBot.Data.World
             // POPULATE ROOMS WITH NPCS
             // populate inn
             Inn.Rooms.CommonRoom.AddToRoom(Inn.Characters.Bartender); // bartender in common room
+            Inn.Rooms.CommonRoom.AddToRoom(Inn.Characters.Waiter); // waiter in common room
             Inn.Rooms.CommonRoom.AddToRoom(Inn.Characters.Drunk); // drunk in common room
             Inn.Rooms.CommonRoom.AddToRoom(Inn.Characters.Customer); // customer in common room
             Inn.Rooms.CommonRoom.AddToRoom(Inn.Characters.ShadyConsumer); // shady consumer in common room
+            Inn.Rooms.Kitchen.AddToRoom(Inn.Characters.Cook); // cook in kitchen
             Inn.Rooms.Cellar.AddToRoom(Inn.Characters.Rat1); // rat in cellar
             Inn.Rooms.Cellar.AddToRoom(Inn.Characters.Rat2); // rat in cellar
             Inn.Rooms.Cellar.AddToRoom(Inn.Characters.Rat3); // rat in cellar
@@ -907,6 +923,7 @@ namespace SineahBot.Data.World
             Streets.Rooms.WGate.AddToRoom(Streets.Characters.plazaMilitian1); // militian at plaza
             Streets.Rooms.WGate.AddToRoom(Streets.Characters.plazaMilitian2); // militian at plaza
             Streets.Rooms.WGate.AddToRoom(Streets.Characters.shadyRat); // rat at shady
+            Streets.Rooms.outerCommercial.AddToRoom(Streets.Characters.baker); // baker at commercial
         }
     }
 }

@@ -70,13 +70,13 @@ namespace SineahBot.Commands
 
             if (totalGoldCost > character.gold)
             {
-                character.Message($@"Not enough gold to buy *x{quantity}* {shopEntry.GetName()} (gold cost: **{totalGoldCost})**");
+                character.Message($@"Not enough gold to buy *x{quantity}* {shopEntry.GetName()} (gold cost: **{totalGoldCost}**)");
                 return;
             }
 
             character.gold -= totalGoldCost;
             character.AddToInventory(shopEntry.referenceItem, quantity);
-            character.Message($@"Bought *x{quantity}* {shopEntry.GetName()} (gold cost: **{totalGoldCost})**");
+            character.Message($@"Bought *x{quantity}* {shopEntry.GetName()} (gold cost: **{totalGoldCost}**)");
 
             character.RewardExperience(1);
         }

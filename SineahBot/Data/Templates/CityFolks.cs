@@ -28,7 +28,7 @@ namespace SineahBot.Data.Templates
             name = "Customer",
             shortDescription = "A customer enjoys the establishment.",
             longDescription = "This okay-looking individual is relaxing, not causing troubles.",
-            alternativeNames = new string[] { "consumer" }
+            alternativeNames = new string[] { }
         };
         public static NPC ShadyConsumer = new NPC()
         {
@@ -41,7 +41,31 @@ namespace SineahBot.Data.Templates
             experience = 1000,
             shortDescription = "A shady looking consumer is brooding in a corner.",
             longDescription = "This individual radiates danger. They are most likely armed, and better left alone.",
-            alternativeNames = new string[] { "shady looking consumer", "shadyconsumer", "shadycons", "shadyc", "sconsumer", "scons", "sc" }
+            alternativeNames = new string[] { "shady looking consumer", "shadyconsumer", "shadycons", "shadyc", "sconsumer", "scons", "consumer", "sc" }
+        };
+        public static NPC Waiter = new NPC()
+        {
+            level = 2,
+            maxHealth = 20,
+            health = 20,
+            gold = 10,
+            name = "Waiter",
+            experience = 0,
+            shortDescription = "A waiter is serving customers.",
+            longDescription = "The waiter walks back and forth, taking orders and serving customers.",
+            alternativeNames = new string[] { "waitress" }
+        };
+        public static NPC Cook = new NPC()
+        {
+            level = 2,
+            maxHealth = 20,
+            health = 20,
+            gold = 20,
+            name = "Cook",
+            experience = 0,
+            shortDescription = "A cook is working here.",
+            longDescription = "The cook is busy making food for customers.",
+            alternativeNames = new string[] { }
         };
         public static NPC Bartender = new NPC()
         {
@@ -54,6 +78,18 @@ namespace SineahBot.Data.Templates
             shortDescription = "The bartender is ready to serve drinks at the bar.",
             longDescription = "The bartender hangs behind the bar, cleaning glasses and serving drinks to the customers of the inn.",
             alternativeNames = new string[] { "host" }
+        };
+        public static NPC Baker = new NPC()
+        {
+            level = 2,
+            maxHealth = 20,
+            health = 20,
+            gold = 40,
+            name = "Baker",
+            experience = 0,
+            shortDescription = "A baker is here to trade.",
+            longDescription = "The baker is ready to trade.",
+            alternativeNames = new string[] { }
         };
         public static NPC Militian = new NPC()
         {

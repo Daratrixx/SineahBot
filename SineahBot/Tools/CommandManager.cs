@@ -27,12 +27,12 @@ namespace SineahBot.Tools
                 }
                 if (message == "!save")
                 {
-                    Program.database.SaveChanges();
+                    Program.SaveData();
                 }
                 if (message == "!stop")
                 {
                     Program.DiscordClient.StopAsync();
-                    Program.database.SaveChanges();
+                    Program.SaveData();
                     Environment.Exit(0);
                 }
                 if (message == "!boost" && player.character != null)

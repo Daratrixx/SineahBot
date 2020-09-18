@@ -34,34 +34,31 @@ namespace SineahBot.Data
             return $"*{longDescription}* \n> {GetStateDescription(agent)}";
         }
 
-        public override bool OnDamage(int damageAmount, INamed source = null)
+        public override void OnDamage(int damageAmount, Entity source = null)
         {
-            var output = base.OnDamage(damageAmount, source);
-            if (!output)
+            base.OnDamage(damageAmount, source);
+            if (!IsDead())
             {
                 new MudTimer(1, () =>
                 {
-                    if (health > 0)
+                    if (!IsDead())
                     {
                         CommandManager.ParseInCharacterMessage(this, $"atk {source.GetName()}", RoomManager.GetRoom(currentRoomId));
-                        //Player.CommitPlayerMessageBuffers().Wait();
                     }
                 });
             }
-            return output;
         }
 
-        public override void OnKilled(IAgent agent = null)
+        public override void OnKilled(Entity killer = null)
         {
             if (shop != null) shop.CloseShop();
-            base.OnKilled(agent);
+            base.OnKilled(killer);
             new MudTimer(30, () =>
             {
                 health = maxHealth;
                 mana = maxMana;
                 var room = RoomManager.GetRoom(idSpawnRoom);
                 RoomManager.MoveToRoom(this, room);
-                //Player.CommitPlayerMessageBuffers().Wait();
             });
         }
 

@@ -17,12 +17,21 @@ namespace SineahBot
         public static readonly bool ONLINE = true;
         public static readonly SineahBotContext database = new SineahBotContext();
 
+        public static void SaveData()
+        {
+            CharacterManager.SaveLoadedCharacters();
+            database.SaveChanges();
+        }
+
         public static void Main(string[] args)
        => new Program().MainAsync().GetAwaiter().GetResult();
 
         public async Task MainAsync()
         {
             Worlds.LoadWorlds();
+            new MudInterval(300, () => {
+                SaveData();
+            });
             try
             {
                 if (ONLINE)
@@ -34,7 +43,7 @@ namespace SineahBot
             {
                 Logging.Log(e.Message);
                 Logging.Log(e.StackTrace);
-                database.SaveChanges();
+                SaveData();
             }
         }
         private Task Log(LogMessage msg)

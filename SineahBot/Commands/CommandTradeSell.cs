@@ -91,7 +91,7 @@ namespace SineahBot.Commands
             var totalGoldCost = shopEntry.goldRefund.Value * quantity;
             character.gold += totalGoldCost;
             character.RemoveFromInventory(shopEntry.referenceItem, quantity);
-            character.Message($@"Sold *x{quantity}* {shopEntry.GetName()} (gold earned: **{totalGoldCost})**");
+            character.Message($@"Sold *x{quantity}* {shopEntry.GetName()} (gold earned: **{totalGoldCost}**)");
 
             character.RewardExperience(1);
         }

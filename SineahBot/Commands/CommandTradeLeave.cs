@@ -13,7 +13,7 @@ namespace SineahBot.Commands
 
         public CommandTradeLeave()
         {
-            commandRegex = new Regex(@"^(leave|exit)$", RegexOptions.IgnoreCase);
+            commandRegex = new Regex(@"^(leave|exit|out)$", RegexOptions.IgnoreCase);
         }
 
         public override bool IsNormalCommand(Character character = null)

@@ -33,9 +33,10 @@ namespace SineahBot.Commands
                 character.Message("You are asleep.");
                 return;
             }
+
             bool direct = character is NPC;
-            var caster = character as ICaster;
-            if (!caster.ActionCooldownOver())
+
+            if (!character.ActionCooldownOver())
             {
                 return;
             }
@@ -47,7 +48,7 @@ namespace SineahBot.Commands
                 character.Message("What are you trying to cast ?");
                 return;
             }
-            var spell = caster.GetSpell(spellName);
+            var spell = character.GetSpell(spellName);
             if (spell == null)
             {
                 character.Message($@"Can't cast unknown spell ""{spellName}"". Type **!spells** to get a list of spells you can cast.");
@@ -68,14 +69,14 @@ namespace SineahBot.Commands
             Entity target = null;
             if (targetName == "self" && spell.CanSelfCast)
             {
-                target = caster as Entity;
+                target = character as Entity;
             }
             else
             {
                 target = room.FindInRoom(targetName);
                 if (target == null && spell.CanSelfCast)
                 {
-                    target = caster as Entity;
+                    target = character as Entity;
                 }
                 if (target == null && !spell.CanSelfCast)
                 {
@@ -92,22 +93,25 @@ namespace SineahBot.Commands
 
             character.Message($"You casted {spell.GetName()} on {target.name}!");
             if (direct)
-                room.DescribeActionNow($"{caster.GetName()} casted {spell.GetName()} on {target.name}!", character);
+                room.DescribeActionNow($"{character.GetName()} casted {spell.GetName()} on {target.name}!", character);
             else
-                room.DescribeAction($"{caster.GetName()} casted {spell.GetName()} on {target.name}!", character);
-            if (caster.CastSpellOn(spell, target)) // true if target died
+                room.DescribeAction($"{character.GetName()} casted {spell.GetName()} on {target.name}!", character);
+
+            character.CastSpellOn(spell, target);
+            character.StartActionCooldown();
+
+            if (target is IKillable)
             {
-                if (target is IKillable)
+                if ((target as IKillable).IsDead())
                 {
                     (target as IKillable).OnKilled(character);
                     character.Message($"You killed {target.GetName()}!");
                     if (direct)
-                        room.DescribeActionNow($"{caster.GetName()} killed {target.GetName()}!", character, target as IAgent);
+                        room.DescribeActionNow($"{character.GetName()} killed {target.GetName()}!", character, target as IAgent);
                     else
-                        room.DescribeAction($"{caster.GetName()} killed {target.GetName()}!", character, target as IAgent);
+                        room.DescribeAction($"{character.GetName()} killed {target.GetName()}!", character, target as IAgent);
                 }
             }
-            caster.StartActionCooldown();
 
             character.RewardExperience(1);
         }

@@ -7,5 +7,6 @@ namespace SineahBot.Interfaces
     interface IDestructible : IDamageable
     {
         void OnDestroyed();
+        bool IsDestroyed();
     }
 }

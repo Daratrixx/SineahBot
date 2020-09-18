@@ -30,9 +30,9 @@ namespace SineahBot.Commands
         public string GetCharacterInventory(Character character)
         {
             return $"**INVENTORY** (*gold*: **{character.gold}**)\n"
-            + String.Join('\n', character.items.Select(x => GetSpellInformation(x.Key, x.Value, character)));
+            + String.Join('\n', character.items.Select(x => GetItemInformation(x.Key, x.Value, character)));
         }
-        public string GetSpellInformation(Item item, int count, Character character)
+        public string GetItemInformation(Item item, int count, Character character)
         {
             return $"> **{item.GetName()}** (x{count}) {item.GetFullDescription(character)}";
         }

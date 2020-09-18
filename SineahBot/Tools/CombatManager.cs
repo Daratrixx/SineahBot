@@ -9,30 +9,45 @@ namespace SineahBot.Tools
 {
     public static class CombatManager
     {
-        public static Dictionary<Guid, Combat> combats = new Dictionary<Guid, Combat>();
+        public static Dictionary<Character, List<Character>> enemies = new Dictionary<Character, List<Character>>();
 
-        public static List<Character> GetCombatForCharacter(Character character)
+        public static void OnDamagingCharacter(Character damaging, Character damaged)
         {
-            if (!combats.ContainsKey(character.id))
+            if (!enemies.ContainsKey(damaged))
             {
-                var combat = new Combat();
-                combat.Add(character);
-                combats[character.id] = combat;
-                return combat;
+                enemies[damaged] = new List<Character>();
             }
-            return combats[character.id];
-        }
-        public static void RemoveFromCombat(Character character) {
-            var combat = GetCombatForCharacter(character);
-            if(combat != null) {
-                combat.Remove(character);
-                combats.Remove(character.id);
+            if (!enemies[damaged].Contains(damaging))
+                enemies[damaged].Add(damaging);
+            damaging.characterStatus = CharacterStatus.Combat;
+
+            if (!enemies.ContainsKey(damaging))
+            {
+                enemies[damaging] = new List<Character>();
             }
+            if (!enemies[damaging].Contains(damaged))
+                enemies[damaging].Add(damaged);
+            damaged.characterStatus = CharacterStatus.Combat;
         }
-        public static void AddToCombat(Character character, Combat combat)
+
+        public static void OnCharacterKilled(Character killed, bool direct)
         {
-            combat.Add(character);
-            combats[character.id] = combat;
+            var enemies = CombatManager.enemies[killed];
+            var goldReward = killed.GetGoldReward() / enemies.Count;
+            var expReward = killed.GetExperienceReward() / enemies.Count;
+            foreach (var c in enemies)
+            {
+                c.Message($"Reward: {c.RewardExperience(expReward / c.level)} exp, {c.RewardGold(goldReward)} gold.");
+                CombatManager.enemies[c].Remove(killed);
+                if (CombatManager.enemies[c].Count == 0)
+                {
+                    c.Message($"You are no longer in combat.", direct);
+                    c.characterStatus = CharacterStatus.Normal;
+                    CombatManager.enemies.Remove(c);
+                }
+            }
+            enemies.Remove(killed);
         }
+
     }
 }

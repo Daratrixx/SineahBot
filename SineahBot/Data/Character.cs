@@ -79,10 +79,10 @@ namespace SineahBot.Data
             throw new NotImplementedException();
         }
 
-        public virtual bool OnDamage(int damageAmount, INamed source = null)
+        public virtual void OnDamage(int damageAmount, Entity source = null)
         {
             health = Math.Max(0, health - damageAmount);
-            if (source == this) return health == 0;
+            if (source == this) return;
             if (agent != null)
             {
                 if (source != null)
@@ -94,6 +94,14 @@ namespace SineahBot.Data
             {
                 CommandSleep.Awake(this, RoomManager.GetRoom(currentRoomId), this is NPC);
             }
+            if (source is Character)
+            {
+                CombatManager.OnDamagingCharacter(this, source as Character);
+            }
+        }
+
+        public bool IsDead()
+        {
             return health == 0;
         }
 
@@ -160,30 +168,14 @@ namespace SineahBot.Data
                     agent.Message($"You recovered {manaAmount} mana.");
             }
         }
-
-        public virtual void OnKilled(IAgent agent = null)
+        public virtual void OnKilled(Entity killer = null)
         {
             RoomManager.RemoveFromCurrentRoom(this, false);
-            if (agent != null)
+            if (killer != null)
             {
-                if (agent != this.agent)
+                if (killer != this)
                 {
-                    Message($"You have been killed by {agent.GetName()}!", agent is NPC);
-                    int rewardExp = ClassProgressionManager.ExperienceForNextLevel(this.level) / 10;
-                    if (this.agent is Player)
-                        rewardExp += rewardExp / 10;
-                    else
-                        rewardExp += experience;
-                    if (agent is Player)
-                    {
-                        var player = agent as Player;
-                        agent.Message($"Reward: {player.character.RewardExperience(rewardExp * Math.Max(this.level, 1) / Math.Max(player.character.level, 1))} exp, {player.character.RewardGold(this.gold)} gold.");
-                    }
-                    if (agent is Character)
-                    {
-                        var character = agent as Character;
-                        agent.Message($"Reward: {character.RewardExperience(rewardExp * Math.Max(this.level, 1) / Math.Max(character.level, 1))} exp, {character.RewardGold(this.gold)} gold.");
-                    }
+                    Message($"You have been killed by {killer.GetName()}!", agent is NPC);
                 }
                 else
                 {
@@ -194,10 +186,25 @@ namespace SineahBot.Data
             {
                 Message($"You died!");
             }
+            CombatManager.OnCharacterKilled(this, killer is NPC);
             if (this.agent is Player)
             {
                 CharacterManager.DeletePlayerCharacter(this.agent as Player);
             }
+        }
+
+        public virtual int GetExperienceReward()
+        {
+            int rewardExp = ClassProgressionManager.ExperienceForNextLevel(level) / 10;
+            if (this.agent is Player)
+                rewardExp += rewardExp / 10;
+            else
+                rewardExp += experience;
+            return rewardExp * level;
+        }
+        public virtual int GetGoldReward()
+        {
+            return this.gold;
         }
 
         public void OnObserving(IObservable observable)
@@ -277,15 +284,15 @@ namespace SineahBot.Data
             return mana > spell.manaCost;
         }
 
-        public bool CastSpell(Spell spell)
+        public void CastSpell(Spell spell)
         {
-            return CastSpellOn(spell, this);
+            CastSpellOn(spell, this);
         }
 
-        public bool CastSpellOn(Spell spell, Entity target)
+        public void CastSpellOn(Spell spell, Entity target)
         {
             mana -= spell.manaCost;
-            return spell.Cast(this, target);
+            spell.Cast(this, target);
         }
 
         public virtual int GetSpellPower()
@@ -311,6 +318,14 @@ namespace SineahBot.Data
                 CommandSleep.Awake(this, RoomManager.GetRoom(currentRoomId), this is NPC);
             }
         }
+    }
+
+    public class CharacterItem
+    {
+        public Guid id { get; set; }
+        public Guid idCharacter { get; set; }
+        public string ItemName { get; set; }
+        public int StackSize { get; set; }
     }
 
     public enum CharacterStatus

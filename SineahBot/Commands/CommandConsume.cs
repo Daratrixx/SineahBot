@@ -48,16 +48,20 @@ namespace SineahBot.Commands
             {
                 item = room.FindInRoom(itemName) as Consumable;
             }
-            else
-            {
-                character.RemoveFromInventory(item);
-            }
+
             if (item == null)
             {
                 character.Message($@"Can't find any ""{itemName}"" to consume!");
                 return;
             }
 
+            if (!item.combatConsumable)
+            {
+                character.Message($@"Can't consume ""{item.GetName()}"" during combat!");
+                return;
+            }
+
+            character.RemoveFromInventory(item);
             item.OnConsumed(character);
             character.Message($"You consumed {item.GetName(character)}.");
             if (direct)

@@ -41,7 +41,7 @@ namespace SineahBot.Data
         }
         public Shop FindShopInRoom(string shopName)
         {
-            if (!string.IsNullOrWhiteSpace(""))
+            if (!string.IsNullOrWhiteSpace(shopName))
             {
                 shopName = shopName.ToLower();
                 var output = npcs.FirstOrDefault(x => x.name.ToLower() == shopName);

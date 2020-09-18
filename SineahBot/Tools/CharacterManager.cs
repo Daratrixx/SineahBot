@@ -10,8 +10,8 @@ namespace SineahBot.Tools
     public static class CharacterManager
     {
 
-        public static int ExpMultiplier = 5;
-        public static int GoldMultiplier = 5;
+        public static int ExpMultiplier = 2;
+        public static int GoldMultiplier = 2;
         static CharacterManager()
         {
             new MudInterval(10, () =>
@@ -39,23 +39,42 @@ namespace SineahBot.Tools
                 if (character == null) throw new Exception($"Impossible to find character with id {idCharacter}");
                 characters[idCharacter] = character;
                 ClassProgressionManager.ApplyClassProgressionForCharacter(character, true);
-                if (ClassProgressionManager.IsPhysicalClass(character.characterClass))
-                {
-                    character.AddToInventory(Data.Templates.Consumables.Bread, 3);
-                    character.AddToInventory(Data.Templates.Consumables.DriedMeat);
-                }
-                if (ClassProgressionManager.IsMagicalClass(character.characterClass))
-                {
-                    character.AddToInventory(Data.Templates.Consumables.Bread, 3);
-                    character.AddToInventory(Data.Templates.Consumables.Water);
-                }
-                if (ClassProgressionManager.IsSecretClass(character.characterClass))
-                {
-                    character.AddToInventory(Data.Templates.Consumables.Candy);
-                }
+                LoadCharacterInventory(character);
                 return character;
             }
             return characters[idCharacter];
+        }
+
+        public static void SaveLoadedCharacters()
+        {
+            foreach (var data in characters.Where(x => x.Value.agent is Player))
+            {
+                SaveCharacterInventory(data.Value);
+            }
+        }
+
+        public static void SaveCharacterInventory(Character character)
+        {
+            var items = Program.database.CharacterItems.AsQueryable().Where(x => x.idCharacter == character.id);
+            Program.database.CharacterItems.RemoveRange(items);
+            items = character.items.AsQueryable().Where(x => x.Key.permanant).Select(item => new CharacterItem()
+            {
+                id = Guid.NewGuid(),
+                idCharacter = character.id,
+                ItemName = item.Key.name,
+                StackSize = item.Value
+            });
+            Program.database.CharacterItems.AddRange(items);
+        }
+
+        public static void LoadCharacterInventory(Character character)
+        {
+            var items = Program.database.CharacterItems.AsEnumerable().Where(x => x.idCharacter == character.id).ToList();
+            var matchedItems = items.Select(x => new KeyValuePair<Item, int>(ItemManager.GetItem(x.ItemName), x.StackSize))
+                .Where(x => x.Key != null)
+                .Distinct()
+                .ToList();
+            character.items = new Dictionary<Item, int>(matchedItems);
         }
 
         public static Character CreateCharacterForPlayer(Player player)
@@ -67,19 +86,16 @@ namespace SineahBot.Tools
             character.characterClass = player.characterClass;
             character.level = 1;
             character.experience = 0;
+            character.gold = 20;
             ClassProgressionManager.ApplyClassProgressionForCharacter(character, true);
             if (ClassProgressionManager.IsPhysicalClass(character.characterClass))
             {
-                character.AddToInventory(Data.Templates.Consumables.Bread);
-                character.AddToInventory(Data.Templates.Consumables.Bread);
-                character.AddToInventory(Data.Templates.Consumables.Bread);
+                character.AddToInventory(Data.Templates.Consumables.Bread,3);
                 character.AddToInventory(Data.Templates.Consumables.DriedMeat);
             }
             if (ClassProgressionManager.IsMagicalClass(character.characterClass))
             {
-                character.AddToInventory(Data.Templates.Consumables.Bread);
-                character.AddToInventory(Data.Templates.Consumables.Bread);
-                character.AddToInventory(Data.Templates.Consumables.Bread);
+                character.AddToInventory(Data.Templates.Consumables.Bread,3);
                 character.AddToInventory(Data.Templates.Consumables.Water);
             }
             if (ClassProgressionManager.IsSecretClass(character.characterClass))

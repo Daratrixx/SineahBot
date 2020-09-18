@@ -13,19 +13,17 @@ namespace SineahBot.Data.Spells
         {
 
         }
-        public override bool Cast(ICaster caster, Entity target)
+        public override void Cast(ICaster caster, Entity target)
         {
             if (target is IDamageable)
             {
                 var damageAmount = baseDamage + caster.GetSpellPower() + new Random().Next(5, 10);
-                var returnValue = (target as IDamageable).OnDamage(damageAmount, caster);
+                (target as IDamageable).OnDamage(damageAmount, caster as Entity);
                 if (caster is IAgent)
                 {
                     (caster as IAgent).Message($"You dealt {damageAmount} damage to {target.GetName()}.");
                 }
-                return returnValue;
             }
-            return false;
         }
         public override string GetDescription(ICaster caster = null)
         {

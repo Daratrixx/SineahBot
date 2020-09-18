@@ -31,7 +31,7 @@ namespace SineahBot.Data
             return "";
         }
 
-        public abstract bool Cast(ICaster caster, Entity target); // returns true if the target died
+        public abstract void Cast(ICaster caster, Entity target);
 
         public string GetName(IAgent agent = null)
         {
