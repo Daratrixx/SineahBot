@@ -33,6 +33,8 @@ namespace SineahBot.Commands
                 return;
             }
 
+            act = act.Replace("*", "");
+
             if (direct)
                 room.DescribeActionNow($@"***{character.GetName()}** {act}*", character);
             else

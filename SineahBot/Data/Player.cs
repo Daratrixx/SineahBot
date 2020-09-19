@@ -1,5 +1,6 @@
 ﻿using Discord;
 using SineahBot.Interfaces;
+using SineahBot.Tools;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -25,7 +26,27 @@ namespace SineahBot.Data
         public Guid? idCharacter { get; set; }
 
         public Character character;
+        public CancelableMudTimer disconnectTimer = null;
 
+        public void SetDisconnectTimer(int minutes)
+        {
+            if (disconnectTimer != null)
+            {
+                disconnectTimer.Cancel();
+                disconnectTimer = null;
+            }
+            if (character == null || character.currentRoomId == Guid.Empty) return;
+            disconnectTimer = new CancelableMudTimer(minutes * 60, () =>
+            {
+                Message("```You will be disconnected in 1 minute.```", true);
+                disconnectTimer = new CancelableMudTimer(60, () =>
+                {
+                    Message("```You are now disconnected.```", true);
+                    PlayerManager.DisconnectPlayer(this);
+                    disconnectTimer = null;
+                });
+            });
+        }
 
         protected List<string> messageMuffer = new List<string>();
         public void Message(string message, bool direct = false)

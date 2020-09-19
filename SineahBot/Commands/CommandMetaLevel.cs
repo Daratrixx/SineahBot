@@ -33,7 +33,9 @@ namespace SineahBot.Commands
             {
                 if (className == "")
                 {
-                    character.Message($"You have to indicate what subclass you wish to level up as [**!level** {subclasses.Select(x => x.Key.ToString()).Aggregate((a, b) => a + "/" + b)}]\n> To keep your current class, type **!level {character.characterClass}**");
+                    character.Message($"You have to indicate what subclass you wish to level up as [**!level** {subclasses.Select(x => x.Key.ToString()).Aggregate((a, b) => a + "/" + b)}]" +
+                    $"\n> To keep your current class, type **!level {character.characterClass}**" +
+                    $"\n> Type `!class [class name]` to get the description of a character class.");
                     return;
                 }
 

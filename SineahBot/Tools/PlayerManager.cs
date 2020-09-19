@@ -38,6 +38,15 @@ namespace SineahBot.Tools
             return players[userId];
         }
 
+        public static void DisconnectPlayer(Player player)
+        {
+            if (player.character != null && player.character.currentRoomId != Guid.Empty)
+            {
+                CharacterManager.SaveCharacterInventory(player.character);
+                RoomManager.RemoveFromCurrentRoom(player.character, false);
+            }
+        }
+
         public static Player TestPlayer
         {
             get

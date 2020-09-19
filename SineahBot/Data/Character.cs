@@ -55,7 +55,8 @@ namespace SineahBot.Data
             if (ClassProgressionManager.IsSecretClass(characterClass))
                 output.Add("They are shrouded by an aura of mistery.");
             output.Add(GetStateDescription(agent));
-            return String.Join("\n> ", output);
+            output.Add(GetPowerDescription(agent as Character));
+            return String.Join("\n> ", output.Where(x => !string.IsNullOrWhiteSpace(x)));
         }
 
         public string GetStateDescription(IAgent agent = null)
@@ -67,6 +68,17 @@ namespace SineahBot.Data
             if (health <= (maxHealth * 3) / 4)
                 return $"> {GetName(agent)} is lightly bruised.";
             return $"> {GetName(agent)} seems in good shape.";
+        }
+
+        public string GetPowerDescription(Character character)
+        {
+            if (character == null) return "";
+            var ratio = (character.level * 10000) / (level * 100);
+            if (ratio < 45) return "> They will be an impossible fight.";
+            if (ratio < 90) return "> This would be a tough fight.";
+            if (ratio > 110) return "> This should be an easy fight.";
+            if (ratio > 155) return "> You're going to beat them to death.";
+            return $"> You seem evenly matched.";
         }
 
         public void Message(string message, bool direct = false)
@@ -131,17 +143,32 @@ namespace SineahBot.Data
                 }
                 return;
             }
+            var healthRegen = GetHealthRegeneration();
+            var manaRegen = GetManaRegeneration();
+            health = Math.Min(maxHealth, health + healthRegen);
+            mana = Math.Min(maxMana, mana + manaRegen);
             if (sleeping)
             {
-                health = Math.Min(maxHealth, health + 8);
-                mana = Math.Min(maxMana, mana + 4);
-                Message("You recovered 8 health and 4 mana while sleeping.", true);
+                Message($"You recovered {healthRegen} health and {manaRegen} mana while sleeping.", true);
             }
-            else
-            {
-                mana = Math.Min(maxMana, mana + 1);
-                health = Math.Min(maxHealth, health + 2);
-            }
+        }
+
+        public int GetHealthRegeneration()
+        {
+            var output = 2;
+            if (sleeping) output *= 4;
+            if (ClassProgressionManager.IsPhysicalClass(characterClass)) output += level;
+
+            return output;
+        }
+
+        public int GetManaRegeneration()
+        {
+            var output = 1;
+            if (sleeping) output *= 4;
+            if (ClassProgressionManager.IsMagicalClass(characterClass)) output *= 2;
+
+            return output;
         }
 
         public void RestoreHealth(int healthAmount, INamed source = null)

@@ -17,7 +17,7 @@ namespace SineahBot.Data.Templates
             name = "Rat",
             shortDescription = "A rat silently scrabbles for food.",
             longDescription = "A regular rat, common pest.",
-            alternativeNames = new string[] { "rat", "small rat", "srat", "sr" }
+            alternativeNames = new string[] { "rat", "small rat", "smallrat", "srat", "sr" }
         };
         public static NPC RabidRat = new NPC()
         {
@@ -29,7 +29,7 @@ namespace SineahBot.Data.Templates
             name = "Rabid rat",
             shortDescription = "An aggressive rat frantically moves around.",
             longDescription = "This red eyed rat seems very aggressive and territorial. His bight might infect you.",
-            alternativeNames = new string[] { "rat", "rabid", "rrat", "rr" }
+            alternativeNames = new string[] { "rat", "aggressive rat", "aggressive", "rrabid", "rabid", "rrat", "rr" }
         };
         public static NPC GiantRat = new NPC()
         {

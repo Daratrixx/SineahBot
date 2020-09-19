@@ -48,7 +48,8 @@ namespace SineahBot.Data.World
         }
         public static class Inn
         {
-            public static class Shops {
+            public static class Shops
+            {
                 public static Shop Bartender = new Shop()
                 .RegisterEntry(Templates.Consumables.Water, 1, null)
                 .RegisterEntry(Templates.Consumables.Beer, 2, null)
@@ -61,6 +62,9 @@ namespace SineahBot.Data.World
                 public static Shop Cook = new Shop()
                 .RegisterEntry(Templates.Goods.BreadBundle, null, 10)
                 .RegisterEntry(Templates.Goods.MeatPackage, null, 20);
+                public static Shop ShadyConsumer = new Shop()
+                .RegisterEntry(Templates.Consumables.HealthPotion, 20, null)
+                .RegisterEntry(Templates.Consumables.ManaPotion, 20, null);
             }
             public static class Rooms
             {
@@ -206,7 +210,7 @@ namespace SineahBot.Data.World
                 public static Character Cook = Templates.CityFolks.Cook.Clone().RegisterShop(Shops.Cook);
                 public static Character Drunk = Templates.CityFolks.Drunk.Clone();
                 public static Character Customer = Templates.CityFolks.Customer.Clone();
-                public static Character ShadyConsumer = Templates.CityFolks.ShadyConsumer.Clone();
+                public static Character ShadyConsumer = Templates.CityFolks.ShadyConsumer.Clone().RegisterShop(Shops.ShadyConsumer);
                 public static Character Rat1 = Templates.Critters.Rat.Clone();
                 public static Character Rat2 = Templates.Critters.Rat.Clone();
                 public static Character Rat3 = Templates.Critters.Rat.Clone();
@@ -291,7 +295,7 @@ namespace SineahBot.Data.World
                 };
                 public static Room SteepDrain = new Room("Steep drain")
                 {
-                    description = "This tunnel comes from the north, the angle allowing the numerous wastes to be evacuated mmore easily. Water drains tothe south."
+                    description = "This tunnel comes from the north, the angle allowing the numerous wastes to be evacuated more easily. Water drains tothe south."
                 };
                 public static Room CollectingRoom1 = new Room("Collecting room")
                 {
@@ -616,7 +620,7 @@ namespace SineahBot.Data.World
                 public static Room outerCommercial = new Room("Sineah commercial street")
                 {
                     isSpawnRoom = false,
-                    description = "The nice smell of freshly baked bread fills the street. This street is a direct access from the southern gate to the central plaza. East is a Shop [CLOSED]. To the south is the city gate. North is the plaza."
+                    description = "The nice smell of freshly baked bread fills the street. This street is a direct access from the southern gate to the central plaza. West is a Shop [CLOSED]. To the south is the city gate. North is the plaza."
                 };
                 public static Room innerScience = new Room("Sineah inner science district")
                 {
@@ -902,7 +906,7 @@ namespace SineahBot.Data.World
             Underground.Rooms.Heart.AddToRoom(Underground.Characters.Skeleton2); // skeleton in heart
             Underground.Rooms.Heart.AddToRoom(Underground.Characters.Skeleton3); // skeleton in heart
             Underground.Rooms.Heart.AddToRoom(Underground.Characters.Zombi1); // zombi in heart
-            Underground.Rooms.Heart.AddToRoom(Underground.Characters.Zombi1); // zombi in heart
+            Underground.Rooms.Heart.AddToRoom(Underground.Characters.Zombi2); // zombi in heart
             Underground.Rooms.Crypt.AddToRoom(Underground.Characters.Skeleton4); // skeleton in crypt
             Underground.Rooms.Crypt.AddToRoom(Underground.Characters.Skeleton5); // skeleton in crypt
             Underground.Rooms.Ossuary.AddToRoom(Underground.Characters.Ghoul); // ghoul in ossuary
@@ -910,18 +914,18 @@ namespace SineahBot.Data.World
 
             Streets.Rooms.WGate.AddToRoom(Streets.Characters.wgGuard); // guard at west gate
             Streets.Rooms.WGate.AddToRoom(Streets.Characters.wgMilitian); // militian at west gate
-            Streets.Rooms.WGate.AddToRoom(Streets.Characters.ngGuard); // guard at north gate
-            Streets.Rooms.WGate.AddToRoom(Streets.Characters.ngMilitian); // militian at north gate
-            Streets.Rooms.WGate.AddToRoom(Streets.Characters.egGuard1); // guard at east gate
-            Streets.Rooms.WGate.AddToRoom(Streets.Characters.egGuard2); // guard at east gate
-            Streets.Rooms.WGate.AddToRoom(Streets.Characters.egMilitian); // militian at east gate
-            Streets.Rooms.WGate.AddToRoom(Streets.Characters.sgGuard); // guard at south gate
-            Streets.Rooms.WGate.AddToRoom(Streets.Characters.sgMilitian); // militian at south gate
-            Streets.Rooms.WGate.AddToRoom(Streets.Characters.innerGuard); // guard at inner military
-            Streets.Rooms.WGate.AddToRoom(Streets.Characters.plazaGuard1); // guard at plaza
-            Streets.Rooms.WGate.AddToRoom(Streets.Characters.plazaGuard2); // guard at plaza
-            Streets.Rooms.WGate.AddToRoom(Streets.Characters.plazaMilitian1); // militian at plaza
-            Streets.Rooms.WGate.AddToRoom(Streets.Characters.plazaMilitian2); // militian at plaza
+            Streets.Rooms.NGate.AddToRoom(Streets.Characters.ngGuard); // guard at north gate
+            Streets.Rooms.NGate.AddToRoom(Streets.Characters.ngMilitian); // militian at north gate
+            Streets.Rooms.EGate.AddToRoom(Streets.Characters.egGuard1); // guard at east gate
+            Streets.Rooms.EGate.AddToRoom(Streets.Characters.egGuard2); // guard at east gate
+            Streets.Rooms.EGate.AddToRoom(Streets.Characters.egMilitian); // militian at east gate
+            Streets.Rooms.SGate.AddToRoom(Streets.Characters.sgGuard); // guard at south gate
+            Streets.Rooms.SGate.AddToRoom(Streets.Characters.sgMilitian); // militian at south gate
+            Streets.Rooms.innerMilitary.AddToRoom(Streets.Characters.innerGuard); // guard at inner military
+            Streets.Rooms.plaza.AddToRoom(Streets.Characters.plazaGuard1); // guard at plaza
+            Streets.Rooms.plaza.AddToRoom(Streets.Characters.plazaGuard2); // guard at plaza
+            Streets.Rooms.plaza.AddToRoom(Streets.Characters.plazaMilitian1); // militian at plaza
+            Streets.Rooms.plaza.AddToRoom(Streets.Characters.plazaMilitian2); // militian at plaza
             Streets.Rooms.shady.AddToRoom(Streets.Characters.shadyRat); // rat at shady
             Streets.Rooms.outerCommercial.AddToRoom(Streets.Characters.baker); // baker at commercial
         }

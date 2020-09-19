@@ -58,7 +58,7 @@ namespace SineahBot.Commands
                 //if (shop == null && character is IInventory) target = (character as IInventory).FindInInventory(shopName); // inventory magic shop ?
                 if (shop == null)
                 {
-                    character.Message($@"There is ""{shopName}"" to trade with in this room.");
+                    character.Message($@"No ""{shopName}"" wants to trade in this room.");
                     return;
                 }
 

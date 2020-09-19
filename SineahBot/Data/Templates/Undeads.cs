@@ -14,7 +14,7 @@ namespace SineahBot.Data.Templates
             name = "Skeleton",
             shortDescription = "A skeleton slowly walks around.",
             longDescription = "Undead fiend.",
-            alternativeNames = new string[] { "sk", "cpt" }
+            alternativeNames = new string[] { "skl" }
         };
         public static NPC Zombi = new NPC()
         {
@@ -25,7 +25,7 @@ namespace SineahBot.Data.Templates
             gold = 5,
             shortDescription = "A zombi shambles on its legs.",
             longDescription = "Undead fiend.",
-            alternativeNames = new string[] { "captain", "cpt" }
+            alternativeNames = new string[] { "z" }
         };
         public static NPC Ghoul = new NPC()
         {
@@ -37,7 +37,7 @@ namespace SineahBot.Data.Templates
             name = "Ghoul",
             shortDescription = "A ghoul is looking for fresh meat.",
             longDescription = "Dangerous undead fiend.",
-            alternativeNames = new string[] { "captain", "cpt" }
+            alternativeNames = new string[] { "g","gh" }
         };
         public static NPC Lich = new NPC()
         {
@@ -50,7 +50,7 @@ namespace SineahBot.Data.Templates
             name = "Lich",
             shortDescription = "A lich is throning in the room.",
             longDescription = "Dangerous undead fiend.",
-            alternativeNames = new string[] { "captain", "cpt" }
+            alternativeNames = new string[] { }
         };
     }
 }

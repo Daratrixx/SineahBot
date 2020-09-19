@@ -18,36 +18,50 @@ namespace SineahBot.Tools
             var player = PlayerManager.GetPlayer(userId);
             if (message.StartsWith("!") && userId == 109406259643437056)
             {
-                var create = createPrivateChannelRegex.Match(message);
-                if (create.Success)
+                if (userId == 109406259643437056)
                 {
-                    ulong createGuildId = ulong.Parse(create.Groups[1].Value);
-                    ulong createUserId = ulong.Parse(create.Groups[2].Value);
-                    Program.CreatePrivateChannel(createGuildId, createUserId);
-                }
-                if (message == "!save")
-                {
-                    Program.SaveData();
-                }
-                if (message == "!stop")
-                {
-                    Program.DiscordClient.StopAsync();
-                    Program.SaveData();
-                    Environment.Exit(0);
-                }
-                if (message == "!boost" && player.character != null)
-                {
-                    var exp = ClassProgressionManager.ExperienceForNextLevel(player.character.level);
-                    player.character.experience += exp;
-                    player.Message($"Earned {exp} experience.");
-                }
-                if (message == "!boosts")
-                {
-                    foreach (var c in Program.database.Characters)
+                    var create = createPrivateChannelRegex.Match(message);
+                    if (create.Success)
                     {
-                        var exp = ClassProgressionManager.ExperienceForNextLevel(c.level);
-                        c.experience += exp;
+                        ulong createGuildId = ulong.Parse(create.Groups[1].Value);
+                        ulong createUserId = ulong.Parse(create.Groups[2].Value);
+                        Program.CreatePrivateChannel(createGuildId, createUserId);
+                        return;
                     }
+                    if (message == "!save")
+                    {
+                        Program.SaveData();
+                        return;
+                    }
+                    if (message == "!stop")
+                    {
+                        Program.DiscordClient.StopAsync();
+                        Program.SaveData();
+                        Environment.Exit(0);
+                    }
+                    if (message == "!boost" && player.character != null)
+                    {
+                        var exp = ClassProgressionManager.ExperienceForNextLevel(player.character.level);
+                        player.character.experience += exp;
+                        player.Message($"Earned {exp} experience.");
+                        return;
+                    }
+                    if (message == "!boosts")
+                    {
+                        foreach (var c in Program.database.Characters)
+                        {
+                            var exp = ClassProgressionManager.ExperienceForNextLevel(c.level);
+                            c.experience += exp;
+                        }
+                        return;
+                    }
+                }
+                var m2 = message.ToLower();
+                if (message == "!disconnect" && player.character != null && player.character.currentRoomId != Guid.Empty)
+                {
+                    // set the disconnection timer to 0 minutes before alert
+                    player.SetDisconnectTimer(0);
+                    return;
                 }
             }
             if (channelId.HasValue) player.channelId = channelId.Value;
@@ -76,6 +90,8 @@ namespace SineahBot.Tools
                     ParseCharacterCreationMessage(player, message);
                     break;
             }
+            // reset the afk disconnection timer to "10 minutes before alert"
+            player.SetDisconnectTimer(10);
         }
 
         public static bool ParseMetaCommand(IAgent agent, string command)

@@ -31,7 +31,7 @@ namespace SineahBot.Data.Templates
             details = "Consuming this will restore a decent amount of health.",
             OnConsumed = (character) => { character.RestoreHealth(50, HealingHerbs); }
         };
-        public static Consumable HealthPotion = new Consumable("Health potion", new string[] { })
+        public static Consumable HealthPotion = new Consumable("Health potion", new string[] { "health pot", "healthpot", "hpot" })
         {
             description = "There's a healing potion.",
             details = "Consuming this will restore a lot of health.",
@@ -58,7 +58,7 @@ namespace SineahBot.Data.Templates
             details = "Consuming this will restore a decent amount of mana.",
             OnConsumed = (character) => { character.RestoreMana(25, Wine); }
         };
-        public static Consumable ManaPotion = new Consumable("Mana potion", new string[] { })
+        public static Consumable ManaPotion = new Consumable("Mana potion", new string[] { "mana pot", "manapot", "mpot" })
         {
             description = "Here's a mana potion.",
             details = "Consuming this will restore a lot of mana.",

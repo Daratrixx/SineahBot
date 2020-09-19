@@ -34,13 +34,12 @@ namespace SineahBot.Commands
                 return;
             }
 
-            bool direct = character is NPC;
-
             if (!character.ActionCooldownOver())
             {
                 return;
             }
 
+            bool direct = character is NPC;
             var targetName = GetArgument(2);
 
             if (String.IsNullOrWhiteSpace(targetName))

@@ -16,9 +16,16 @@ namespace SineahBot.Tools
             this.seconds = seconds;
             (thread = new System.Threading.Thread(() =>
             {
-                Thread.Sleep(seconds * 1000);
-                handler?.Invoke();
-                expired = true;
+                try
+                {
+                    Thread.Sleep(seconds * 1000);
+                    handler?.Invoke();
+                    expired = true;
+                }
+                catch (ThreadInterruptedException e)
+                {
+                    // it's ok!
+                }
             })).Start();
             startTime = DateTime.Now;
         }
@@ -34,7 +41,7 @@ namespace SineahBot.Tools
 
         public void Cancel()
         {
-            thread.Abort();
+            thread.Interrupt();
         }
     }
 

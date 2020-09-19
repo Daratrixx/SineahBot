@@ -34,6 +34,11 @@ namespace SineahBot.Commands
                 return;
             }
 
+            if (!character.ActionCooldownOver())
+            {
+                return;
+            }
+
             bool direct = character is NPC;
             var itemName = GetArgument(2);
 
@@ -63,6 +68,8 @@ namespace SineahBot.Commands
 
             character.RemoveFromInventory(item);
             item.OnConsumed(character);
+            character.StartActionCooldown();
+
             character.Message($"You consumed {item.GetName(character)}.");
             if (direct)
                 room.DescribeActionNow($"{character.GetName()} consumed {item.GetName()}.", character);

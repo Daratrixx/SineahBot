@@ -31,7 +31,7 @@ namespace SineahBot.Data
 
         public override string GetFullDescription(IAgent agent = null)
         {
-            return $"*{longDescription}* \n> {GetStateDescription(agent)}";
+            return $"*{longDescription}* \n> {GetStateDescription(agent)} \n> {GetPowerDescription(agent as Character)}";
         }
 
         public override void OnDamage(int damageAmount, Entity source = null)
@@ -53,7 +53,8 @@ namespace SineahBot.Data
         {
             if (shop != null) shop.CloseShop();
             base.OnKilled(killer);
-            new MudTimer(30, () =>
+            var respawnTime = elite ? 300 : 60;
+            new MudTimer(respawnTime, () =>
             {
                 health = maxHealth;
                 mana = maxMana;

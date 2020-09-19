@@ -52,7 +52,8 @@ namespace SineahBot.Commands
 > - Type `consume [item name]` to consume an item from your inventory or from the room.
 > - Type `!information` to get some information about your character.
 > - Type `!spells` to get the list of spells you can cast.
-> - Type `!inventory` to get the list of spells you can cast.
+> - Type `!inventory` to get a list of items you own.
+> - Type `!class [class name]` to get the description of a character class.
 > - Type `!level` to level up.
 > - [SOON] Type `!help [full command]` to have a detailed description of a command.
 ";
