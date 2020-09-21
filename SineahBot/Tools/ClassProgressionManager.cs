@@ -90,6 +90,7 @@ namespace SineahBot.Tools
             { CharacterClass.Druid, new ClassProgression(CharacterClass.Druid, 20, 15, 15, 3)
             .RegisterSpell(Spell.MinorHealing, 2)
             .RegisterSpell(Spell.MagicDart, 4)
+            .RegisterSpell(Spell.Incinerate, 5)
             .RegisterSpell(Spell.MajorHealing, 6) },
         };
         private static Dictionary<CharacterClass, string> classDescription = new Dictionary<CharacterClass, string>() {

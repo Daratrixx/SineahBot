@@ -213,7 +213,7 @@ namespace SineahBot.Tools
         public static List<Command> MetaCommands = new List<Command>() {
             new CommandMetaInformation(), new CommandMetaInventory(),
             new CommandMetaLevel(),
-            new CommandMetaSpells(), new CommandMetaClass(),
+            new CommandMetaSpells(), new CommandMetaClass(), new CommandMetaAlteration(),
             new CommandMetaHelp() };
         public static List<Command> NoCharacterCommands = new List<Command>() { };
         public static List<Command> InCharacterCommands = new List<Command>() {

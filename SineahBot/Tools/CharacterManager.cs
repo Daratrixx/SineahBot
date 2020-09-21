@@ -12,13 +12,25 @@ namespace SineahBot.Tools
 
         public static int ExpMultiplier = 2;
         public static int GoldMultiplier = 2;
+        public static int RegenerationInterval = 10;
+        public static int AlteractionInterval = 2;
         static CharacterManager()
         {
+            // start the character regeneration interval
             new MudInterval(10, () =>
             {
                 foreach (var c in characters)
                 {
                     c.Value.Regenerate();
+                }
+            });
+
+            // start the character alteration expiration interval
+            new MudInterval(AlteractionInterval, () =>
+            {
+                foreach (var c in characters)
+                {
+                    c.Value.TickAlterations(AlteractionInterval);
                 }
             });
         }

@@ -34,9 +34,9 @@ namespace SineahBot.Data
             return $"*{longDescription}* \n> {GetStateDescription(agent)} \n> {GetPowerDescription(agent as Character)}";
         }
 
-        public override void OnDamage(int damageAmount, Entity source = null)
+        public override int OnDamage(int damageAmount, Entity source = null)
         {
-            base.OnDamage(damageAmount, source);
+            var output = base.OnDamage(damageAmount, source);
             if (!IsDead())
             {
                 new MudTimer(1, () =>
@@ -47,6 +47,7 @@ namespace SineahBot.Data
                     }
                 });
             }
+            return output;
         }
 
         public override void OnKilled(Entity killer = null)

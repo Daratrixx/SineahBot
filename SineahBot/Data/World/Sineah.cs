@@ -295,7 +295,7 @@ namespace SineahBot.Data.World
                 };
                 public static Room SteepDrain = new Room("Steep drain")
                 {
-                    description = "This tunnel comes from the north, the angle allowing the numerous wastes to be evacuated more easily. Water drains tothe south."
+                    description = "This tunnel comes from the north, the angle allowing the numerous wastes to be evacuated more easily. Water is drained south."
                 };
                 public static Room CollectingRoom1 = new Room("Collecting room")
                 {

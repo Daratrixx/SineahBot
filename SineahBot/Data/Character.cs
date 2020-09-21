@@ -17,6 +17,7 @@ namespace SineahBot.Data
         public int maxMana;
         public Dictionary<Item, int> items = new Dictionary<Item, int>();
         public Spell[] spells = new Spell[] { Spell.MinorHealing, Spell.MagicDart };
+        protected Dictionary<AlterationType, Alteration> alterations = new Dictionary<AlterationType, Alteration>();
 
         public CharacterClass characterClass { get; set; }
         public int level { get; set; } = 1;
@@ -91,16 +92,18 @@ namespace SineahBot.Data
             throw new NotImplementedException();
         }
 
-        public virtual void OnDamage(int damageAmount, Entity source = null)
+        public virtual int OnDamage(int damageAmount, Entity source = null)
         {
+            if (HasAlteration(AlterationType.Warded) || HasAlteration(AlterationType.Hardened))
+                damageAmount /= 2;
             health = Math.Max(0, health - damageAmount);
-            if (source == this) return;
+            if (source == this) return damageAmount;
             if (agent != null)
             {
                 if (source != null)
                     agent.Message($"You took {damageAmount} damage from {source.GetName()}.", source is NPC);
                 else
-                    agent.Message($"You took {damageAmount} damage.");
+                    agent.Message($"You took {damageAmount} damage.", true);
             }
             if (sleeping)
             {
@@ -110,6 +113,7 @@ namespace SineahBot.Data
             {
                 CombatManager.OnDamagingCharacter(this, source as Character);
             }
+            return damageAmount;
         }
 
         public bool IsDead()
@@ -158,6 +162,7 @@ namespace SineahBot.Data
             var output = 2;
             if (sleeping) output *= 4;
             if (ClassProgressionManager.IsPhysicalClass(characterClass)) output += level;
+            if (HasAlteration(AlterationType.Burnt)) output /= 2;
 
             return output;
         }
@@ -167,6 +172,7 @@ namespace SineahBot.Data
             var output = 1;
             if (sleeping) output *= 4;
             if (ClassProgressionManager.IsMagicalClass(characterClass)) output *= 2;
+            if (HasAlteration(AlterationType.Poisoned)) output /= 2;
 
             return output;
         }
@@ -294,6 +300,8 @@ namespace SineahBot.Data
         public virtual int GetWeaponDamage()
         {
             var bonusDamage = ClassProgressionManager.IsPhysicalClass(characterClass) ? level * 2 : level;
+            if (HasAlteration(AlterationType.Empowered))
+                bonusDamage = (int)(bonusDamage * 1.5);
             return bonusDamage;
         }
 
@@ -325,6 +333,8 @@ namespace SineahBot.Data
         public virtual int GetSpellPower()
         {
             var bonusDamage = ClassProgressionManager.IsMagicalClass(characterClass) ? level * 2 : level;
+            if (HasAlteration(AlterationType.Amplified))
+                bonusDamage = (int)(bonusDamage * 1.5);
             return bonusDamage;
         }
 
@@ -344,6 +354,75 @@ namespace SineahBot.Data
             {
                 CommandSleep.Awake(this, RoomManager.GetRoom(currentRoomId), this is NPC);
             }
+        }
+
+        public void TickAlterations(int tickDuration)
+        {
+            if (alterations.Count == 0) return;
+            foreach (var a in alterations.Values.ToArray())
+            {
+                OnAlterationTick(a.alteration);
+                a.remainingTime -= tickDuration;
+            }
+            var expired = alterations.Values.Where(x => x.remainingTime <= 0).ToList();
+            foreach (var a in expired)
+                RemoveAlteration(a.alteration, true);
+        }
+        public void OnAlterationTick(AlterationType alteration)
+        {
+            switch (alteration)
+            {
+                case AlterationType.Burning:
+                    OnDamage(2);
+                    if (new Random().NextDouble() < 0.20)
+                        AddAlteration(AlterationType.Burnt, 300);
+                    break;
+                case AlterationType.Sick:
+                    OnDamage(1);
+                    break;
+                case AlterationType.Taunted:
+                    break;
+                case AlterationType.Frenzied:
+                    break;
+                default: break;
+            }
+        }
+
+        public int? GetAlterationRemainingTime(AlterationType alteration)
+        {
+            if (alterations.ContainsKey(alteration))
+                return alterations[alteration].remainingTime;
+            return null;
+        }
+
+        public bool HasAlteration(AlterationType alteration)
+        {
+            return alterations.ContainsKey(alteration);
+
+        }
+        public void AddAlteration(AlterationType alteration, int duration, bool direct = false)
+        {
+            if (!alterations.ContainsKey(alteration))
+            {
+                alterations[alteration] = new Alteration() { alteration = alteration, remainingTime = duration };
+                Message($"You are now **{alteration}**", direct);
+            }
+            else
+            {
+                alterations[alteration].remainingTime = Math.Max(alterations[alteration].remainingTime, duration);
+            }
+        }
+        public void RemoveAlteration(AlterationType alteration, bool direct = false)
+        {
+            if (!alterations.ContainsKey(alteration))
+                return;
+            OnAlterationRemoved(alteration, direct);
+            alterations.Remove(alteration);
+        }
+
+        public void OnAlterationRemoved(AlterationType alteration, bool direct = false)
+        {
+            Message($"You are no longer **{alteration}**", direct);
         }
     }
 

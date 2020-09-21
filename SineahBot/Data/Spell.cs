@@ -48,6 +48,31 @@ namespace SineahBot.Data
         new string[] { "divh", "divhand", "dh" })
         { description = "Heal the targeted character for a high amount of health.", baseHeal = 40, manaCost = 20 };
 
+        public static Spell Incinerate = new SpellAlter("Incinerate",
+        new string[] { "inc", "burn" })
+        {
+            description = "Sets the target ablaze.",
+            CanSelfCast = false,
+            NeedsTarget = true,
+            manaCost = 10,
+            baseDuration = 10,
+            spellPowerDurationRatio = 0.25,
+            alterations = new AlterationType[] { AlterationType.Burning },
+        };
+
+        /*
+        public static Spell Incinerate = new SpellFreeForm("Incinerate",
+        new string[] { "inc", "burn" })
+        {
+            description = "Sets the target ablaze.",
+            CanSelfCast = false,
+            NeedsTarget = true,
+            manaCost = 5,
+            handler = (caster, target) =>
+            {
+            }
+        };
+        */
 
         public static Spell MagicDart = new SpellDamage("Magic dart",
         new string[] { "magicdart", "magicd", "mdart", "magd", "md" })
