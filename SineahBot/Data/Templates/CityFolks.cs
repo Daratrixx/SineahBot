@@ -82,8 +82,8 @@ namespace SineahBot.Data.Templates
         public static NPC Baker = new NPC()
         {
             level = 2,
-            maxHealth = 20,
-            health = 20,
+            maxHealth = 30,
+            health = 30,
             gold = 40,
             name = "Baker",
             experience = 0,
@@ -119,8 +119,8 @@ namespace SineahBot.Data.Templates
         {
             level = 7,
             elite = true,
-            maxHealth = 200,
-            health = 200,
+            maxHealth = 450,
+            health = 450,
             gold = 500,
             experience = 5000,
             name = "Captain",

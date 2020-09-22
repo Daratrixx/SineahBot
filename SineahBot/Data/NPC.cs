@@ -31,23 +31,25 @@ namespace SineahBot.Data
 
         public override string GetFullDescription(IAgent agent = null)
         {
-            return $"*{longDescription}* \n> {GetStateDescription(agent)} \n> {GetPowerDescription(agent as Character)}";
+            return $"*{longDescription}*" +
+            $"\n> {GetStateDescription(agent)}" +
+            $"\n> {GetPowerDescription(agent as Character)} " +
+            $"\n> {GetAlterationDescription(agent as Character)} ";
         }
 
-        public override int OnDamage(int damageAmount, Entity source = null)
+        public override void DamageHealth(int damageAmount, INamed source = null)
         {
-            var output = base.OnDamage(damageAmount, source);
-            if (!IsDead())
+            base.DamageHealth(damageAmount, source);
+            if (!IsDead() && source != null)
             {
                 new MudTimer(1, () =>
                 {
-                    if (!IsDead())
+                    if (!IsDead() && source != null)
                     {
                         CommandManager.ParseInCharacterMessage(this, $"atk {source.GetName()}", RoomManager.GetRoom(currentRoomId));
                     }
                 });
             }
-            return output;
         }
 
         public override void OnKilled(Entity killer = null)
@@ -95,7 +97,8 @@ namespace SineahBot.Data
                 alternativeNames = alternativeNames,
                 characterClass = characterClass,
                 characterStatus = characterStatus,
-                agent = agent
+                agent = agent,
+                tags = new List<CharacterTag>(tags)
             };
         }
     }

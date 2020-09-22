@@ -91,6 +91,7 @@ namespace SineahBot.Tools
             .RegisterSpell(Spell.MinorHealing, 2)
             .RegisterSpell(Spell.MagicDart, 4)
             .RegisterSpell(Spell.Incinerate, 5)
+            .RegisterSpell(Spell.Harden, 5)
             .RegisterSpell(Spell.MajorHealing, 6) },
         };
         private static Dictionary<CharacterClass, string> classDescription = new Dictionary<CharacterClass, string>() {

@@ -18,6 +18,7 @@ namespace SineahBot.Data
         public Dictionary<Item, int> items = new Dictionary<Item, int>();
         public Spell[] spells = new Spell[] { Spell.MinorHealing, Spell.MagicDart };
         protected Dictionary<AlterationType, Alteration> alterations = new Dictionary<AlterationType, Alteration>();
+        public List<CharacterTag> tags = new List<CharacterTag>();
 
         public CharacterClass characterClass { get; set; }
         public int level { get; set; } = 1;
@@ -57,6 +58,7 @@ namespace SineahBot.Data
                 output.Add("They are shrouded by an aura of mistery.");
             output.Add(GetStateDescription(agent));
             output.Add(GetPowerDescription(agent as Character));
+            output.Add(GetAlterationDescription(agent as Character));
             return String.Join("\n> ", output.Where(x => !string.IsNullOrWhiteSpace(x)));
         }
 
@@ -82,6 +84,11 @@ namespace SineahBot.Data
             return $"> You seem evenly matched.";
         }
 
+        public string GetAlterationDescription(Character character)
+        {
+            return $"> Alterations: {String.Join(", ", alterations.Keys.Select(x => x.ToString())) }";
+        }
+
         public void Message(string message, bool direct = false)
         {
             if (agent != null) agent.Message(message, direct);
@@ -92,19 +99,21 @@ namespace SineahBot.Data
             throw new NotImplementedException();
         }
 
-        public virtual int OnDamage(int damageAmount, Entity source = null)
+        public virtual void DamageHealth(int damageAmount, INamed source = null)
         {
             if (HasAlteration(AlterationType.Warded) || HasAlteration(AlterationType.Hardened))
                 damageAmount /= 2;
             health = Math.Max(0, health - damageAmount);
-            if (source == this) return damageAmount;
-            if (agent != null)
+            if (source != null)
             {
-                if (source != null)
-                    agent.Message($"You took {damageAmount} damage from {source.GetName()}.", source is NPC);
-                else
-                    agent.Message($"You took {damageAmount} damage.", true);
+                Message($"You took {damageAmount} damage from {source.GetName()}.", source is NPC);
+                if (source is IAgent && source != this && source != agent)
+                {
+                    (source as IAgent).Message($"You dealt {damageAmount} damage to {GetName()}.", source is NPC);
+                }
             }
+            else
+                Message($"You took {damageAmount} damage.", true);
             if (sleeping)
             {
                 CommandSleep.Awake(this, RoomManager.GetRoom(currentRoomId), this is NPC);
@@ -113,7 +122,7 @@ namespace SineahBot.Data
             {
                 CombatManager.OnDamagingCharacter(this, source as Character);
             }
-            return damageAmount;
+            return;
         }
 
         public bool IsDead()
@@ -162,7 +171,7 @@ namespace SineahBot.Data
             var output = 2;
             if (sleeping) output *= 4;
             if (ClassProgressionManager.IsPhysicalClass(characterClass)) output += level;
-            if (HasAlteration(AlterationType.Burnt)) output /= 2;
+            if (HasAlteration(AlterationType.Burnt) && !HasCharacterTag(CharacterTag.Mecanical)) output /= 2;
 
             return output;
         }
@@ -172,25 +181,40 @@ namespace SineahBot.Data
             var output = 1;
             if (sleeping) output *= 4;
             if (ClassProgressionManager.IsMagicalClass(characterClass)) output *= 2;
-            if (HasAlteration(AlterationType.Poisoned)) output /= 2;
+            if (HasAlteration(AlterationType.Poisoned) && !HasCharacterTag(CharacterTag.Undead) && !HasCharacterTag(CharacterTag.Mecanical)) output /= 2;
 
             return output;
         }
 
         public void RestoreHealth(int healthAmount, INamed source = null)
         {
-            health = Math.Min(maxHealth, health + healthAmount);
-            if (source == this) return;
-            if (agent != null)
+            if (HasCharacterTag(CharacterTag.Mecanical))
             {
-                if (source != null)
-                    agent.Message($"You recovered {healthAmount} health from {source.GetName(this)}.", source is NPC);
-                else
-                    agent.Message($"You recovered {healthAmount} health.");
+                return;
             }
+            if (HasCharacterTag(CharacterTag.Undead))
+            {
+                DamageHealth(healthAmount, source);
+                return;
+            }
+            if (HasAlteration(AlterationType.Burnt))
+                healthAmount = healthAmount / 2;
+            health = Math.Min(maxHealth, health + healthAmount);
+            if (source != null)
+            {
+                Message($"You recovered {healthAmount} health from {source.GetName(this)}.", source is NPC);
+                if (source is IAgent && source != this && source != agent)
+                {
+                    (source as IAgent).Message($"You healed {GetName()} for {healthAmount} health.", source is NPC);
+                }
+            }
+            else
+                Message($"You recovered {healthAmount} health.");
         }
         public void RestoreMana(int manaAmount, INamed source = null)
         {
+            if (HasAlteration(AlterationType.Poisoned) && !HasCharacterTag(CharacterTag.Undead) && !HasCharacterTag(CharacterTag.Mecanical))
+                manaAmount = manaAmount / 2;
             mana = Math.Min(maxMana, mana + manaAmount);
             if (source == this) return;
             if (agent != null)
@@ -373,12 +397,17 @@ namespace SineahBot.Data
             switch (alteration)
             {
                 case AlterationType.Burning:
-                    OnDamage(2);
+                    if (HasCharacterTag(CharacterTag.Mecanical)) break;
+                    if (HasCharacterTag(CharacterTag.Undead) || HasCharacterTag(CharacterTag.Plant))
+                        DamageHealth(4);
+                    else
+                        DamageHealth(2);
                     if (new Random().NextDouble() < 0.20)
                         AddAlteration(AlterationType.Burnt, 300);
                     break;
                 case AlterationType.Sick:
-                    OnDamage(1);
+                    if (HasCharacterTag(CharacterTag.Mecanical)) break;
+                    DamageHealth(1);
                     break;
                 case AlterationType.Taunted:
                     break;
@@ -405,7 +434,7 @@ namespace SineahBot.Data
             if (!alterations.ContainsKey(alteration))
             {
                 alterations[alteration] = new Alteration() { alteration = alteration, remainingTime = duration };
-                Message($"You are now **{alteration}**", direct);
+                Message($"You are now **{alteration}**.", direct);
             }
             else
             {
@@ -422,7 +451,12 @@ namespace SineahBot.Data
 
         public void OnAlterationRemoved(AlterationType alteration, bool direct = false)
         {
-            Message($"You are no longer **{alteration}**", direct);
+            Message($"You are no longer **{alteration}**.", direct);
+        }
+
+        public bool HasCharacterTag(CharacterTag tag)
+        {
+            return tags.Contains(tag);
         }
     }
 

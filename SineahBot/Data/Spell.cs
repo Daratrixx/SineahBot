@@ -59,6 +59,17 @@ namespace SineahBot.Data
             spellPowerDurationRatio = 0.25,
             alterations = new AlterationType[] { AlterationType.Burning },
         };
+        public static Spell Harden = new SpellAlter("Harden",
+        new string[] { "hard" })
+        {
+            description = "Harden the target.",
+            CanSelfCast = false,
+            NeedsTarget = true,
+            manaCost = 15,
+            baseDuration = 20,
+            spellPowerDurationRatio = 0.5,
+            alterations = new AlterationType[] { AlterationType.Hardened },
+        };
 
         /*
         public static Spell Incinerate = new SpellFreeForm("Incinerate",

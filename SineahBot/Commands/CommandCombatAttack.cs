@@ -67,7 +67,7 @@ namespace SineahBot.Commands
                 else
                     room.DescribeAction($"{character.GetName()} attacked {target.GetName()}.", character, target as IAgent);
 
-                damageableTarget.OnDamage(damage, character);
+                damageableTarget.DamageHealth(damage, character);
                 character.StartActionCooldown();
 
                 if (damageableTarget is IDestructible)

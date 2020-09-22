@@ -36,12 +36,12 @@ namespace SineahBot.Data.Spells
             if (caster != null)
             {
                 return base.GetEffectDescription(caster) + $"Applies alterations ({String.Join(", ", alterations.Select(x => x.ToString()))})" +
-                $"\n> Duration : **{baseDuration + caster.GetSpellPower()} ({baseDuration} + [spell power])**";
+                $"\n> Duration : **{baseDuration + (int)(caster.GetSpellPower()*spellPowerDurationRatio)} ({baseDuration} + [spell power] * {spellPowerDurationRatio})**";
             }
             else
             {
                 return base.GetEffectDescription(caster) + $"Applies alterations ({String.Join(", ",alterations.Select(x=>x.ToString()))})" +
-                $"\n> Duration : **{baseDuration} +  [spell power]**";
+                $"\n> Duration : **{baseDuration} +  [spell power] * {spellPowerDurationRatio}**";
             }
         }
     }

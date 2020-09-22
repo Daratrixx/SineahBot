@@ -18,11 +18,7 @@ namespace SineahBot.Data.Spells
             if (target is IDamageable)
             {
                 var damageAmount = baseDamage + caster.GetSpellPower() + new Random().Next(5, 10);
-                (target as IDamageable).OnDamage(damageAmount, caster as Entity);
-                if (caster is IAgent)
-                {
-                    (caster as IAgent).Message($"You dealt {damageAmount} damage to {target.GetName()}.");
-                }
+                (target as IDamageable).DamageHealth(damageAmount, caster as Entity);
             }
         }
         public override string GetDescription(ICaster caster = null)

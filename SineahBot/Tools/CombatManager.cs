@@ -32,12 +32,15 @@ namespace SineahBot.Tools
 
         public static void OnCharacterKilled(Character killed, bool direct)
         {
-            var enemies = CombatManager.enemies[killed];
-            var goldReward = killed.GetGoldReward() / enemies.Count;
-            var expReward = killed.GetExperienceReward() / enemies.Count;
-            foreach (var c in enemies)
+            var enemies = CombatManager.enemies[killed].Where(x => !x.HasCharacterTag(CharacterTag.Summon));
+            if (enemies.Count() > 0)
             {
-                c.Message($"Reward: {c.RewardExperience(expReward / c.level)} exp, {c.RewardGold(goldReward)} gold.");
+                var goldReward = killed.GetGoldReward() / enemies.Count();
+                var expReward = killed.GetExperienceReward() / enemies.Count();
+                foreach (var c in enemies)
+                {
+                    c.Message($"Reward: {c.RewardExperience(expReward / c.level)} exp, {c.RewardGold(goldReward)} gold.");
+                }
             }
             RemoveFromCombat(killed, direct);
         }
