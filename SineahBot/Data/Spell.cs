@@ -59,6 +59,17 @@ namespace SineahBot.Data
             spellPowerDurationRatio = 0.25,
             alterations = new AlterationType[] { AlterationType.Burning },
         };
+        public static Spell Ignite = new SpellAlter("Ignite",
+        new string[] { "burn" })
+        {
+            description = "Sets the target ablaze.",
+            CanSelfCast = false,
+            NeedsTarget = true,
+            manaCost = 3,
+            baseDuration = 6,
+            spellPowerDurationRatio = 0,
+            alterations = new AlterationType[] { AlterationType.Burning },
+        };
         public static Spell Harden = new SpellAlter("Harden",
         new string[] { "hard" })
         {

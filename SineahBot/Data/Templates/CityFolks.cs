@@ -9,7 +9,7 @@ namespace SineahBot.Data.Templates
         public static NPC Drunk = new NPC()
         {
             level = 3,
-            maxHealth = 50,
+            baseHealth = 50,
             health = 50,
             gold = 5,
             name = "Drunk",
@@ -21,7 +21,7 @@ namespace SineahBot.Data.Templates
         public static NPC Customer = new NPC()
         {
             level = 2,
-            maxHealth = 30,
+            baseHealth = 30,
             health = 30,
             gold = 10,
             experience = 0,
@@ -34,7 +34,7 @@ namespace SineahBot.Data.Templates
         {
             level = 4,
             elite = true,
-            maxHealth = 100,
+            baseHealth = 100,
             health = 100,
             gold = 100,
             name = "Shady consumer",
@@ -46,7 +46,7 @@ namespace SineahBot.Data.Templates
         public static NPC Waiter = new NPC()
         {
             level = 2,
-            maxHealth = 20,
+            baseHealth = 20,
             health = 20,
             gold = 10,
             name = "Waiter",
@@ -58,7 +58,7 @@ namespace SineahBot.Data.Templates
         public static NPC Cook = new NPC()
         {
             level = 2,
-            maxHealth = 20,
+            baseHealth = 20,
             health = 20,
             gold = 20,
             name = "Cook",
@@ -70,7 +70,7 @@ namespace SineahBot.Data.Templates
         public static NPC Bartender = new NPC()
         {
             level = 2,
-            maxHealth = 20,
+            baseHealth = 20,
             health = 20,
             gold = 50,
             name = "Bartender",
@@ -82,7 +82,7 @@ namespace SineahBot.Data.Templates
         public static NPC Baker = new NPC()
         {
             level = 2,
-            maxHealth = 30,
+            baseHealth = 30,
             health = 30,
             gold = 40,
             name = "Baker",
@@ -91,10 +91,34 @@ namespace SineahBot.Data.Templates
             longDescription = "The baker is ready to trade.",
             alternativeNames = new string[] { }
         };
+        public static NPC WeaponSeller = new NPC()
+        {
+            level = 2,
+            baseHealth = 30,
+            health = 30,
+            gold = 40,
+            name = "Weapon seller",
+            experience = 0,
+            shortDescription = "A weapon seller is here to trade.",
+            longDescription = "The weapon seller is ready to trade.",
+            alternativeNames = new string[] { "weaponseller", "weapons", "weapon", "weaponsmith" }
+        };
+        public static NPC ArmorSeller = new NPC()
+        {
+            level = 2,
+            baseHealth = 30,
+            health = 30,
+            gold = 40,
+            name = "Armor seller",
+            experience = 0,
+            shortDescription = "An armor seller is here to trade.",
+            longDescription = "The armor seller is ready to trade.",
+            alternativeNames = new string[] { "armorseller", "armors", "armor", "armorsmith" }
+        };
         public static NPC Militian = new NPC()
         {
             level = 3,
-            maxHealth = 50,
+            baseHealth = 50,
             health = 50,
             gold = 5,
             experience = 0,
@@ -106,7 +130,7 @@ namespace SineahBot.Data.Templates
         public static NPC Guard = new NPC()
         {
             level = 5,
-            maxHealth = 90,
+            baseHealth = 90,
             health = 90,
             gold = 15,
             experience = 0,
@@ -119,7 +143,7 @@ namespace SineahBot.Data.Templates
         {
             level = 7,
             elite = true,
-            maxHealth = 450,
+            baseHealth = 450,
             health = 450,
             gold = 500,
             experience = 5000,

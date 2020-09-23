@@ -579,6 +579,12 @@ namespace SineahBot.Data.World
                 public static Shop Baker = new Shop()
                 .RegisterEntry(Templates.Consumables.Bread, 1, null)
                 .RegisterEntry(Templates.Goods.BreadBundle, 8, null);
+                public static Shop WeaponSmith = new Shop()
+                .RegisterEntry(Templates.Equipments.Dagger, 50, 10)
+                .RegisterEntry(Templates.Equipments.Sword, 200, 40)
+                .RegisterEntry(Templates.Equipments.Axe, 150, 30)
+                .RegisterEntry(Templates.Equipments.Mace, 150, 30)
+                .RegisterEntry(Templates.Equipments.Spear, 200, 40);
             }
             public static class Rooms
             {
@@ -766,6 +772,7 @@ namespace SineahBot.Data.World
                 public static Character plazaMilitian2 = Templates.CityFolks.Militian.Clone();
                 public static Character shadyRat = Templates.Critters.Rat.Clone();
                 public static Character baker = Templates.CityFolks.Baker.Clone().RegisterShop(Shops.Baker);
+                public static Character weaponSeller = Templates.CityFolks.WeaponSeller.Clone().RegisterShop(Shops.WeaponSmith);
             }
             public static Character[] GetCharacters()
             {
@@ -785,6 +792,8 @@ namespace SineahBot.Data.World
                     Characters.plazaMilitian1,
                     Characters.plazaMilitian2,
                     Characters.shadyRat,
+                    Characters.baker,
+                    Characters.weaponSeller,
                 };
             }
 
@@ -928,6 +937,7 @@ namespace SineahBot.Data.World
             Streets.Rooms.plaza.AddToRoom(Streets.Characters.plazaMilitian2); // militian at plaza
             Streets.Rooms.shady.AddToRoom(Streets.Characters.shadyRat); // rat at shady
             Streets.Rooms.outerCommercial.AddToRoom(Streets.Characters.baker); // baker at commercial
+            Streets.Rooms.innerMilitary.AddToRoom(Streets.Characters.weaponSeller); // baker at commercial
         }
     }
 }

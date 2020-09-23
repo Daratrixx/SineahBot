@@ -223,6 +223,7 @@ namespace SineahBot.Tools
             new CommandSay(), new CommandAct(),
             new CommandCombatAttack(), new CommandCombatFlee(),
             new CommandCastOn(), new CommandCast(),
+            new CommandEquip(), new CommandUnequip(),
             new CommandSleep(),
             new CommandTrade(), new CommandTradeList(), new CommandTradeBuy(), new CommandTradeSell(), new CommandTradeLeave(),
         };

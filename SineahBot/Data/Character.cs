@@ -13,12 +13,13 @@ namespace SineahBot.Data
         public IAgent agent;
         public CharacterStatus characterStatus;
         public Shop currentShop = null;
-        public int maxHealth;
-        public int maxMana;
+        public int baseHealth;
+        public int baseMana;
         public Dictionary<Item, int> items = new Dictionary<Item, int>();
-        public Spell[] spells = new Spell[] { Spell.MinorHealing, Spell.MagicDart };
-        protected Dictionary<AlterationType, Alteration> alterations = new Dictionary<AlterationType, Alteration>();
+        public List<Spell> spells = new List<Spell>() { Spell.MinorHealing, Spell.MagicDart };
+        public Dictionary<AlterationType, Alteration> alterations = new Dictionary<AlterationType, Alteration>();
         public List<CharacterTag> tags = new List<CharacterTag>();
+        public Dictionary<EquipmentSlot, Equipment> equipments = new Dictionary<EquipmentSlot, Equipment>();
 
         public CharacterClass characterClass { get; set; }
         public int level { get; set; } = 1;
@@ -30,6 +31,17 @@ namespace SineahBot.Data
         public bool sleeping;
 
         public MudTimer actionCooldown = null;
+
+        public int MaxHealth { get { return baseHealth + bonusHealth; } }
+        public int MaxMana { get { return baseMana + bonusMana; } }
+
+        // equipment bonus
+        public int bonusSpellPower = 0;
+        public int bonusDamage = 0;
+        public int bonusArmor = 0;
+        public int bonusHealth = 0;
+        public int bonusMana = 0;
+        public List<Spell> bonusSpells = new List<Spell>();
 
         public int RewardExperience(int amount)
         {
@@ -64,11 +76,11 @@ namespace SineahBot.Data
 
         public string GetStateDescription(IAgent agent = null)
         {
-            if (health <= (maxHealth * 1) / 4)
+            if (health <= (MaxHealth * 1) / 4)
                 return $"> {GetName(agent)} is at death's door.";
-            if (health <= (maxHealth * 2) / 4)
+            if (health <= (MaxHealth * 2) / 4)
                 return $"> {GetName(agent)} is badly injured.";
-            if (health <= (maxHealth * 3) / 4)
+            if (health <= (MaxHealth * 3) / 4)
                 return $"> {GetName(agent)} is lightly bruised.";
             return $"> {GetName(agent)} seems in good shape.";
         }
@@ -103,6 +115,7 @@ namespace SineahBot.Data
         {
             if (HasAlteration(AlterationType.Warded) || HasAlteration(AlterationType.Hardened))
                 damageAmount /= 2;
+            damageAmount = (int)(damageAmount * (1 - GetArmorDamageReduction()));
             health = Math.Max(0, health - damageAmount);
             if (source != null)
             {
@@ -148,7 +161,7 @@ namespace SineahBot.Data
 
         public void Regenerate()
         {
-            if (health == maxHealth && mana == maxMana)
+            if (health == MaxHealth && mana == MaxMana)
             {
                 if (sleeping)
                 {
@@ -158,8 +171,8 @@ namespace SineahBot.Data
             }
             var healthRegen = GetHealthRegeneration();
             var manaRegen = GetManaRegeneration();
-            health = Math.Min(maxHealth, health + healthRegen);
-            mana = Math.Min(maxMana, mana + manaRegen);
+            health = Math.Min(MaxHealth, health + healthRegen);
+            mana = Math.Min(MaxMana, mana + manaRegen);
             if (sleeping)
             {
                 Message($"You recovered {healthRegen} health and {manaRegen} mana while sleeping.", true);
@@ -170,7 +183,7 @@ namespace SineahBot.Data
         {
             var output = 2;
             if (sleeping) output *= 4;
-            if (ClassProgressionManager.IsPhysicalClass(characterClass)) output += level;
+            if (ClassProgressionManager.IsPhysicalClass(characterClass)) output += level / 2;
             if (HasAlteration(AlterationType.Burnt) && !HasCharacterTag(CharacterTag.Mecanical)) output /= 2;
 
             return output;
@@ -180,7 +193,7 @@ namespace SineahBot.Data
         {
             var output = 1;
             if (sleeping) output *= 4;
-            if (ClassProgressionManager.IsMagicalClass(characterClass)) output *= 2;
+            if (ClassProgressionManager.IsMagicalClass(characterClass)) output += level / 4;
             if (HasAlteration(AlterationType.Poisoned) && !HasCharacterTag(CharacterTag.Undead) && !HasCharacterTag(CharacterTag.Mecanical)) output /= 2;
 
             return output;
@@ -199,7 +212,7 @@ namespace SineahBot.Data
             }
             if (HasAlteration(AlterationType.Burnt))
                 healthAmount = healthAmount / 2;
-            health = Math.Min(maxHealth, health + healthAmount);
+            health = Math.Min(MaxHealth, health + healthAmount);
             if (source != null)
             {
                 Message($"You recovered {healthAmount} health from {source.GetName(this)}.", source is NPC);
@@ -215,7 +228,7 @@ namespace SineahBot.Data
         {
             if (HasAlteration(AlterationType.Poisoned) && !HasCharacterTag(CharacterTag.Undead) && !HasCharacterTag(CharacterTag.Mecanical))
                 manaAmount = manaAmount / 2;
-            mana = Math.Min(maxMana, mana + manaAmount);
+            mana = Math.Min(MaxMana, mana + manaAmount);
             if (source == this) return;
             if (agent != null)
             {
@@ -323,14 +336,20 @@ namespace SineahBot.Data
 
         public virtual int GetWeaponDamage()
         {
-            var bonusDamage = ClassProgressionManager.IsPhysicalClass(characterClass) ? level * 2 : level;
+            var bonusDamage = this.bonusDamage + (ClassProgressionManager.IsPhysicalClass(characterClass) ? level * 2 : level);
             if (HasAlteration(AlterationType.Empowered))
                 bonusDamage = (int)(bonusDamage * 1.5);
             return bonusDamage;
         }
 
+        public IEnumerable<Spell> GetSpells()
+        {
+            return spells.Union(bonusSpells);
+        }
+
         public Spell GetSpell(string spellName)
         {
+            var spells = GetSpells();
             spellName = spellName.ToLower();
             var output = spells.FirstOrDefault(x => x.name.ToLower() == spellName);
             if (output == null)
@@ -356,7 +375,7 @@ namespace SineahBot.Data
 
         public virtual int GetSpellPower()
         {
-            var bonusDamage = ClassProgressionManager.IsMagicalClass(characterClass) ? level * 2 : level;
+            var bonusDamage = bonusSpellPower + (ClassProgressionManager.IsMagicalClass(characterClass) ? level * 2 : level);
             if (HasAlteration(AlterationType.Amplified))
                 bonusDamage = (int)(bonusDamage * 1.5);
             return bonusDamage;
@@ -457,6 +476,33 @@ namespace SineahBot.Data
         public bool HasCharacterTag(CharacterTag tag)
         {
             return tags.Contains(tag);
+        }
+
+        public void Equip(Equipment equipment)
+        {
+            var slot = equipment.slot;
+            Unequip(slot);
+            equipments[slot] = equipment;
+            equipment.Equip(this);
+        }
+
+        public void Unequip(EquipmentSlot slot)
+        {
+            if (equipments.ContainsKey(slot))
+            {
+                equipments[slot]?.Unequip(this);
+                equipments.Remove(slot);
+            }
+        }
+
+        public bool IsEquiped(Equipment equipment)
+        {
+            return equipments.ContainsKey(equipment.slot) && equipments[equipment.slot] == equipment;
+        }
+
+        public double GetArmorDamageReduction()
+        {
+            return bonusArmor == 0 ? 0 : bonusArmor / (bonusArmor / 20.0);
         }
     }
 

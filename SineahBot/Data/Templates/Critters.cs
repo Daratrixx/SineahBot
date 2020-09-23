@@ -11,7 +11,7 @@ namespace SineahBot.Data.Templates
         {
             characterStatus = CharacterStatus.Normal,
             level = 1,
-            maxHealth = 11,
+            baseHealth = 11,
             health = 11,
             gold = 0,
             name = "Rat",
@@ -23,7 +23,7 @@ namespace SineahBot.Data.Templates
         {
             characterStatus = CharacterStatus.Normal,
             level = 2,
-            maxHealth = 20,
+            baseHealth = 20,
             health = 20,
             gold = 0,
             name = "Rabid rat",
@@ -35,7 +35,7 @@ namespace SineahBot.Data.Templates
         {
             characterStatus = CharacterStatus.Normal,
             level = 3,
-            maxHealth = 30,
+            baseHealth = 30,
             health = 30,
             gold = 0,
             name = "Giant rat",

@@ -1,4 +1,5 @@
-﻿using SineahBot.Interfaces;
+﻿using Microsoft.EntityFrameworkCore.Query;
+using SineahBot.Interfaces;
 using SineahBot.Tools;
 using System;
 using System.Collections.Generic;
@@ -59,8 +60,8 @@ namespace SineahBot.Data
             var respawnTime = elite ? 300 : 60;
             new MudTimer(respawnTime, () =>
             {
-                health = maxHealth;
-                mana = maxMana;
+                health = baseHealth;
+                mana = baseMana;
                 var room = RoomManager.GetRoom(idSpawnRoom);
                 RoomManager.MoveToRoom(this, room);
             });
@@ -89,9 +90,9 @@ namespace SineahBot.Data
                 level = level,
                 experience = experience,
                 gold = gold,
-                maxHealth = maxHealth,
+                baseHealth = baseHealth,
                 health = health,
-                maxMana = maxMana,
+                baseMana = baseMana,
                 mana = mana,
                 spells = spells,
                 alternativeNames = alternativeNames,
@@ -100,6 +101,10 @@ namespace SineahBot.Data
                 agent = agent,
                 tags = new List<CharacterTag>(tags)
             };
+        }
+        public NPC Equipment(Equipment equipment) {
+            base.Equip(equipment);
+            return this;
         }
     }
 }

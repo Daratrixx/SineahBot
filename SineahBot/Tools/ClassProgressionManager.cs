@@ -119,13 +119,14 @@ namespace SineahBot.Tools
         public static void ApplyClassProgressionForCharacter(Character character, bool maximize = false)
         {
             var progression = classProgressions[character.characterClass];
-            character.maxHealth = progression.baseHealth + character.level * progression.levelHealth;
-            character.maxMana = progression.baseMana + character.level * progression.levelMana;
-            character.spells = progression.availableSpells.Where(x => x.Value <= character.level).Select(x => x.Key).ToArray();
+            character.baseHealth = progression.baseHealth + character.level * progression.levelHealth;
+            character.baseMana = progression.baseMana + character.level * progression.levelMana;
+            character.spells.Clear();
+            character.spells.AddRange(progression.availableSpells.Where(x => x.Value <= character.level).Select(x => x.Key));
             if (maximize)
             {
-                character.health = character.maxHealth;
-                character.mana = character.maxMana;
+                character.health = character.MaxHealth;
+                character.mana = character.MaxMana;
             }
         }
         public static KeyValuePair<CharacterClass, int>[] GetAvailableClassChange(Character character)

@@ -9,7 +9,7 @@ namespace SineahBot.Data.Templates
         public static NPC Skeleton = new NPC()
         {
             level = 5,
-            maxHealth = 90,
+            baseHealth = 90,
             health = 90,
             name = "Skeleton",
             shortDescription = "A skeleton slowly walks around.",
@@ -20,7 +20,7 @@ namespace SineahBot.Data.Templates
         public static NPC Zombi = new NPC()
         {
             level = 6,
-            maxHealth = 110,
+            baseHealth = 110,
             health = 110,
             name = "Zombi",
             gold = 5,
@@ -33,7 +33,7 @@ namespace SineahBot.Data.Templates
         {
             level = 7,
             elite = true,
-            maxHealth = 450,
+            baseHealth = 450,
             health = 450,
             experience = 5000,
             name = "Ghoul",
@@ -46,7 +46,7 @@ namespace SineahBot.Data.Templates
         {
             level = 10,
             elite = true,
-            maxHealth = 730,
+            baseHealth = 730,
             health = 730,
             experience = 10000,
             gold = 1000,

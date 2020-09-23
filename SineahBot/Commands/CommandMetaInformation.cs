@@ -26,10 +26,10 @@ namespace SineahBot.Commands
             return $@"
 **INFORMATION** - ***{character.name}***
 > *{character.characterClass.ToString().ToUpper()}* *level **{character.level}*** (*{character.experience}/{ClassProgressionManager.ExperienceForNextLevel(character.level)} exp*)
-> *Health* : **{character.health}/{character.maxHealth}**
-> *Mana* : **{character.mana}/{character.maxMana}**
-> *Spell power* : **{character.GetSpellPower()}** ({(ClassProgressionManager.IsMagicalClass(character.characterClass) ? "2" : "1")} x level)
-> *Physical power* : **{character.GetWeaponDamage()}** ({(ClassProgressionManager.IsPhysicalClass(character.characterClass) ? "2" : "1")} x level)
+> *Health* : **{character.health}/{character.MaxHealth}** (**+{character.bonusHealth}**) Armor: **{character.bonusArmor}** ({(int)(character.GetArmorDamageReduction())}%)
+> *Mana* : **{character.mana}/{character.MaxMana}** (**+{character.bonusMana}**)
+> *Spell power* : **{character.GetSpellPower()}** ({(ClassProgressionManager.IsMagicalClass(character.characterClass) ? "2" : "1")} x level **+{character.bonusSpellPower}**)
+> *Physical power* : **{character.GetWeaponDamage()}** ({(ClassProgressionManager.IsPhysicalClass(character.characterClass) ? "2" : "1")} x level **+{character.bonusDamage}**)
 > *Gold*: **{character.gold}**
 {(character.experience >= ClassProgressionManager.ExperienceForNextLevel(character.level) ? "*You have enough experience to level up! Type **!level***" : "")}
 ";

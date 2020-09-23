@@ -9,7 +9,7 @@ namespace SineahBot.Data.Templates
         public static NPC FleshGolem = new NPC()
         {
             level = 7,
-            maxHealth = 130,
+            baseHealth = 130,
             health = 130,
             name = "Flesh golem",
             shortDescription = "A flesh golem stands guard.",
@@ -20,7 +20,7 @@ namespace SineahBot.Data.Templates
         public static NPC Ent = new NPC()
         {
             level = 5,
-            maxHealth = 90,
+            baseHealth = 90,
             health = 90,
             name = "Ent",
             shortDescription = "An ent stands guard.",
@@ -31,7 +31,7 @@ namespace SineahBot.Data.Templates
         public static NPC Guardian = new NPC()
         {
             level = 5,
-            maxHealth = 90,
+            baseHealth = 90,
             health = 90,
             name = "Guardian",
             shortDescription = "A guardian stands guard.",

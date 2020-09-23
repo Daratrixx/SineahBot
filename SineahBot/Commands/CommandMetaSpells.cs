@@ -24,7 +24,7 @@ namespace SineahBot.Commands
         }
         public void DisplayinformationForCharacter(Character character, string spellName)
         {
-            if (character.spells.Length == 0)
+            if (character.spells.Count() == 0)
             {
                 character.Message($@"> You do not know any spells yet.");
                 return;
@@ -50,7 +50,7 @@ namespace SineahBot.Commands
         public string GetCharacterSpells(Character character)
         {
             return "**SPELLS**\n"
-            + String.Join('\n', character.spells.Select(x => GetSpellInformation(x, character as ICaster)))
+            + String.Join('\n', character.GetSpells().Select(x => GetSpellInformation(x, character as ICaster)))
             + "\n *Type **!spells [spell name]** to get more informations about the specified spell.*";
         }
         public string GetSpellInformation(Spell spell, ICaster caster)
