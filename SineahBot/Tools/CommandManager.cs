@@ -224,7 +224,7 @@ namespace SineahBot.Tools
             new CommandCombatAttack(), new CommandCombatFlee(),
             new CommandCastOn(), new CommandCast(),
             new CommandEquip(), new CommandUnequip(),
-            new CommandSleep(),
+            new CommandSleep(), new CommandAsk(),
             new CommandTrade(), new CommandTradeList(), new CommandTradeBuy(), new CommandTradeSell(), new CommandTradeLeave(),
         };
         public static List<Command> OutCharacterCommands = new List<Command>() { };

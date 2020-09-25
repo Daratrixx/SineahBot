@@ -19,6 +19,7 @@ namespace SineahBot.Data
         public bool elite;
 
         public Shop shop { get; private set; }
+        public Dictionary<string, string> knowledgeBase = new Dictionary<string, string>();
         public NPC RegisterShop(Shop shop)
         {
             this.shop = shop;
@@ -28,6 +29,17 @@ namespace SineahBot.Data
         public override string GetShortDescription(IAgent agent = null)
         {
             return shortDescription;
+        }
+        public NPC RegisterKnowlede(string knowledge, string response)
+        {
+            knowledgeBase[knowledge.ToLower().Replace(" ", "")] = response;
+            return this;
+        }
+        public string GetKnowledgeResponse(string knowledge)
+        {
+            knowledge = knowledge.ToLower().Replace(" ","");
+            if (!knowledgeBase.ContainsKey(knowledge)) return $"*{GetName()}*: I don't know anything about that.";
+            return $"*{GetName()}*: **{knowledge}**... {knowledgeBase[knowledge]}";
         }
 
         public override string GetFullDescription(IAgent agent = null)
@@ -102,7 +114,8 @@ namespace SineahBot.Data
                 tags = new List<CharacterTag>(tags)
             };
         }
-        public NPC Equipment(Equipment equipment) {
+        public NPC Equipment(Equipment equipment)
+        {
             base.Equip(equipment);
             return this;
         }

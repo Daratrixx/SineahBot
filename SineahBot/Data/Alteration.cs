@@ -19,7 +19,7 @@ namespace SineahBot.Data
                 case AlterationType.Burnt: return $"Healing from every source is halved.";
                 case AlterationType.Poisoned: return $"Mana regeneration is halved.";
                 case AlterationType.Sick: return $"You will take a little bit of damage over time.";
-                case AlterationType.Weakened: return $"Your physycal attacks will be half as powerful.";
+                case AlterationType.Weakened: return $"Your physical attacks will be half as powerful.";
                 case AlterationType.Blind: return $"You won't be able to see anything.";
                 case AlterationType.Deaf: return $"You won't be able to hear anything.";
                 case AlterationType.Frenzied: return $"You will attack randomly as soon as you are able to.";
