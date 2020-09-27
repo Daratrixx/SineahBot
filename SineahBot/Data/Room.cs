@@ -26,6 +26,7 @@ namespace SineahBot.Data
         public IEnumerable<Character> characters { get { return entities.Where(x => x is Character).Select(x => x as Character); } }
         public IEnumerable<Item> items { get { return entities.Where(x => x is Item).Select(x => x as Item); } }
         public IEnumerable<NPC> npcs { get { return entities.Where(x => x is NPC).Select(x => x as NPC); } }
+        public IEnumerable<Display> displays { get { return entities.Where(x => x is Display).Select(x => x as Display); } }
 
         private Dictionary<MoveDirection, RoomConnectionState> directions = new Dictionary<MoveDirection, RoomConnectionState>();
 
@@ -37,6 +38,8 @@ namespace SineahBot.Data
                 output = items.FirstOrDefault(x => x.alternativeNames.Contains(entityName));
             if (output == null)
                 output = npcs.FirstOrDefault(x => x.alternativeNames.Contains(entityName));
+            if (output == null)
+                output = displays.FirstOrDefault(x => x.alternativeNames.Contains(entityName));
             return output;
         }
         public Shop FindShopInRoom(string shopName)

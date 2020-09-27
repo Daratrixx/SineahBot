@@ -66,6 +66,29 @@ namespace SineahBot.Data.Templates
             OnConsumed = (character) => { character.RestoreMana(35, ManaPotion); }
         };
 
+        // other
+        public static Consumable Antidote = new Consumable("Antidote", new string[] { })
+        {
+            description = "There's an antidote.",
+            details = "Consuming this will eliminate all trace of poison from your body.",
+            combatConsumable = false,
+            OnConsumed = (character) => { character.RemoveAlteration(AlterationType.Poisoned); }
+        };
+        public static Consumable AntiBurnCream = new Consumable("Anti-burn cream", new string[] { "antiburncream", "burncream", "burn cream", "anti burn cream" })
+        {
+            description = "There's some anti-burn cream.",
+            details = "Consuming this will heal your burns.",
+            combatConsumable = false,
+            OnConsumed = (character) => { character.RemoveAlteration(AlterationType.Burnt); }
+        };
+        public static Consumable Medicine = new Consumable("Medicine", new string[] { "meds" })
+        {
+            description = "There's some medicine.",
+            details = "Consuming this will heal you from common sickness.",
+            combatConsumable = false,
+            OnConsumed = (character) => { character.RemoveAlteration(AlterationType.Sick); }
+        };
+
         // mixte
         public static Consumable Candy = new Consumable("Candy", new string[] { })
         {

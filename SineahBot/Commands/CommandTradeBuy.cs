@@ -60,7 +60,7 @@ namespace SineahBot.Commands
 
             if (shopEntry?.goldCost == null)
             {
-                character.Message($@"Can't find any ""{shopEntry}"" to buy!");
+                character.Message($@"Can't find any ""{itemName}"" to buy!");
                 return;
             }
 

@@ -19,6 +19,7 @@ namespace SineahBot.Data
         public bool elite;
 
         public Shop shop { get; private set; }
+        public string knowledgeDefaultResponse = "I don't know anything about that.";
         public Dictionary<string, string> knowledgeBase = new Dictionary<string, string>();
         public NPC RegisterShop(Shop shop)
         {
@@ -30,16 +31,36 @@ namespace SineahBot.Data
         {
             return shortDescription;
         }
+        public NPC SetKnowladgeDefaultResponse(string defaultResponse)
+        {
+            return this;
+        }
+        public NPC RegisterKnowlede(IEnumerable<string> knowledges, string response)
+        {
+            foreach (var knowledge in knowledges)
+            {
+                knowledgeBase[knowledge.ToLower()] = response;
+                if (knowledge.Contains(" "))
+                    knowledgeBase[knowledge.ToLower().Replace(" ", "")] = response;
+            }
+            return this;
+        }
         public NPC RegisterKnowlede(string knowledge, string response)
         {
-            knowledgeBase[knowledge.ToLower().Replace(" ", "")] = response;
+            knowledgeBase[knowledge.ToLower()] = response;
+            if (knowledge.Contains(" "))
+                knowledgeBase[knowledge.ToLower().Replace(" ", "")] = response;
             return this;
         }
         public string GetKnowledgeResponse(string knowledge)
         {
-            knowledge = knowledge.ToLower().Replace(" ","");
-            if (!knowledgeBase.ContainsKey(knowledge)) return $"*{GetName()}*: I don't know anything about that.";
-            return $"*{GetName()}*: **{knowledge}**... {knowledgeBase[knowledge]}";
+            knowledge = knowledge.ToLower().Replace(" ", "");
+            if (!knowledgeBase.ContainsKey(knowledge))
+            {
+                if (knowledgeDefaultResponse == null) return null;
+                return $"**{GetName()}**: \"*{knowledgeDefaultResponse}*\"";
+            }
+            return $"**{GetName()}** - *{knowledge}*\n{knowledgeBase[knowledge]}";
         }
 
         public override string GetFullDescription(IAgent agent = null)
@@ -48,6 +69,17 @@ namespace SineahBot.Data
             $"\n> {GetStateDescription(agent)}" +
             $"\n> {GetPowerDescription(agent as Character)} " +
             $"\n> {GetAlterationDescription(agent as Character)} ";
+        }
+
+        public override string GetPowerDescription(Character character)
+        {
+            if (character == null) return "";
+            var ratio = (character.level * 10000) / (level * 100 * (elite ? 2 : 1));
+            if (ratio < 45) return "> They will be an impossible fight for you alone.";
+            if (ratio < 90) return "> This would be a tough fight.";
+            if (ratio > 110) return "> This should be an easy fight.";
+            if (ratio > 155) return "> You're going to beat them to death.";
+            return $"> You seem evenly matched.";
         }
 
         public override void DamageHealth(int damageAmount, INamed source = null)
@@ -111,7 +143,9 @@ namespace SineahBot.Data
                 characterClass = characterClass,
                 characterStatus = characterStatus,
                 agent = agent,
-                tags = new List<CharacterTag>(tags)
+                tags = new List<CharacterTag>(tags),
+                knowledgeBase = new Dictionary<string, string>(knowledgeBase),
+                knowledgeDefaultResponse = knowledgeDefaultResponse
             };
         }
         public NPC Equipment(Equipment equipment)

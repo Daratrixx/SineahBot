@@ -56,14 +56,14 @@ namespace SineahBot.Commands
                 return;
             }
 
-            if (spell.NeedsTarget)
+            if (spell.needsTarget)
             {
                 Entity target = null;
-                if (spell.CanSelfCast)
+                if (spell.canSelfCast)
                 {
                     target = character as Entity;
                 }
-                if (target == null && !spell.CanSelfCast)
+                if (target == null && !spell.canSelfCast)
                 {
                     character.Message($@"This spell needs a target! Type **cast {spellName} on [target name]** instead.");
                     return;

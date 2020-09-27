@@ -65,6 +65,8 @@ namespace SineahBot.Data
         {
             entryName = entryName.ToLower();
             var output = entries.FirstOrDefault(x => x.referenceItem.GetName().ToLower() == entryName);
+            if (output == null)
+                output = entries.FirstOrDefault(x => x.referenceItem.alternativeNames.Contains(entryName));
             return output;
         }
     }

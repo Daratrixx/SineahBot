@@ -16,7 +16,7 @@ namespace SineahBot.Data
         public int baseHealth;
         public int baseMana;
         public Dictionary<Item, int> items = new Dictionary<Item, int>();
-        public List<Spell> spells = new List<Spell>() { Spell.MinorHealing, Spell.MagicDart };
+        public List<Spell> spells = new List<Spell>() { };
         public Dictionary<AlterationType, Alteration> alterations = new Dictionary<AlterationType, Alteration>();
         public List<CharacterTag> tags = new List<CharacterTag>();
         public Dictionary<EquipmentSlot, Equipment> equipments = new Dictionary<EquipmentSlot, Equipment>();
@@ -56,22 +56,22 @@ namespace SineahBot.Data
 
         public virtual string GetShortDescription(IAgent agent = null)
         {
-            return $"Here is {name}.";
+            return $"Here is **{name}**.";
         }
 
         public virtual string GetFullDescription(IAgent agent = null)
         {
             List<string> output = new List<string>();
             if (ClassProgressionManager.IsPhysicalClass(characterClass))
-                output.Add("They seem to have a powerful body.");
+                output.Add("> They seem to have a powerful body.");
             if (ClassProgressionManager.IsMagicalClass(characterClass))
-                output.Add("Their eyes glow with knowledge and power.");
+                output.Add("> Their eyes glow with knowledge and power.");
             if (ClassProgressionManager.IsSecretClass(characterClass))
-                output.Add("They are shrouded by an aura of mistery.");
+                output.Add("> They are shrouded by an aura of mistery.");
             output.Add(GetStateDescription(agent));
             output.Add(GetPowerDescription(agent as Character));
             output.Add(GetAlterationDescription(agent as Character));
-            return String.Join("\n> ", output.Where(x => !string.IsNullOrWhiteSpace(x)));
+            return String.Join("\n", output.Where(x => !string.IsNullOrWhiteSpace(x)));
         }
 
         public string GetStateDescription(IAgent agent = null)
@@ -85,7 +85,7 @@ namespace SineahBot.Data
             return $"> {GetName(agent)} seems in good shape.";
         }
 
-        public string GetPowerDescription(Character character)
+        public virtual string GetPowerDescription(Character character)
         {
             if (character == null) return "";
             var ratio = (character.level * 10000) / (level * 100);
@@ -117,16 +117,15 @@ namespace SineahBot.Data
                 damageAmount /= 2;
             damageAmount = (int)(damageAmount * (1 - GetArmorDamageReduction()));
             health = Math.Max(0, health - damageAmount);
-            if (source != null)
+            if (source != null && source is IAgent && source != this && source != agent)
             {
                 Message($"You took {damageAmount} damage from {source.GetName()}.", source is NPC);
-                if (source is IAgent && source != this && source != agent)
-                {
-                    (source as IAgent).Message($"You dealt {damageAmount} damage to {GetName()}.", source is NPC);
-                }
+                (source as IAgent).Message($"You dealt {damageAmount} damage to {GetName()}.", source is NPC);
             }
             else
+            {
                 Message($"You took {damageAmount} damage.", true);
+            }
             if (sleeping)
             {
                 CommandSleep.Awake(this, RoomManager.GetRoom(currentRoomId), this is NPC);
@@ -213,16 +212,15 @@ namespace SineahBot.Data
             if (HasAlteration(AlterationType.Burnt))
                 healthAmount = healthAmount / 2;
             health = Math.Min(MaxHealth, health + healthAmount);
-            if (source != null)
+            if (source != null && source is IAgent && source != this && source != agent)
             {
+                (source as IAgent).Message($"You healed {GetName()} for {healthAmount} health.", source is NPC);
                 Message($"You recovered {healthAmount} health from {source.GetName(this)}.", source is NPC);
-                if (source is IAgent && source != this && source != agent)
-                {
-                    (source as IAgent).Message($"You healed {GetName()} for {healthAmount} health.", source is NPC);
-                }
             }
             else
+            {
                 Message($"You recovered {healthAmount} health.");
+            }
         }
         public void RestoreMana(int manaAmount, INamed source = null)
         {
@@ -230,13 +228,10 @@ namespace SineahBot.Data
                 manaAmount = manaAmount / 2;
             mana = Math.Min(MaxMana, mana + manaAmount);
             if (source == this) return;
-            if (agent != null)
-            {
-                if (source != null)
-                    agent.Message($"You recovered {manaAmount} mana from {source.GetName(this)}.", source is NPC);
-                else
-                    agent.Message($"You recovered {manaAmount} mana.");
-            }
+            if (source != null)
+                Message($"You recovered {manaAmount} mana from {source.GetName(this)}.", source is NPC);
+            else
+                Message($"You recovered {manaAmount} mana.");
         }
         public virtual void OnKilled(Entity killer = null)
         {
@@ -381,6 +376,11 @@ namespace SineahBot.Data
             return bonusDamage;
         }
 
+        public virtual int GetPhysicalPower()
+        {
+            return GetWeaponDamage();
+        }
+
         public void OnAttacking()
         {
 
@@ -418,7 +418,7 @@ namespace SineahBot.Data
                 case AlterationType.Burning:
                     if (HasCharacterTag(CharacterTag.Mecanical)) break;
                     if (HasCharacterTag(CharacterTag.Undead) || HasCharacterTag(CharacterTag.Plant))
-                        DamageHealth(4);
+                        DamageHealth(8);
                     else
                         DamageHealth(2);
                     if (new Random().NextDouble() < 0.20)
@@ -502,7 +502,8 @@ namespace SineahBot.Data
 
         public double GetArmorDamageReduction()
         {
-            return bonusArmor == 0 ? 0 : bonusArmor / (bonusArmor / 20.0);
+            if (bonusArmor == 0) return 0;
+            return bonusArmor / (bonusArmor + 20.0);
         }
     }
 

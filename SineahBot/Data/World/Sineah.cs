@@ -8,6 +8,12 @@ namespace SineahBot.Data.World
 {
     public static class Sineah
     {
+        public static NPC SineahCommonKnowledge(this NPC npc)
+        {
+            return npc
+                .RegisterKnowlede(new string[] { "town", "city", "sineah" }, "\"**Sineah is a nice city to live in. you can learn about the history of the town at the Library.**\"");
+        }
+
         public static class s
         {
             public static class Rooms
@@ -64,7 +70,8 @@ namespace SineahBot.Data.World
                 .RegisterEntry(Templates.Goods.MeatPackage, null, 20);
                 public static Shop ShadyConsumer = new Shop()
                 .RegisterEntry(Templates.Consumables.HealthPotion, 20, null)
-                .RegisterEntry(Templates.Consumables.ManaPotion, 20, null);
+                .RegisterEntry(Templates.Consumables.ManaPotion, 20, null)
+                .RegisterEntry(Templates.Equipments.ShadowCloak, 500, null);
             }
             public static class Rooms
             {
@@ -205,12 +212,42 @@ namespace SineahBot.Data.World
 
             public static class Characters
             {
-                public static Character Bartender = Templates.CityFolks.Bartender.Clone().RegisterShop(Shops.Bartender);
-                public static Character Waiter = Templates.CityFolks.Waiter.Clone().RegisterShop(Shops.Waiter);
-                public static Character Cook = Templates.CityFolks.Cook.Clone().RegisterShop(Shops.Cook);
-                public static Character Drunk = Templates.CityFolks.Drunk.Clone();
-                public static Character Customer = Templates.CityFolks.Customer.Clone();
-                public static Character ShadyConsumer = Templates.CityFolks.ShadyConsumer.Clone().RegisterShop(Shops.ShadyConsumer);
+                public static Character Bartender = Templates.CityFolks.Bartender.Clone()
+                    .RegisterShop(Shops.Bartender)
+                    .SineahCommonKnowledge()
+                    .RegisterKnowlede("food", "\"**Have a seat and order from the **waiter**. Nothing beats a full stomach on a hard day.**\"")
+                    .RegisterKnowlede("drink", "\"**We can serve you a refreshing drink to help you gather your thoughts.**\"")
+                    .RegisterKnowlede("drunk", "\"**Oh, he's been here everyday for weeks... I wonder what happened to that poor soul. They used to have a good life. They open up, though.**\"")
+                    .RegisterKnowlede("shady consumer", "\"**Leave them alone, unless you want to get into trouble. I'm sure they dwel in some illegal activities...**\"")
+                    .RegisterKnowlede("waiter", "\"**Ask them for drinks, or the inn's specility.**\"")
+                    .RegisterKnowlede("speciality", "\"**The four inn's blanquette is renouned all over the country.**\"")
+                    .RegisterKnowlede("blanquette", "\"**The four inn's blanquette is renouned all over the country.**\"");
+                public static Character Waiter = Templates.CityFolks.Waiter.Clone()
+                    .RegisterShop(Shops.Waiter)
+                    .SineahCommonKnowledge()
+                    .RegisterKnowlede("food", "\"**I can serve you food if you order.**\"")
+                    .RegisterKnowlede("drink", "\"**I can serve you drinks if you order.**\"")
+                    .RegisterKnowlede("speciality", "\"**The four inn's blanquette is renouned all over the country.**\"")
+                    .RegisterKnowlede("blanquette", "\"**The four inn's blanquette is renouned all over the country.**\"");
+                public static Character Cook = Templates.CityFolks.Cook.Clone()
+                    .RegisterShop(Shops.Cook)
+                    .SineahCommonKnowledge()
+                    .RegisterKnowlede("food", "\"**The **waiter** can serve you food if you order.**\"")
+                    .RegisterKnowlede("drink", "\"**The **waiter** can serve you drinks if you order.**\"")
+                    .RegisterKnowlede("speciality", "\"**My blanquette is renouned all over the country.**\"")
+                    .RegisterKnowlede("blanquette", "\"**My blanquette is renouned all over the country.**\"");
+                public static Character Drunk = Templates.CityFolks.Drunk.Clone()
+                    .RegisterKnowlede("town", "\"**I used to love this city. I fought for her for many years. Maybe I should leave now though...**\"")
+                    .RegisterKnowlede("city", "\"**I used to love this city. I fought for her for many years. Maybe I should leave now though...**\"")
+                    .RegisterKnowlede("sineah", "\"**I used to love this city. I fought for her for many years. Maybe I should leave now though...**\"")
+                    .RegisterKnowlede("guards", "*They smile for a bit.*\n\"**I used to be a guard myself.**\"")
+                    .RegisterKnowlede("sewer", "*They shiver, visibly scared.*\n\"**Don't go down there. You'll regret it.**\"")
+                    .RegisterKnowlede("undead", "*Their eyes widen for a second.*\n\"**They are better left alone. But the church won't do anything about it...**\"" +
+                    "\n*They shake their head.*\n\"**Just don't go there. I can't go there...**\"");
+                public static Character Customer = Templates.CityFolks.Customer.Clone()
+                    .SineahCommonKnowledge();
+                public static Character ShadyConsumer = Templates.CityFolks.ShadyConsumer.Clone()
+                    .RegisterShop(Shops.ShadyConsumer);
                 public static Character Rat1 = Templates.Critters.Rat.Clone();
                 public static Character Rat2 = Templates.Critters.Rat.Clone();
                 public static Character Rat3 = Templates.Critters.Rat.Clone();
@@ -265,33 +302,92 @@ namespace SineahBot.Data.World
                 };
             }
         }
+        public static class University
+        {
+            public static class Shops
+            {
+            }
+            public static class Rooms
+            {
+                public static Room MainHall = new Room("University main hall")
+                {
+                    isSpawnRoom = true,
+                    description = "This large hall serve as both an entry point and a gathering area. The only door opened to the public is the western door labeled \"**Library**\""
+                };
+                public static Room LibraryEntrance = new Room("Library entrance")
+                {
+                    isSpawnRoom = true,
+                    description = "This is the entrance area for the library. It's not possible to enter yet, but a few books are displayed here for the public to read."
+                };
+            }
+            public static Room[] GetRooms()
+            {
+                return new Room[]{
+                    Rooms.MainHall,
+                    Rooms.LibraryEntrance,
+                };
+            }
+
+            public static class Connections
+            {
+                public static RoomConnection HallLibrary = new RoomConnection(Rooms.MainHall.id, Rooms.LibraryEntrance.id) // to kitchen
+                {
+                    directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.West, Commands.MoveDirection.In },
+                    directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.East, Commands.MoveDirection.Out }
+                };
+            }
+            public static RoomConnection[] GetConnections()
+            {
+                return new RoomConnection[] {
+                    Connections.HallLibrary,
+                };
+            }
+
+            public static class Characters
+            {
+            }
+            public static Character[] GetCharacters()
+            {
+                return new Character[] {
+                };
+            }
+
+            public static class Items
+            {
+            }
+            public static Item[] GetItems()
+            {
+                return new Item[] {
+                };
+            }
+        }
         public static class Underground
         {
             public static class Rooms
             {
                 public static Room SewerAccess = new Room("Illegal sewer access")
                 {
-                    description = "This damp underground room is an illegitimate entry point to the sewer system. Contaminated water flows from the western tunel, and runs into to the brighter eastern tunnel. Up north is a ladder leading out of the sewer system."
+                    description = "This damp underground room is an illegitimate entry point to the sewer system. Contaminated water flows from the western tunnel, and runs into to the brighter eastern tunnel. Up north is a ladder leading out of the sewer system."
                 };
                 public static Room DischargeTunnel = new Room("Discharge tunnel")
                 {
                     description = "This steep tunnel evacuate the water coming from the western tunnel out of the city sewer system. Daylight can be seen at the eastern end."
                 };
-                public static Room SewerTunel = new Room("Sewer tunel")
+                public static Room SewerTunnel = new Room("Sewer tunnel")
                 {
-                    description = "A tunel part of the swer system. Water flow from the north and drains to the east."
+                    description = "A tunnel part of the sewer system. Water flows from the north and drains to the east."
                 };
                 public static Room ConvergenceRoom = new Room("Convergence room")
                 {
-                    description = "This massive underground room has multiple tunnel discharging their wastes in a collection of large pools, all connected to the southern exit. Water from west seems way more poisoned than the water from north and east."
+                    description = "This massive underground room has multiple tunnels discharging their wastes in a collection of large pools, all connected to the southern exit. Water from west seems way more poisoned than the water from north and east."
                 };
                 public static Room ToxicDrain = new Room("Toxic drain")
                 {
-                    description = "The water going down this tunel is unusually tainted. It comes from the western collector and leaks into the eastern tunel."
+                    description = "The water going down this tunnel is unusually tainted. It comes from the western collector and leaks into the eastern tunnel."
                 };
                 public static Room ToxicWaste = new Room("Toxic waste")
                 {
-                    description = "If collector is filled to the brim with corrupted mater, result of the Spire experiments. It affects the sewer dwellers. The waste slowly drains to the east."
+                    description = "This collector is filled to the brim with corrupted mater, result of the Spire experiments. It affects the sewer dwellers. The waste slowly drains to the east."
                 };
                 public static Room SteepDrain = new Room("Steep drain")
                 {
@@ -303,7 +399,7 @@ namespace SineahBot.Data.World
                 };
                 public static Room EasternDrain = new Room("Eastern drain")
                 {
-                    description = "This tunel drains the water from the eastern waste collecting room to the western convergence room. Another tunnel opens on the northern wall, but no water comes from it."
+                    description = "This tunnel drains the water from the eastern waste collecting room to the western convergence room. Another tunnel opens on the northern wall, but no water comes from it."
                 };
                 public static Room CollectingRoom2 = new Room("Collecting room")
                 {
@@ -311,11 +407,11 @@ namespace SineahBot.Data.World
                 };
                 public static Room DeterioratedDrain = new Room("Deteriorated drain")
                 {
-                    description = "This tunel is very damaged, and dry. It's collecting room is up north, and the waste would run down south if there was any."
+                    description = "This tunnel is very damaged, and dry. It's collecting room is up north, and the waste would run down south if there was any."
                 };
                 public static Room CrumbledCollector = new Room("Crumbled collector")
                 {
-                    description = "This waste collector hasn't been used in years and is perfectly dry. However, a cold, moist atmospher seemingly leaks out of the eastern wall. in the past, water would have run down the southern tunel."
+                    description = "This waste collector hasn't been used in years and is perfectly dry. However, a cold, moist atmospher seemingly leaks out of the eastern wall. in the past, water would have run down the southern tunnel."
                 };
                 public static Room ForgottenPassage = new Room("Forgotten passage")
                 {
@@ -323,11 +419,11 @@ namespace SineahBot.Data.World
                 };
                 public static Room LowArchway = new Room("Low archway")
                 {
-                    description = "The southern gallery led to a low-ceiling tunel, with sculpted archs every few steps. It seems to open up to a room further north."
+                    description = "The southern gallery led to a low-ceiling tunnel, with sculpted archs every few steps. It seems to open up to a room further north."
                 };
                 public static Room Heart = new Room("Heart of the catacombs")
                 {
-                    description = "This vast underground room is littered with bones and remains. Pillars support large archs, and smaller archs decorate the other opening, situated at the western, northern, and eastern ends of the room."
+                    description = "This vast underground room is littered with bones and remains. Pillars support large archs, and smaller archs decorate the other openings, situated at the western, northern, and eastern ends of the room."
                 };
                 public static Room Underway1 = new Room("Underway")
                 {
@@ -335,7 +431,7 @@ namespace SineahBot.Data.World
                 };
                 public static Room Crypt = new Room("Ancient crypt gate")
                 {
-                    description = "The tunel ends on massive stones gate. They seem unmovable. The only exit is the eastern tunel you came from."
+                    description = "The tunnel ends on massive stones gate. They seem unmovable. The only exit is the eastern tunnel you came from."
                 };
                 public static Room Underway2 = new Room("Underway")
                 {
@@ -343,7 +439,7 @@ namespace SineahBot.Data.World
                 };
                 public static Room Ossuary = new Room("Ossuary")
                 {
-                    description = "This wide, low-ceiling room walls and floor are covered in bones. No visible exit beside the southern tunel."
+                    description = "This wide, low-ceiling room walls and floor are covered in bones. No visible exit beside the southern tunnel."
                 };
                 public static Room Underway3 = new Room("Underway")
                 {
@@ -359,7 +455,7 @@ namespace SineahBot.Data.World
                 return new Room[]{
                     Rooms.SewerAccess,
                     Rooms.DischargeTunnel,
-                    Rooms.SewerTunel,
+                    Rooms.SewerTunnel,
                     Rooms.ConvergenceRoom,
                     Rooms.ToxicDrain,
                     Rooms.ToxicWaste,
@@ -388,12 +484,12 @@ namespace SineahBot.Data.World
                     directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.East },
                     directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.West, Commands.MoveDirection.In }
                 };
-                public static RoomConnection AccessTunel = new RoomConnection(Rooms.SewerAccess.id, Rooms.SewerTunel.id) // to sewer tunel
+                public static RoomConnection AccessTunnel = new RoomConnection(Rooms.SewerAccess.id, Rooms.SewerTunnel.id) // to sewer tunnel
                 {
                     directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.West, Commands.MoveDirection.In },
                     directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.East, Commands.MoveDirection.Out }
                 };
-                public static RoomConnection TunelConvergence = new RoomConnection(Rooms.SewerTunel.id, Rooms.ConvergenceRoom.id) // to convergence room
+                public static RoomConnection TunnelConvergence = new RoomConnection(Rooms.SewerTunnel.id, Rooms.ConvergenceRoom.id) // to convergence room
                 {
                     directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.North, Commands.MoveDirection.In },
                     directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.South, Commands.MoveDirection.Out }
@@ -488,8 +584,8 @@ namespace SineahBot.Data.World
             {
                 return new RoomConnection[] {
                     Connections.AccessDischarge,
-                    Connections.AccessTunel,
-                    Connections.TunelConvergence,
+                    Connections.AccessTunnel,
+                    Connections.TunnelConvergence,
                     Connections.ConvergenceToxic,
                     Connections.ToxicToxic,
                     Connections.ConvergenceSteep,
@@ -512,12 +608,12 @@ namespace SineahBot.Data.World
 
             public static class Characters
             {
-                public static Character Rat1 = Templates.Critters.Rat.Clone(); // tunel
+                public static Character Rat1 = Templates.Critters.Rat.Clone(); // tunnel
                 public static Character Rat2 = Templates.Critters.Rat.Clone(); // convergence
                 public static Character Rat3 = Templates.Critters.Rat.Clone(); // convergence
                 public static Character RabidRat1 = Templates.Critters.RabidRat.Clone(); // convergence
-                public static Character RabidRat2 = Templates.Critters.RabidRat.Clone(); // toxic tunel
-                public static Character RabidRat3 = Templates.Critters.RabidRat.Clone(); // toxic tunel
+                public static Character RabidRat2 = Templates.Critters.RabidRat.Clone(); // toxic tunnel
+                public static Character RabidRat3 = Templates.Critters.RabidRat.Clone(); // toxic tunnel
                 public static Character GiantRat1 = Templates.Critters.GiantRat.Clone(); // toxic waste
                 public static Character GiantRat2 = Templates.Critters.GiantRat.Clone(); // toxic waste
                 public static Character RabidRat4 = Templates.Critters.RabidRat.Clone(); // toxic waste
@@ -579,12 +675,31 @@ namespace SineahBot.Data.World
                 public static Shop Baker = new Shop()
                 .RegisterEntry(Templates.Consumables.Bread, 1, null)
                 .RegisterEntry(Templates.Goods.BreadBundle, 8, null);
+                public static Shop Pharmacist = new Shop()
+                .RegisterEntry(Templates.Consumables.HealingHerbs, 10, null)
+                .RegisterEntry(Templates.Consumables.HealthPotion, 20, null)
+                .RegisterEntry(Templates.Consumables.AntiBurnCream, 5, null)
+                .RegisterEntry(Templates.Consumables.Antidote, 10, null)
+                .RegisterEntry(Templates.Consumables.Medicine, 15, null);
+                public static Shop ChurchAttendant = new Shop()
+                .RegisterEntry(Templates.Equipments.PriestRobes, 150, null)
+                .RegisterEntry(Templates.Equipments.TemplarRobes, 400, null)
+                .RegisterEntry(Templates.Equipments.FanaticRobes, 400, null);
+                public static Shop MagicVendor = new Shop()
+                .RegisterEntry(Templates.Equipments.Staff, 100, null)
+                .RegisterEntry(Templates.Equipments.EnchanterCloak, 150, null)
+                .RegisterEntry(Templates.Equipments.MageCloak, 500, null)
+                .RegisterEntry(Templates.Equipments.WizardCloak, 1000, null);
                 public static Shop WeaponSmith = new Shop()
                 .RegisterEntry(Templates.Equipments.Dagger, 50, 10)
                 .RegisterEntry(Templates.Equipments.Sword, 200, 40)
                 .RegisterEntry(Templates.Equipments.Axe, 150, 30)
                 .RegisterEntry(Templates.Equipments.Mace, 150, 30)
                 .RegisterEntry(Templates.Equipments.Spear, 200, 40);
+                public static Shop ArmorSmith = new Shop()
+                .RegisterEntry(Templates.Equipments.MilitianArmor, 150, 75)
+                .RegisterEntry(Templates.Equipments.GuardArmor, 500, 250)
+                .RegisterEntry(Templates.Equipments.KnightArmor, 1000, 500);
             }
             public static class Rooms
             {
@@ -611,7 +726,7 @@ namespace SineahBot.Data.World
                 public static Room outerScience = new Room("Sineah outer science district")
                 {
                     isSpawnRoom = false,
-                    description = "This long district reaches from the western gate all the way to the central plaza. North is the University [CLOSED]. South is the Arcane Spire [CLOSED]. To the west is the city gate. The district continues further east, ending on the plaza."
+                    description = "This long district reaches from the western gate all the way to the central plaza. North is the University. South is the Arcane Spire [CLOSED]. To the west is the city gate. The district continues further east, ending on the plaza."
                 };
                 public static Room outerTraveller = new Room("Sineah outer travellers avenue")
                 {
@@ -646,7 +761,7 @@ namespace SineahBot.Data.World
                 public static Room shady = new Room("Sineah hidden street")
                 {
                     isSpawnRoom = false,
-                    description = "A shady back alley. West will lead back to the security of the Commercial street. A manhole is pried open."
+                    description = "A shady back alley. West will lead back to the safety of the Commercial street. A manhole is pried open."
                 };
                 public static Room plaza = new Room("Sineah central plaza")
                 {
@@ -772,7 +887,16 @@ namespace SineahBot.Data.World
                 public static Character plazaMilitian2 = Templates.CityFolks.Militian.Clone();
                 public static Character shadyRat = Templates.Critters.Rat.Clone();
                 public static Character baker = Templates.CityFolks.Baker.Clone().RegisterShop(Shops.Baker);
-                public static Character weaponSeller = Templates.CityFolks.WeaponSeller.Clone().RegisterShop(Shops.WeaponSmith);
+                public static Character weaponSeller = Templates.CityFolks.WeaponSeller.Clone()
+                    .RegisterShop(Shops.WeaponSmith);
+                public static Character armorSeller = Templates.CityFolks.ArmorSeller.Clone()
+                    .RegisterShop(Shops.ArmorSmith);
+                public static Character pharmacist = Templates.CityFolks.Pharmacian.Clone()
+                    .RegisterShop(Shops.Pharmacist);
+                public static Character churchAttendant = Templates.CityFolks.ChurchAttendant.Clone()
+                    .RegisterShop(Shops.ChurchAttendant);
+                public static Character magicVendor = Templates.CityFolks.MagicVendor.Clone()
+                    .RegisterShop(Shops.MagicVendor);
             }
             public static Character[] GetCharacters()
             {
@@ -794,6 +918,10 @@ namespace SineahBot.Data.World
                     Characters.shadyRat,
                     Characters.baker,
                     Characters.weaponSeller,
+                    Characters.armorSeller,
+                    Characters.pharmacist,
+                    Characters.churchAttendant,
+                    Characters.magicVendor,
                 };
             }
 
@@ -838,6 +966,11 @@ namespace SineahBot.Data.World
             {
                 directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.Down },
                 directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.Up, Commands.MoveDirection.North, Commands.MoveDirection.Out }
+            },
+            new RoomConnection(Streets.Rooms.outerScience.id, University.Rooms.MainHall.id) // outer science to university
+            {
+                directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.North },
+                directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.South, Commands.MoveDirection.Out }
             }
         };
         #endregion
@@ -871,6 +1004,9 @@ namespace SineahBot.Data.World
             RoomManager.LoadRooms(Underground.GetRooms());
             RoomManager.LoadRoomConnections(Underground.GetConnections());
             CharacterManager.LoadCharacters(Underground.GetCharacters());
+            // load university
+            RoomManager.LoadRooms(University.GetRooms());
+            RoomManager.LoadRoomConnections(University.GetConnections());
 
             // LOAD STREETS
             RoomManager.LoadRooms(Streets.GetRooms());
@@ -899,7 +1035,7 @@ namespace SineahBot.Data.World
             Inn.Rooms.Cellar.AddToRoom(Inn.Characters.Rat3); // rat in cellar
 
             // populate underground
-            Underground.Rooms.SewerTunel.AddToRoom(Underground.Characters.Rat1); // rat in sewer tunel
+            Underground.Rooms.SewerTunnel.AddToRoom(Underground.Characters.Rat1); // rat in sewer tunnel
             Underground.Rooms.ConvergenceRoom.AddToRoom(Underground.Characters.Rat2); // rat in convergence room
             Underground.Rooms.ConvergenceRoom.AddToRoom(Underground.Characters.Rat3); // rat in convergence room
             Underground.Rooms.ConvergenceRoom.AddToRoom(Underground.Characters.RabidRat1); // rabid rat in convergence room
@@ -937,7 +1073,20 @@ namespace SineahBot.Data.World
             Streets.Rooms.plaza.AddToRoom(Streets.Characters.plazaMilitian2); // militian at plaza
             Streets.Rooms.shady.AddToRoom(Streets.Characters.shadyRat); // rat at shady
             Streets.Rooms.outerCommercial.AddToRoom(Streets.Characters.baker); // baker at commercial
-            Streets.Rooms.innerMilitary.AddToRoom(Streets.Characters.weaponSeller); // baker at commercial
+            Streets.Rooms.innerMilitary.AddToRoom(Streets.Characters.weaponSeller); // weaponsmith at inner military
+            Streets.Rooms.innerMilitary.AddToRoom(Streets.Characters.armorSeller); // armorsmith at inner military
+            Streets.Rooms.outerTraveller.AddToRoom(Streets.Characters.churchAttendant); // armorsmith at outer traveller
+            Streets.Rooms.outerScience.AddToRoom(Streets.Characters.magicVendor); // magic vendor at outer science
+            Streets.Rooms.outerScience.AddToRoom(Streets.Characters.pharmacist); // pharmacist at outer science
+
+            // signs
+            Streets.Rooms.outerScience.AddToRoom(Display.Sign("University notice sign", "The reconstruction of the university is still underway. However, some part of the library are ready to welcome curious minds once again.\nKeep in mind that most books still need to be restored, and some might be moved to different sections as more aisle are being reopened."));
+
+            // books
+            University.Rooms.LibraryEntrance.AddToRoom(Templates.Books.SineahHistoryPart1);
+            University.Rooms.LibraryEntrance.AddToRoom(Templates.Books.PurgeTheUndead);
+            University.Rooms.LibraryEntrance.AddToRoom(Templates.Books.CityCritters);
+
         }
     }
 }

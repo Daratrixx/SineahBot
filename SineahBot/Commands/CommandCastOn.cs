@@ -53,31 +53,31 @@ namespace SineahBot.Commands
                 character.Message($@"Can't cast unknown spell ""{spellName}"". Type **!spells** to get a list of spells you can cast.");
                 return;
             }
-            if (!spell.NeedsTarget)
+            if (!spell.needsTarget)
             {
                 character.Message($"This spell doesn't need a target! Type **cast {spellName}** instead.");
                 return;
             }
             var targetName = GetArgument(2);
-            if (String.IsNullOrWhiteSpace(targetName) && !spell.CanSelfCast)
+            if (String.IsNullOrWhiteSpace(targetName) && !spell.canSelfCast)
             {
                 character.Message("What are you trying to cast on ?");
                 return;
             }
 
             Entity target = null;
-            if (targetName == "self" && spell.CanSelfCast)
+            if (targetName == "self" && spell.canSelfCast)
             {
                 target = character as Entity;
             }
             else
             {
                 target = room.FindInRoom(targetName);
-                if (target == null && spell.CanSelfCast)
+                if (target == null && spell.canSelfCast)
                 {
                     target = character as Entity;
                 }
-                if (target == null && !spell.CanSelfCast)
+                if (target == null && !spell.canSelfCast)
                 {
                     character.Message($@"Can't find any ""{targetName}"" to cast on here !");
                     return;

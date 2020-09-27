@@ -55,9 +55,9 @@ namespace SineahBot.Commands
                 return;
             }
 
+            character.Message($"You unequiped {item.GetName(character)}.");
             character.Unequip(item.slot);
 
-            character.Message($"You unequiped {item.GetName(character)}.");
             if (direct)
                 room.DescribeActionNow($"{character.GetName()} unequiped {item.GetName()}.", character);
             else

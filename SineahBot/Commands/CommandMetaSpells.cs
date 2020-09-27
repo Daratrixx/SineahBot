@@ -55,16 +55,17 @@ namespace SineahBot.Commands
         }
         public string GetSpellInformation(Spell spell, ICaster caster)
         {
-            return $"> {spell.GetName()} - {spell.GetDescription(caster)}";
+            return $"> **`{spell.GetName()}`** - {spell.GetDescription(caster)}";
         }
         public string GetSpellDetails(Spell spell, ICaster caster)
         {
             return $@"
-**{spell.GetName().ToUpper()}** *(alt: {String.Join(", ", spell.alternativeNames)})*
+**`{spell.GetName().ToUpper()}`** *(alt: {String.Join(", ", spell.alternativeNames.Select(x => $"`{x}`"))})*
 > {spell.GetDescription(caster)}
-> {(spell.NeedsTarget ? "Needs target" : "No target")}, {(spell.CanSelfCast ? "Can self cast" : "Can't self cast")}
+> *{(spell.needsTarget ? "Needs target" : "No target")}*, *{(spell.canSelfCast ? "Can self cast" : "Can't self cast")}*
 > Mana cost : **{spell.manaCost}**
-> Effects : {spell.GetEffectDescription(caster)}
+> Effects :
+{spell.GetEffectDescription(caster)}
 ";
         }
     }

@@ -7,13 +7,13 @@ using System.Text;
 
 namespace SineahBot.Data
 {
-    public abstract class Spell : INamed
+    public class Spell : INamed
     {
         public Guid id;
         public string name;
         public int manaCost = 0;
-        public bool NeedsTarget { get; protected set; } = true;
-        public bool CanSelfCast { get; protected set; } = true;
+        public bool needsTarget = true;
+        public bool canSelfCast = true;
         public Spell(string spellName, string[] alternativeNames = null)
         {
             id = Guid.NewGuid();
@@ -22,88 +22,180 @@ namespace SineahBot.Data
         }
         public string[] alternativeNames = new string[] { };
         public string description { get; set; }
+
+        public Effect[] effects = new Effect[] { };
         public virtual string GetDescription(ICaster caster = null)
         {
             return description;
         }
         public virtual string GetEffectDescription(ICaster caster = null)
         {
-            return "";
+            return string.Join("\n", effects.Select(x => x.GetEffectDescription(caster)));
         }
 
-        public abstract void Cast(ICaster caster, Entity target);
+        public void Cast(ICaster caster, Entity target)
+        {
+            foreach (var effect in effects)
+            {
+                effect.RunEffect(caster, target);
+            }
+        }
 
         public string GetName(IAgent agent = null)
         {
             return name;
         }
+        public abstract class Effect
+        {
+            public abstract void RunEffect(ICaster caster, Entity target);
+            public abstract string GetEffectDescription(ICaster caster = null);
 
-        public static Spell MinorHealing = new SpellHeal("Minor healing",
-        new string[] { "minh", "minheal", "mheal", "mh", "sh" })
-        { description = "Heal the targeted character for a small amount of health.", baseHeal = 5, manaCost = 5 };
-        public static Spell MajorHealing = new SpellHeal("Major healing",
-        new string[] { "majh", "majheal", "heal", "h", "bh" })
-        { description = "Heal the targeted character for a moderate amount of health.", baseHeal = 15, manaCost = 10 };
-        public static Spell DivineHand = new SpellHeal("Divine hand",
-        new string[] { "divh", "divhand", "dh" })
-        { description = "Heal the targeted character for a high amount of health.", baseHeal = 40, manaCost = 20 };
-
-        public static Spell Incinerate = new SpellAlter("Incinerate",
-        new string[] { "inc", "burn" })
-        {
-            description = "Sets the target ablaze.",
-            CanSelfCast = false,
-            NeedsTarget = true,
-            manaCost = 10,
-            baseDuration = 10,
-            spellPowerDurationRatio = 0.25,
-            alterations = new AlterationType[] { AlterationType.Burning },
-        };
-        public static Spell Ignite = new SpellAlter("Ignite",
-        new string[] { "burn" })
-        {
-            description = "Sets the target ablaze.",
-            CanSelfCast = false,
-            NeedsTarget = true,
-            manaCost = 3,
-            baseDuration = 6,
-            spellPowerDurationRatio = 0,
-            alterations = new AlterationType[] { AlterationType.Burning },
-        };
-        public static Spell Harden = new SpellAlter("Harden",
-        new string[] { "hard" })
-        {
-            description = "Harden the target.",
-            CanSelfCast = false,
-            NeedsTarget = true,
-            manaCost = 15,
-            baseDuration = 20,
-            spellPowerDurationRatio = 0.5,
-            alterations = new AlterationType[] { AlterationType.Hardened },
-        };
-
-        /*
-        public static Spell Incinerate = new SpellFreeForm("Incinerate",
-        new string[] { "inc", "burn" })
-        {
-            description = "Sets the target ablaze.",
-            CanSelfCast = false,
-            NeedsTarget = true,
-            manaCost = 5,
-            handler = (caster, target) =>
+            public class Heal : Effect
             {
-            }
-        };
-        */
+                public int baseHeal = 0;
 
-        public static Spell MagicDart = new SpellDamage("Magic dart",
-        new string[] { "magicdart", "magicd", "mdart", "magd", "md" })
-        { description = "Inflict a moderate amount of damage to the target.", baseDamage = 15, manaCost = 10, CanSelfCast = false };
-        public static Spell ArcaneBlast = new SpellDamage("Arcane blast",
-        new string[] { "arcanblast", "arcanb", "ablast", "arcb", "ab" })
-        { description = "Inflict a high amount of damage to the target.", baseDamage = 40, manaCost = 20, CanSelfCast = false };
-        public static Spell Overcharge = new SpellDamage("Overcharge",
-        new string[] { "overc", "ocharge", "oc" })
-        { description = "Inflict a small amount of damage to the target.", baseDamage = 5, manaCost = 5, CanSelfCast = false };
+                public override string GetEffectDescription(ICaster caster = null)
+                {
+                    if (caster != null)
+                    {
+                        return $"- Heals target\n> Healing potential : **{baseHeal + caster.GetSpellPower()} ({baseHeal} + [spell power])**";
+                    }
+                    else
+                    {
+                        return $"- Heals target\n> Healing potential : **{baseHeal} +  [spell power]**";
+                    }
+                }
+
+                public override void RunEffect(ICaster caster, Entity target)
+                {
+                    if (target is IHealable)
+                    {
+                        var healingAmount = baseHeal + caster.GetSpellPower() + new Random().Next(5, 10);
+                        (target as IHealable).RestoreHealth(healingAmount, caster);
+                    }
+                }
+            }
+            public class SpellDamage : Effect
+            {
+                public int baseDamage = 0;
+
+                public override string GetEffectDescription(ICaster caster = null)
+                {
+                    if (caster != null)
+                    {
+                        return $"- Damages target\n> Damaging potential : **{baseDamage + caster.GetSpellPower()} ({baseDamage} + [spell power])**";
+                    }
+                    else
+                    {
+                        return $"- Damages target\n> Damaging potential : **{baseDamage} + [spell power]**";
+                    }
+                }
+
+                public override void RunEffect(ICaster caster, Entity target)
+                {
+                    if (target is IDamageable)
+                    {
+                        var damageAmount = baseDamage + caster.GetSpellPower() + new Random().Next(5, 10);
+                        (target as IDamageable).DamageHealth(damageAmount, caster as Entity);
+                    }
+                }
+            }
+            public class AttackDamage : Effect
+            {
+                public int baseDamage = 0;
+
+                public override string GetEffectDescription(ICaster caster = null)
+                {
+                    if (caster != null)
+                    {
+                        return $"- Damages target\n> Damaging potential : **{baseDamage + caster.GetPhysicalPower()} ({baseDamage} + [physical power])**";
+                    }
+                    else
+                    {
+                        return $"- Damages target\n> Damaging potential : **{baseDamage} + [physical power]**";
+                    }
+                }
+
+                public override void RunEffect(ICaster caster, Entity target)
+                {
+                    if (target is IDamageable)
+                    {
+                        var damageAmount = baseDamage + caster.GetPhysicalPower() + new Random().Next(5, 10);
+                        (target as IDamageable).DamageHealth(damageAmount, caster as Entity);
+                    }
+                }
+            }
+            public class AddAlter : Effect
+            {
+                public AlterationType alteration;
+                public int baseDuration;
+                public double spellPowerDurationRatio = 1;
+
+                public override string GetEffectDescription(ICaster caster = null)
+                {
+                    if (caster != null)
+                    {
+                        return $"- Applies alteration ({alteration})" +
+                        $"\n> Duration : **{baseDuration + (int)(caster.GetSpellPower() * spellPowerDurationRatio)} ({baseDuration} + [spell power] * {spellPowerDurationRatio})**";
+                    }
+                    else
+                    {
+                        return $"- Applies alteration ({alteration})" +
+                        $"\n> Duration : **{baseDuration} + [spell power] * {spellPowerDurationRatio}**";
+                    }
+                }
+
+                public override void RunEffect(ICaster caster, Entity target)
+                {
+                    if (target is Character)
+                    {
+                        var c = target as Character;
+                        var duration = baseDuration + (int)(caster.GetSpellPower() * spellPowerDurationRatio);
+                        c.AddAlteration(alteration, duration, caster is NPC);
+                    }
+                }
+            }
+            public class RemoveAlter : Effect
+            {
+                public AlterationType alteration;
+
+                public override string GetEffectDescription(ICaster caster = null)
+                {
+                    return $"- Removes alteration ({alteration})";
+                }
+
+                public override void RunEffect(ICaster caster, Entity target)
+                {
+                    if (target is Character)
+                    {
+                        var c = target as Character;
+                        c.RemoveAlteration(alteration, caster is NPC);
+                    }
+                }
+            }
+            public class Custom : Effect
+            {
+                public Custom(EffectRunHandler runHandler, EffectDescriptionHandler descriptionHandler)
+                {
+                    this.runHandler = runHandler;
+                    this.descriptionHandler = descriptionHandler;
+                }
+                private EffectRunHandler runHandler;
+                private EffectDescriptionHandler descriptionHandler;
+
+                public override void RunEffect(ICaster caster, Entity target)
+                {
+                    runHandler(caster, target);
+                }
+
+                public override string GetEffectDescription(ICaster caster = null)
+                {
+                    return descriptionHandler(caster);
+                }
+            }
+
+            public delegate void EffectRunHandler(ICaster caster, Entity target);
+            public delegate string EffectDescriptionHandler(ICaster caster = null);
+        }
     }
 }

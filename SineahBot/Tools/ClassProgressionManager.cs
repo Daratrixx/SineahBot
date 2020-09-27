@@ -63,36 +63,46 @@ namespace SineahBot.Tools
             .RegisterSubclass(CharacterClass.Enchanter, 2) },
             // faith path
             { CharacterClass.Abbot, new ClassProgression(CharacterClass.Abbot, 20, 10, 15, 3)
-            .RegisterSpell(Spell.MinorHealing, 2)
+            .RegisterSpell(Data.Spells.Priest.MinorHealing, 2)
+            .RegisterSpell(Data.Spells.Priest.Cure, 3)
             .RegisterSubclass(CharacterClass.Prelate, 4) },
             { CharacterClass.Prelate, new ClassProgression(CharacterClass.Prelate, 25, 12, 15, 3)
-            .RegisterSpell(Spell.MinorHealing, 2)
-            .RegisterSpell(Spell.MajorHealing, 4)
+            .RegisterSpell(Data.Spells.Priest.MinorHealing, 2)
+            .RegisterSpell(Data.Spells.Priest.Cure, 3)
+            .RegisterSpell(Data.Spells.Priest.MajorHealing, 4)
+            .RegisterSpell(Data.Spells.Priest.Smite, 5)
             .RegisterSubclass(CharacterClass.Bishop, 7) },
             { CharacterClass.Bishop, new ClassProgression(CharacterClass.Bishop, 30, 14, 15, 3)
-            .RegisterSpell(Spell.MinorHealing, 2)
-            .RegisterSpell(Spell.MajorHealing, 4)
-            .RegisterSpell(Spell.DivineHand, 7) },
+            .RegisterSpell(Data.Spells.Priest.MinorHealing, 2)
+            .RegisterSpell(Data.Spells.Priest.Cure, 3)
+            .RegisterSpell(Data.Spells.Priest.MajorHealing, 4)
+            .RegisterSpell(Data.Spells.Priest.Smite, 5)
+            .RegisterSpell(Data.Spells.Priest.DivineHand, 6) },
             // magic path
             { CharacterClass.Enchanter, new ClassProgression(CharacterClass.Enchanter, 20, 10, 20, 4)
-            .RegisterSpell(Spell.MagicDart, 2)
+            .RegisterSpell(Data.Spells.Mage.MagicDart, 2)
+            .RegisterSpell(Data.Spells.Mage.Amplify, 3)
             .RegisterSubclass(CharacterClass.Mage, 4) },
             { CharacterClass.Mage, new ClassProgression(CharacterClass.Mage, 24, 11, 20, 4)
-            .RegisterSpell(Spell.MagicDart, 2)
-            .RegisterSpell(Spell.ArcaneBlast, 4)
+            .RegisterSpell(Data.Spells.Mage.MagicDart, 2)
+            .RegisterSpell(Data.Spells.Mage.Amplify, 3)
+            .RegisterSpell(Data.Spells.Mage.ArcaneBlast, 4)
+            .RegisterSpell(Data.Spells.Mage.Incinerate, 5)
             .RegisterSubclass(CharacterClass.Wizard, 7) },
             { CharacterClass.Wizard, new ClassProgression(CharacterClass.Wizard, 28, 12, 20, 4)
-            .RegisterSpell(Spell.MagicDart, 2)
-            .RegisterSpell(Spell.ArcaneBlast, 4)
-            .RegisterSpell(Spell.Overcharge, 7) },
+            .RegisterSpell(Data.Spells.Mage.MagicDart, 2)
+            .RegisterSpell(Data.Spells.Mage.Amplify, 3)
+            .RegisterSpell(Data.Spells.Mage.ArcaneBlast, 4)
+            .RegisterSpell(Data.Spells.Mage.Incinerate, 5)
+            .RegisterSpell(Data.Spells.Mage.Overcharge, 7) },
 
             // secret class
             { CharacterClass.Druid, new ClassProgression(CharacterClass.Druid, 20, 15, 15, 3)
-            .RegisterSpell(Spell.MinorHealing, 2)
-            .RegisterSpell(Spell.MagicDart, 4)
-            .RegisterSpell(Spell.Incinerate, 5)
-            .RegisterSpell(Spell.Harden, 5)
-            .RegisterSpell(Spell.MajorHealing, 6) },
+            .RegisterSpell(Data.Spells.Druid.HealingTouch, 2)
+            .RegisterSpell(Data.Spells.Druid.Hibernate, 3)
+            .RegisterSpell(Data.Spells.Druid.Wrath, 3)
+            .RegisterSpell(Data.Spells.Druid.Metabolize, 4)
+            .RegisterSpell(Data.Spells.Druid.VenomousWhip, 5) },
         };
         private static Dictionary<CharacterClass, string> classDescription = new Dictionary<CharacterClass, string>() {
             { CharacterClass.Militian, "Citizen following the path of arms, ready to take and give a beating." },

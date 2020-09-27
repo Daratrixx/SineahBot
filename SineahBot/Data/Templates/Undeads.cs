@@ -15,7 +15,8 @@ namespace SineahBot.Data.Templates
             shortDescription = "A skeleton slowly walks around.",
             longDescription = "Undead fiend.",
             alternativeNames = new string[] { "skl" },
-            tags = new List<CharacterTag>() { CharacterTag.Undead }
+            tags = new List<CharacterTag>() { CharacterTag.Undead },
+            knowledgeDefaultResponse = null,
         };
         public static NPC Zombi = new NPC()
         {
@@ -27,7 +28,8 @@ namespace SineahBot.Data.Templates
             shortDescription = "A zombi shambles on its legs.",
             longDescription = "Undead fiend.",
             alternativeNames = new string[] { "z" },
-            tags = new List<CharacterTag>() { CharacterTag.Undead }
+            tags = new List<CharacterTag>() { CharacterTag.Undead },
+            knowledgeDefaultResponse = null,
         };
         public static NPC Ghoul = new NPC()
         {
@@ -36,11 +38,13 @@ namespace SineahBot.Data.Templates
             baseHealth = 450,
             health = 450,
             experience = 5000,
+            gold = 100,
             name = "Ghoul",
             shortDescription = "A ghoul is looking for fresh meat.",
             longDescription = "Dangerous undead fiend.",
             alternativeNames = new string[] { "g","gh" },
-            tags = new List<CharacterTag>() { CharacterTag.Undead }
+            tags = new List<CharacterTag>() { CharacterTag.Undead },
+            knowledgeDefaultResponse = "**unearthly screaming**",
         };
         public static NPC Lich = new NPC()
         {
@@ -54,7 +58,8 @@ namespace SineahBot.Data.Templates
             shortDescription = "A lich is throning in the room.",
             longDescription = "Powerful undead fiend.",
             alternativeNames = new string[] { },
-            tags = new List<CharacterTag>() { CharacterTag.Undead }
+            tags = new List<CharacterTag>() { CharacterTag.Undead },
+            knowledgeDefaultResponse = "Please leave this place. You're meddling where you shouldn't.",
         };
     }
 }

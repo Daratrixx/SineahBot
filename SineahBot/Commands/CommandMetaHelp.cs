@@ -50,12 +50,13 @@ namespace SineahBot.Commands
 > - Type `act [acting]` to have your character act in the room.
 > - Type `trade [merchant name]` to start trading with a merchant. Type `leave` to stop trading.
 > - Type `consume [item name]` to consume an item from your inventory or from the room.
+> - Type `ask [character name] about [subject]` to get information about a subject.
 > - Type `!information` to get some information about your character.
 > - Type `!spells` to get the list of spells you can cast.
 > - Type `!inventory` to get a list of items you own.
 > - Type `!class [class name]` to get the description of a character class.
 > - Type `!level` to level up.
-> - [SOON] Type `!help [full command]` to have a detailed description of a command.
+> - [SOON] Type `!help [command name]` to have a detailed description of a command.
 ";
 
         public const string TradeHelpMessage = @"

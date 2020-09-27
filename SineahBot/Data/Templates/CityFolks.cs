@@ -15,7 +15,7 @@ namespace SineahBot.Data.Templates
             name = "Drunk",
             experience = 0,
             shortDescription = "A drunk stumbles around.",
-            longDescription = "They can barely keep their balance, smell alcool from meters away, and seem to be looking for a fight.",
+            longDescription = "They can barely keep their balance, and smell alcool from meters away.",
             alternativeNames = new string[] { "drnk" }
         };
         public static NPC Customer = new NPC()
@@ -41,7 +41,7 @@ namespace SineahBot.Data.Templates
             experience = 1000,
             shortDescription = "A shady looking consumer is brooding in a corner.",
             longDescription = "This individual radiates danger. They are most likely armed, and better left alone.",
-            alternativeNames = new string[] { "shady looking consumer", "shadyconsumer", "shadycons", "shadyc", "sconsumer", "scons", "consumer", "sc" }
+            alternativeNames = new string[] { "shady looking consumer", "shadyconsumer", "shadycons", "shadyc", "sconsumer", "scons", "consumer", "sc", "shady" }
         };
         public static NPC Waiter = new NPC()
         {
@@ -114,6 +114,42 @@ namespace SineahBot.Data.Templates
             shortDescription = "An armor seller is here to trade.",
             longDescription = "The armor seller is ready to trade.",
             alternativeNames = new string[] { "armorseller", "armors", "armor", "armorsmith" }
+        };
+        public static NPC ChurchAttendant = new NPC()
+        {
+            level = 2,
+            baseHealth = 30,
+            health = 30,
+            gold = 40,
+            name = "Church attendant",
+            experience = 0,
+            shortDescription = "A church attendant is here to trade.",
+            longDescription = "The church attendant is ready to trade.",
+            alternativeNames = new string[] { "churchattendant", "churchatt", "churcha", "cattendant", "ca" }
+        };
+        public static NPC MagicVendor = new NPC()
+        {
+            level = 2,
+            baseHealth = 30,
+            health = 30,
+            gold = 40,
+            name = "Magic vendor",
+            experience = 0,
+            shortDescription = "A magic vendor is here to trade.",
+            longDescription = "The magic vendor is ready to trade.",
+            alternativeNames = new string[] { "magicvendor", "magicv", "mvendor", "cattendant", "mv" }
+        };
+        public static NPC Pharmacian = new NPC()
+        {
+            level = 2,
+            baseHealth = 30,
+            health = 30,
+            gold = 40,
+            name = "Pharmacian",
+            experience = 0,
+            shortDescription = "A pharmacian is here to trade.",
+            longDescription = "The pharmacian is ready to trade.",
+            alternativeNames = new string[] { "pharma", "doctor", "heal", "pha", "ph", "p" }
         };
         public static NPC Militian = new NPC()
         {

@@ -55,9 +55,9 @@ namespace SineahBot.Commands
                 return;
             }
 
+            character.Message($"You equiped {item.GetName(character)}.");
             character.Equip(item);
 
-            character.Message($"You equiped {item.GetName(character)}.");
             if (direct)
                 room.DescribeActionNow($"{character.GetName()} equiped {item.GetName()}.", character);
             else

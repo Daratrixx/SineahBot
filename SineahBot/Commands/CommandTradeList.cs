@@ -14,7 +14,7 @@ namespace SineahBot.Commands
 
         public CommandTradeList()
         {
-            commandRegex = new Regex(@"^(l|list)$", RegexOptions.IgnoreCase);
+            commandRegex = new Regex(@"^(l|list)( .*)?$", RegexOptions.IgnoreCase);
         }
 
         public override bool IsNormalCommand(Character character = null)
@@ -47,13 +47,29 @@ namespace SineahBot.Commands
                 return;
             }
 
-            var shop = character.currentShop;
-            var buyableList = String.Join('\n', shop.GetBuyableEntries()
-            .Select(x => $"*{x.referenceItem.GetName()}* - **{x.goldCost}** gold"));
-            var sellableList = String.Join('\n', shop.GetSellableEntries()
-            .Select(x => $"*{x.referenceItem.GetName()}* - **{x.goldRefund}** gold"));
+            var entryName = GetArgument(2);
 
-            character.Message($"**{shop.GetName().ToUpper()}**{GetShopListForCharacter(shop, character)}");
+            var shop = character.currentShop;
+            if (!string.IsNullOrEmpty(entryName))
+            {
+                var entry = shop.FindShopEntry(entryName);
+                if (entry == null)
+                {
+                    character.Message($"This merchant doesn't trade \"{entryName}\"");
+                    return;
+                }
+
+                character.Message($"**{shop.GetName().ToUpper()}**\n> **{entry.referenceItem.GetName()}**\n> {entry.referenceItem.details}");
+            }
+            else
+            {
+                var buyableList = String.Join('\n', shop.GetBuyableEntries()
+                .Select(x => $"*{x.referenceItem.GetName()}* - **{x.goldCost}** gold"));
+                var sellableList = String.Join('\n', shop.GetSellableEntries()
+                .Select(x => $"*{x.referenceItem.GetName()}* - **{x.goldRefund}** gold"));
+
+                character.Message($"**{shop.GetName().ToUpper()}**{GetShopListForCharacter(shop, character)}");
+            }
         }
 
         public static string GetShopListForCharacter(Shop shop, Character character)

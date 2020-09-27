@@ -52,7 +52,7 @@ namespace SineahBot.Commands
             }
 
             var observableTarget = target;
-            character.Message($"**{observableTarget.GetName(character)}**\n> {observableTarget.GetFullDescription(character)}");
+            character.Message($"**{observableTarget.GetName(character)}**\n{observableTarget.GetFullDescription(character)}");
 
             character.RewardExperience(1);
         }

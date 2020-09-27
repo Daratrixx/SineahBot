@@ -43,9 +43,7 @@ namespace SineahBot.Commands
                 return;
             }
 
-            var inventory = character as IInventory;
-            var target = room.FindInRoom(targetName) as Item;
-            if (target == null && (character is IInventory)) target = (character as IInventory).FindInInventory(targetName) as Item;
+            var target = character.FindInInventory(targetName) as Item;
 
             if (target == null)
             {
@@ -54,13 +52,15 @@ namespace SineahBot.Commands
             }
 
             var itemTarget = target as Item;
-            inventory.RemoveFromInventory(itemTarget);
+            if (itemTarget is Equipment && character.IsEquiped(itemTarget as Equipment))
+                character.Unequip((itemTarget as Equipment).slot);
+            character.RemoveFromInventory(itemTarget);
             character.Message($"You dropped {itemTarget.name}.");
+            room.AddToRoom(itemTarget);
             if (direct)
                 room.DescribeActionNow($"{character.GetName()} dropped {itemTarget.name}.", character);
             else
                 room.DescribeAction($"{character.GetName()} dropped {itemTarget.name}.", character);
-            room.AddToRoom(itemTarget);
 
             character.RewardExperience(1);
         }

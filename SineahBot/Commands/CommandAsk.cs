@@ -66,8 +66,13 @@ namespace SineahBot.Commands
                 character.Message("What are you asking?");
                 return;
             }
-
-            character.Message(target.GetKnowledgeResponse(knowledge));
+            var response = target.GetKnowledgeResponse(knowledge);
+            if (response == null)
+            {
+                character.Message($"You can't ask {target.GetName()}");
+                return;
+            }
+            character.Message(response);
 
             character.RewardExperience(1);
         }
