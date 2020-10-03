@@ -10,7 +10,6 @@ namespace SineahBot.Commands
 {
     public class CommandAsk : Command
     {
-
         public CommandAsk()
         {
             commandRegex = new Regex(@"^ask (.+)( ?about ?| ?: ?)(.+)$", RegexOptions.IgnoreCase);
@@ -72,7 +71,7 @@ namespace SineahBot.Commands
                 character.Message($"You can't ask {target.GetName()}");
                 return;
             }
-            character.Message(response);
+            character.Message($"**{target.GetName()}** (about \"*{knowledge}*\")\n{response}");
 
             character.RewardExperience(1);
         }

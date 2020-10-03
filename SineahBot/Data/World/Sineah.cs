@@ -1,6 +1,7 @@
 ﻿using SineahBot.Tools;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -11,7 +12,15 @@ namespace SineahBot.Data.World
         public static NPC SineahCommonKnowledge(this NPC npc)
         {
             return npc
-                .RegisterKnowlede(new string[] { "town", "city", "sineah" }, "\"**Sineah is a nice city to live in. you can learn about the history of the town at the Library.**\"");
+                .RegisterKnowlede(new string[] { "town", "city", "sineah" }, "\"**Sineah is a nice city to live in. You can learn about the history of the town at the Library.**\"")
+                .RegisterKnowlede(new string[] { "guard", "guards", "militia", "militian" }, "\"**The guards are keeping the city safe from danger, both from external menace and internal chaos.**\"")
+                .RegisterKnowlede(new string[] { "inn", "four winds", "four winds inn" }, "\"**The Four Winds inn is renouned even outside of Sineah. It's a popular stop for travellers and adventurers alike. You have to try their speciality!**\"");
+        }
+        public static NPC SineahInnKnowledge(this NPC npc)
+        {
+            return npc
+                .RegisterKnowlede(new string[] { "inn speciality", "inn blanquette", "speciality", "blanquette" }, "\"**Ah, that's the famous dish of the place. It will fill you right up and give you the energy to crush a hundred kobolds!**\"")
+                .RegisterKnowlede(new string[] { "room", "rooms", "stay" }, "\"**Sorry, the inn is fully book for another few days, no rooms are available at the moment.**\"");
         }
 
         public static class s
@@ -214,36 +223,32 @@ namespace SineahBot.Data.World
             {
                 public static Character Bartender = Templates.CityFolks.Bartender.Clone()
                     .RegisterShop(Shops.Bartender)
+                    .RegisterTraderKnowledge()
                     .SineahCommonKnowledge()
-                    .RegisterKnowlede("food", "\"**Have a seat and order from the **waiter**. Nothing beats a full stomach on a hard day.**\"")
-                    .RegisterKnowlede("drink", "\"**We can serve you a refreshing drink to help you gather your thoughts.**\"")
+                    .SineahInnKnowledge()
+                    .RegisterKnowlede(new string[] { "food", "meal" }, "\"**Have a seat and order from the **waiter**. Nothing beats a full stomach on a hard day.**\"")
+                    .RegisterKnowlede(new string[] { "drink", "drinks" }, "\"**We can serve you a refreshing drink to help you gather your thoughts.**\"")
                     .RegisterKnowlede("drunk", "\"**Oh, he's been here everyday for weeks... I wonder what happened to that poor soul. They used to have a good life. They open up, though.**\"")
                     .RegisterKnowlede("shady consumer", "\"**Leave them alone, unless you want to get into trouble. I'm sure they dwel in some illegal activities...**\"")
-                    .RegisterKnowlede("waiter", "\"**Ask them for drinks, or the inn's specility.**\"")
-                    .RegisterKnowlede("speciality", "\"**The four inn's blanquette is renouned all over the country.**\"")
-                    .RegisterKnowlede("blanquette", "\"**The four inn's blanquette is renouned all over the country.**\"");
+                    .RegisterKnowlede("waiter", "\"**Ask them for drinks, or the inn's specility.**\"");
                 public static Character Waiter = Templates.CityFolks.Waiter.Clone()
                     .RegisterShop(Shops.Waiter)
+                    .RegisterTraderKnowledge()
                     .SineahCommonKnowledge()
-                    .RegisterKnowlede("food", "\"**I can serve you food if you order.**\"")
-                    .RegisterKnowlede("drink", "\"**I can serve you drinks if you order.**\"")
-                    .RegisterKnowlede("speciality", "\"**The four inn's blanquette is renouned all over the country.**\"")
-                    .RegisterKnowlede("blanquette", "\"**The four inn's blanquette is renouned all over the country.**\"");
+                    .SineahInnKnowledge()
+                    .RegisterKnowlede(new string[] { "food", "meal", "drink", "drinks" }, "\"**I can serve you food and drinks if you order.**\"");
                 public static Character Cook = Templates.CityFolks.Cook.Clone()
                     .RegisterShop(Shops.Cook)
+                    .RegisterTraderKnowledge()
                     .SineahCommonKnowledge()
-                    .RegisterKnowlede("food", "\"**The **waiter** can serve you food if you order.**\"")
-                    .RegisterKnowlede("drink", "\"**The **waiter** can serve you drinks if you order.**\"")
-                    .RegisterKnowlede("speciality", "\"**My blanquette is renouned all over the country.**\"")
-                    .RegisterKnowlede("blanquette", "\"**My blanquette is renouned all over the country.**\"");
+                    .RegisterKnowlede(new string[] { "food", "meal", "drink", "drinks" }, "\"**The **waiter** can serve you food and drinks if you order.**\"")
+                    .RegisterKnowlede(new string[] { "speciality", "blanquette" }, "*The cook smiles at you.* \"**My blanquette is the best. Family recipe! Order it from the waiter and taste it for yourself.**\"");
                 public static Character Drunk = Templates.CityFolks.Drunk.Clone()
-                    .RegisterKnowlede("town", "\"**I used to love this city. I fought for her for many years. Maybe I should leave now though...**\"")
-                    .RegisterKnowlede("city", "\"**I used to love this city. I fought for her for many years. Maybe I should leave now though...**\"")
-                    .RegisterKnowlede("sineah", "\"**I used to love this city. I fought for her for many years. Maybe I should leave now though...**\"")
+                    .RegisterKnowlede(new string[] { "sineah", "city", "town" }, "\"**I used to love this city. I fought for her for many years. Maybe I should leave now though...**\"")
                     .RegisterKnowlede("guards", "*They smile for a bit.*\n\"**I used to be a guard myself.**\"")
                     .RegisterKnowlede("sewer", "*They shiver, visibly scared.*\n\"**Don't go down there. You'll regret it.**\"")
                     .RegisterKnowlede("undead", "*Their eyes widen for a second.*\n\"**They are better left alone. But the church won't do anything about it...**\"" +
-                    "\n*They shake their head.*\n\"**Just don't go there. I can't go there...**\"");
+                    "\n*They shake their head.*\n\"**Just don't go there. It's not safe. I can't go there...**\"");
                 public static Character Customer = Templates.CityFolks.Customer.Clone()
                     .SineahCommonKnowledge();
                 public static Character ShadyConsumer = Templates.CityFolks.ShadyConsumer.Clone()
@@ -886,17 +891,24 @@ namespace SineahBot.Data.World
                 public static Character plazaMilitian1 = Templates.CityFolks.Militian.Clone();
                 public static Character plazaMilitian2 = Templates.CityFolks.Militian.Clone();
                 public static Character shadyRat = Templates.Critters.Rat.Clone();
-                public static Character baker = Templates.CityFolks.Baker.Clone().RegisterShop(Shops.Baker);
+                public static Character baker = Templates.CityFolks.Baker.Clone()
+                    .RegisterShop(Shops.Baker)
+                    .RegisterTraderKnowledge();
                 public static Character weaponSeller = Templates.CityFolks.WeaponSeller.Clone()
-                    .RegisterShop(Shops.WeaponSmith);
+                    .RegisterShop(Shops.WeaponSmith)
+                    .RegisterTraderKnowledge();
                 public static Character armorSeller = Templates.CityFolks.ArmorSeller.Clone()
-                    .RegisterShop(Shops.ArmorSmith);
+                    .RegisterShop(Shops.ArmorSmith)
+                    .RegisterTraderKnowledge();
                 public static Character pharmacist = Templates.CityFolks.Pharmacian.Clone()
-                    .RegisterShop(Shops.Pharmacist);
+                    .RegisterShop(Shops.Pharmacist)
+                    .RegisterTraderKnowledge();
                 public static Character churchAttendant = Templates.CityFolks.ChurchAttendant.Clone()
-                    .RegisterShop(Shops.ChurchAttendant);
+                    .RegisterShop(Shops.ChurchAttendant)
+                    .RegisterTraderKnowledge();
                 public static Character magicVendor = Templates.CityFolks.MagicVendor.Clone()
-                    .RegisterShop(Shops.MagicVendor);
+                    .RegisterShop(Shops.MagicVendor)
+                    .RegisterTraderKnowledge();
             }
             public static Character[] GetCharacters()
             {

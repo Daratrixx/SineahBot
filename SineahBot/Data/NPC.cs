@@ -52,15 +52,59 @@ namespace SineahBot.Data
                 knowledgeBase[knowledge.ToLower().Replace(" ", "")] = response;
             return this;
         }
+        public NPC RegisterTraderKnowledge()
+        {
+            var selling = shop.GetBuyableEntries();
+            var buying = shop.GetSellableEntries();
+            if (selling.Count() == 0 && buying.Count() == 0)
+            {
+                return RegisterKnowlede(new string[] { "trade", "trades", "trading", "sell", "selling", "buy", "buying" }, "\"*I don't trade*\"");
+            }
+            var sellingMessage = $"I am selling **{String.Join("**, **", selling.Select(x => x.referenceItem.GetName()))}**.";
+            var buyingMessage = $"I am buying **{String.Join("**, **", buying.Select(x => x.referenceItem.GetName()))}**.";
+            if (selling.Count() > 0 && buying.Count() > 0)
+            {
+                RegisterKnowlede(new string[] { "trade", "trades", "trading" }, $"\"*{sellingMessage}\n{buyingMessage}*\"");
+            }
+            else
+            {
+                if (selling.Count() > 0)
+                {
+                    RegisterKnowlede(new string[] { "trade", "trades", "trading", "sell", "selling" }, $"\"*{sellingMessage}*\"");
+                }
+                else
+                {
+                    RegisterKnowlede(new string[] { "sell", "selling" }, $"\"*I don't sell anything.*\"");
+                }
+                if (buying.Count() > 0)
+                {
+                    RegisterKnowlede(new string[] { "trade", "trades", "trading", "buy", "buying" }, $"\"*{buyingMessage}*\"");
+                }
+                else
+                {
+                    RegisterKnowlede(new string[] { "buy", "buying" }, $"\"*I don't buy anything.*\"");
+                }
+            }
+            foreach (var s in selling)
+            {
+                var item = s.referenceItem;
+                RegisterKnowlede(new string[] { item.GetName() }, $"\"*{item.GetFullDescription()}*\"");
+            }
+            foreach (var b in buying)
+            {
+                var item = b.referenceItem;
+                RegisterKnowlede(new string[] { item.GetName() }, $"\"*{item.GetFullDescription()}*\"");
+            }
+            return this;
+        }
         public string GetKnowledgeResponse(string knowledge)
         {
             knowledge = knowledge.ToLower().Replace(" ", "");
             if (!knowledgeBase.ContainsKey(knowledge))
             {
-                if (knowledgeDefaultResponse == null) return null;
-                return $"**{GetName()}**: \"*{knowledgeDefaultResponse}*\"";
+                return knowledgeDefaultResponse;
             }
-            return $"**{GetName()}** - *{knowledge}*\n{knowledgeBase[knowledge]}";
+            return knowledgeBase[knowledge];
         }
 
         public override string GetFullDescription(IAgent agent = null)

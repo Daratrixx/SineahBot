@@ -41,7 +41,8 @@ namespace SineahBot.Data.Templates
             experience = 1000,
             shortDescription = "A shady looking consumer is brooding in a corner.",
             longDescription = "This individual radiates danger. They are most likely armed, and better left alone.",
-            alternativeNames = new string[] { "shady looking consumer", "shadyconsumer", "shadycons", "shadyc", "sconsumer", "scons", "consumer", "sc", "shady" }
+            alternativeNames = new string[] { "shady looking consumer", "shadyconsumer", "shadycons", "shadyc", "sconsumer", "scons", "consumer", "sc", "shady" },
+            knowledgeDefaultResponse = "*They look at you with piercing eyes and stay silent.*"
         };
         public static NPC Waiter = new NPC()
         {
@@ -64,8 +65,9 @@ namespace SineahBot.Data.Templates
             name = "Cook",
             experience = 0,
             shortDescription = "A cook is working here.",
-            longDescription = "The cook is busy making food for customers.",
-            alternativeNames = new string[] { }
+            longDescription = "The cook is busy making food for the customers.",
+            alternativeNames = new string[] { },
+            knowledgeDefaultResponse = "\"**Sorry, I'm a bit busy.**\""
         };
         public static NPC Bartender = new NPC()
         {
