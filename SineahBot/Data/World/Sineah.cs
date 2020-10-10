@@ -1092,10 +1092,11 @@ namespace SineahBot.Data.World
             Streets.Rooms.outerScience.AddToRoom(Streets.Characters.pharmacist); // pharmacist at outer science
 
             // signs
-            Streets.Rooms.outerScience.AddToRoom(Display.Sign("University notice sign", "The reconstruction of the university is still underway. However, some part of the library are ready to welcome curious minds once again.\nKeep in mind that most books still need to be restored, and some might be moved to different sections as more aisle are being reopened."));
+            Streets.Rooms.outerScience.AddToRoom(Display.Sign("University notice sign",
+            "The reconstruction of the university is still underway. However, some part of the library are ready to welcome curious minds once again.\nKeep in mind that most books still need to be restored, and some might be moved to different sections as more aisle are being reopened."));
 
             // books
-            University.Rooms.LibraryEntrance.AddToRoom(Templates.Books.SineahHistoryPart1);
+            University.Rooms.LibraryEntrance.AddToRoom(Templates.Books.SineahHistory);
             University.Rooms.LibraryEntrance.AddToRoom(Templates.Books.PurgeTheUndead);
             University.Rooms.LibraryEntrance.AddToRoom(Templates.Books.CityCritters);
 

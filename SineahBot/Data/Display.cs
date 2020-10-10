@@ -16,11 +16,12 @@ namespace SineahBot.Data
         }
         public string[] alternativeNames = new string[] { };
         public string description { get; set; }
-        public string content { get; set; }
+        public string details { get; set; }
+        public string[] content { get; set; } = new string[] { };
 
         public virtual string GetFullDescription(IAgent agent = null)
         {
-            return $"{content}";
+            return details;
         }
 
         public string GetShortDescription(IAgent agent = null)
@@ -28,9 +29,39 @@ namespace SineahBot.Data
             return description;
         }
 
-        public static Display Sign(string signName, string signContent)
+        public string GetContent(Character reader = null, int page = 0)
         {
-            return new Display(signName, new string[] { signName.Replace(" ", ""), "sign" }) { content = "The sign reads:\n> " + signContent.Replace("\n","\n> "), description = $"You spot the {signName}." };
+            if (content.Length == 0) return details;
+            return content[Math.Clamp(page, 0, content.Length - 1)];
+        }
+        public bool HasMultiplePages()
+        {
+            return content.Length > 1;
+        }
+
+        public int GetPageCount()
+        {
+            return content.Length;
+        }
+
+        public static Display Sign(string signName, string details, string signContent = null)
+        {
+            return new Display(signName, new string[] { signName.Replace(" ", ""), "sign" })
+            {
+                description = $"You spot a sign labelled \"**{signName}**\".",
+                details = "The sign reads:\n> " + details.Replace("\n", "\n> "),
+                content = new string[] { "The sign reads:\n> " + (!string.IsNullOrWhiteSpace(signContent) ? signContent : details).Replace("\n", "\n> ") },
+            };
+        }
+
+        public static Display Book(string bookName, string details, params string[] content)
+        {
+            return new Display(bookName, new string[] { bookName.Replace(" ", ""), "book" })
+            {
+                description = $"You found a book labelled \"**{bookName}**\".",
+                details = details,
+                content = content,
+            };
         }
     }
 }

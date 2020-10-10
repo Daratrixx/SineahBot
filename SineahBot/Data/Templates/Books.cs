@@ -6,23 +6,25 @@ namespace SineahBot.Data.Templates
 {
     public static class Books
     {
-        public static Display SineahHistoryPart1 = new Display("The history of Sineah (Pt.1)", new string[] { "the history sineah part 1",
-        "history sineah part 1", "sineah part 1",
-        "history sineah pt 1", "sineah pt 1",
-        "history sineah 1", "sineah 1" ,
-        "history of sineah",
-        "history sineah", "sineah" })
-        {
-            description = @"""The history of Sineah (Pt.1)"" thrones here.",
-            content = $@"> The history is not that long and not so complicated but I don't have time to write it down for the test :v Shouldn't get up 3 hours before it starts uh ?
-",
-        };
-        public static Display PurgeTheUndead = new Display("Purge the undead", new string[] { "purge undead",
-        "purgetheundead", "purgeundead",
-        "purge", "undead" })
-        {
-            description = @"""Purge the undead"" thrones here.",
-            content = $@"> **Undead** are a known but not so common menace. The best course of action when facing the undead is to let a servitor of the gods smite them back to their grave.
+        public static Display SineahHistory = Display.Book("The history of Sineah", "",
+        // page 1
+        $"> The story of Sineah emerges from the story of __Freinort__. __Freinort__ was a small community of pagan worshipers. " +
+        $"They built shrines and temples to honor their primitive deities, and originally were a positive force in the region, helping nearby villages with their knowledge, magic, and miracles. " +
+        $"Their warriors were protecting the land from local monsters, and they even pushed back the kobold hordes for decades, all on their own.",
+        // page 2
+        "> Over time, their beliefs shifted, and their cult took a darker turn. Outdoor shrines went vacant as more and more underground rooms were dug, scaring the earth they once honored. " +
+        "The memory of their own ancestors became more important than the balance of nature. The __Freinort artefacts__ were twisted. Soon, they were able to harness the power of the dead. " +
+        "And as they were becoming even more powerful, the region gradually fell into chaos. " +
+        "It all peaked when they started filling their __ossuary__ with the bones of massacred inhabitants from the nearby villages, planning on using them to raise an army of the dead.",
+        // page 3
+        "> That's when the glorious northern __Holy Church__ intervened. They fought against their undead minions and slayed their unholy cultists. " +
+        "Their underground rooms were buried, their altars shattered, and their faith was no more. " +
+        "To restore balance in the region, and save the remaining humans from chaos, they erected a large fortress or the fuming rubbles of __Freinort__. " +
+        "This fortress expanded over time, and became the great city-state of Sineah, keeping peace in this part of the world, and holding the front against the ever-growing kobold hordes."
+        );
+
+        public static Display PurgeTheUndead = Display.Book("Purge the undead", "",
+        $@"> **Undead** are a known but not so common menace. The best course of action when facing the undead is to let a servitor of the gods smite them back to their grave.
 > However, if you can't afford to wait for a priest, here's a few points to help you stay alive:
 > - Undead are very vulnerable to fire. Most will burn to a crisp within a minute once set ablaze.
 > - Undead cannot get sick, poisoned, weakened, taunted, frenzied, nor stunned.
@@ -35,15 +37,11 @@ namespace SineahBot.Data.Templates
 > - Banshee
 > - Lich
 > None of the aformentioned undead creature can be defeated by a non-veteran adventurer.
-",
-        };
-        public static Display CityCritters = new Display("City critters", new string[] { "citycritters",
-        "critters" })
-        {
-            description = @"""Critters"" thrones here.",
-            content = $@"> Many critters populate our cities. Here's a rundown on what you can epxect to encounter:
+");
+
+        public static Display CityCritters = Display.Book("City critters", "",
+        $@"> Many critters populate our cities. Here's a rundown on what you can epxect to encounter:
 > - **Rats** are a fairly common pest that you will find in all the cities of the world. They are most likely to live in the sewers. Careful, some of them might carry dangerous diseases.
-",
-        };
+");
     }
 }
