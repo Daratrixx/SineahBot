@@ -13,6 +13,7 @@ namespace SineahBot.Tools
 
         public static void OnDamagingCharacter(Character damaging, Character damaged)
         {
+            if (damaging == damaged) return; // don't start a combat against yourself...
             if (!enemies.ContainsKey(damaged))
             {
                 enemies[damaged] = new List<Character>();

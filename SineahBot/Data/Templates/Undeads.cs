@@ -59,7 +59,7 @@ namespace SineahBot.Data.Templates
             longDescription = "Powerful undead fiend.",
             alternativeNames = new string[] { },
             tags = new List<CharacterTag>() { CharacterTag.Undead },
-            knowledgeDefaultResponse = "Please leave this place. You're meddling where you shouldn't.",
+            knowledgeDefaultResponse = "Please leave this place. You're meddling with what you shouldn't.",
         };
     }
 }

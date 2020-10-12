@@ -75,11 +75,11 @@ namespace SineahBot.Commands
                     return;
                 }
 
-                character.Message($"You casted {spell.GetName()} on {target.name}!");
+                character.Message($"You cast {spell.GetName()} on {target.name}!");
                 if (direct)
-                    room.DescribeActionNow($"{character.GetName()} casted {spell.GetName()} on {target.name}!", character);
+                    room.DescribeActionNow($"{character.GetName()} cast {spell.GetName()} on {target.name}!", character);
                 else
-                    room.DescribeAction($"{character.GetName()} casted {spell.GetName()} on {target.name}!", character);
+                    room.DescribeAction($"{character.GetName()} cast {spell.GetName()} on {target.name}!", character);
 
                 character.CastSpellOn(spell, target);
                 character.StartActionCooldown();
@@ -105,11 +105,11 @@ namespace SineahBot.Commands
                     return;
                 }
 
-                character.Message($"You casted {spell.GetName()}!");
+                character.Message($"You cast {spell.GetName()}!");
                 if (direct)
-                    room.DescribeActionNow($"{character.GetName()} casted {spell.GetName()}!", character);
+                    room.DescribeActionNow($"{character.GetName()} cast {spell.GetName()}!", character);
                 else
-                    room.DescribeAction($"{character.GetName()} casted {spell.GetName()}!", character);
+                    room.DescribeAction($"{character.GetName()} cast {spell.GetName()}!", character);
 
                 character.CastSpell(spell);
                 character.StartActionCooldown();

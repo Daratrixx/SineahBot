@@ -384,7 +384,7 @@ namespace SineahBot.Data.World
                 };
                 public static Room ConvergenceRoom = new Room("Convergence room")
                 {
-                    description = "This massive underground room has multiple tunnels discharging their wastes in a collection of large pools, all connected to the southern exit. Water from west seems way more poisoned than the water from north and east."
+                    description = "This massive underground room has multiple tunnels discharging their wastes in a collection of large pools, all connected to the southern exit. Water from the west seems way more poisoned than the water from the north and the east."
                 };
                 public static Room ToxicDrain = new Room("Toxic drain")
                 {
@@ -412,11 +412,11 @@ namespace SineahBot.Data.World
                 };
                 public static Room DeterioratedDrain = new Room("Deteriorated drain")
                 {
-                    description = "This tunnel is very damaged, and dry. It's collecting room is up north, and the waste would run down south if there was any."
+                    description = "This tunnel is very damaged, and dry. Its collecting room is up north, and the waste would run down south if there was any."
                 };
                 public static Room CrumbledCollector = new Room("Crumbled collector")
                 {
-                    description = "This waste collector hasn't been used in years and is perfectly dry. However, a cold, moist atmospher seemingly leaks out of the eastern wall. in the past, water would have run down the southern tunnel."
+                    description = "This waste collector hasn't been used in years and is perfectly dry. However, a cold, moist atmosphere seemingly leaks out of the eastern wall. In the past, water would have run down the southern tunnel."
                 };
                 public static Room ForgottenPassage = new Room("Forgotten passage")
                 {
@@ -428,7 +428,7 @@ namespace SineahBot.Data.World
                 };
                 public static Room Heart = new Room("Heart of the catacombs")
                 {
-                    description = "This vast underground room is littered with bones and remains. Pillars support large archs, and smaller archs decorate the other openings, situated at the western, northern, and eastern ends of the room."
+                    description = "This vast underground room is littered with bones and remains. Pillars support large arches, and smaller arches decorate the other openings, situated at the western, northern, and eastern ends of the room."
                 };
                 public static Room Underway1 = new Room("Underway")
                 {
@@ -633,7 +633,11 @@ namespace SineahBot.Data.World
                 public static Character Skeleton4 = Templates.Undeads.Skeleton.Clone(); // crypt
                 public static Character Skeleton5 = Templates.Undeads.Skeleton.Clone(); // crypt
                 public static Character Ghoul = Templates.Undeads.Ghoul.Clone(); // ossuary
-                public static Character Lich = Templates.Undeads.Lich.Clone(); // altar
+                public static Character Lich = Templates.Undeads.Lich.Clone() // altar
+                .RegisterKnowlede(new string[] { "Lich", "become lich" }, "\"**You shouldn't aim to become a lich. Trust me, it's not pleasant. But if one becomes a __Necromancer__**, they can reach that state if they are powerful enough.\"")
+                .RegisterKnowlede(new string[] { "Necromancer", "become necromancer" }, "\"**Through rebirth, you can become a `Necromancer`.\"")
+                .RegisterKnowlede(new string[] { "Ernaldz", "Bishop Ernaldz" }, "\"**Oh, I assume you came accross the work of that old agent of the church propaganda ?`\"")
+                .RegisterKnowlede(new string[] { "Sineah", "History of Sineah" }, "\"**Don't believe that book. It is filled with lies and a lot of the story isn't told at all in it.\"");
             }
             public static Character[] GetCharacters()
             {

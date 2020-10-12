@@ -334,6 +334,8 @@ namespace SineahBot.Data
             var bonusDamage = this.bonusDamage + (ClassProgressionManager.IsPhysicalClass(characterClass) ? level * 2 : level);
             if (HasAlteration(AlterationType.Empowered))
                 bonusDamage = (int)(bonusDamage * 1.5);
+                if(HasAlteration(AlterationType.Weakened))
+                bonusDamage = bonusDamage / 2;
             return bonusDamage;
         }
 
@@ -556,5 +558,8 @@ namespace SineahBot.Data
 
         // secret class
         Druid,
+        Shaman,
+        Necromancer,
+        Lich
     }
 }

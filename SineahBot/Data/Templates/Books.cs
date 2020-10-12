@@ -6,7 +6,7 @@ namespace SineahBot.Data.Templates
 {
     public static class Books
     {
-        public static Display SineahHistory = Display.Book("The history of Sineah", "",
+        public static Display SineahHistory = Display.Book("History of Sineah", "A very old looking books, labelled \"*History of Sineah*\" by __Bishop Ernaldz__",
         // page 1
         $"> The story of Sineah emerges from the story of __Freinort__. __Freinort__ was a small community of pagan worshipers. " +
         $"They built shrines and temples to honor their primitive deities, and originally were a positive force in the region, helping nearby villages with their knowledge, magic, and miracles. " +
@@ -43,5 +43,11 @@ namespace SineahBot.Data.Templates
         $@"> Many critters populate our cities. Here's a rundown on what you can epxect to encounter:
 > - **Rats** are a fairly common pest that you will find in all the cities of the world. They are most likely to live in the sewers. Careful, some of them might carry dangerous diseases.
 ");
+        public static Display Gods = Display.Book("Gods and deities", "",
+        $@"> Soon™");
+        public static Display SineahRulers = Display.Book("Sineah rulers", "",
+        $@"> Soon™");
+        public static Display ListarothGeography = Display.Book("Listaroth Geography", "",
+        $@"> Soon™");
     }
 }
