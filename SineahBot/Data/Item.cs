@@ -15,7 +15,6 @@ namespace SineahBot.Data
             if (alternativeNames != null) this.alternativeNames = alternativeNames.Select(x => x.ToLower()).ToArray();
             ItemManager.items.Add(name, this);
         }
-        public string[] alternativeNames = new string[] { };
         public string description { get; set; }
         public string details { get; set; }
 

@@ -27,12 +27,18 @@ namespace SineahBot.Commands
             character.Message(GetCharacterInventory(character));
         }
 
-        public string GetCharacterInventory(Character character)
+        public static string GetCharacterInventory(Character character)
         {
             return $"**INVENTORY** (*gold*: **{character.gold}**)\n"
-            + String.Join('\n', character.items.Select(x => GetItemInformation(x.Key, x.Value, character)));
+            + GetItemListInInventory(character, character);
         }
-        public string GetItemInformation(Item item, int count, Character character)
+
+        public static string GetItemListInInventory<Inventory>(IInventory<Inventory> inventory, Character character = null) where Inventory : IInventory<Inventory>
+        {
+            return String.Join('\n', inventory.ListItems().Select(x => GetItemInformation(x.Key, x.Value, character)));
+        }
+
+        public static string GetItemInformation(Item item, int count, Character character)
         {
             return $"> **{item.GetName()}** (x{count}) {item.GetFullDescription(character)}";
         }

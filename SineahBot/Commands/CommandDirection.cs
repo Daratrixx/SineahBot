@@ -27,6 +27,11 @@ namespace SineahBot.Commands
             return false;
         }
 
+        public override bool IsSearchCommand(Character character = null)
+        {
+            return false;
+        }
+
         public override void Run(Character character, Room room)
         {
             character.Message(String.Join(", ", room.GetDirections().Select(x => x.ToString())) + '.');

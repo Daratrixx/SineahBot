@@ -32,6 +32,11 @@ namespace SineahBot.Commands
             return false;
         }
 
+        public override bool IsSearchCommand(Character character = null)
+        {
+            return false;
+        }
+
         public override void Run(Character character, Room room)
         {
             if (character.sleeping)
@@ -63,11 +68,6 @@ namespace SineahBot.Commands
             }
             else
             {
-                var buyableList = String.Join('\n', shop.GetBuyableEntries()
-                .Select(x => $"*{x.referenceItem.GetName()}* - **{x.goldCost}** gold"));
-                var sellableList = String.Join('\n', shop.GetSellableEntries()
-                .Select(x => $"*{x.referenceItem.GetName()}* - **{x.goldRefund}** gold"));
-
                 character.Message($"**{shop.GetName().ToUpper()}**{GetShopListForCharacter(shop, character)}");
             }
         }

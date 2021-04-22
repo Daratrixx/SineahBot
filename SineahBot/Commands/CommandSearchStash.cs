@@ -8,22 +8,12 @@ using System.Text.RegularExpressions;
 
 namespace SineahBot.Commands
 {
-    public class CommandTradeSell : Command
+    public class CommandSearchStash : Command
     {
 
-        public CommandTradeSell()
+        public CommandSearchStash()
         {
-            commandRegex = new Regex(@"^(s|sell) (\d+ |all |[*] )?(.+)$", RegexOptions.IgnoreCase);
-        }
-
-        public override bool IsNormalCommand(Character character = null)
-        {
-            return false;
-        }
-
-        public override bool IsCombatCommand(Character character = null)
-        {
-            return false;
+            commandRegex = new Regex(@"^(stash|store|s|drop|d)( \d+| all| \*)? (.+)$", RegexOptions.IgnoreCase);
         }
 
         public override bool IsWorkbenchCommand(Character character = null)
@@ -31,51 +21,43 @@ namespace SineahBot.Commands
             return false;
         }
 
-        public override bool IsSearchCommand(Character character = null)
+        public override bool IsTradeCommand(Character character = null)
         {
             return false;
         }
 
         public override void Run(Character character, Room room)
         {
-
             if (character.sleeping)
             {
                 character.Message("You are asleep.");
                 return;
             }
 
-            if (character.currentShop == null)
+            if (character.currentContainer == null)
             {
-                character.Message("You are not currently trading.");
+                character.Message("You are not currently searching.");
                 character.characterStatus = CharacterStatus.Normal;
                 return;
             }
 
+            bool direct = character is NPC;
             var itemQuantity = GetArgument(2);
             var itemName = GetArgument(3);
 
             if (String.IsNullOrWhiteSpace(itemName))
             {
-                character.Message("What are you trying to sell ?");
-                return;
-            }
-
-            var shop = character.currentShop;
-            var shopEntry = shop.FindShopEntry(itemName);
-
-            if (shopEntry?.goldRefund == null)
-            {
-                character.Message($@"This merchant doesn't want to buy that.");
+                character.Message("What are you trying to stash ?");
                 return;
             }
 
             var item = character.FindInInventory(itemName);
             if (item == null)
             {
-                character.Message("What are you trying to sell ?");
+                character.Message($@"You don't have any ""{itemName}"" in your inventory.");
                 return;
             }
+
             var quantityOwned = character.CountInInventory(item);
             var quantity = 1;
             if (itemQuantity == "*" || itemQuantity.ToLower() == "all")
@@ -89,14 +71,15 @@ namespace SineahBot.Commands
 
             if (quantity > quantityOwned)
             {
-                character.Message($"You cannot sell {quantity} {item.GetName()} because you only own {quantityOwned}.");
+                character.Message($"You cannot stash {quantity} **{item.GetName()}** because you only own {quantityOwned}.");
                 return;
             }
 
-            var totalGoldCost = shopEntry.goldRefund.Value * quantity;
-            character.gold += totalGoldCost;
-            character.RemoveFromInventory(shopEntry.referenceItem, quantity);
-            character.Message($@"Sold *x{quantity}* {shopEntry.GetName()} (gold earned: **{totalGoldCost}**)");
+            if (item is Equipment && character.IsEquiped(item as Equipment))
+                character.Unequip((item as Equipment).slot);
+            character.RemoveFromInventory(item, quantity);
+            character.Message($"You stashed **{item.name}** x{quantity} in **{character.currentContainer.GetName()}**.");
+            character.currentContainer.AddToInventory(item, quantity);
 
             character.RewardExperience(1);
         }

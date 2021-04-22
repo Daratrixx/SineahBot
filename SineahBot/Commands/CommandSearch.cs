@@ -3,17 +3,18 @@ using SineahBot.Interfaces;
 using SineahBot.Tools;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
 namespace SineahBot.Commands
 {
-    public class CommandPickup : Command
+    public class CommandSearch : Command
     {
 
-        public CommandPickup()
+        public CommandSearch()
         {
-            commandRegex = new Regex(@"^(get|g|pickup|pick up|grab|take) (.+)$", RegexOptions.IgnoreCase);
+            commandRegex = new Regex(@"^(search|loot) (.+)?$", RegexOptions.IgnoreCase);
         }
 
         public override bool IsCombatCommand(Character character = null)
@@ -43,33 +44,26 @@ namespace SineahBot.Commands
                 character.Message("You are asleep.");
                 return;
             }
+            var containerName = GetArgument(2);
 
-            bool direct = character is NPC;
-            var targetName = GetArgument(2);
-
-            if (String.IsNullOrWhiteSpace(targetName))
+            if (String.IsNullOrWhiteSpace(containerName))
             {
-                character.Message("What are you trying to get ?");
+                character.Message("What are you trying to search?");
                 return;
             }
 
-            var item = room.FindInRoom(targetName) as Item;
-
-            if (item == null)
+            var container = room.FindInRoom<Container>(containerName);
+            if (container == null)
             {
-                character.Message($@"Can't find any ""{targetName}"" here !");
+                character.Message($"There is no \"{containerName}\" to search in this room.");
                 return;
             }
 
-            room.RemoveFromRoom(item);
-            character.Message($"You picked up {item.GetName()}.");
-            if (direct)
-                room.DescribeActionNow($"{character.GetName()} picked up {item.GetName()}.", character);
-            else
-                room.DescribeAction($"{character.GetName()} picked up {item.GetName()}.", character);
-            character.AddToInventory(item);
+            character.characterStatus = CharacterStatus.Search;
+            character.currentContainer = container;
+            character.Message($"You started searching **{container.GetName()}**.\n> It contains:\n{CommandMetaInventory.GetItemListInInventory(container, character)}");
 
-            character.RewardExperience(1);
+            character.RewardExperience(2);
         }
     }
 }

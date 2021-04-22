@@ -26,6 +26,11 @@ namespace SineahBot.Commands
             return false;
         }
 
+        public override bool IsSearchCommand(Character character = null)
+        {
+            return false;
+        }
+
 
         public override void Run(Character character, Room room)
         {
@@ -44,7 +49,7 @@ namespace SineahBot.Commands
             }
 
             var target = room.FindInRoom(targetName) as IObservable;
-            if (target == null && character is IInventory) target = (character as IInventory).FindInInventory(targetName) as IObservable;
+            if (target == null) target = character.FindInInventory(targetName) as IObservable;
             if (target == null)
             {
                 character.Message($@"Can't find any ""{targetName}"" here !");

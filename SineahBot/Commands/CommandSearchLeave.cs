@@ -8,12 +8,12 @@ using System.Text.RegularExpressions;
 
 namespace SineahBot.Commands
 {
-    public class CommandTradeLeave : Command
+    public class CommandSearchLeave : Command
     {
 
-        public CommandTradeLeave()
+        public CommandSearchLeave()
         {
-            commandRegex = new Regex(@"^(leave|exit|out)$", RegexOptions.IgnoreCase);
+            commandRegex = new Regex(@"^(leave|exit|out|quit|off|done|away|escape)$", RegexOptions.IgnoreCase);
         }
 
         public override bool IsNormalCommand(Character character = null)
@@ -31,23 +31,23 @@ namespace SineahBot.Commands
             return false;
         }
 
-        public override bool IsSearchCommand(Character character = null)
+        public override bool IsTradeCommand(Character character = null)
         {
             return false;
         }
 
         public override void Run(Character character, Room room)
         {
-            if (character.currentShop == null)
+            if (character.currentContainer == null)
             {
-                character.Message("You are not currently trading");
+                character.Message("You are not currently searching.");
                 character.characterStatus = CharacterStatus.Normal;
                 return;
             }
 
-            character?.currentShop.RemoveClient(character);
-            if (character.characterStatus == CharacterStatus.Trade) character.characterStatus = CharacterStatus.Normal;
-            character.Message("You stopped trading.");
+            character.currentContainer = null;
+            if (character.characterStatus == CharacterStatus.Search) character.characterStatus = CharacterStatus.Normal;
+            character.Message("You stopped searching.");
         }
     }
 }

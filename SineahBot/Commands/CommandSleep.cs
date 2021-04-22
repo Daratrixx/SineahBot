@@ -31,6 +31,11 @@ namespace SineahBot.Commands
             return false;
         }
 
+        public override bool IsSearchCommand(Character character = null)
+        {
+            return false;
+        }
+
         public override void Run(Character character, Room room)
         {
             bool direct = character is NPC;

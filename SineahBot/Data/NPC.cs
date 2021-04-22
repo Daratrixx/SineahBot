@@ -13,7 +13,6 @@ namespace SineahBot.Data
     {
         public string shortDescription { get; set; }
         public string longDescription { get; set; }
-        public string[] alternativeNames { get; set; }
 
         public Guid idSpawnRoom { get; set; }
         public bool elite;
@@ -187,6 +186,7 @@ namespace SineahBot.Data
                 characterClass = characterClass,
                 characterStatus = characterStatus,
                 agent = agent,
+                items = new Dictionary<Item, int>(items),
                 tags = new List<CharacterTag>(tags),
                 knowledgeBase = new Dictionary<string, string>(knowledgeBase),
                 knowledgeDefaultResponse = knowledgeDefaultResponse

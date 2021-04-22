@@ -47,7 +47,7 @@ namespace SineahBot.Commands
 
             if (target == null)
             {
-                character.Message($@"Can't find any ""{targetName}""!");
+                character.Message($@"you don't have ""{targetName}"" in your inventory.");
                 return;
             }
 

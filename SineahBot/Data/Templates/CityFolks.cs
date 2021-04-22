@@ -69,7 +69,7 @@ namespace SineahBot.Data.Templates
             alternativeNames = new string[] { },
             knowledgeDefaultResponse = "\"**Sorry, I'm a bit busy.**\""
         };
-        public static NPC Bartender = new NPC()
+        public static NPC Bartender = (NPC)new NPC()
         {
             level = 2,
             baseHealth = 20,
@@ -80,7 +80,7 @@ namespace SineahBot.Data.Templates
             shortDescription = "The bartender is ready to serve drinks at the bar.",
             longDescription = "The bartender hangs behind the bar, cleaning glasses and serving drinks to the customers of the inn.",
             alternativeNames = new string[] { "host" }
-        };
+        }.AddToInventory(Consumables.Candy, 2);
         public static NPC Baker = new NPC()
         {
             level = 2,

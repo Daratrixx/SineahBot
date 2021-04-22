@@ -1,4 +1,5 @@
 ﻿using SineahBot.Commands;
+using SineahBot.Data.Templates;
 using SineahBot.Interfaces;
 using SineahBot.Tools;
 using System;
@@ -8,11 +9,12 @@ using System.Text;
 
 namespace SineahBot.Data
 {
-    public class Character : Entity, IAgent, IAttackable, IAttacker, IKillable, IObservable, IObserver, IDamageable, IInventory, ICaster, IHealable
+    public class Character : Entity, IAgent, IAttackable, IAttacker, IKillable, IObservable, IObserver, IDamageable, IInventory<Character>, ICaster, IHealable
     {
         public IAgent agent;
         public CharacterStatus characterStatus;
         public Shop currentShop = null;
+        public Container currentContainer = null;
         public int baseHealth;
         public int baseMana;
         public Dictionary<Item, int> items = new Dictionary<Item, int>();
@@ -130,6 +132,8 @@ namespace SineahBot.Data
             {
                 CommandSleep.Awake(this, RoomManager.GetRoom(currentRoomId), this is NPC);
             }
+            if (currentShop != null) currentShop.RemoveClient(this);
+            if (currentContainer != null) currentContainer = null;
             if (source is Character)
             {
                 CombatManager.OnDamagingCharacter(this, source as Character);
@@ -235,6 +239,7 @@ namespace SineahBot.Data
         }
         public virtual void OnKilled(Entity killer = null)
         {
+            RoomManager.GetRoom(currentRoomId).AddToRoom(Containers.CreateContainerFromCharacter(this), false);
             RoomManager.RemoveFromCurrentRoom(this, false);
             if (killer != null)
             {
@@ -277,7 +282,7 @@ namespace SineahBot.Data
             throw new NotImplementedException();
         }
 
-        public void AddToInventory(Item item, int count = 1)
+        public Character AddToInventory(Item item, int count = 1)
         {
             if (IsItemInInventory(item.GetName()))
             {
@@ -287,6 +292,7 @@ namespace SineahBot.Data
             {
                 items[item] = count;
             }
+            return this;
         }
 
         public Item FindInInventory(string name)
@@ -324,6 +330,11 @@ namespace SineahBot.Data
             }
         }
 
+        public IEnumerable<KeyValuePair<Item, int>> ListItems()
+        {
+            return items;
+        }
+
         public override string GetName(IAgent agent = null)
         {
             return name;
@@ -334,7 +345,7 @@ namespace SineahBot.Data
             var bonusDamage = this.bonusDamage + (ClassProgressionManager.IsPhysicalClass(characterClass) ? level * 2 : level);
             if (HasAlteration(AlterationType.Empowered))
                 bonusDamage = (int)(bonusDamage * 1.5);
-                if(HasAlteration(AlterationType.Weakened))
+            if (HasAlteration(AlterationType.Weakened))
                 bonusDamage = bonusDamage / 2;
             return bonusDamage;
         }
@@ -522,6 +533,7 @@ namespace SineahBot.Data
         Normal,
         Combat,
         Trade,
+        Search,
         Workbench,
         Unknown
     }

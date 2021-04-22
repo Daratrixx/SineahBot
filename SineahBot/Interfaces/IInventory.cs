@@ -5,11 +5,15 @@ using System.Text;
 
 namespace SineahBot.Interfaces
 {
-    interface IInventory
+    public interface IInventory<Inventory> where Inventory: IInventory<Inventory>
     {
-        void AddToInventory(Item item, int count = 1);
+        Inventory AddToInventory(Item item, int count = 1);
         Item FindInInventory(string name);
         bool IsItemInInventory(string name);
+        int CountInInventory(string name);
+        int CountInInventory(Item item);
         void RemoveFromInventory(Item item, int count = 1);
+
+        IEnumerable<KeyValuePair<Item, int>> ListItems();
     }
 }

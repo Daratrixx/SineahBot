@@ -20,6 +20,7 @@ namespace SineahBot.Commands
 
         protected string GetArgument(int argumentGroupIndex)
         {
+            if (argumentGroupIndex >= commandMatch.Groups.Count) return null;
             return commandMatch.Groups[argumentGroupIndex].Value?.Trim();
         }
 
@@ -32,11 +33,15 @@ namespace SineahBot.Commands
         {
             return true;
         }
-        public virtual bool IsWorkbenchCommand(Character character = null)
+        public virtual bool IsTradeCommand(Character character = null)
         {
             return true;
         }
-        public virtual bool IsTradeCommand(Character character = null)
+        public virtual bool IsSearchCommand(Character character = null)
+        {
+            return true;
+        }
+        public virtual bool IsWorkbenchCommand(Character character = null)
         {
             return true;
         }

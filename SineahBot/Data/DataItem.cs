@@ -10,5 +10,6 @@ namespace SineahBot.Data
         [Key]
         public Guid id { get; set; }
         public string name { get; set; }
+        public string[] alternativeNames = new string[] { };
     }
 }

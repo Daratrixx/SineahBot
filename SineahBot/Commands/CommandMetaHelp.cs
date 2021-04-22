@@ -153,6 +153,18 @@ namespace SineahBot.Commands
 > Some NPC dialogue and some books will have some underlined text called __key words__.
 > Asking the right NPC about the right __key word__ will lead you to new discoveries.
 " },
+            { "search", @"> - `search [container name]` to search and see what items a container is holding.
+> Containers can be different kind of furniture such as chests, cabinets, desks...
+> Corpse and remains are container, and can be searched in the same way.
+> While searching, the following commands are available:
+> - Type `look`, `list` or `l` to get a list of all items present in the container.
+> - Type `get [item name]` or `pick up [item name]` to retrieve an item from the container.
+> - Type `get [amount] [item name]` or `pick up [amount] [item name]` to retrieve several items from the container.
+> - Type `stash [item name]`, `drop [item name]`,`s [item name]` or ` d [item name]` to stash an item from your inventory.
+> - Type `stash [amount] [item name]`, `drop [amount] [item name]`,`s [amount] [item name]` or `d [amount] [item name]` to stash several item from your inventory.
+> - Type `leave` or `out` to stop searching.
+> While in the searching mode, you cannot **move**, **attack**, **cast** spells, **lock** or **unlock** access, but you will automatically quit searching if you are attacked.
+" },
             { "!information", @"*(alt: `!i`)*
 > - `!information` to get some information about your character.
 " },

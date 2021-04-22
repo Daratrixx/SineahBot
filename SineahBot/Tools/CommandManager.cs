@@ -195,11 +195,14 @@ namespace SineahBot.Tools
                 case CharacterStatus.Combat:
                     InCharacterCommands.Where(x => x.IsCombatCommand(character)).FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(character, room);
                     break;
-                case CharacterStatus.Workbench:
-                    InCharacterCommands.Where(x => x.IsWorkbenchCommand(character)).FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(character, room);
-                    break;
                 case CharacterStatus.Trade:
                     InCharacterCommands.Where(x => x.IsTradeCommand(character)).FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(character, room);
+                    break;
+                case CharacterStatus.Search:
+                    InCharacterCommands.Where(x => x.IsSearchCommand(character)).FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(character, room);
+                    break;
+                case CharacterStatus.Workbench:
+                    InCharacterCommands.Where(x => x.IsWorkbenchCommand(character)).FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(character, room);
                     break;
                 default:
                     throw new Exception($"Impossible to parse an in-character command for a character in the unsupported character state : {characterStatus}");
@@ -226,6 +229,7 @@ namespace SineahBot.Tools
             new CommandEquip(), new CommandUnequip(),
             new CommandSleep(), new CommandAsk(), new CommandRead(),
             new CommandTrade(), new CommandTradeList(), new CommandTradeBuy(), new CommandTradeSell(), new CommandTradeLeave(),
+            new CommandSearch(), new CommandSearchLook(), new CommandSearchPickup(), new CommandSearchStash(), new CommandSearchLeave()
         };
         public static List<Command> OutCharacterCommands = new List<Command>() { };
     }
