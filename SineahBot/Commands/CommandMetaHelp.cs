@@ -196,6 +196,15 @@ namespace SineahBot.Commands
 > - Type `leave` or `out` to stop trading.
 > While in the trading mode, you cannot **move**, **attack**, **cast** spells, **equip** or **unequip** gear, **get** or **drop** items, **lock** or **unlock** access, but you will automatically quit the trade if you are attacked.
 " },
+            { "searching", @"> While in searching mode, you have access to the following commands:
+> - Type `list` or `l` to get a list of items stashed in the container you're searching into.
+> - Type `get [item name]` to get an item stack from the container.
+> - Type `get [amount] [item name]` to get a desired amount of items from the container. `[amount]` can be `all` or `*`, which will make you get all the items of the specified typ from the container.
+> - Type `store [item name]` to stash an item into the container.
+> - Type `store [amount] [item name]` to stash several items at once. `[amount]` can be `all` or `*`, which will make you stash all your items of the specified type.
+> - Type `leave` or `out` to stop searching.
+> While in the searching mode, you cannot **move**, **attack**, **cast** spells, **equip** or **unequip** gear, **get** or **drop** items, **lock** or **unlock** access, but you will automatically quit the search if you are attacked.
+" },
             { "combat", @"> Dealing or receiving any amount of damage will put you into fight mode.
 > While fighting, you cannot move, equip or unequip gear, lock or unlock access.
 > You will remain in combat as long as every character you damaged/that damaged you are still fighting.
