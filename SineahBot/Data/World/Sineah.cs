@@ -893,37 +893,38 @@ namespace SineahBot.Data.World
 
             public static class Characters
             {
-                public static Character wgGuard = Templates.CityFolks.Guard.Clone();
-                public static Character wgMilitian = Templates.CityFolks.Militian.Clone();
-                public static Character ngGuard = Templates.CityFolks.Guard.Clone();
-                public static Character ngMilitian = Templates.CityFolks.Militian.Clone();
-                public static Character egGuard1 = Templates.CityFolks.Guard.Clone();
-                public static Character egGuard2 = Templates.CityFolks.Guard.Clone();
-                public static Character egMilitian = Templates.CityFolks.Militian.Clone();
-                public static Character sgGuard = Templates.CityFolks.Guard.Clone();
-                public static Character sgMilitian = Templates.CityFolks.Militian.Clone();
-                public static Character innerGuard = Templates.CityFolks.Guard.Clone();
-                public static Character plazaGuard1 = Templates.CityFolks.Guard.Clone();
-                public static Character plazaGuard2 = Templates.CityFolks.Guard.Clone();
-                public static Character plazaMilitian1 = Templates.CityFolks.Militian.Clone();
-                public static Character plazaMilitian2 = Templates.CityFolks.Militian.Clone();
-                public static Character shadyRat = Templates.Critters.Rat.Clone();
-                public static Character baker = Templates.CityFolks.Baker.Clone()
+                public static NPC beggar = Templates.CityFolks.Beggar.Clone();
+                public static NPC wgGuard = Templates.CityFolks.Guard.Clone();
+                public static NPC wgMilitian = Templates.CityFolks.Militian.Clone();
+                public static NPC ngGuard = Templates.CityFolks.Guard.Clone();
+                public static NPC ngMilitian = Templates.CityFolks.Militian.Clone();
+                public static NPC egGuard1 = Templates.CityFolks.Guard.Clone();
+                public static NPC egGuard2 = Templates.CityFolks.Guard.Clone();
+                public static NPC egMilitian = Templates.CityFolks.Militian.Clone();
+                public static NPC sgGuard = Templates.CityFolks.Guard.Clone();
+                public static NPC sgMilitian = Templates.CityFolks.Militian.Clone();
+                public static NPC innerGuard = Templates.CityFolks.Guard.Clone();
+                public static NPC plazaGuard1 = Templates.CityFolks.Guard.Clone();
+                public static NPC plazaGuard2 = Templates.CityFolks.Guard.Clone();
+                public static NPC plazaMilitian1 = Templates.CityFolks.Militian.Clone();
+                public static NPC plazaMilitian2 = Templates.CityFolks.Militian.Clone();
+                public static NPC shadyRat = Templates.Critters.Rat.Clone();
+                public static NPC baker = Templates.CityFolks.Baker.Clone()
                     .RegisterShop(Shops.Baker)
                     .GenerateTraderKnowledge();
-                public static Character weaponSeller = Templates.CityFolks.WeaponSeller.Clone()
+                public static NPC weaponSeller = Templates.CityFolks.WeaponSeller.Clone()
                     .RegisterShop(Shops.WeaponSmith)
                     .GenerateTraderKnowledge();
-                public static Character armorSeller = Templates.CityFolks.ArmorSeller.Clone()
+                public static NPC armorSeller = Templates.CityFolks.ArmorSeller.Clone()
                     .RegisterShop(Shops.ArmorSmith)
                     .GenerateTraderKnowledge();
-                public static Character pharmacist = Templates.CityFolks.Pharmacian.Clone()
+                public static NPC pharmacist = Templates.CityFolks.Pharmacian.Clone()
                     .RegisterShop(Shops.Pharmacist)
                     .GenerateTraderKnowledge();
-                public static Character churchAttendant = Templates.CityFolks.ChurchAttendant.Clone()
+                public static NPC churchAttendant = Templates.CityFolks.ChurchAttendant.Clone()
                     .RegisterShop(Shops.ChurchAttendant)
                     .GenerateTraderKnowledge();
-                public static Character magicVendor = Templates.CityFolks.MagicVendor.Clone()
+                public static NPC magicVendor = Templates.CityFolks.MagicVendor.Clone()
                     .RegisterShop(Shops.MagicVendor)
                     .GenerateTraderKnowledge();
             }
@@ -1096,6 +1097,8 @@ namespace SineahBot.Data.World
             Underground.Rooms.Ossuary.AddToRoom(Underground.Characters.Ghoul); // ghoul in ossuary
             Underground.Rooms.Altar.AddToRoom(Underground.Characters.Lich); // lich in altar
 
+            // populate streets
+            Streets.Rooms.plaza.AddToRoom(Streets.Characters.beggar); // guard at west gate
             Streets.Rooms.WGate.AddToRoom(Streets.Characters.wgGuard); // guard at west gate
             Streets.Rooms.WGate.AddToRoom(Streets.Characters.wgMilitian); // militian at west gate
             Streets.Rooms.NGate.AddToRoom(Streets.Characters.ngGuard); // guard at north gate
@@ -1137,6 +1140,9 @@ namespace SineahBot.Data.World
             .Union(Underground.GetRooms())
             .Union(Streets.GetRooms())
             .ToArray();
+
+            // register behaviours
+            BehaviourManager.RegisterNPC(Streets.Characters.beggar, new BehaviourManager.Behaviour());
         }
     }
 }

@@ -81,19 +81,24 @@ namespace SineahBot.Commands
                     throw new Exception($@"Can't move to unknown direction ""{directionName}""");
             }
 
+            if (MoveCharacter(character, room, direction))
+                character.RewardExperience(1);
+        }
+
+        public static bool MoveCharacter(Character character, Room room, MoveDirection direction)
+        {
             if (!room.IsValidDirection(direction))
             {
                 character.Message($@"This room doesn't have a ""{direction}"" access.");
-                return;
+                return false;
             }
 
             if (!RoomManager.MoveFromRoom(character, room, direction))
             {
                 character.Message("This access is locked.");
-                return;
+                return false;
             }
-
-            character.RewardExperience(1);
+            return true;
         }
     }
 

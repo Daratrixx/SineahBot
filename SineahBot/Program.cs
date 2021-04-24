@@ -15,7 +15,7 @@ namespace SineahBot
 
         // Scaffold-DbContext "DataSource=../SineahBot.sqlite" Microsoft.EntityFrameworkCore.Sqlite -ContextDir DataContext -OutputDir DataContext -Force
 
-        public static readonly bool ONLINE = false;
+        public static readonly bool ONLINE = true;
         public static readonly SineahBotContext database = new SineahBotContext();
 
         public static void SaveData()
@@ -31,6 +31,7 @@ namespace SineahBot
         {
             Worlds.LoadWorlds();
             PathBuilder.BuildGraphs();
+            BehaviourManager.StartBehaviourTimer();
             new MudInterval(300, () => {
                 SaveData();
             });

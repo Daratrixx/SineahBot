@@ -99,7 +99,7 @@ namespace SineahBot.Data
 
         public IEnumerable<Room> GetNeighboringRooms()
         {
-            return directions.Values.Select(x => x.toRoom);
+            return directions.Values.Select(x => x.toRoom).Distinct();
         }
 
         public MoveDirection GetDirectionToRoom(Room r)

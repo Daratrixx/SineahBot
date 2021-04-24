@@ -47,18 +47,19 @@ namespace SineahBot.Tools
             if (graph != roomGraphs[to])
                 return MoveDirection.None;
             var toNode = graph.GetNodeForData(to);
-            if(toNode == null)
+            if (toNode == null)
                 return MoveDirection.None;
 
-            var targetRoom = from.GetNeighboringRooms()
-            .Select(x=>new { room = x, node = graph.GetNodeForData(x) })
-            .Where(x=>x.node != null)
-            .Select(x=> new {x.room,x.node, d = graph.GetDistance(x.node, toNode) })
-            .Where(x=>x.d > 0)
-            .OrderBy(x=> x.d)
-            .FirstOrDefault();
+            var targetRooms = from.GetNeighboringRooms()
+            .Select(x => new { room = x, node = graph.GetNodeForData(x) })
+            .Where(x => x.node != null)
+            .Select(x => new { x.room, x.node, d = graph.GetDistance(x.node, toNode) })
+            .Where(x => x.d >= 0)
+            .OrderBy(x => x.d).ToArray();
+            var targetRoom = targetRooms
+             .FirstOrDefault();
 
-            if(targetRoom == null)
+            if (targetRoom == null)
                 return MoveDirection.None;
 
             return from.GetDirectionToRoom(targetRoom.room);
