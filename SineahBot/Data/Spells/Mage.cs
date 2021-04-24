@@ -34,7 +34,7 @@ namespace SineahBot.Data.Spells
                     spellPowerDurationRatio = 1
                 }
             },
-            description = "Inflict a moderate amount of damage to the target."
+            description = "Increase the targets spell potency for a short time."
         };
         public static Spell ArcaneBlast = new Spell("Arcane blast", new string[] { "arcanblast", "arcanb", "ablast", "arcb", "ab" })
         {
@@ -60,7 +60,7 @@ namespace SineahBot.Data.Spells
                     spellPowerDurationRatio = 0.25
                 }
             },
-            description = "Sets the target ablaze."
+            description = "Sets the target ablaze for a short time."
         };
         public static Spell Overcharge = new Spell("Overcharge", new string[] { "overc", "ocharge", "oc" })
         {
@@ -77,7 +77,7 @@ namespace SineahBot.Data.Spells
                     spellPowerDurationRatio = 0.5
                 }
             },
-            description = "Inflict a small amount of damage to the target."
+            description = "Inflict a small amount of damage to the target, and reduce the potency of the targets spells for a short time."
         };
     }
 }

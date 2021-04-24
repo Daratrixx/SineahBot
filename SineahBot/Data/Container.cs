@@ -17,9 +17,24 @@ namespace SineahBot.Data
         public string description { get; set; }
         public string details { get; set; }
         public Dictionary<Item, int> items = new Dictionary<Item, int>();
+        public bool lockable { get; set; } = false;
+        public bool locked { get; private set; }
+        public string keyItemName = null;
+        public void Lock()
+        {
+            if (!locked) locked = true;
+        }
+        public void Unlock()
+        {
+            if (locked) locked = false;
+        }
 
         public virtual string GetFullDescription(IAgent agent = null)
         {
+            if (lockable && !string.IsNullOrWhiteSpace(keyItemName))
+                return details + $"\n*With the right key, you could {(locked ? "unlock" : "lock")} this.*";
+            if (lockable)
+                return details + $"\n*You can {(locked ? "unlock" : "lock")} this.*";
             return details;
         }
 
@@ -78,6 +93,17 @@ namespace SineahBot.Data
         public IEnumerable<KeyValuePair<Item, int>> ListItems()
         {
             return items;
+        }
+
+        public Container Clone()
+        {
+            return new Container(name, alternativeNames) { details = details, description = description, lockable = lockable, keyItemName = keyItemName, items = new Dictionary<Item, int>(items) };
+        }
+
+        public Container SetKeyItemName(string keyItemName)
+        {
+            this.keyItemName = keyItemName;
+            return this;
         }
     }
 }

@@ -48,7 +48,7 @@ namespace SineahBot.Data
             });
         }
 
-        protected List<string> messageMuffer = new List<string>();
+        protected List<string> messageBuffer = new List<string>();
         public void Message(string message, bool direct = false)
         {
             if (direct)
@@ -67,7 +67,7 @@ namespace SineahBot.Data
                 {
                     //if (!Monitor.IsEntered(playerMessageBuffers))
                     //    Monitor.TryEnter(playerMessageBuffers, 5000);
-                    messageMuffer.Add(message);
+                    messageBuffer.Add(message);
                     if (!playerMessageBuffers.Contains(this)) playerMessageBuffers.Add(this);
                     //Monitor.Exit(playerMessageBuffers);
                 }).Wait();
@@ -75,7 +75,7 @@ namespace SineahBot.Data
         }
         public void CommitMessageBuffer()
         {
-            var output = String.Join('\n', messageMuffer);
+            var output = String.Join('\n', messageBuffer);
             if (Program.ONLINE && output != null)
             {
                 var channel = Program.DiscordClient.GetChannel(channelId) as IMessageChannel;
@@ -83,7 +83,7 @@ namespace SineahBot.Data
             }
             else
                 Console.WriteLine(output);
-            messageMuffer.Clear();
+            messageBuffer.Clear();
         }
 
         private static List<Player> playerMessageBuffers = new List<Player>();
@@ -95,7 +95,7 @@ namespace SineahBot.Data
                 //if (!Monitor.IsEntered(playerMessageBuffers))
                 //    Monitor.TryEnter(playerMessageBuffers, 5000);
                 Messaging = true;
-                foreach (var p in playerMessageBuffers)
+                foreach (var p in playerMessageBuffers.ToArray()) // to array for better thread-safety
                     p.CommitMessageBuffer();
                 playerMessageBuffers.Clear();
                 Messaging = false;

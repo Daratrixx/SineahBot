@@ -16,7 +16,7 @@ namespace SineahBot.Tools
         public static void ParseUserMessage(ulong userId, string message, ulong? channelId = null)
         {
             var player = PlayerManager.GetPlayer(userId);
-            if (message.StartsWith("!") && userId == 109406259643437056)
+            if (message.StartsWith("!"))
             {
                 if (userId == 109406259643437056)
                 {
@@ -222,7 +222,7 @@ namespace SineahBot.Tools
         public static List<Command> InCharacterCommands = new List<Command>() {
             new CommandMove(), new CommandLook(), new CommandDirection(),
             new CommandPickup(), new CommandDrop(), new CommandConsume(),
-            new CommandLock(), new CommandUnlock(),
+            new CommandLock(), new CommandLockContainer(), new CommandUnlock(),new CommandUnlockContainer(),
             new CommandSay(), new CommandAct(),
             new CommandCombatAttack(), new CommandCombatFlee(),
             new CommandCastOn(), new CommandCast(),

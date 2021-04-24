@@ -124,7 +124,7 @@ namespace SineahBot.Data
 
         public void DescribeAction(string action, params IAgent[] agent)
         {
-            foreach (var a in agents.Where(x => !agent.Contains(x)))
+            foreach (var a in agents.Where(x => !agent.Contains(x)).ToArray()) // to array for better thread-safety
             {
                 a.Message(action);
             }
@@ -132,7 +132,7 @@ namespace SineahBot.Data
 
         public void DescribeActionNow(string action, params IAgent[] agent)
         {
-            foreach (var a in agents.Where(x => !agent.Contains(x)))
+            foreach (var a in agents.Where(x => !agent.Contains(x)).ToArray()) // to array for better thread-safety
             {
                 a.Message(action, true);
             }

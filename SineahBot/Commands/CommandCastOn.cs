@@ -13,7 +13,7 @@ namespace SineahBot.Commands
 
         public CommandCastOn()
         {
-            commandRegex = new Regex(@"^cast (.+) on (.+)$", RegexOptions.IgnoreCase);
+            commandRegex = new Regex(@"^cast (.+?) on (.+?)$", RegexOptions.IgnoreCase);
         }
 
         public override bool IsWorkbenchCommand(Character character = null)

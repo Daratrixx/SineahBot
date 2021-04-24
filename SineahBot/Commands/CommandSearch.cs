@@ -59,6 +59,12 @@ namespace SineahBot.Commands
                 return;
             }
 
+            if (container.lockable && container.locked)
+            {
+                character.Message($"**{container.GetName()}** is locked, you cannot search it.");
+                return;
+            }
+
             character.characterStatus = CharacterStatus.Search;
             character.currentContainer = container;
             character.Message($"You started searching **{container.GetName()}**.\n> It contains:\n{CommandMetaInventory.GetItemListInInventory(container, character)}");

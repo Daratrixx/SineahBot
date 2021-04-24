@@ -51,7 +51,7 @@ namespace SineahBot.Data
                 knowledgeBase[knowledge.ToLower().Replace(" ", "")] = response;
             return this;
         }
-        public NPC RegisterTraderKnowledge()
+        public NPC GenerateTraderKnowledge()
         {
             var selling = shop.GetBuyableEntries();
             var buying = shop.GetSellableEntries();

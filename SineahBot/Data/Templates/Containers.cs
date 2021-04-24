@@ -14,19 +14,20 @@ namespace SineahBot.Data.Templates
         public static Container Chest = new Container("Chest", new string[] { })
         {
             description = "A mundane chest lays on the floor.",
-            details = "This is a chest like any other. Perfect to stash anyway anything, really."
+            details = "This is a chest like any other. Perfect to stash anyway anything, really.",
+            lockable = true
         };
         public static Container IronChest = new Container("Iron chest", new string[] { "ironchest", "chest" })
         {
             description = "A solid, iron-reinforced chest lays on the floor.",
-            details = "This is a very sturdy chest, reinforced with several iron plating. It will be almost impossible to break this open without damaging whatever is stached inside."
+            details = "This is a very sturdy chest, reinforced with several iron plating. It will be almost impossible to break this open without damaging whatever is stached inside.",
+            lockable = true
         };
         public static Container Desk = new Container("Desk", new string[] { })
         {
             description = "A sturdy desk rests against the wall.",
             details = "This desk is made out of solid wood. It offers a large workspace, as well as several drawers and compartments to store items."
         };
-
 
         public static Container CreateContainerFromCharacter(Character character)
         {

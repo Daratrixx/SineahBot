@@ -9,14 +9,14 @@ namespace SineahBot.Data.World
 {
     public static class Sineah
     {
-        public static NPC SineahCommonKnowledge(this NPC npc)
+        public static NPC AddSineahCommonKnowledge(this NPC npc)
         {
             return npc
                 .RegisterKnowlede(new string[] { "town", "city", "sineah" }, "\"**Sineah is a nice city to live in. You can learn about the history of the town at the Library.**\"")
                 .RegisterKnowlede(new string[] { "guard", "guards", "militia", "militian" }, "\"**The guards are keeping the city safe from danger, both from external menace and internal chaos.**\"")
-                .RegisterKnowlede(new string[] { "inn", "four winds", "four winds inn" }, "\"**The Four Winds inn is renouned even outside of Sineah. It's a popular stop for travellers and adventurers alike. You have to try their speciality!**\"");
+                .RegisterKnowlede(new string[] { "inn", "four winds", "four winds inn" }, "\"**The Four Winds inn is renowned even outside of Sineah. It's a popular stop for travellers and adventurers alike. You have to try their speciality!**\"");
         }
-        public static NPC SineahInnKnowledge(this NPC npc)
+        public static NPC AddSineahInnKnowledge(this NPC npc)
         {
             return npc
                 .RegisterKnowlede(new string[] { "inn speciality", "inn blanquette", "speciality", "blanquette" }, "\"**Ah, that's the famous dish of the place. It will fill you right up and give you the energy to crush a hundred kobolds!**\"")
@@ -63,6 +63,13 @@ namespace SineahBot.Data.World
         }
         public static class Inn
         {
+            public static class Containers {
+                public static Container Room1Chest = Templates.Containers.Chest.Clone();
+                public static Container Room3Chest = Templates.Containers.Chest.Clone();
+                public static Container OfficeDesk = Templates.Containers.Desk.Clone();
+                public static Container OfficeChest = Templates.Containers.IronChest.Clone()
+                .SetKeyItemName("Iron chest key");
+            }
             public static class Shops
             {
                 public static Shop Bartender = new Shop()
@@ -223,9 +230,9 @@ namespace SineahBot.Data.World
             {
                 public static Character Bartender = Templates.CityFolks.Bartender.Clone()
                     .RegisterShop(Shops.Bartender)
-                    .RegisterTraderKnowledge()
-                    .SineahCommonKnowledge()
-                    .SineahInnKnowledge()
+                    .GenerateTraderKnowledge()
+                    .AddSineahCommonKnowledge()
+                    .AddSineahInnKnowledge()
                     .RegisterKnowlede(new string[] { "food", "meal" }, "\"**Have a seat and order from the **waiter**. Nothing beats a full stomach on a hard day.**\"")
                     .RegisterKnowlede(new string[] { "drink", "drinks" }, "\"**We can serve you a refreshing drink to help you gather your thoughts.**\"")
                     .RegisterKnowlede("drunk", "\"**Oh, he's been here everyday for weeks... I wonder what happened to that poor soul. They used to have a good life. They open up, though.**\"")
@@ -233,14 +240,14 @@ namespace SineahBot.Data.World
                     .RegisterKnowlede("waiter", "\"**Ask them for drinks, or the inn's specility.**\"");
                 public static Character Waiter = Templates.CityFolks.Waiter.Clone()
                     .RegisterShop(Shops.Waiter)
-                    .RegisterTraderKnowledge()
-                    .SineahCommonKnowledge()
-                    .SineahInnKnowledge()
+                    .GenerateTraderKnowledge()
+                    .AddSineahCommonKnowledge()
+                    .AddSineahInnKnowledge()
                     .RegisterKnowlede(new string[] { "food", "meal", "drink", "drinks" }, "\"**I can serve you food and drinks if you order.**\"");
                 public static Character Cook = Templates.CityFolks.Cook.Clone()
                     .RegisterShop(Shops.Cook)
-                    .RegisterTraderKnowledge()
-                    .SineahCommonKnowledge()
+                    .GenerateTraderKnowledge()
+                    .AddSineahCommonKnowledge()
                     .RegisterKnowlede(new string[] { "food", "meal", "drink", "drinks" }, "\"**The **waiter** can serve you food and drinks if you order.**\"")
                     .RegisterKnowlede(new string[] { "speciality", "blanquette" }, "*The cook smiles at you.* \"**My blanquette is the best. Family recipe! Order it from the waiter and taste it for yourself.**\"");
                 public static Character Drunk = Templates.CityFolks.Drunk.Clone()
@@ -250,7 +257,7 @@ namespace SineahBot.Data.World
                     .RegisterKnowlede("undead", "*Their eyes widen for a second.*\n\"**They are better left alone. But the church won't do anything about it...**\"" +
                     "\n*They shake their head.*\n\"**Just don't go there. It's not safe. I can't go there...**\"");
                 public static Character Customer = Templates.CityFolks.Customer.Clone()
-                    .SineahCommonKnowledge();
+                    .AddSineahCommonKnowledge();
                 public static Character ShadyConsumer = Templates.CityFolks.ShadyConsumer.Clone()
                     .RegisterShop(Shops.ShadyConsumer);
                 public static Character Rat1 = Templates.Critters.Rat.Clone();
@@ -272,6 +279,12 @@ namespace SineahBot.Data.World
 
             public static class Items
             {
+                public static Item IronChestKey = new Item("Iron chest key", new string[] { "key", "iron key" })
+                {
+                    description = "A heavy iron key is laying around.",
+                    details = "A key giving access to the iron chest in the Four Winds innkeepers office.",
+                    permanant = false
+                };
                 public static Item OfficeKey = new Item("Innkeepers office key", new string[] { "key", "office key" })
                 {
                     description = "An ornate key is lying around.",
@@ -384,7 +397,7 @@ namespace SineahBot.Data.World
                 };
                 public static Room ConvergenceRoom = new Room("Convergence room")
                 {
-                    description = "This massive underground room has multiple tunnels discharging their wastes in a collection of large pools, all connected to the southern exit. Water from the west seems way more poisoned than the water from the north and the east."
+                    description = "This massive underground room has multiple tunnels discharging their wastes in a collection of large pools, all connected to the southern exit. Water from the west seems way more polluted than the water from the north and the east."
                 };
                 public static Room ToxicDrain = new Room("Toxic drain")
                 {
@@ -424,7 +437,7 @@ namespace SineahBot.Data.World
                 };
                 public static Room LowArchway = new Room("Low archway")
                 {
-                    description = "The southern gallery led to a low-ceiling tunnel, with sculpted archs every few steps. It seems to open up to a room further north."
+                    description = "The southern gallery led to a low-ceiling tunnel, with sculpted arches every few steps. It seems to open up to a room further north."
                 };
                 public static Room Heart = new Room("Heart of the catacombs")
                 {
@@ -897,22 +910,22 @@ namespace SineahBot.Data.World
                 public static Character shadyRat = Templates.Critters.Rat.Clone();
                 public static Character baker = Templates.CityFolks.Baker.Clone()
                     .RegisterShop(Shops.Baker)
-                    .RegisterTraderKnowledge();
+                    .GenerateTraderKnowledge();
                 public static Character weaponSeller = Templates.CityFolks.WeaponSeller.Clone()
                     .RegisterShop(Shops.WeaponSmith)
-                    .RegisterTraderKnowledge();
+                    .GenerateTraderKnowledge();
                 public static Character armorSeller = Templates.CityFolks.ArmorSeller.Clone()
                     .RegisterShop(Shops.ArmorSmith)
-                    .RegisterTraderKnowledge();
+                    .GenerateTraderKnowledge();
                 public static Character pharmacist = Templates.CityFolks.Pharmacian.Clone()
                     .RegisterShop(Shops.Pharmacist)
-                    .RegisterTraderKnowledge();
+                    .GenerateTraderKnowledge();
                 public static Character churchAttendant = Templates.CityFolks.ChurchAttendant.Clone()
                     .RegisterShop(Shops.ChurchAttendant)
-                    .RegisterTraderKnowledge();
+                    .GenerateTraderKnowledge();
                 public static Character magicVendor = Templates.CityFolks.MagicVendor.Clone()
                     .RegisterShop(Shops.MagicVendor)
-                    .RegisterTraderKnowledge();
+                    .GenerateTraderKnowledge();
             }
             public static Character[] GetCharacters()
             {
@@ -1032,11 +1045,20 @@ namespace SineahBot.Data.World
             // CONNECT BUILDINGS TO STREETS
             RoomManager.LoadRoomConnections(cityToBuildingConnections);
 
+            // PLACE CONTAINERS IN ROOMS
+            Inn.Rooms.InnkeeprsOffice.AddToRoom(Inn.Containers.OfficeDesk);
+            Inn.Rooms.InnkeeprsOffice.AddToRoom(Inn.Containers.OfficeChest);
+            Inn.Rooms.Bedroom1.AddToRoom(Inn.Containers.Room1Chest);
+            Inn.Rooms.Bedroom3.AddToRoom(Inn.Containers.Room3Chest);
+
             // PLACE ITEMS IN ROOMS
-            Inn.Rooms.InnkeeprsOffice.AddToRoom(Inn.Items.OfficeKey); // office key in office
             Inn.Rooms.InnkeeprsOffice.AddToRoom(Inn.Items.Room1Key); // bedroom key 1 in office
             Inn.Rooms.InnkeeprsOffice.AddToRoom(Inn.Items.Room3Key); // bedroom key 3 in office
-            Inn.Rooms.Bedroom3.AddToRoom(Inn.Items.Ragdoll); // ragdoll in bedroom 3
+
+            // PLACE ITEMS IN CONTAINERS
+            Inn.Containers.OfficeDesk.AddToInventory(Inn.Items.IronChestKey); // iron chest key in office
+            Inn.Containers.OfficeChest.AddToInventory(Inn.Items.OfficeKey); // office key in office
+            Inn.Containers.Room3Chest.AddToInventory(Inn.Items.Ragdoll); // office key in office
 
             // POPULATE ROOMS WITH NPCS
             // populate inn

@@ -23,10 +23,17 @@ namespace SineahBot.Commands
 
             if (String.IsNullOrWhiteSpace(targetName))
             {
-                if (character.characterStatus == CharacterStatus.Trade)
-                    character.Message(TradeHelpMessage);
-                else
-                    character.Message(GetDefaultHelpMessage());
+            switch(character.characterStatus) {
+                    case CharacterStatus.Trade:
+                        character.Message(TradeHelpMessage);
+                        break;
+                    case CharacterStatus.Search:
+                        character.Message(SearchHelpMessage);
+                        break;
+                    default:
+                        character.Message(GetDefaultHelpMessage());
+                        break;
+                }
             }
             else
             {
@@ -44,6 +51,17 @@ namespace SineahBot.Commands
 > - Type `sell [amount] [item name]` to sell several items. `[amount]` can be `all` or `*`, which will make you sell all your items of the specified type.
 > - Type `leave` to stop trading.
 > While in the trading mode, you cannot **move**, **attack**, **cast** spells, **equip** or **unequip** gear, **get** or **drop** items, **lock** or **unlock** access, but you will automatically quit the trade if you are attacked.
+";
+
+        public const string SearchHelpMessage = @"
+**HELP** - SEARCHING
+> - Type `look`, `list` or `l` to get a list of all items present in the container.
+> - Type `get [item name]` or `pick up [item name]` to retrieve an item from the container.
+> - Type `get [amount] [item name]` or `pick up [amount] [item name]` to retrieve several items from the container.
+> - Type `stash [item name]`, `drop [item name]`,`s [item name]` or ` d [item name]` to stash an item from your inventory.
+> - Type `stash [amount] [item name]`, `drop [amount] [item name]`,`s [amount] [item name]` or `d [amount] [item name]` to stash several item from your inventory.
+> - Type `leave` or `out` to stop searching.
+> While in the searching mode, you cannot **move**, **attack**, **cast** spells, **lock** or **unlock** access, but you will automatically quit searching if you are attacked.
 ";
 
         public static string GetHelpMessage(string command = null)
