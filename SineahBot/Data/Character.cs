@@ -151,6 +151,7 @@ namespace SineahBot.Data
             if (sleeping) return false;
             sleeping = true;
             if (currentShop != null) currentShop.RemoveClient(this);
+            if (currentContainer != null) currentContainer = null;
             if (characterStatus != CharacterStatus.Normal) characterStatus = CharacterStatus.Normal;
             return true;
         }

@@ -1,4 +1,5 @@
 ﻿using SineahBot.Commands;
+using SineahBot.Data.Path;
 using SineahBot.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Text;
 
 namespace SineahBot.Data
 {
-    public class Room : DataItem, IObservable
+    public class Room : DataItem, IObservable, INeighbor<Room>
     {
         public Room()
         {
@@ -18,6 +19,11 @@ namespace SineahBot.Data
         {
             id = Guid.NewGuid();
             name = roomName;
+        }
+
+        public override string ToString()
+        {
+            return @$"Room ""{name}"" ({id})";
         }
         public bool isSpawnRoom { get; set; }
         public string description { get; set; }
@@ -89,6 +95,20 @@ namespace SineahBot.Data
         public bool IsValidDirection(MoveDirection direction)
         {
             return directions.ContainsKey(direction);
+        }
+
+        public IEnumerable<Room> GetNeighboringRooms()
+        {
+            return directions.Values.Select(x => x.toRoom);
+        }
+
+        public MoveDirection GetDirectionToRoom(Room r)
+        {
+            foreach (var dir in directions)
+            {
+                if (dir.Value.toRoom == r) return dir.Key;
+            }
+            return MoveDirection.None;
         }
 
         public IEnumerable<IObservable> observables
@@ -177,6 +197,11 @@ namespace SineahBot.Data
         public string GetName(IAgent agent = null)
         {
             return name;
+        }
+
+        public bool IsNeighbor(Room b)
+        {
+            return directions.Values.Select(x => x.toRoom).Contains(b);
         }
     }
 }

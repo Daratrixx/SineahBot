@@ -106,6 +106,7 @@ namespace SineahBot.Commands
         In,
         Out,
         Up,
-        Down
+        Down,
+        None
     }
 }

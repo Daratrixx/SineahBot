@@ -982,6 +982,7 @@ namespace SineahBot.Data.World
 
         // The trader - outer commercial
         // The fence - hidden commercial
+        public static IEnumerable<Room> rooms;
         #endregion
 
         #region CONNECTIONS
@@ -1126,6 +1127,16 @@ namespace SineahBot.Data.World
             University.Rooms.LibraryEntrance.AddToRoom(Templates.Books.PurgeTheUndead);
             University.Rooms.LibraryEntrance.AddToRoom(Templates.Books.CityCritters);
 
+
+
+
+
+            // populate global room list for graph construction
+            rooms = Inn.GetRooms()
+            .Union(University.GetRooms())
+            .Union(Underground.GetRooms())
+            .Union(Streets.GetRooms())
+            .ToArray();
         }
     }
 }
