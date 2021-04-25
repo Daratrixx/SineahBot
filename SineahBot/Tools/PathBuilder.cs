@@ -14,7 +14,7 @@ namespace SineahBot.Tools
     }
     public class RoomGraph : Graph<RoomNode, Room>
     {
-        public RoomGraph(IEnumerable<Room> data) : base(data)
+        public RoomGraph(IEnumerable<Room> data, bool threaded = true) : base(data, threaded)
         {
         }
     }
@@ -25,19 +25,19 @@ namespace SineahBot.Tools
 
         public static void BuildGraphs()
         {
-            SineahGraph = BuildGraph(SineahBot.Data.World.Sineah.rooms);
+            SineahGraph = BuildGraph(SineahBot.Data.World.Sineah.rooms, false);
         }
 
-        private static RoomGraph BuildGraph(IEnumerable<Room> data)
+        private static RoomGraph BuildGraph(IEnumerable<Room> data, bool threaded = true)
         {
             DateTime buildingStart = DateTime.Now;
-            var output = new RoomGraph(data);
+            var output = new RoomGraph(data, threaded);
             foreach (var room in data)
             {
                 roomGraphs[room] = output;
             }
             DateTime buildingEnd = DateTime.Now;
-            Logging.Log($"PathBuilder>Graph generated in {buildingEnd - buildingStart}");
+            Logging.Log($"PathBuilder>Graph generated in {buildingEnd - buildingStart} ({(threaded? "threaded" : "not threaded")})");
             return output;
         }
 

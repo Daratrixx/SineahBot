@@ -7,7 +7,7 @@ namespace SineahBot.Data.Path
 {
     public class Graph<NodeType, NodeData> where NodeType : Node<NodeData> where NodeData : class, INeighbor<NodeData>
     {
-        public Graph(IEnumerable<NodeData> data)
+        public Graph(IEnumerable<NodeData> data, bool threaded = true)
         {
             nodes = data.Select((nodeData, id) => new Node<NodeType, NodeData>() { id = id, nodeData = nodeData, graph = this }).ToArray();
             distances = new int[nodes.Length, nodes.Length];
@@ -18,10 +18,38 @@ namespace SineahBot.Data.Path
                     distances[i, j] = i == j ? 0 : int.MaxValue;
                 }
             }
+            if (threaded)
+                GenerateThreaded();
+            else
+                Generate();
+        }
+        private void Generate()
+        {
             foreach (var n in nodes)
             {
                 BucketFillNode(n);
             }
+        }
+        private void GenerateThreaded()
+        {
+            List<System.Threading.Thread> threads = new List<System.Threading.Thread>();
+            // create threads for each nodes
+            foreach (var n in nodes)
+            {
+                var thread = new System.Threading.Thread(() => { BucketFillNode(n); });
+                threads.Add(thread);
+            }
+            // start threads
+            foreach (var thread in threads)
+            {
+                thread.Start();
+            }
+            // wait for threads to finish
+            foreach (var thread in threads)
+            {
+                thread.Join();
+            }
+
         }
 
         private Node<NodeType, NodeData>[] nodes;
@@ -63,7 +91,7 @@ namespace SineahBot.Data.Path
                 foreach (var node in neighbors)
                 {
                     distances[n.id, node.id] = Math.Min(distances[n.id, node.id], depth);
-                    distances[node.id, n.id] = Math.Min(distances[node.id, n.id], depth);
+                    //distances[node.id, n.id] = Math.Min(distances[node.id, n.id], depth);
                     remainingNodes.Remove(node);
                     doneNodes.Add(node);
                 }
