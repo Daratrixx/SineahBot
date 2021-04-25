@@ -1142,7 +1142,7 @@ namespace SineahBot.Data.World
             .ToArray();
 
             // register behaviours
-            BehaviourManager.RegisterNPC(Streets.Characters.beggar, new BehaviourManager.Behaviour());
+            BehaviourManager.RegisterNPC(Streets.Characters.beggar, new Behaviours.CitiFolks.Beggar());
         }
     }
 }

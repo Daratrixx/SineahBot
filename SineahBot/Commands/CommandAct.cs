@@ -35,12 +35,17 @@ namespace SineahBot.Commands
 
             act = act.Replace("*", "");
 
+            Act(character, room, act, direct);
+            character.RewardExperience(1);
+        }
+
+        public static void Act(Character character, Room room, string act, bool direct = false)
+        {
             if (direct)
                 room.DescribeActionNow($@"***{character.GetName()}** {act}*", character);
             else
                 room.DescribeAction($@"***{character.GetName()}** {act}*", character);
             character.Message($@"***{character.GetName()}** {act}*");
-            character.RewardExperience(1);
         }
     }
 }

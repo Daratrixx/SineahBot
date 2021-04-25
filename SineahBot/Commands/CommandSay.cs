@@ -32,13 +32,20 @@ namespace SineahBot.Commands
                 return;
             }
 
+            Say(character, room, speach, direct);
+
+            character.RewardExperience(1);
+        }
+
+        public static void Say(Character character, Room room, string speach, bool direct = false)
+        {
+
+
             if (direct)
                 room.DescribeActionNow($@"**{character.GetName()}** said: ""{speach}""", character);
             else
                 room.DescribeAction($@"**{character.GetName()}** said: ""{speach}""", character);
             character.Message($@"You said: ""{speach}""");
-
-            character.RewardExperience(1);
         }
     }
 }
