@@ -2,9 +2,11 @@
 using SineahBot.Interfaces;
 using SineahBot.Tools;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
@@ -63,44 +65,49 @@ namespace SineahBot.Data
             }
             else
             {
-                Task.Run(() =>
+                lock (messageBuffer)
                 {
                     //if (!Monitor.IsEntered(playerMessageBuffers))
                     //    Monitor.TryEnter(playerMessageBuffers, 5000);
                     messageBuffer.Add(message);
                     if (!playerMessageBuffers.Contains(this)) playerMessageBuffers.Add(this);
                     //Monitor.Exit(playerMessageBuffers);
-                }).Wait();
+                }
             }
         }
         public void CommitMessageBuffer()
         {
-            var output = String.Join('\n', messageBuffer);
+            string output;
+            lock (messageBuffer)
+            {
+                output = String.Join('\n', messageBuffer);
+                messageBuffer.Clear();
+            }
+
             if (Program.ONLINE && output != null)
             {
                 var channel = Program.DiscordClient.GetChannel(channelId) as IMessageChannel;
                 var result = channel.SendMessageAsync(output).Result;
+                return;
             }
-            else
-                Console.WriteLine(output);
-            messageBuffer.Clear();
+            Console.WriteLine(output);
         }
 
-        private static List<Player> playerMessageBuffers = new List<Player>();
-        public static async Task CommitPlayerMessageBuffers()
+        private static ConcurrentBag<Player> playerMessageBuffers = new ConcurrentBag<Player>();
+        public static void CommitPlayerMessageBuffers()
         {
-            await Task.Run(() =>
+            lock (playerMessageBuffers)
             {
-                if (Messaging) return;
-                //if (!Monitor.IsEntered(playerMessageBuffers))
-                //    Monitor.TryEnter(playerMessageBuffers, 5000);
-                Messaging = true;
-                foreach (var p in playerMessageBuffers.ToArray()) // to array for better thread-safety
+                foreach (var p in playerMessageBuffers) // to array for better thread-safety
                     p.CommitMessageBuffer();
                 playerMessageBuffers.Clear();
-                Messaging = false;
-                //Monitor.Exit(playerMessageBuffers);
-            });
+            }
+            //if (Messaging) return;
+            //if (!Monitor.IsEntered(playerMessageBuffers))
+            //    Monitor.TryEnter(playerMessageBuffers, 5000);
+            //Messaging = true;
+            //Messaging = false;
+            //Monitor.Exit(playerMessageBuffers);
         }
         public static bool Messaging { get; private set; }
         public string GetName(IAgent agent = null)

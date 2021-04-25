@@ -16,31 +16,54 @@ namespace SineahBot.Tools
             new MudInterval(5, () =>
             {
                 RunBehaviours();
-                Player.CommitPlayerMessageBuffers().Wait();
+                Player.CommitPlayerMessageBuffers();
             });
         }
 
         public static void RegisterNPC<BehaviourClass>(NPC npc, BehaviourClass behaviour) where BehaviourClass : Behaviour
         {
-            behaviours.Add(npc, behaviour);
             behaviour.Init(npc);
+            lock (behaviours)
+            {
+                behaviours.Add(npc, behaviour);
+            }
+        }
+
+        public static void SetActiveForNpc(NPC npc, bool active)
+        {
+            Behaviour behaviour;
+            lock (behaviours)
+            {
+                if (behaviours.TryGetValue(npc, out behaviour))
+                {
+                    behaviour.active = active;
+                }
+            }
         }
 
         public static void RemoveNPC(NPC npc)
         {
-            behaviours.Remove(npc);
+            lock (behaviours)
+            {
+                behaviours.Remove(npc);
+            }
         }
 
         public static void RunBehaviours()
         {
-            foreach (var npc in behaviours)
+            lock (behaviours)
             {
-                RunBehaviour(npc.Value);
+                foreach (var npc in behaviours)
+                {
+                    RunBehaviour(npc.Value);
+                }
             }
         }
 
         public static void RunBehaviour(Behaviour behaviour)
         {
+            if (!behaviour.active)
+                return;
             var room = RoomManager.GetRoom(behaviour.npc.currentRoomId);
             behaviour.Run(room);
         }

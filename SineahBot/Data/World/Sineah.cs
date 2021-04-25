@@ -63,7 +63,8 @@ namespace SineahBot.Data.World
         }
         public static class Inn
         {
-            public static class Containers {
+            public static class Containers
+            {
                 public static Container Room1Chest = Templates.Containers.Chest.Clone();
                 public static Container Room3Chest = Templates.Containers.Chest.Clone();
                 public static Container OfficeDesk = Templates.Containers.Desk.Clone();
@@ -1143,6 +1144,12 @@ namespace SineahBot.Data.World
 
             // register behaviours
             BehaviourManager.RegisterNPC(Streets.Characters.beggar, new Behaviours.CitiFolks.Beggar());
+            for (int i = 0; i < 10; ++i)
+            {
+                var tmp = Streets.Characters.beggar.Clone();
+                Streets.Rooms.plaza.AddToRoom(tmp); // guard at west gate
+                BehaviourManager.RegisterNPC(tmp, new Behaviours.CitiFolks.Beggar());
+            }
         }
     }
 }

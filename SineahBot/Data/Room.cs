@@ -161,7 +161,7 @@ namespace SineahBot.Data
         public void AddToRoom(Entity entity, bool feedback = true)
         {
             if (entity is NPC)
-                DescribeActionNow($"{entity.GetName()} has entered the room.", entity as IAgent);
+                DescribeAction($"{entity.GetName()} has entered the room.", entity as IAgent);
             else if (entity is Character)
                 DescribeAction($"{entity.GetName()} has entered the room.", entity as IAgent);
             if (entity is IAgent && feedback)
@@ -171,7 +171,10 @@ namespace SineahBot.Data
             }
             entity.currentRoomId = this.id;
             // trigger stuff on entity entering
-            entities.Add(entity);
+            lock (entities)
+            {
+                entities.Add(entity);
+            }
             if (entity is NPC)
             {
                 var npc = entity as NPC;
@@ -182,16 +185,18 @@ namespace SineahBot.Data
 
         public void RemoveFromRoom(Entity entity, bool feedback = true)
         {
-            entities.Remove(entity);
+            lock (entities)
+            {
+                entities.Remove(entity);
+            }
             entity.currentRoomId = Guid.Empty;
             if (feedback)
             {
                 if (entity is NPC)
-                    DescribeActionNow($"{entity.name} has left the room.", entity as IAgent);
+                    DescribeAction($"{entity.name} has left the room.", entity as IAgent);
                 else if (entity is Character)
                     DescribeAction($"{entity.name} has left the room.", entity as IAgent);
             }
-            // trigger stuff on entity leaving
         }
 
         public string GetName(IAgent agent = null)

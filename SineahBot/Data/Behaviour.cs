@@ -6,10 +6,9 @@ using System.Text;
 
 namespace SineahBot.Data
 {
-
-
     public abstract class Behaviour
     {
+        public bool active = true;
         public Room destination;
         public NPC npc;
 
@@ -45,7 +44,6 @@ namespace SineahBot.Data
             if (dir == MoveDirection.None)
                 return from;
 
-            Logging.Log("NPC is moving.");
             if (CommandMove.MoveCharacter(npc, from, dir))
             {
                 return RoomManager.GetRoom(npc.currentRoomId);

@@ -142,6 +142,7 @@ namespace SineahBot.Data
 
         public override void OnKilled(Entity killer = null)
         {
+            BehaviourManager.SetActiveForNpc(this, false);
             if (shop != null) shop.CloseShop();
             base.OnKilled(killer);
             var respawnTime = elite ? 300 : 60;
@@ -151,6 +152,7 @@ namespace SineahBot.Data
                 mana = baseMana;
                 var room = RoomManager.GetRoom(idSpawnRoom);
                 RoomManager.MoveToRoom(this, room);
+                BehaviourManager.SetActiveForNpc(this, true);
             });
         }
 
