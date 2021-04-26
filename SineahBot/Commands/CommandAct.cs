@@ -46,6 +46,8 @@ namespace SineahBot.Commands
             else
                 room.DescribeAction($@"***{character.GetName()}** {act}*", character);
             character.Message($@"***{character.GetName()}** {act}*");
+
+            room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterActs) { actingCharacter = character, actingContent = act }, character);
         }
     }
 }

@@ -143,7 +143,7 @@ namespace SineahBot.Data
 
         public bool IsDead()
         {
-            return health == 0;
+            return health <= 0;
         }
 
         public bool Sleep()

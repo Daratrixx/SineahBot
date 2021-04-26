@@ -1132,9 +1132,6 @@ namespace SineahBot.Data.World
             University.Rooms.LibraryEntrance.AddToRoom(Templates.Books.CityCritters);
 
 
-
-
-
             // populate global room list for graph construction
             rooms = Inn.GetRooms()
             .Union(University.GetRooms())
@@ -1143,13 +1140,7 @@ namespace SineahBot.Data.World
             .ToArray();
 
             // register behaviours
-            BehaviourManager.RegisterNPC(Streets.Characters.beggar, new Behaviours.CitiFolks.Beggar());
-            for (int i = 0; i < 10; ++i)
-            {
-                var tmp = Streets.Characters.beggar.Clone();
-                Streets.Rooms.plaza.AddToRoom(tmp); // guard at west gate
-                BehaviourManager.RegisterNPC(tmp, new Behaviours.CitiFolks.Beggar());
-            }
+            BehaviourManager.RegisterNPC(Streets.Characters.beggar, new Behaviours.CityFolks.Beggar());
         }
     }
 }

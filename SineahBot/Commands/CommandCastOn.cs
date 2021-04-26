@@ -73,14 +73,14 @@ namespace SineahBot.Commands
             Entity target = null;
             if (targetName == "self" && spell.canSelfCast)
             {
-                target = character as Entity;
+                target = character;
             }
             else
             {
                 target = room.FindInRoom(targetName);
                 if (target == null && spell.canSelfCast)
                 {
-                    target = character as Entity;
+                    target = character;
                 }
                 if (target == null && !spell.canSelfCast)
                 {
@@ -95,14 +95,20 @@ namespace SineahBot.Commands
                 return;
             }
 
+            CastOn(character, room, spell, target);
+
+            character.RewardExperience(1);
+        }
+
+        public static void CastOn(Character character, Room room, Spell spell, Entity target)
+        {
             character.Message($"You cast {spell.GetName()} on {target.name}!");
-            if (direct)
-                room.DescribeActionNow($"{character.GetName()} cast {spell.GetName()} on {target.name}!", character);
-            else
-                room.DescribeAction($"{character.GetName()} cast {spell.GetName()} on {target.name}!", character);
+            room.DescribeAction($"{character.GetName()} cast {spell.GetName()} on {target.name}!", character);
 
             character.CastSpellOn(spell, target);
             character.StartActionCooldown();
+
+            room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterCasts) { castingCharacter = character, castingSpell = spell, castingTarget = target }, character);
 
             if (target is IKillable)
             {
@@ -110,14 +116,12 @@ namespace SineahBot.Commands
                 {
                     (target as IKillable).OnKilled(character);
                     character.Message($"You killed {target.GetName()}!");
-                    if (direct)
-                        room.DescribeActionNow($"{character.GetName()} killed {target.GetName()}!", character, target as IAgent);
-                    else
-                        room.DescribeAction($"{character.GetName()} killed {target.GetName()}!", character, target as IAgent);
+                    room.DescribeAction($"{character.GetName()} killed {target.GetName()}!", character, target as IAgent);
+
+                    if(target is Character)
+                    room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterKills) { killingCharacter = character, killedTarget = target as Character }, character);
                 }
             }
-
-            character.RewardExperience(1);
         }
     }
 }

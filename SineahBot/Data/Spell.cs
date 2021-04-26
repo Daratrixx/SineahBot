@@ -14,6 +14,7 @@ namespace SineahBot.Data
         public int manaCost = 0;
         public bool needsTarget = true;
         public bool canSelfCast = true;
+        public bool aggressiveSpell = true;
         public Spell(string spellName, string[] alternativeNames = null)
         {
             id = Guid.NewGuid();

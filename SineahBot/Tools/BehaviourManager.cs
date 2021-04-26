@@ -60,6 +60,21 @@ namespace SineahBot.Tools
             }
         }
 
+        public static void RunRoomEventForNPCs(IEnumerable<NPC> npcs, Room room, RoomEvent e)
+        {
+            Behaviour behaviour;
+            lock (behaviours)
+            {
+                foreach (var npc in npcs)
+                {
+                    if (behaviours.TryGetValue(npc, out behaviour))
+                    {
+                        behaviour.OnRoomEvent(room, e);
+                    }
+                }
+            }
+        }
+
         public static void RunBehaviour(Behaviour behaviour)
         {
             if (!behaviour.active)

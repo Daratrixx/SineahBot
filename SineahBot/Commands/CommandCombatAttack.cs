@@ -62,15 +62,21 @@ namespace SineahBot.Commands
                 return;
             }
 
+            Attack(character, room, target);
+
+            character.RewardExperience(1);
+        }
+
+        public static void Attack(Character character, Room room, IAttackable target)
+        {
+            room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterAttacks) { attackingCharacter = character, attackTarget = target }, character);
+
             if (target is IDamageable)
             {
                 var damageableTarget = target as IDamageable;
                 var damage = character.GetWeaponDamage() + new Random().Next(5, 10);
                 character.Message($"You attacked {target.GetName()} for {damage} damages.");
-                if (direct)
-                    room.DescribeActionNow($"{character.GetName()} attacked {target.GetName()}.", character, target as IAgent);
-                else
-                    room.DescribeAction($"{character.GetName()} attacked {target.GetName()}.", character, target as IAgent);
+                room.DescribeAction($"{character.GetName()} attacked {target.GetName()}.", character, target as IAgent);
 
                 damageableTarget.DamageHealth(damage, character);
                 character.StartActionCooldown();
@@ -80,37 +86,28 @@ namespace SineahBot.Commands
                     if ((damageableTarget as IDestructible).IsDestroyed())
                     {
                         character.Message($"You destroyed {target.GetName()}!");
-                        if (direct)
-                            room.DescribeActionNow($"{character.GetName()} destroyed {target.GetName()}!", character, target as IAgent);
-                        else
-                            room.DescribeAction($"{character.GetName()} destroyed {target.GetName()}!", character, target as IAgent);
+                        room.DescribeAction($"{character.GetName()} destroyed {target.GetName()}!", character, target as IAgent);
                         (damageableTarget as IDestructible).OnDestroyed();
                     }
                 }
 
                 if (damageableTarget is IKillable)
                 {
-                    if ((damageableTarget as IKillable).IsDead())
+                    var killableTarget = damageableTarget as IKillable;
+                    if (killableTarget.IsDead())
                     {
                         character.Message($"You killed {target.GetName()}!");
-                        if (direct)
-                            room.DescribeActionNow($"{character.GetName()} killed {target.GetName()}!", character, target as IAgent);
-                        else
-                            room.DescribeAction($"{character.GetName()} killed {target.GetName()}!", character, target as IAgent);
-                        (damageableTarget as IKillable).OnKilled(character);
+                        room.DescribeAction($"{character.GetName()} killed {target.GetName()}!", character, target as IAgent);
+                        killableTarget.OnKilled(character);
+                        room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterKills) { killingCharacter = character, killedTarget = killableTarget }, character);
                     }
                 }
             }
             else
             {
                 character.Message($"You attacked {target.GetName()}.");
-                if (direct)
-                    room.DescribeActionNow($"{character.GetName()} attacked {target.GetName()}.", character, target as IAgent);
-                else
-                    room.DescribeAction($"{character.GetName()} attacked {target.GetName()}.", character, target as IAgent);
+                room.DescribeAction($"{character.GetName()} attacked {target.GetName()}.", character, target as IAgent);
             }
-
-            character.RewardExperience(1);
         }
     }
 }

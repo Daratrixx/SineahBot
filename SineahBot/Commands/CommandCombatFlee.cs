@@ -78,25 +78,23 @@ namespace SineahBot.Commands
                     direction = MoveDirection.Down;
                     break;
                 default:
-                    character.Message($@"Can't move to unknown direction ""{directionName}""");
-                    throw new Exception($@"Can't move to unknown direction ""{directionName}""");
+                    character.Message($@"Can't flee to unknown direction ""{directionName}""");
+                    Logging.Log($@"Can't flee to unknown direction ""{directionName}""");
+                    return;
             }
 
-            if (!room.IsValidDirection(direction))
+            if (Flee(character, room, direction))
+                character.RewardExperience(1);
+        }
+
+        public static bool Flee(Character character, Room room, MoveDirection direction)
+        {
+            if (CommandMove.MoveCharacter(character, room, direction))
             {
-                character.Message($@"This room doesn't have a ""{direction}"" access.");
-                return;
+                CombatManager.RemoveFromCombat(character, false);
+                return true;
             }
-
-            if (!RoomManager.MoveFromRoom(character, room, direction))
-            {
-                character.Message("This access is locked.");
-                return;
-            }
-
-            CombatManager.RemoveFromCombat(character, direct);
-
-            character.RewardExperience(1);
+            return false;
         }
     }
 }

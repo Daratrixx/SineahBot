@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SineahBot.Interfaces
 {
-    interface IKillable : IDamageable, INamed
+    public interface IKillable : IDamageable, INamed
     {
         void OnKilled(Entity killer = null);
         bool IsDead();
