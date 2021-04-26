@@ -61,6 +61,142 @@ namespace SineahBot.Data.World
                 };
             }
         }
+        public static class Barracks
+        {
+            public static class Rooms
+            {
+                public static Room Entrance = new Room("Barracks entrance")
+                {
+                    description = "This narrow, easily defendable corridor connects the barracks to the streets."
+                };
+                public static Room Hall = new Room("Barracks hall")
+                {
+                    description = "Heart of barracks, branching to the other sections. North is the guards room, east is the captain room, west is the equipment room, and south leads back out."
+                };
+                public static Room GuardsRoom = new Room("Guards room")
+                {
+                    description = "Main gathering place for guards."
+                };
+                public static Room LivingQuarters = new Room("Guards living quarters")
+                {
+                    description = "Military quarters housing the city's garrison. Rows of beds are lined up, and a few cupboards are used to store the guards personal effects."
+                };
+                public static Room CaptainRoom = new Room("Captain room")
+                {
+                    description = "The room serves both as a meeting room and as the captains office. A small altar thrones in a corner."
+                };
+                public static Room EquipmentRoom = new Room("Equipment storage room")
+                {
+                    description = "Room cramped with standard guard equipment and other supplies."
+                };
+            }
+            public static Room[] GetRooms()
+            {
+                return new Room[]{
+                    Rooms.Entrance,
+                    Rooms.Hall,
+                    Rooms.GuardsRoom,
+                    Rooms.LivingQuarters,
+                    Rooms.CaptainRoom,
+                    Rooms.EquipmentRoom,
+                };
+            }
+
+            public static class Connections
+            {
+                public static RoomConnection EntranceHall = new RoomConnection(Rooms.Entrance.id, Rooms.Hall.id) // to guards room
+                {
+                    directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.North, Commands.MoveDirection.In },
+                    directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.South, Commands.MoveDirection.Out }
+                };
+                public static RoomConnection HallGuardsRoom = new RoomConnection(Rooms.Hall.id, Rooms.GuardsRoom.id) // to guards room
+                {
+                    directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.North },
+                    directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.South, Commands.MoveDirection.Out }
+                };
+                public static RoomConnection GuardRoomsLivingQuarters = new RoomConnection(Rooms.GuardsRoom.id, Rooms.LivingQuarters.id) // to guards living quarters
+                {
+                    directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.North, Commands.MoveDirection.In },
+                    directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.South, Commands.MoveDirection.Out }
+                };
+                public static RoomConnection HallCaptainRoom = new RoomConnection(Rooms.Hall.id, Rooms.CaptainRoom.id) // to captain room
+                {
+                    directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.East },
+                    directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.West, Commands.MoveDirection.Out }
+                };
+                public static RoomConnection HallEquipmentRoom = new RoomConnection(Rooms.Hall.id, Rooms.EquipmentRoom.id) // to equipment room
+                {
+                    directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.West },
+                    directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.East, Commands.MoveDirection.Out }
+                };
+            }
+            public static RoomConnection[] GetConnections()
+            {
+                return new RoomConnection[] {
+                    Connections.EntranceHall,
+                    Connections.HallGuardsRoom,
+                    Connections.GuardRoomsLivingQuarters,
+                    Connections.HallCaptainRoom,
+                    Connections.HallEquipmentRoom,
+                };
+            }
+
+            public static class Characters
+            {
+            }
+            public static Character[] GetCharacters()
+            {
+                return new Character[] {
+                };
+            }
+
+            public static class Items
+            {
+            }
+            public static Item[] GetItems()
+            {
+                return new Item[] {
+                };
+            }
+        }
+        public static class Church
+        {
+            public static class Rooms
+            {
+            }
+            public static Room[] GetRooms()
+            {
+                return new Room[]{
+                };
+            }
+
+            public static class Connections
+            {
+            }
+            public static RoomConnection[] GetConnections()
+            {
+                return new RoomConnection[] {
+                };
+            }
+
+            public static class Characters
+            {
+            }
+            public static Character[] GetCharacters()
+            {
+                return new Character[] {
+                };
+            }
+
+            public static class Items
+            {
+            }
+            public static Item[] GetItems()
+            {
+                return new Item[] {
+                };
+            }
+        }
         public static class Inn
         {
             public static class Containers
@@ -759,7 +895,7 @@ namespace SineahBot.Data.World
                 public static Room outerMilitary = new Room("Sineah outer military path")
                 {
                     isSpawnRoom = false,
-                    description = "This fortified path connects the eastern gate to the city. North are the primary Barracks [CLOSED]. South are the secondary Barracks [CLOSED]. To the east is the city gate. The path continues further west, ending the plaza."
+                    description = "This fortified path connects the eastern gate to the city. North are the city Barracks. To the east is the city gate. The path continues further west, leading to the plaza."
                 };
                 public static Room outerCommercial = new Room("Sineah commercial street")
                 {
@@ -794,7 +930,7 @@ namespace SineahBot.Data.World
             }
             public static Room[] GetRooms()
             {
-                return new Room[]{
+                return new Room[] {
                     Rooms.WGate,
                     Rooms.NGate,
                     Rooms.EGate,
@@ -989,6 +1125,11 @@ namespace SineahBot.Data.World
 
         #region CONNECTIONS
         public static RoomConnection[] cityToBuildingConnections = new RoomConnection[] {
+            new RoomConnection(Streets.Rooms.outerMilitary.id, Barracks.Rooms.Entrance.id) // outer military to barracks
+            {
+                directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.North },
+                directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.South, Commands.MoveDirection.Out }
+            },
             new RoomConnection(Streets.Rooms.innerTraveller.id, Inn.Rooms.CommonRoom.id) // inner traveller to inn
             {
                 directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.East, Commands.MoveDirection.In },
@@ -1028,6 +1169,10 @@ namespace SineahBot.Data.World
         public static void LoadWorld()
         {
             // LOAD BUILDINGS
+            // load barracks
+            RoomManager.LoadRooms(Barracks.GetRooms());
+            RoomManager.LoadRoomConnections(Barracks.GetConnections());
+            CharacterManager.LoadCharacters(Barracks.GetCharacters());
             // load inn
             RoomManager.LoadRooms(Inn.GetRooms());
             RoomManager.LoadRoomConnections(Inn.GetConnections());

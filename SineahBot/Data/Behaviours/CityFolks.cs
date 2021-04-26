@@ -22,6 +22,7 @@ namespace SineahBot.Data.Behaviours
                 default:
                     break;
             }
+            return false;
         }
         public class Beggar : CityFolks
         {
