@@ -861,7 +861,7 @@ namespace SineahBot.Data.World
                 .RegisterEntry(Templates.Equipments.Armor.KnightArmor, 1000, 500);
                 public static Shop Trader = new Shop()
                 .RegisterEntry(Templates.Equipments.Weapons.Dagger, 50, 10)
-                .RegisterEntry(Templates.Equipments.Armor.TravelingCloak, 100, null)
+                .RegisterEntry(Templates.Equipments.Armor.TravellingCloak, 100, null)
                 .RegisterEntry(Templates.Consumables.DriedMeat, 3, null)
                 .RegisterEntry(Templates.Consumables.Water, 1, null);
                 public static Shop Jeweler = new Shop()

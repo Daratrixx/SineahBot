@@ -191,11 +191,10 @@ namespace SineahBot.Data.Templates
                 OnEquipped = (x) => { x.AddAlteration(AlterationType.Shrouded, int.MaxValue); },
                 OnUnequipped = (x) => { x.RemoveAlteration(AlterationType.Shrouded); }
             };
-            public static Equipment TravelingCloak = new Equipment("Traveling cloak", EquipmentSlot.Armor, new string[] { "travelingcloak", "tcloak", "cloak" })
+            public static Equipment TravellingCloak = new Equipment("Travelling cloak", EquipmentSlot.Armor, new string[] { "travellingcloak", "tcloak", "cloak" })
             {
-                description = "A traveling cloak is stashed here.",
-                details = "Gives a small armor, health regen and mana regen.",
-                bonusArmor = 5,
+                description = "A travelling cloak is stashed here.",
+                details = "Gives a small health regen and mana regen boost.",
                 bonusHealthRegen = 2,
                 bonusManaRegen = 1,
                 OnEquipped = (x) => { },
