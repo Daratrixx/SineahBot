@@ -59,6 +59,15 @@ namespace SineahBot.Data.Templates
             };
         }
 
+        public static class Shields
+        {
+            public static Equipment Shield = new Equipment("Shield", EquipmentSlot.Shield, new string[] { })
+            {
+                description = "A shield lies around.",
+                details = "A sharp, quick dagger. Gives a small deflection boost.",
+                bonusDeflection = 10
+            };
+        }
         public static class Trinkets
         {
             public static Equipment HolySymbol = new Equipment("Holy symbol", EquipmentSlot.Trinket, new string[] { "holysymbol", "hsymbol", "symbol", "trinket" })

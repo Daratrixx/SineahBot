@@ -77,6 +77,9 @@ namespace SineahBot.Data
         public int bonusMana = 0;
         public int bonusHealthRegen = 0;
         public int bonusManaRegen = 0;
+        public int bonusDeflection = 0;
+        public int bonusEvasion = 0;
+
         public List<Spell> bonusSpells = new List<Spell>();
 
         public int RewardExperience(int amount)
@@ -147,19 +150,32 @@ namespace SineahBot.Data
             throw new NotImplementedException();
         }
 
+        public bool DeflectionCheck()
+        {
+            return new Random().Next(1, 100) <= bonusDeflection;
+        }
+
+        public bool EvasionCheck()
+        {
+            return new Random().Next(1, 100) <= bonusEvasion + 5;
+        }
+
         public virtual void DamageHealth(int damageAmount, DamageType type, INamed source = null)
         {
-            switch(type) {
+            switch (type)
+            {
                 case DamageType.Physical:
                     if (HasAlteration(AlterationType.Hardened))
                         damageAmount /= 2;
                     damageAmount = (int)(damageAmount * (1 - GetArmorDamageReduction()));
+                    if (DeflectionCheck())
+                        damageAmount = damageAmount / 2;
                     break;
                 case DamageType.Magical:
                     if (HasAlteration(AlterationType.Warded))
                         damageAmount /= 2;
                     break;
-                default:break;
+                default: break;
             }
             health = Math.Max(0, health - damageAmount);
             if (source != null && source != this && source != agent)
@@ -386,12 +402,12 @@ namespace SineahBot.Data
 
         public virtual int GetWeaponDamage()
         {
-            var bonusDamage = this.bonusDamage + (ClassProgressionManager.IsPhysicalClass(characterClass) ? level * 2 : level);
+            var weaponDamage = bonusDamage + (ClassProgressionManager.IsPhysicalClass(characterClass) ? level * 2 : level);
             if (HasAlteration(AlterationType.Empowered))
-                bonusDamage = (int)(bonusDamage * 1.5);
+                weaponDamage = (int)(weaponDamage * 1.5);
             if (HasAlteration(AlterationType.Weakened))
-                bonusDamage = bonusDamage / 2;
-            return bonusDamage;
+                weaponDamage = weaponDamage / 2;
+            return weaponDamage;
         }
 
         public IEnumerable<Spell> GetSpells()

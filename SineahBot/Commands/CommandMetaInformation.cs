@@ -22,7 +22,6 @@ namespace SineahBot.Commands
 
         public string GetCharacterInformation(Character character)
         {
-            var armor = character.bonusArmor;
             var damageRedution = character.GetArmorDamageReduction();
             return $@"
 **INFORMATION** - ***{character.name}***
@@ -31,7 +30,9 @@ namespace SineahBot.Commands
 > *Mana* : **{character.mana}/{character.MaxMana}** (**+{character.bonusMana}**)
 > *Spell power* : **{character.GetSpellPower()}** ({(ClassProgressionManager.IsMagicalClass(character.characterClass) ? "2" : "1")} x level **+{character.bonusSpellPower}**)
 > *Physical power* : **{character.GetWeaponDamage()}** ({(ClassProgressionManager.IsPhysicalClass(character.characterClass) ? "2" : "1")} x level **+{character.bonusDamage}**)
-> *Armor*: **{armor}** ({(int)(damageRedution*100)}%)
+> *Armor*: **{character.bonusArmor}** ({(int)(damageRedution * 100)}% physical damage reduction)
+> *Deflection*: **{character.bonusDeflection}**% chance to halve incoming physical damage.
+> *Evasion*: **{5 + character.bonusEvasion}**% chance to halve incoming area damage.
 > *Gold*: **{character.gold}**
 {(character.experience >= ClassProgressionManager.ExperienceForNextLevel(character.level) ? "*You have enough experience to level up! Type **!level***" : "")}
 ";

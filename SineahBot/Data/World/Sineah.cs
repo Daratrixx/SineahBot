@@ -841,14 +841,14 @@ namespace SineahBot.Data.World
                 .RegisterEntry(Templates.Consumables.Antidote, 10, null)
                 .RegisterEntry(Templates.Consumables.Medicine, 15, null);
                 public static Shop ChurchAttendant = new Shop()
-                .RegisterEntry(Templates.Equipments.Armor.PriestRobes, 150, null)
-                .RegisterEntry(Templates.Equipments.Armor.TemplarRobes, 400, null)
-                .RegisterEntry(Templates.Equipments.Armor.FanaticRobes, 400, null);
+                .RegisterEntry(Templates.Equipments.Armor.PriestRobes, 150, 30)
+                .RegisterEntry(Templates.Equipments.Armor.TemplarRobes, 400, 80)
+                .RegisterEntry(Templates.Equipments.Armor.FanaticRobes, 400, 80);
                 public static Shop MagicVendor = new Shop()
-                .RegisterEntry(Templates.Equipments.Weapons.Staff, 100, null)
-                .RegisterEntry(Templates.Equipments.Armor.EnchanterCloak, 150, null)
-                .RegisterEntry(Templates.Equipments.Armor.MageCloak, 500, null)
-                .RegisterEntry(Templates.Equipments.Armor.WizardCloak, 1000, null);
+                .RegisterEntry(Templates.Equipments.Weapons.Staff, 100, 20)
+                .RegisterEntry(Templates.Equipments.Armor.EnchanterCloak, 150, 30)
+                .RegisterEntry(Templates.Equipments.Armor.MageCloak, 500, 100)
+                .RegisterEntry(Templates.Equipments.Armor.WizardCloak, 1000, 200);
                 public static Shop WeaponSmith = new Shop()
                 .RegisterEntry(Templates.Equipments.Weapons.Dagger, 50, 10)
                 .RegisterEntry(Templates.Equipments.Weapons.Sword, 200, 40)
@@ -856,20 +856,21 @@ namespace SineahBot.Data.World
                 .RegisterEntry(Templates.Equipments.Weapons.Mace, 150, 30)
                 .RegisterEntry(Templates.Equipments.Weapons.Spear, 200, 40);
                 public static Shop ArmorSmith = new Shop()
-                .RegisterEntry(Templates.Equipments.Armor.MilitianArmor, 150, 75)
-                .RegisterEntry(Templates.Equipments.Armor.GuardArmor, 500, 250)
-                .RegisterEntry(Templates.Equipments.Armor.KnightArmor, 1000, 500);
+                .RegisterEntry(Templates.Equipments.Shields.Shield, 100, 20)
+                .RegisterEntry(Templates.Equipments.Armor.MilitianArmor, 150, 30)
+                .RegisterEntry(Templates.Equipments.Armor.GuardArmor, 500, 100)
+                .RegisterEntry(Templates.Equipments.Armor.KnightArmor, 1000, 200);
                 public static Shop Trader = new Shop()
                 .RegisterEntry(Templates.Equipments.Weapons.Dagger, 50, 10)
-                .RegisterEntry(Templates.Equipments.Armor.TravellingCloak, 100, null)
+                .RegisterEntry(Templates.Equipments.Armor.TravellingCloak, 100, 20)
                 .RegisterEntry(Templates.Consumables.DriedMeat, 3, null)
                 .RegisterEntry(Templates.Consumables.Water, 1, null);
                 public static Shop Jeweler = new Shop()
-                .RegisterEntry(Templates.Equipments.Rings.BladeRing, 100, null)
-                .RegisterEntry(Templates.Equipments.Rings.HealthRing, 200, null)
-                .RegisterEntry(Templates.Equipments.Rings.ManaRing, 200, null)
-                .RegisterEntry(Templates.Equipments.Rings.IronRing, 200, null)
-                .RegisterEntry(Templates.Equipments.Rings.AmethystRing, 200, null);
+                .RegisterEntry(Templates.Equipments.Rings.BladeRing, 100, 50)
+                .RegisterEntry(Templates.Equipments.Rings.HealthRing, 200, 100)
+                .RegisterEntry(Templates.Equipments.Rings.ManaRing, 200, 100)
+                .RegisterEntry(Templates.Equipments.Rings.IronRing, 200, 100)
+                .RegisterEntry(Templates.Equipments.Rings.AmethystRing, 200, 100);
             }
             public static class Rooms
             {

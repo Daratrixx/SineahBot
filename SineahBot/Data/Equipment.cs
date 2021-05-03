@@ -13,9 +13,10 @@ namespace SineahBot.Data
         public int bonusArmor;
         public int bonusHealth;
         public int bonusMana;
-
         public int bonusHealthRegen;
         public int bonusManaRegen;
+        public int bonusDeflection;
+        public int bonusEvasion;
 
         public List<Spell> bonusSpells = new List<Spell>();
 
@@ -38,6 +39,8 @@ namespace SineahBot.Data
             c.bonusMana += bonusMana;
             c.bonusHealthRegen += bonusHealthRegen;
             c.bonusManaRegen += bonusManaRegen;
+            c.bonusDeflection += bonusDeflection;
+            c.bonusEvasion += bonusEvasion;
             c.bonusSpells.AddRange(bonusSpells);
         }
         public void Unequip(Character c)
@@ -50,6 +53,8 @@ namespace SineahBot.Data
             c.bonusMana -= bonusMana;
             c.bonusHealthRegen -= bonusHealthRegen;
             c.bonusManaRegen -= bonusManaRegen;
+            c.bonusDeflection -= bonusDeflection;
+            c.bonusEvasion -= bonusEvasion;
             if (c.health > c.MaxHealth) c.health = c.MaxHealth;
             if (c.mana > c.MaxMana) c.mana = c.MaxMana;
             c.bonusSpells.RemoveAll(x => bonusSpells.Contains(x));
@@ -67,5 +72,4 @@ namespace SineahBot.Data
         Trinket,
         Ring
     }
-
 }
