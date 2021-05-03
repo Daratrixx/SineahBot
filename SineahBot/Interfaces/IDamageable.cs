@@ -7,6 +7,6 @@ namespace SineahBot.Interfaces
 {
     public interface IDamageable : IAttackable
     {
-        void DamageHealth(int damageAmount, INamed source = null);
+        void DamageHealth(int damageAmount, DamageType type, INamed source = null);
     }
 }

@@ -30,7 +30,7 @@ namespace SineahBot.Data.Spells
             manaCost = 5,
             effects = new Spell.Effect[] {
                 new Spell.Effect.RemoveAlter() {
-                    alteration = AlterationType.Sick
+                    alteration = AlterationType.Sickness
                 }
             },
         };
@@ -58,7 +58,7 @@ namespace SineahBot.Data.Spells
                 {
                     var damage = caster.GetSpellPower();
                     if (target is Character && (target as Character).HasCharacterTag(CharacterTag.Undead)) damage = damage * 2;
-                        (target as IDamageable).DamageHealth(damage, caster);
+                        (target as IDamageable).DamageHealth(damage, DamageType.Magical, caster);
                 },
                 (caster) =>
                 {

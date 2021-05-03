@@ -86,7 +86,7 @@ namespace SineahBot.Data.Templates
             description = "There's some medicine.",
             details = "Consuming this will heal you from common sickness.",
             combatConsumable = false,
-            OnConsumed = (character) => { character.RemoveAlteration(AlterationType.Sick); }
+            OnConsumed = (character) => { character.RemoveAlteration(AlterationType.Sickness); }
         };
 
         // mixte

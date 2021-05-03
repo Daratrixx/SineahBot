@@ -84,11 +84,11 @@ namespace SineahBot.Data
                 {
                     if (caster != null)
                     {
-                        return $"- Damages target\n> Damaging potential : **{baseDamage + caster.GetSpellPower()} ({baseDamage} + [spell power])**";
+                        return $"- Damages target\n> Damaging potential : **{baseDamage + caster.GetSpellPower()} ({baseDamage} + [spell power])**\n> Damage type: {DamageType.Magical}";
                     }
                     else
                     {
-                        return $"- Damages target\n> Damaging potential : **{baseDamage} + [spell power]**";
+                        return $"- Damages target\n> Damaging potential : **{baseDamage} + [spell power]**\n> Damage type: {DamageType.Magical}";
                     }
                 }
 
@@ -97,23 +97,22 @@ namespace SineahBot.Data
                     if (target is IDamageable)
                     {
                         var damageAmount = baseDamage + caster.GetSpellPower() + new Random().Next(5, 10);
-                        (target as IDamageable).DamageHealth(damageAmount, caster as Entity);
+                        (target as IDamageable).DamageHealth(damageAmount, DamageType.Magical, caster as Entity);
                     }
                 }
             }
             public class AttackDamage : Effect
             {
                 public int baseDamage = 0;
-
                 public override string GetEffectDescription(ICaster caster = null)
                 {
                     if (caster != null)
                     {
-                        return $"- Damages target\n> Damaging potential : **{baseDamage + caster.GetPhysicalPower()} ({baseDamage} + [physical power])**";
+                        return $"- Damages target\n> Damaging potential : **{baseDamage + caster.GetPhysicalPower()} ({baseDamage} + [physical power])**\n> Damage type: {DamageType.Physical}";
                     }
                     else
                     {
-                        return $"- Damages target\n> Damaging potential : **{baseDamage} + [physical power]**";
+                        return $"- Damages target\n> Damaging potential : **{baseDamage} + [physical power]**\n> Damage type: {DamageType.Physical}";
                     }
                 }
 
@@ -122,7 +121,7 @@ namespace SineahBot.Data
                     if (target is IDamageable)
                     {
                         var damageAmount = baseDamage + caster.GetPhysicalPower() + new Random().Next(5, 10);
-                        (target as IDamageable).DamageHealth(damageAmount, caster as Entity);
+                        (target as IDamageable).DamageHealth(damageAmount, DamageType.Physical, caster as Entity);
                     }
                 }
             }

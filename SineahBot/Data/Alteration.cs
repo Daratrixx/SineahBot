@@ -1,15 +1,14 @@
-﻿using System;
+﻿using SineahBot.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace SineahBot.Data
 {
-    public class Alteration
+    public class Alteration : INamed
     {
         public AlterationType alteration;
         public int remainingTime;
-
-
 
         public static string GetAlterationDescription(AlterationType alteration)
         {
@@ -18,7 +17,7 @@ namespace SineahBot.Data
                 case AlterationType.Burning: return $"You will take a lot of damage over time and you have a chance to get **{AlterationType.Burnt}**";
                 case AlterationType.Burnt: return $"Healing from every source is halved.";
                 case AlterationType.Poisoned: return $"Mana regeneration is halved.";
-                case AlterationType.Sick: return $"You will take a little bit of damage over time.";
+                case AlterationType.Sickness: return $"You will take a little bit of damage over time.";
                 case AlterationType.Weakened: return $"Your physical attacks will be half as powerful.";
                 case AlterationType.Blind: return $"You won't be able to see anything.";
                 case AlterationType.Deaf: return $"You won't be able to hear anything.";
@@ -34,6 +33,11 @@ namespace SineahBot.Data
                 default: return "Unknown alteration, no description.";
             }
         }
+
+        public string GetName(IAgent agent = null)
+        {
+            return alteration.ToString();
+        }
     }
 
     public enum AlterationType
@@ -41,7 +45,7 @@ namespace SineahBot.Data
         Burning, // get damage over time
         Burnt, // get reduced healing
         Poisoned, // get reduced mana regen
-        Sick, // get damage over time
+        Sickness, // get damage over time
         Weakened, // deal reduced damamge
         Blind, // can't see other entities, room descriptions, or directions
         Deaf, // can't heat character talking, or access being locked/unlocked

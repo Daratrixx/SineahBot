@@ -46,7 +46,7 @@ namespace SineahBot.Data.Spells
             canSelfCast = true,
             effects = new Spell.Effect[] {
                 new Spell.Effect.AddAlter() {
-                    alteration = AlterationType.Sick,
+                    alteration = AlterationType.Sickness,
                     baseDuration = 60,
                     spellPowerDurationRatio = 0
                 },

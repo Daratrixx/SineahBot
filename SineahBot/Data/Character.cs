@@ -147,16 +147,25 @@ namespace SineahBot.Data
             throw new NotImplementedException();
         }
 
-        public virtual void DamageHealth(int damageAmount, INamed source = null)
+        public virtual void DamageHealth(int damageAmount, DamageType type, INamed source = null)
         {
-            if (HasAlteration(AlterationType.Warded) || HasAlteration(AlterationType.Hardened))
-                damageAmount /= 2;
-            damageAmount = (int)(damageAmount * (1 - GetArmorDamageReduction()));
+            switch(type) {
+                case DamageType.Physical:
+                    if (HasAlteration(AlterationType.Hardened))
+                        damageAmount /= 2;
+                    damageAmount = (int)(damageAmount * (1 - GetArmorDamageReduction()));
+                    break;
+                case DamageType.Magical:
+                    if (HasAlteration(AlterationType.Warded))
+                        damageAmount /= 2;
+                    break;
+                default:break;
+            }
             health = Math.Max(0, health - damageAmount);
-            if (source != null && source is IAgent && source != this && source != agent)
+            if (source != null && source != this && source != agent)
             {
                 Message($"You took {damageAmount} damage from {source.GetName()}.");
-                (source as IAgent).Message($"You dealt {damageAmount} damage to {GetName()}.");
+                (source as IAgent)?.Message($"You dealt {damageAmount} damage to {GetName()}.");
             }
             else
             {
@@ -245,16 +254,16 @@ namespace SineahBot.Data
             }
             if (HasCharacterTag(CharacterTag.Undead))
             {
-                DamageHealth(healthAmount, source);
+                DamageHealth(healthAmount, DamageType.Pure, source);
                 return;
             }
             if (HasAlteration(AlterationType.Burnt))
                 healthAmount = healthAmount / 2;
             health = Math.Min(MaxHealth, health + healthAmount);
-            if (source != null && source is IAgent && source != this && source != agent)
+            if (source != null && source != this && source != agent)
             {
-                (source as IAgent).Message($"You healed {GetName()} for {healthAmount} health.");
                 Message($"You recovered {healthAmount} health from {source.GetName(this)}.");
+                (source as IAgent)?.Message($"You healed {GetName()} for {healthAmount} health.");
             }
             else
             {
@@ -452,29 +461,29 @@ namespace SineahBot.Data
             if (alterations.Count == 0) return;
             foreach (var a in alterations.Values.ToArray())
             {
-                OnAlterationTick(a.alteration);
+                OnAlterationTick(a);
                 a.remainingTime -= tickDuration;
             }
             var expired = alterations.Values.Where(x => x.remainingTime <= 0).ToList();
             foreach (var a in expired)
                 RemoveAlteration(a.alteration);
         }
-        public void OnAlterationTick(AlterationType alteration)
+        public void OnAlterationTick(Alteration alteration)
         {
-            switch (alteration)
+            switch (alteration.alteration)
             {
                 case AlterationType.Burning:
                     if (HasCharacterTag(CharacterTag.Mecanical)) break;
                     if (HasCharacterTag(CharacterTag.Undead) || HasCharacterTag(CharacterTag.Plant))
-                        DamageHealth(8);
+                        DamageHealth(8, DamageType.Pure, alteration);
                     else
-                        DamageHealth(2);
+                        DamageHealth(2, DamageType.Pure, alteration);
                     if (new Random().NextDouble() < 0.20)
                         AddAlteration(AlterationType.Burnt, 300);
                     break;
-                case AlterationType.Sick:
+                case AlterationType.Sickness:
                     if (HasCharacterTag(CharacterTag.Mecanical)) break;
-                    DamageHealth(1);
+                    DamageHealth(1, DamageType.Pure, alteration);
                     break;
                 case AlterationType.Taunted:
                     break;
@@ -563,6 +572,13 @@ namespace SineahBot.Data
         public Guid idCharacter { get; set; }
         public string ItemName { get; set; }
         public int StackSize { get; set; }
+    }
+
+    public enum DamageType
+    {
+        Physical,
+        Magical,
+        Pure
     }
 
     public enum CharacterStatus

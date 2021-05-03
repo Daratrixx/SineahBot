@@ -125,9 +125,9 @@ namespace SineahBot.Data
             return $"> You seem evenly matched.";
         }
 
-        public override void DamageHealth(int damageAmount, INamed source = null)
+        public override void DamageHealth(int damageAmount, DamageType type, INamed source = null)
         {
-            base.DamageHealth(damageAmount, source);
+            base.DamageHealth(damageAmount, type, source);
             if (!IsDead() && source != null)
             {
                 new MudTimer(1, () =>
