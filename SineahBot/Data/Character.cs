@@ -75,6 +75,8 @@ namespace SineahBot.Data
         public int bonusArmor = 0;
         public int bonusHealth = 0;
         public int bonusMana = 0;
+        public int bonusHealthRegen = 0;
+        public int bonusManaRegen = 0;
         public List<Spell> bonusSpells = new List<Spell>();
 
         public int RewardExperience(int amount)
@@ -217,7 +219,7 @@ namespace SineahBot.Data
 
         public int GetHealthRegeneration()
         {
-            var output = 2;
+            var output = 2 + bonusHealthRegen;
             if (sleeping) output *= 4;
             if (ClassProgressionManager.IsPhysicalClass(characterClass)) output += level / 2;
             if (HasAlteration(AlterationType.Burnt) && !HasCharacterTag(CharacterTag.Mecanical)) output /= 2;
@@ -227,7 +229,7 @@ namespace SineahBot.Data
 
         public int GetManaRegeneration()
         {
-            var output = 1;
+            var output = 1 + bonusManaRegen;
             if (sleeping) output *= 4;
             if (ClassProgressionManager.IsMagicalClass(characterClass)) output += level / 4;
             if (HasAlteration(AlterationType.Poisoned) && !HasCharacterTag(CharacterTag.Undead) && !HasCharacterTag(CharacterTag.Mecanical)) output /= 2;

@@ -14,6 +14,9 @@ namespace SineahBot.Data
         public int bonusHealth;
         public int bonusMana;
 
+        public int bonusHealthRegen;
+        public int bonusManaRegen;
+
         public List<Spell> bonusSpells = new List<Spell>();
 
         public EquipmentSlot slot { get; private set; }
@@ -33,6 +36,8 @@ namespace SineahBot.Data
             c.bonusArmor += bonusArmor;
             c.bonusHealth += bonusHealth;
             c.bonusMana += bonusMana;
+            c.bonusHealthRegen += bonusHealthRegen;
+            c.bonusManaRegen += bonusManaRegen;
             c.bonusSpells.AddRange(bonusSpells);
         }
         public void Unequip(Character c)
@@ -43,6 +48,8 @@ namespace SineahBot.Data
             c.bonusArmor -= bonusArmor;
             c.bonusHealth -= bonusHealth;
             c.bonusMana -= bonusMana;
+            c.bonusHealthRegen -= bonusHealthRegen;
+            c.bonusManaRegen -= bonusManaRegen;
             if (c.health > c.MaxHealth) c.health = c.MaxHealth;
             if (c.mana > c.MaxMana) c.mana = c.MaxMana;
             c.bonusSpells.RemoveAll(x => bonusSpells.Contains(x));
