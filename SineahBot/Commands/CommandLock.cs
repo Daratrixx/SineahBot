@@ -42,7 +42,7 @@ namespace SineahBot.Commands
                 character.Message("You are asleep.");
                 return;
             }
-            bool direct = character is NPC;
+
             string directionName = GetArgument(2);
             MoveDirection direction;
             switch (directionName)
@@ -102,30 +102,18 @@ namespace SineahBot.Commands
 
                 connection.Lock();
                 // describe in current room
-                if (direct)
-                    room.DescribeActionNow($"{character.GetName()} has locked the access ({direction})", character);
-                else
-                    room.DescribeAction($"{character.GetName()} has locked the access ({direction})", character);
+                room.DescribeAction($"{character.GetName()} has locked the access ({direction})", character);
                 // describe in adjacent room
-                if (direct)
-                    connection.toRoom.DescribeActionNow($"Someone locked the access from the other side.");
-                else
-                    connection.toRoom.DescribeAction($"Someone locked the access from the other side.");
+                connection.toRoom.DescribeAction($"Someone locked the access from the other side.");
                 character.Message($"You locked the access ({direction})");
             }
             else
             {
                 connection.Lock();
                 // describe in current room
-                if (direct)
-                    room.DescribeActionNow($"{character.GetName()} has locked the access ({direction})", character);
-                else
-                    room.DescribeAction($"{character.GetName()} has locked the access ({direction})", character);
+                room.DescribeAction($"{character.GetName()} has locked the access ({direction})", character);
                 // describe in adjacent room
-                if (direct)
-                    connection.toRoom.DescribeActionNow($"Someone locked the access from the other side.");
-                else
-                    connection.toRoom.DescribeAction($"Someone locked the access from the other side.");
+                connection.toRoom.DescribeAction($"Someone locked the access from the other side.");
                 character.Message($"You locked the access ({direction})");
             }
 

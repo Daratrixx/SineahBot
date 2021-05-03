@@ -22,7 +22,7 @@ namespace SineahBot.Tools
                     handler?.Invoke();
                     expired = true;
                 }
-                catch (ThreadInterruptedException e)
+                catch (ThreadInterruptedException)
                 {
                     // it's ok!
                 }

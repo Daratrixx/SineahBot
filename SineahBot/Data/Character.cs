@@ -24,7 +24,26 @@ namespace SineahBot.Data
         public Dictionary<EquipmentSlot, Equipment> equipments = new Dictionary<EquipmentSlot, Equipment>();
 
         public string gender { get; set; }
-        public string pronouns { get; set; }
+        private string _pronouns = "they/them/theirs/their/themselves";
+        public string pronouns
+        {
+            get { return _pronouns; }
+            set
+            {
+                _pronouns = value;
+                var split = value.Split('/');
+                they = split[0];
+                They = they.Capitalize();
+                them = split[1];
+                Them = them.Capitalize();
+                theirs = split[2];
+                Theirs = theirs.Capitalize();
+                their = split[3];
+                Their = their.Capitalize();
+                themselves = split[3];
+                Themselves = themselves.Capitalize();
+            }
+        }
         public CharacterClass characterClass { get; set; }
         public int level { get; set; } = 1;
         public int experience { get; set; } = 0;
@@ -38,6 +57,17 @@ namespace SineahBot.Data
 
         public int MaxHealth { get { return baseHealth + bonusHealth; } }
         public int MaxMana { get { return baseMana + bonusMana; } }
+
+        public string they { get; private set; } = "they";
+        public string They { get; private set; } = "They";
+        public string them { get; private set; } = "them";
+        public string Them { get; private set; } = "Them";
+        public string theirs { get; private set; } = "theirs";
+        public string Theirs { get; private set; } = "Theirs";
+        public string their { get; private set; } = "their";
+        public string Their { get; private set; } = "Their";
+        public string themselves { get; private set; } = "themselves";
+        public string Themselves { get; private set; } = "Themselves";
 
         // equipment bonus
         public int bonusSpellPower = 0;
@@ -67,11 +97,11 @@ namespace SineahBot.Data
         {
             List<string> output = new List<string>();
             if (ClassProgressionManager.IsPhysicalClass(characterClass))
-                output.Add("> They seem to have a powerful body.");
+                output.Add($"> {They} seem to have a powerful body.");
             if (ClassProgressionManager.IsMagicalClass(characterClass))
-                output.Add("> Their eyes glow with knowledge and power.");
+                output.Add($"> {Their} eyes glow with knowledge and power.");
             if (ClassProgressionManager.IsSecretClass(characterClass))
-                output.Add("> They are shrouded by an aura of mistery.");
+                output.Add($"> {They} are shrouded by an aura of mistery.");
             output.Add(GetStateDescription(agent));
             output.Add(GetPowerDescription(agent as Character));
             output.Add(GetAlterationDescription(agent as Character));
@@ -93,10 +123,10 @@ namespace SineahBot.Data
         {
             if (character == null) return "";
             var ratio = (character.level * 10000) / (level * 100);
-            if (ratio < 45) return "> They will be an impossible fight.";
+            if (ratio < 45) return $"> {They} will be an impossible fight.";
             if (ratio < 90) return "> This would be a tough fight.";
             if (ratio > 110) return "> This should be an easy fight.";
-            if (ratio > 155) return "> You're going to beat them to death.";
+            if (ratio > 155) return $"> You're going to beat {them} to death.";
             return $"> You seem evenly matched.";
         }
 
@@ -105,9 +135,9 @@ namespace SineahBot.Data
             return $"> Alterations: {String.Join(", ", alterations.Keys.Select(x => x.ToString())) }";
         }
 
-        public void Message(string message, bool direct = false)
+        public void Message(string message)
         {
-            if (agent != null) agent.Message(message, direct);
+            if (agent != null) agent.Message(message);
         }
 
         public void OnAttacked(IAgent agent)
@@ -123,12 +153,12 @@ namespace SineahBot.Data
             health = Math.Max(0, health - damageAmount);
             if (source != null && source is IAgent && source != this && source != agent)
             {
-                Message($"You took {damageAmount} damage from {source.GetName()}.", source is NPC);
-                (source as IAgent).Message($"You dealt {damageAmount} damage to {GetName()}.", source is NPC);
+                Message($"You took {damageAmount} damage from {source.GetName()}.");
+                (source as IAgent).Message($"You dealt {damageAmount} damage to {GetName()}.");
             }
             else
             {
-                Message($"You took {damageAmount} damage.", true);
+                Message($"You took {damageAmount} damage.");
             }
             if (sleeping)
             {
@@ -181,7 +211,7 @@ namespace SineahBot.Data
             mana = Math.Min(MaxMana, mana + manaRegen);
             if (sleeping)
             {
-                Message($"You recovered {healthRegen} health and {manaRegen} mana while sleeping.", true);
+                Message($"You recovered {healthRegen} health and {manaRegen} mana while sleeping.");
             }
         }
 
@@ -221,8 +251,8 @@ namespace SineahBot.Data
             health = Math.Min(MaxHealth, health + healthAmount);
             if (source != null && source is IAgent && source != this && source != agent)
             {
-                (source as IAgent).Message($"You healed {GetName()} for {healthAmount} health.", source is NPC);
-                Message($"You recovered {healthAmount} health from {source.GetName(this)}.", source is NPC);
+                (source as IAgent).Message($"You healed {GetName()} for {healthAmount} health.");
+                Message($"You recovered {healthAmount} health from {source.GetName(this)}.");
             }
             else
             {
@@ -236,7 +266,7 @@ namespace SineahBot.Data
             mana = Math.Min(MaxMana, mana + manaAmount);
             if (source == this) return;
             if (source != null)
-                Message($"You recovered {manaAmount} mana from {source.GetName(this)}.", source is NPC);
+                Message($"You recovered {manaAmount} mana from {source.GetName(this)}.");
             else
                 Message($"You recovered {manaAmount} mana.");
         }
@@ -248,7 +278,7 @@ namespace SineahBot.Data
             {
                 if (killer != this)
                 {
-                    Message($"You have been killed by {killer.GetName()}!", agent is NPC);
+                    Message($"You have been killed by {killer.GetName()}!");
                 }
                 else
                 {
@@ -425,7 +455,7 @@ namespace SineahBot.Data
             }
             var expired = alterations.Values.Where(x => x.remainingTime <= 0).ToList();
             foreach (var a in expired)
-                RemoveAlteration(a.alteration, true);
+                RemoveAlteration(a.alteration);
         }
         public void OnAlterationTick(AlterationType alteration)
         {
@@ -464,29 +494,29 @@ namespace SineahBot.Data
             return alterations.ContainsKey(alteration);
 
         }
-        public void AddAlteration(AlterationType alteration, int duration, bool direct = false)
+        public void AddAlteration(AlterationType alteration, int duration)
         {
             if (!alterations.ContainsKey(alteration))
             {
                 alterations[alteration] = new Alteration() { alteration = alteration, remainingTime = duration };
-                Message($"You are now **{alteration}**.", direct);
+                Message($"You are now **{alteration}**.");
             }
             else
             {
                 alterations[alteration].remainingTime = Math.Max(alterations[alteration].remainingTime, duration);
             }
         }
-        public void RemoveAlteration(AlterationType alteration, bool direct = false)
+        public void RemoveAlteration(AlterationType alteration)
         {
             if (!alterations.ContainsKey(alteration))
                 return;
-            OnAlterationRemoved(alteration, direct);
+            OnAlterationRemoved(alteration);
             alterations.Remove(alteration);
         }
 
-        public void OnAlterationRemoved(AlterationType alteration, bool direct = false)
+        public void OnAlterationRemoved(AlterationType alteration)
         {
-            Message($"You are no longer **{alteration}**.", direct);
+            Message($"You are no longer **{alteration}**.");
         }
 
         public bool HasCharacterTag(CharacterTag tag)

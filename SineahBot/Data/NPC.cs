@@ -118,10 +118,10 @@ namespace SineahBot.Data
         {
             if (character == null) return "";
             var ratio = (character.level * 10000) / (level * 100 * (elite ? 2 : 1));
-            if (ratio < 45) return "> They will be an impossible fight for you alone.";
+            if (ratio < 45) return $"> {They} will be an impossible fight for you alone.";
             if (ratio < 90) return "> This would be a tough fight.";
             if (ratio > 110) return "> This should be an easy fight.";
-            if (ratio > 155) return "> You're going to beat them to death.";
+            if (ratio > 155) return $"> You're going to beat {them} to death.";
             return $"> You seem evenly matched.";
         }
 

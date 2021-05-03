@@ -16,7 +16,7 @@ namespace SineahBot.Tools
         public static void ParsePlayerCharacterCreationInput(Player p, string input)
         {
             CharacterCreationState state;
-            if (!playerCharacterCreation.TryGetValue(p, out state))
+            if (!playerCharacterCreation.TryGetValue(p, out state)) // if the player doesn't have a character being created, initiate the creation
             {
                 state = playerCharacterCreation[p] = new CharacterCreationState() { player = p };
                 p.Message($@"You are about to start your adventure.");
@@ -29,17 +29,18 @@ namespace SineahBot.Tools
                 ++state.currentStep; // advence to next state
             }
 
-            if (state.currentStep == creationSteps.Length)
+            if (state.currentStep == creationSteps.Length) // if we reach the end of the creation process
             {
-                p.Message($@"You are now ready to walk the world. Type **!help** to learn how to play. Farewell for now, mortal.");
-                var character = CharacterManager.CreateCharacterForPlayer(state);
-                character.currentRoomId = RoomManager.GetSpawnRoomId();
-                RoomManager.GetRoom(character.currentRoomId).AddToRoom(character);
-                p.playerStatus = PlayerStatus.InCharacter;
+                var character = CharacterManager.CreateCharacterForPlayer(state); // create character
+                character.currentRoomId = RoomManager.GetSpawnRoomId(); // get spawn room
+                p.Message($@"You are now ready to walk the world. Type **!help** to learn how to play. Farewell for now, mortal."); // display informations
+                RoomManager.GetRoom(character.currentRoomId).AddToRoom(character); // add player to room, will display room description
+                p.playerStatus = PlayerStatus.InCharacter; // indicate that the player is now in character and further commands must go in that pipeline
+                playerCharacterCreation.Remove(p); // forget the creation state for the player
                 return;
             }
 
-            if (state.currentStep >= 0)
+            if (state.currentStep >= 0) // if the step is still within bounds
             {
                 state.player.Message(creationSteps[state.currentStep].Prompt(state));
             }
@@ -58,9 +59,9 @@ namespace SineahBot.Tools
         private static CharacterCreationStep ConfirmGender = new CharacterCreationStepValidation<string>((state) => state.gender);
 
         private static string[] possiblePronouns = new string[] {
-            "they/them/theirs",
-            "she/her/hers",
-            "he/him/his"
+            "they/them/theirs/their/themselves",
+            "she/her/hers/her/herself",
+            "he/him/his/his/himself"
         };
         private static string GetPossiblePronounsList()
         {

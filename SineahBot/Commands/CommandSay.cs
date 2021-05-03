@@ -23,7 +23,6 @@ namespace SineahBot.Commands
                 character.Message("You are asleep.");
                 return;
             }
-            bool direct = character is NPC;
             var speach = GetArgument(2);
 
             if (String.IsNullOrWhiteSpace(speach))
@@ -32,19 +31,14 @@ namespace SineahBot.Commands
                 return;
             }
 
-            Say(character, room, speach, direct);
+            Say(character, room, speach);
 
             character.RewardExperience(1);
         }
 
-        public static void Say(Character character, Room room, string speach, bool direct = false)
+        public static void Say(Character character, Room room, string speach)
         {
-
-
-            if (direct)
-                room.DescribeActionNow($@"**{character.GetName()}** said: ""{speach}""", character);
-            else
-                room.DescribeAction($@"**{character.GetName()}** said: ""{speach}""", character);
+            room.DescribeAction($@"**{character.GetName()}** said: ""{speach}""", character);
             character.Message($@"You said: ""{speach}""");
         }
     }

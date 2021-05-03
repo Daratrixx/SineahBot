@@ -39,7 +39,6 @@ namespace SineahBot.Commands
                 return;
             }
 
-            bool direct = character is NPC;
             var equipmentName = GetArgument(2);
 
             if (String.IsNullOrWhiteSpace(equipmentName))
@@ -58,9 +57,6 @@ namespace SineahBot.Commands
             character.Message($"You equiped {item.GetName(character)}.");
             character.Equip(item);
 
-            if (direct)
-                room.DescribeActionNow($"{character.GetName()} equiped {item.GetName()}.", character);
-            else
                 room.DescribeAction($"{character.GetName()} equiped {item.GetName()}.", character);
 
             character.RewardExperience(1);

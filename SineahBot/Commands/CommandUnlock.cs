@@ -43,7 +43,6 @@ namespace SineahBot.Commands
                 return;
             }
 
-            bool direct = character is NPC;
             string directionName = GetArgument(2);
             MoveDirection direction;
             switch (directionName)
@@ -104,27 +103,15 @@ namespace SineahBot.Commands
                 }
 
                 connection.Unlock();
-                if (direct)
-                    room.DescribeActionNow($"{character.GetName()} has unlocked the access ({direction})", character);
-                else
-                    room.DescribeAction($"{character.GetName()} has unlocked the access ({direction})", character);
-                if (direct)
-                    connection.toRoom.DescribeActionNow($"Someone unlocked the access from the other side.");
-                else
-                    connection.toRoom.DescribeAction($"Someone unlocked the access from the other side.");
+                room.DescribeAction($"{character.GetName()} has unlocked the access ({direction})", character);
+                connection.toRoom.DescribeAction($"Someone unlocked the access from the other side.");
                 character.Message($"You unlocked the access ({direction})");
             }
             else
             {
                 connection.Unlock();
-                if (direct)
-                    room.DescribeActionNow($"{character.GetName()} has unlocked the access ({direction})", character);
-                else
-                    room.DescribeAction($"{character.GetName()} has unlocked the access ({direction})", character);
-                if (direct)
-                    connection.toRoom.DescribeActionNow($"Someone unlocked the access from the other side.");
-                else
-                    connection.toRoom.DescribeAction($"Someone unlocked the access from the other side.");
+                room.DescribeAction($"{character.GetName()} has unlocked the access ({direction})", character);
+                connection.toRoom.DescribeAction($"Someone unlocked the access from the other side.");
                 character.Message($"You unlocked the access ({direction})");
             }
 

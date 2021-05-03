@@ -43,7 +43,6 @@ namespace SineahBot.Commands
                 return;
             }
 
-            bool direct = character is NPC;
             string containerName = GetArgument(2);
             Container container = room.FindInRoom<Container>(containerName);
 
@@ -72,10 +71,7 @@ namespace SineahBot.Commands
             }
 
             container.Unlock();
-            if (direct)
-                room.DescribeActionNow($"{character.GetName()} has unlocked **{container.GetName()}**", character);
-            else
-                room.DescribeAction($"{character.GetName()} has unlocked **{container.GetName()}**", character);
+            room.DescribeAction($"{character.GetName()} has unlocked **{container.GetName()}**", character);
             character.Message($"You unlocked **{container.GetName()}**");
 
             character.RewardExperience(1);

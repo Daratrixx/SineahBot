@@ -38,8 +38,7 @@ namespace SineahBot.Commands
 
         public override void Run(Character character, Room room)
         {
-            bool direct = character is NPC;
-            if (!Sleep(character, room, direct))
+            if (!Sleep(character, room))
             {
                 character.Message($@"You are already asleep.");
                 return;
@@ -48,15 +47,12 @@ namespace SineahBot.Commands
             character.RewardExperience(1);
         }
 
-        public static bool Sleep(Character character, Room room, bool direct)
+        public static bool Sleep(Character character, Room room)
         {
             if (character.Sleep())
             {
-                if (direct)
-                    room.DescribeActionNow($@"**{character.GetName()}** fell asleep.", character);
-                else
-                    room.DescribeAction($@"**{character.GetName()}** fell asleep.", character);
-                character.Message($@"You fell asleep.", direct);
+                room.DescribeAction($@"**{character.GetName()}** fell asleep.", character);
+                character.Message($@"You fell asleep.");
                 return true;
             }
             else
@@ -68,11 +64,8 @@ namespace SineahBot.Commands
         {
             if (character.Awake())
             {
-                if (direct)
-                    room.DescribeActionNow($@"**{character.GetName()}** woke up.", character);
-                else
-                    room.DescribeAction($@"**{character.GetName()}** woke up.", character);
-                character.Message($@"You woke up.", direct);
+                room.DescribeAction($@"**{character.GetName()}** woke up.", character);
+                character.Message($@"You woke up.");
                 return true;
             }
             else

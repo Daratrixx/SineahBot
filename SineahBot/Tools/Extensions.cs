@@ -12,11 +12,26 @@ namespace System.Linq
             if (enumerable.Count() == 0)
                 return default(T);
             var random = new Random();
-            return enumerable.OrderBy(x=> random.Next(int.MinValue,int.MaxValue)).First();
+            return enumerable.OrderBy(x => random.Next(int.MinValue, int.MaxValue)).First();
         }
 
-        public static bool Is(this string str, params string[] values) {
+        public static bool Is(this string str, params string[] values)
+        {
             return values.Contains(str);
+        }
+
+        public static char Capitalize(this char c)
+        {
+            return char.ToUpper(c);
+        }
+
+        public static string Capitalize(this string str)
+        {
+            if (str == null || str.Length == 0)
+                return "";
+            if (str.Length > 1)
+                return str[0].Capitalize() + str.Substring(1);
+            return str[0].Capitalize().ToString();
         }
 
         public static bool Is(this int i, params int[] values)

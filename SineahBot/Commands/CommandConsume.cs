@@ -44,7 +44,6 @@ namespace SineahBot.Commands
                 return;
             }
 
-            bool direct = character is NPC;
             var itemName = GetArgument(2);
 
             if (String.IsNullOrWhiteSpace(itemName))
@@ -76,9 +75,6 @@ namespace SineahBot.Commands
             character.StartActionCooldown();
 
             character.Message($"You consumed {item.GetName(character)}.");
-            if (direct)
-                room.DescribeActionNow($"{character.GetName()} consumed {item.GetName()}.", character);
-            else
                 room.DescribeAction($"{character.GetName()} consumed {item.GetName()}.", character);
 
             character.RewardExperience(1);

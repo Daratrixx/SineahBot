@@ -152,7 +152,7 @@ namespace SineahBot.Data
                     {
                         var c = target as Character;
                         var duration = baseDuration + (int)(caster.GetSpellPower() * spellPowerDurationRatio);
-                        c.AddAlteration(alteration, duration, caster is NPC);
+                        c.AddAlteration(alteration, duration);
                     }
                 }
             }
@@ -170,7 +170,7 @@ namespace SineahBot.Data
                     if (target is Character)
                     {
                         var c = target as Character;
-                        c.RemoveAlteration(alteration, caster is NPC);
+                        c.RemoveAlteration(alteration);
                     }
                 }
             }

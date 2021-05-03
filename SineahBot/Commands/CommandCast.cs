@@ -110,7 +110,7 @@ namespace SineahBot.Commands
             {
                 character.OnKilled(character);
                 character.Message($"You killed yourself!");
-                room.DescribeAction($"{character.GetName()} killed themselves!", character);
+                room.DescribeAction($"{character.GetName()} killed {character.themselves}!", character);
                 room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterKills) { killingCharacter = character, killedTarget = character }, character);
             }
         }

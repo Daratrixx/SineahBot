@@ -7,6 +7,6 @@ namespace SineahBot.Interfaces
 {
     public interface IAgent : INamed
     {
-        void Message(string message, bool direct = false);
+        void Message(string message);
     }
 }

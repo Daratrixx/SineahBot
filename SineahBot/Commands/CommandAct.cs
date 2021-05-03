@@ -24,7 +24,6 @@ namespace SineahBot.Commands
                 return;
             }
 
-            bool direct = character is NPC;
             var act = GetArgument(2);
 
             if (String.IsNullOrWhiteSpace(act))
@@ -35,16 +34,13 @@ namespace SineahBot.Commands
 
             act = act.Replace("*", "");
 
-            Act(character, room, act, direct);
+            Act(character, room, act);
             character.RewardExperience(1);
         }
 
-        public static void Act(Character character, Room room, string act, bool direct = false)
+        public static void Act(Character character, Room room, string act)
         {
-            if (direct)
-                room.DescribeActionNow($@"***{character.GetName()}** {act}*", character);
-            else
-                room.DescribeAction($@"***{character.GetName()}** {act}*", character);
+            room.DescribeAction($@"***{character.GetName()}** {act}*", character);
             character.Message($@"***{character.GetName()}** {act}*");
 
             room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterActs) { actingCharacter = character, actingContent = act }, character);

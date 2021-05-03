@@ -34,7 +34,6 @@ namespace SineahBot.Commands
                 return;
             }
 
-            bool direct = character is NPC;
             var targetName = GetArgument(2);
 
             if (String.IsNullOrWhiteSpace(targetName))
@@ -47,7 +46,7 @@ namespace SineahBot.Commands
 
             if (target == null)
             {
-                character.Message($@"you don't have ""{targetName}"" in your inventory.");
+                character.Message($@"You don't have ""{targetName}"" in your inventory.");
                 return;
             }
 
@@ -57,9 +56,6 @@ namespace SineahBot.Commands
             character.RemoveFromInventory(itemTarget);
             character.Message($"You dropped {itemTarget.name}.");
             room.AddToRoom(itemTarget);
-            if (direct)
-                room.DescribeActionNow($"{character.GetName()} dropped {itemTarget.name}.", character);
-            else
                 room.DescribeAction($"{character.GetName()} dropped {itemTarget.name}.", character);
 
             character.RewardExperience(1);

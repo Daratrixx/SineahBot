@@ -42,7 +42,7 @@ namespace SineahBot.Commands
                 character.Message("You are asleep.");
                 return;
             }
-            bool direct = character is NPC;
+
             string containerName = GetArgument(2);
             Container container = room.FindInRoom<Container>(containerName);
 
@@ -72,10 +72,7 @@ namespace SineahBot.Commands
 
             container.Lock();
             // describe in current room
-            if (direct)
-                room.DescribeActionNow($"{character.GetName()} has locked **{container.GetName()}**.", character);
-            else
-                room.DescribeAction($"{character.GetName()} has locked **{container.GetName()}**.", character);
+            room.DescribeAction($"{character.GetName()} has locked **{container.GetName()}**.", character);
             character.Message($"You locked **{container.GetName()}**.");
 
             character.RewardExperience(1);

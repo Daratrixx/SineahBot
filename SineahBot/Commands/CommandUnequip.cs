@@ -39,7 +39,6 @@ namespace SineahBot.Commands
                 return;
             }
 
-            bool direct = character is NPC;
             var equipmentName = GetArgument(2);
 
             if (String.IsNullOrWhiteSpace(equipmentName))
@@ -58,10 +57,7 @@ namespace SineahBot.Commands
             character.Message($"You unequiped {item.GetName(character)}.");
             character.Unequip(item.slot);
 
-            if (direct)
-                room.DescribeActionNow($"{character.GetName()} unequiped {item.GetName()}.", character);
-            else
-                room.DescribeAction($"{character.GetName()} unequiped {item.GetName()}.", character);
+            room.DescribeAction($"{character.GetName()} unequiped {item.GetName()}.", character);
 
             character.RewardExperience(1);
         }

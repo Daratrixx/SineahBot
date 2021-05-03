@@ -150,14 +150,6 @@ namespace SineahBot.Data
             }
         }
 
-        public void DescribeActionNow(string action, params IAgent[] agent)
-        {
-            foreach (var a in agents.Where(x => !agent.Contains(x)).ToArray()) // to array for better thread-safety
-            {
-                a.Message(action, true);
-            }
-        }
-
         public void RaiseRoomEvent(RoomEvent e, Character source)
         {
             var npcs = entities.Where(x => x is NPC && x != source).ToArray().Select(x=>x as NPC);

@@ -61,13 +61,13 @@ namespace SineahBot.Tools
                     {
                         CombatManager.enemies.Remove(c);
                         c.characterStatus = CharacterStatus.Normal;
-                        c.Message($"You are no longer in combat.", direct);
+                        c.Message($"You are no longer in combat.");
                     }
                 }
             }
             CombatManager.enemies.Remove(character);
             character.characterStatus = CharacterStatus.Normal;
-            character.Message($"You are no longer in combat.", direct);
+            character.Message($"You are no longer in combat.");
         }
     }
 }

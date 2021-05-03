@@ -44,7 +44,6 @@ namespace SineahBot.Commands
                 return;
             }
 
-            bool direct = character is NPC;
             var targetName = GetArgument(2);
 
             if (String.IsNullOrWhiteSpace(targetName))
@@ -62,11 +61,7 @@ namespace SineahBot.Commands
             }
 
             room.RemoveFromRoom(item);
-            character.Message($"You picked up {item.GetName()}.");
-            if (direct)
-                room.DescribeActionNow($"{character.GetName()} picked up {item.GetName()}.", character);
-            else
-                room.DescribeAction($"{character.GetName()} picked up {item.GetName()}.", character);
+            room.DescribeAction($"{character.GetName()} picked up {item.GetName()}.", character);
             character.AddToInventory(item);
 
             character.RewardExperience(1);

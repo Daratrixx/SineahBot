@@ -37,10 +37,10 @@ namespace SineahBot.Data
             if (character == null || character.currentRoomId == Guid.Empty) return;
             disconnectTimer = new CancelableMudTimer(minutes * 60, () =>
             {
-                Message("```You will be disconnected in 1 minute.```", true);
+                Message("```You will be disconnected in 1 minute.```");
                 disconnectTimer = new CancelableMudTimer(60, () =>
                 {
-                    Message("```You are now disconnected.```", true);
+                    Message("```You are now disconnected.```");
                     PlayerManager.DisconnectPlayer(this);
                     disconnectTimer = null;
                 });
@@ -48,28 +48,12 @@ namespace SineahBot.Data
         }
 
         protected List<string> messageBuffer = new List<string>();
-        public void Message(string message, bool direct = false)
+        public void Message(string message)
         {
-            if (direct)
+            lock (messageBuffer)
             {
-                if (Program.ONLINE && !string.IsNullOrWhiteSpace(message))
-                {
-                    var channel = Program.DiscordClient.GetChannel(channelId) as IMessageChannel;
-                    var result = channel.SendMessageAsync(message).Result;
-                }
-                else
-                    Console.WriteLine(message);
-            }
-            else
-            {
-                lock (messageBuffer)
-                {
-                    //if (!Monitor.IsEntered(playerMessageBuffers))
-                    //    Monitor.TryEnter(playerMessageBuffers, 5000);
-                    messageBuffer.Add(message);
-                    if (!playerMessageBuffers.Contains(this)) playerMessageBuffers.Add(this);
-                    //Monitor.Exit(playerMessageBuffers);
-                }
+                messageBuffer.Add(message);
+                if (!playerMessageBuffers.Contains(this)) playerMessageBuffers.Add(this);
             }
         }
         public void CommitMessageBuffer()
