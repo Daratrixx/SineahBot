@@ -163,12 +163,14 @@ namespace SineahBot.Data
 
         public bool DeflectionCheck()
         {
-            return new Random().Next(1, 100) <= bonusDeflection;
+            var checkRoll = new Random().Next(1, 100);
+            return checkRoll <= bonusDeflection;
         }
 
         public bool EvasionCheck()
         {
-            return new Random().Next(1, 100) <= bonusEvasion + 5;
+            var checkRoll = new Random().Next(1, 100);
+            return checkRoll <= bonusEvasion + 5;
         }
 
         public virtual void DamageHealth(int damageAmount, DamageType type, INamed source = null)
@@ -180,7 +182,11 @@ namespace SineahBot.Data
                         damageAmount /= 2;
                     damageAmount = (int)(damageAmount * (1 - GetArmorDamageReduction()));
                     if (DeflectionCheck())
+                    {
                         damageAmount = damageAmount / 2;
+                        Message($"You deflected an attack.");
+                        (source as IAgent)?.Message($"{GetName()} deflected your attack.");
+                    }
                     break;
                 case DamageType.Magical:
                     if (HasAlteration(AlterationType.Warded))
