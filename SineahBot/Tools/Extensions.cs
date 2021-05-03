@@ -14,5 +14,14 @@ namespace System.Linq
             var random = new Random();
             return enumerable.OrderBy(x=> random.Next(int.MinValue,int.MaxValue)).First();
         }
+
+        public static bool Is(this string str, params string[] values) {
+            return values.Contains(str);
+        }
+
+        public static bool Is(this int i, params int[] values)
+        {
+            return values.Contains(i);
+        }
     }
 }

@@ -18,6 +18,7 @@ namespace SineahBot.Tools
             var player = PlayerManager.GetPlayer(userId);
             if (message.StartsWith("!"))
             {
+                var m2 = message.ToLower();
                 if (userId == 109406259643437056)
                 {
                     var create = createPrivateChannelRegex.Match(message);
@@ -28,25 +29,25 @@ namespace SineahBot.Tools
                         Program.CreatePrivateChannel(createGuildId, createUserId);
                         return;
                     }
-                    if (message == "!save")
+                    if (m2 == "!save")
                     {
                         Program.SaveData();
                         return;
                     }
-                    if (message == "!stop")
+                    if (m2 == "!stop")
                     {
                         Program.DiscordClient.StopAsync();
                         Program.SaveData();
                         Environment.Exit(0);
                     }
-                    if (message == "!boost" && player.character != null)
+                    if (m2 == "!boost" && player.character != null)
                     {
                         var exp = ClassProgressionManager.ExperienceForNextLevel(player.character.level);
                         player.character.experience += exp;
                         player.Message($"Earned {exp} experience.");
                         return;
                     }
-                    if (message == "!boosts")
+                    if (m2 == "!boosts")
                     {
                         foreach (var c in Program.database.Characters)
                         {
@@ -56,8 +57,14 @@ namespace SineahBot.Tools
                         return;
                     }
                 }
-                var m2 = message.ToLower();
-                if (message == "!disconnect" && player.character != null && player.character.currentRoomId != Guid.Empty)
+                if (m2.Is("!die", "!kill", "!death", "!suicide", "!reroll") && player.character != null && player.character.currentRoomId != Guid.Empty)
+                {
+                    RoomManager.GetRoom(player.character.currentRoomId).DescribeAction($"**{player.GetName()}** died.");
+                    player.character.OnKilled(null); // calls combat manager and removes player
+                    return;
+                }
+
+                if (m2.Is("!disconnect", "!logout", "!off") && player.character != null && player.character.currentRoomId != Guid.Empty)
                 {
                     // set the disconnection timer to 0 minutes before alert
                     player.SetDisconnectTimer(0);
@@ -116,73 +123,7 @@ namespace SineahBot.Tools
         }
         public static void ParseCharacterCreationMessage(Player player, string command)
         {
-            switch (player.playerCharacterCreationStatus)
-            {
-                case PlayerCharacterCreationStatus.None:
-                    player.Message("You are about to start your adventure.\n> What is your **name**, mortal ?");
-                    player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.Naming;
-                    break;
-                case PlayerCharacterCreationStatus.Naming:
-                    player.characterName = command;
-                    player.Message($@"""{command}""... Is this how you will be called from now on ? [**y**es/**n**o]");
-                    player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.NamingConfirmation;
-                    break;
-                case PlayerCharacterCreationStatus.NamingConfirmation:
-                    command = command.ToLower();
-                    if (command == "yes" || command == "y" || command == "yep" || command == "affirmative")
-                    {
-                        player.Message($@"""{player.characterName}"" will now be your name in this world.
-> What will be your starting class ? [{ClassProgressionManager.GetStartClassListString()}]");
-                        player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.Classing;
-                    }
-                    else if (command == "no" || command == "n" || command == "nope" || command == "negative")
-                    {
-                        player.Message("What is your **name**, mortal ?");
-                        player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.Naming;
-                    }
-                    else
-                    {
-                        player.Message($@"Type **yes** to confirm that ""{player.characterName}"" will be your name, or **no** to enter a new name.");
-                    }
-                    break;
-                case PlayerCharacterCreationStatus.Classing:
-                    if (Enum.TryParse(command, true, out player.characterClass) && ClassProgressionManager.IsStartingClass(player.characterClass))
-                    {
-                        player.Message($@"""{player.characterClass}""... will this be your starting class, your initial role in this world ? [**y**es/**n**o]
-> **{player.characterClass}**: *{ClassProgressionManager.GetClassDescription(player.characterClass)}*");
-                        player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.ClassingConfirmation;
-                    }
-                    else
-                    {
-                        player.Message($@"""{command}"" is not a recognized starting class. Type one of the following : [{ClassProgressionManager.GetStartClassListString()}]");
-                    }
-                    break;
-                case PlayerCharacterCreationStatus.ClassingConfirmation:
-                    command = command.ToLower();
-                    if (command == "yes" || command == "y" || command == "yep" || command == "affirmative")
-                    {
-                        FinishCharacterCreation(player);
-                    }
-                    else if (command == "no" || command == "n" || command == "nope" || command == "negative")
-                    {
-                        player.Message("What is your **class**, mortal ?");
-                        player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.Classing;
-                    }
-                    else
-                    {
-                        player.Message($@"Type **yes** to confirm that ""{player.characterClass}"" will be your class, or **no** to choose a new class.");
-                    }
-                    break;
-            }
-        }
-        public static void FinishCharacterCreation(Player player)
-        {
-            player.Message($@"You are now ready to walk the world. Type **!help** to learn how to play. Farewell for now, mortal.");
-            player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.None;
-            var character = CharacterManager.CreateCharacterForPlayer(player);
-            character.currentRoomId = RoomManager.GetSpawnRoomId();
-            RoomManager.GetRoom(character.currentRoomId).AddToRoom(character);
-            player.playerStatus = PlayerStatus.InCharacter;
+            CharacterCreator.ParsePlayerCharacterCreationInput(player, command);
         }
         public static void ParseInCharacterMessage(Character character, string command, Room room)
         {

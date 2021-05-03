@@ -20,7 +20,7 @@ namespace SineahBot.Tools
         CharacterClass.Enchanter, CharacterClass.Mage, CharacterClass.Wizard,
         CharacterClass.Druid, CharacterClass.Necromancer, CharacterClass.Lich };
 
-        public static string GetStartClassListString()
+        public static string GetStartClassList()
         {
             return String.Join('/', starterClass.Select(x => x.ToString()));
         }

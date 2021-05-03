@@ -18,10 +18,7 @@ namespace SineahBot.Data
     {
         // character creation temporary values
         public ulong channelId;
-        public string characterName;
-        public CharacterClass characterClass;
         public PlayerStatus playerStatus;
-        public PlayerCharacterCreationStatus playerCharacterCreationStatus;
 
         [Key]
         public ulong userId { get; set; }
@@ -123,14 +120,5 @@ namespace SineahBot.Data
         CharacterCreation,
         InCharacter,
         OutCharacter
-    }
-
-    public enum PlayerCharacterCreationStatus
-    {
-        None,
-        Naming,
-        NamingConfirmation,
-        Classing,
-        ClassingConfirmation,
     }
 }

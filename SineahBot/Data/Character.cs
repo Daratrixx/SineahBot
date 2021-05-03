@@ -23,6 +23,8 @@ namespace SineahBot.Data
         public List<CharacterTag> tags = new List<CharacterTag>();
         public Dictionary<EquipmentSlot, Equipment> equipments = new Dictionary<EquipmentSlot, Equipment>();
 
+        public string gender { get; set; }
+        public string pronouns { get; set; }
         public CharacterClass characterClass { get; set; }
         public int level { get; set; } = 1;
         public int experience { get; set; } = 0;

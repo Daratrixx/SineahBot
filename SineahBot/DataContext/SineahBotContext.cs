@@ -36,6 +36,12 @@ namespace SineahBot.DataContext
 
                 entity.Property(e => e.name)
                     .IsRequired();
+
+                entity.Property(e => e.gender)
+                    .IsRequired();
+
+                entity.Property(e => e.pronouns)
+                    .IsRequired();
             });
 
             modelBuilder.Entity<Data.Player>(entity =>

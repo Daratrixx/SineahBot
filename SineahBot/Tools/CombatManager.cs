@@ -33,14 +33,17 @@ namespace SineahBot.Tools
 
         public static void OnCharacterKilled(Character killed, bool direct)
         {
-            var enemies = CombatManager.enemies[killed].Where(x => !x.HasCharacterTag(CharacterTag.Summon));
-            if (enemies.Count() > 0)
+            if (CombatManager.enemies.ContainsKey(killed))
             {
-                var goldReward = killed.GetGoldReward() / enemies.Count();
-                var expReward = killed.GetExperienceReward() / enemies.Count();
-                foreach (var c in enemies)
+                var enemies = CombatManager.enemies[killed].Where(x => !x.HasCharacterTag(CharacterTag.Summon));
+                if (enemies.Count() > 0)
                 {
-                    c.Message($"Reward: {c.RewardExperience(expReward / c.level)} exp, {c.RewardGold(goldReward)} gold.");
+                    var goldReward = killed.GetGoldReward() / enemies.Count();
+                    var expReward = killed.GetExperienceReward() / enemies.Count();
+                    foreach (var c in enemies)
+                    {
+                        c.Message($"Reward: {c.RewardExperience(expReward / c.level)} exp, {c.RewardGold(goldReward)} gold.");
+                    }
                 }
             }
             RemoveFromCombat(killed, direct);
@@ -48,21 +51,23 @@ namespace SineahBot.Tools
 
         public static void RemoveFromCombat(Character character, bool direct)
         {
-            var enemies = CombatManager.enemies[character];
-            foreach (var c in enemies)
+            if (CombatManager.enemies.ContainsKey(character))
             {
-                CombatManager.enemies[c].Remove(character);
-                if (CombatManager.enemies[c].Count == 0)
+                var enemies = CombatManager.enemies[character];
+                foreach (var c in enemies)
                 {
-                    CombatManager.enemies.Remove(c);
-                    c.characterStatus = CharacterStatus.Normal;
-                    c.Message($"You are no longer in combat.", direct);
+                    CombatManager.enemies[c].Remove(character);
+                    if (CombatManager.enemies[c].Count == 0)
+                    {
+                        CombatManager.enemies.Remove(c);
+                        c.characterStatus = CharacterStatus.Normal;
+                        c.Message($"You are no longer in combat.", direct);
+                    }
                 }
             }
             CombatManager.enemies.Remove(character);
             character.characterStatus = CharacterStatus.Normal;
             character.Message($"You are no longer in combat.", direct);
         }
-
     }
 }

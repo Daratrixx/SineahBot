@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using static SineahBot.Tools.CharacterCreator;
 
 namespace SineahBot.Tools
 {
@@ -89,25 +90,27 @@ namespace SineahBot.Tools
             character.items = new Dictionary<Item, int>(matchedItems);
         }
 
-        public static Character CreateCharacterForPlayer(Player player)
+        public static Character CreateCharacterForPlayer(CharacterCreationState state)
         {
             var character = new Character();
+            character.agent = state.player;
             character.id = Guid.NewGuid();
-            character.name = player.characterName;
-            character.agent = player;
-            character.characterClass = player.characterClass;
+            character.name = state.name;
+            character.gender = state.gender;
+            character.pronouns = state.pronouns;
+            character.characterClass = state.characterClass;
             character.level = 1;
             character.experience = 0;
             character.gold = 20;
             ClassProgressionManager.ApplyClassProgressionForCharacter(character, true);
             if (ClassProgressionManager.IsPhysicalClass(character.characterClass))
             {
-                character.AddToInventory(Data.Templates.Consumables.Bread,3);
+                character.AddToInventory(Data.Templates.Consumables.Bread, 3);
                 character.AddToInventory(Data.Templates.Consumables.DriedMeat);
             }
             if (ClassProgressionManager.IsMagicalClass(character.characterClass))
             {
-                character.AddToInventory(Data.Templates.Consumables.Bread,3);
+                character.AddToInventory(Data.Templates.Consumables.Bread, 3);
                 character.AddToInventory(Data.Templates.Consumables.Water);
             }
             if (ClassProgressionManager.IsSecretClass(character.characterClass))
@@ -116,8 +119,8 @@ namespace SineahBot.Tools
             }
             characters[character.id] = character;
             Program.database.Characters.Add(character);
-            player.idCharacter = character.id;
-            player.character = character;
+            state.player.idCharacter = character.id;
+            state.player.character = character;
             return character;
         }
 
@@ -132,9 +135,6 @@ namespace SineahBot.Tools
             player.idCharacter = null;
             player.character = null;
             player.playerStatus = PlayerStatus.CharacterCreation;
-            player.playerCharacterCreationStatus = PlayerCharacterCreationStatus.None;
-            player.characterName = null;
-            player.characterClass = CharacterClass.None;
         }
 
         public static Character TestCharacter
