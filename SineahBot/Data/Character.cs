@@ -4,6 +4,7 @@ using SineahBot.Interfaces;
 using SineahBot.Tools;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 
@@ -58,15 +59,25 @@ namespace SineahBot.Data
         public int MaxHealth { get { return baseHealth + bonusHealth; } }
         public int MaxMana { get { return baseMana + bonusMana; } }
 
+        [NotMapped]
         public string they { get; private set; } = "they";
+        [NotMapped]
         public string They { get; private set; } = "They";
+        [NotMapped]
         public string them { get; private set; } = "them";
+        [NotMapped]
         public string Them { get; private set; } = "Them";
+        [NotMapped]
         public string theirs { get; private set; } = "theirs";
+        [NotMapped]
         public string Theirs { get; private set; } = "Theirs";
+        [NotMapped]
         public string their { get; private set; } = "their";
+        [NotMapped]
         public string Their { get; private set; } = "Their";
+        [NotMapped]
         public string themselves { get; private set; } = "themselves";
+        [NotMapped]
         public string Themselves { get; private set; } = "Themselves";
 
         // equipment bonus
