@@ -10,7 +10,6 @@ namespace SineahBot.Commands
 {
     public class CommandPickup : Command
     {
-
         public CommandPickup()
         {
             commandRegex = new Regex(@"^(get|g|pickup|pick up|grab|take) (.+)$", RegexOptions.IgnoreCase);
@@ -60,11 +59,16 @@ namespace SineahBot.Commands
                 return;
             }
 
+            Pickup(character, room, item);
+
+            character.RewardExperience(1);
+        }
+
+        public static void Pickup(Character character, Room room, Item item)
+        {
             room.RemoveFromRoom(item);
             room.DescribeAction($"{character.GetName()} picked up {item.GetName()}.", character);
             character.AddToInventory(item);
-
-            character.RewardExperience(1);
         }
     }
 }

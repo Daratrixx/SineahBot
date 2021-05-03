@@ -52,29 +52,35 @@ namespace SineahBot.Commands
                 return;
             }
 
+            if (Unlock(character, room, container))
+                character.RewardExperience(1);
+        }
+
+        public static bool Unlock(Character character, Room room, Container container)
+        {
             if (!container.lockable)
             {
                 character.Message($@"The container ""{container.GetName()}"" cannot be locked");
-                return;
+                return false;
             }
 
             if (!container.locked)
             {
                 character.Message("This container is already unlocked.");
-                return;
+                return false;
             }
 
             if (container.keyItemName != null && !character.IsItemInInventory(container.keyItemName))
             {
                 character.Message("You need a key for that.");
-                return;
+                return false;
             }
 
             container.Unlock();
             room.DescribeAction($"{character.GetName()} has unlocked **{container.GetName()}**", character);
             character.Message($"You unlocked **{container.GetName()}**");
 
-            character.RewardExperience(1);
+            return true;
         }
     }
 }

@@ -10,7 +10,6 @@ namespace SineahBot.Commands
 {
     public class CommandCombatFlee : Command
     {
-
         public CommandCombatFlee()
         {
             commandRegex = new Regex(@"^(flee) (north|n|east|e|south|s|west|w|in|out|up|down)$", RegexOptions.IgnoreCase);

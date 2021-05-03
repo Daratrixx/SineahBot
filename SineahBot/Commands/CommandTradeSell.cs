@@ -10,7 +10,6 @@ namespace SineahBot.Commands
 {
     public class CommandTradeSell : Command
     {
-
         public CommandTradeSell()
         {
             commandRegex = new Regex(@"^(s|sell) (\d+ |all |[*] )?(.+)$", RegexOptions.IgnoreCase);

@@ -10,7 +10,6 @@ namespace SineahBot.Commands
 {
     public class CommandSearchPickup : Command
     {
-
         public CommandSearchPickup()
         {
             commandRegex = new Regex(@"^(get|g|pickup|pick up|grab|take)( \d+| all| \*)? (.+)?$", RegexOptions.IgnoreCase);

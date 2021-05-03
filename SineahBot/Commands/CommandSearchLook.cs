@@ -11,7 +11,6 @@ namespace SineahBot.Commands
 {
     public class CommandSearchLook : Command
     {
-
         public CommandSearchLook()
         {
             commandRegex = new Regex(@"^(l|look|list)( .*)?$", RegexOptions.IgnoreCase);

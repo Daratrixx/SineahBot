@@ -10,7 +10,6 @@ namespace SineahBot.Commands
 {
     public class CommandSearchStash : Command
     {
-
         public CommandSearchStash()
         {
             commandRegex = new Regex(@"^(stash|store|s|drop|d)( \d+| all| \*)? (.+)$", RegexOptions.IgnoreCase);

@@ -11,7 +11,6 @@ namespace SineahBot.Commands
 {
     public class CommandSearch : Command
     {
-
         public CommandSearch()
         {
             commandRegex = new Regex(@"^(search|loot) (.+)?$", RegexOptions.IgnoreCase);

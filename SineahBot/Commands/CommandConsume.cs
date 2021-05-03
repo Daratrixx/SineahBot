@@ -10,7 +10,6 @@ namespace SineahBot.Commands
 {
     public class CommandConsume : Command
     {
-
         public CommandConsume()
         {
             commandRegex = new Regex(@"^(use |consume |c )(.+)$", RegexOptions.IgnoreCase);
@@ -64,10 +63,16 @@ namespace SineahBot.Commands
                 return;
             }
 
+            if (Consume(character, room, item))
+                character.RewardExperience(1);
+        }
+
+        public static bool Consume(Character character, Room room, Consumable item)
+        {
             if (!item.combatConsumable && character.characterStatus == CharacterStatus.Combat)
             {
                 character.Message($@"Can't consume ""{item.GetName()}"" during combat!");
-                return;
+                return false;
             }
 
             character.RemoveFromInventory(item);
@@ -75,9 +80,9 @@ namespace SineahBot.Commands
             character.StartActionCooldown();
 
             character.Message($"You consumed {item.GetName(character)}.");
-                room.DescribeAction($"{character.GetName()} consumed {item.GetName()}.", character);
+            room.DescribeAction($"{character.GetName()} consumed {item.GetName()}.", character);
 
-            character.RewardExperience(1);
+            return true;
         }
     }
 }

@@ -10,7 +10,6 @@ namespace SineahBot.Commands
 {
     public class CommandEquip : Command
     {
-
         public CommandEquip()
         {
             commandRegex = new Regex(@"^(equip|eq) (.+)$", RegexOptions.IgnoreCase);
@@ -54,12 +53,17 @@ namespace SineahBot.Commands
                 return;
             }
 
+            Equip(character, room, item);
+
+            character.RewardExperience(1);
+        }
+
+        public static void Equip(Character character, Room room, Equipment item)
+        {
             character.Message($"You equiped {item.GetName(character)}.");
             character.Equip(item);
 
-                room.DescribeAction($"{character.GetName()} equiped {item.GetName()}.", character);
-
-            character.RewardExperience(1);
+            room.DescribeAction($"{character.GetName()} equiped {item.GetName()}.", character);
         }
     }
 }

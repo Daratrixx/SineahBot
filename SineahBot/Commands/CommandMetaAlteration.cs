@@ -10,7 +10,6 @@ namespace SineahBot.Commands
 {
     public class CommandMetaAlteration : Command
     {
-
         public CommandMetaAlteration()
         {
             commandRegex = new Regex(@"^!(alterations ?|alt ?)(.*)$", RegexOptions.IgnoreCase);

@@ -11,7 +11,6 @@ namespace SineahBot.Commands
 {
     public class CommandDirection : Command
     {
-
         public CommandDirection()
         {
             commandRegex = new Regex(@"^(dir|directions?)$", RegexOptions.IgnoreCase);

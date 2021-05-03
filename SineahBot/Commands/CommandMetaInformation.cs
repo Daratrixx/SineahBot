@@ -10,7 +10,6 @@ namespace SineahBot.Commands
 {
     public class CommandMetaInformation : Command
     {
-
         public CommandMetaInformation()
         {
             commandRegex = new Regex(@"^!(i|info|self|information)$", RegexOptions.IgnoreCase);

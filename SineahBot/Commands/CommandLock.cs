@@ -79,45 +79,41 @@ namespace SineahBot.Commands
                     character.Message($@"Can't lock unknown direction ""{directionName}""");
                     throw new Exception($@"Can't lock unknown direction ""{directionName}""");
             }
+
+            Lock(character, room, direction);
+
+            character.RewardExperience(1);
+        }
+
+        public static bool Lock(Character character, Room room, MoveDirection direction)
+        {
             if (!room.IsValidDirection(direction))
             {
                 character.Message($@"This room doesn't have a ""{direction}"" access.");
-                return;
+                return false;
             }
             var connection = room.GetRoomConnectionInDirection(direction);
 
             if (connection.locked)
             {
                 character.Message("This access is already locked.");
-                return;
+                return false;
             }
 
-            if (connection.keyItemName != null)
+            if (connection.keyItemName != null && !character.IsItemInInventory(connection.keyItemName))
             {
-                if (!character.IsItemInInventory(connection.keyItemName))
-                {
-                    character.Message("You need a key for that.");
-                    return;
-                }
-
-                connection.Lock();
-                // describe in current room
-                room.DescribeAction($"{character.GetName()} has locked the access ({direction})", character);
-                // describe in adjacent room
-                connection.toRoom.DescribeAction($"Someone locked the access from the other side.");
-                character.Message($"You locked the access ({direction})");
-            }
-            else
-            {
-                connection.Lock();
-                // describe in current room
-                room.DescribeAction($"{character.GetName()} has locked the access ({direction})", character);
-                // describe in adjacent room
-                connection.toRoom.DescribeAction($"Someone locked the access from the other side.");
-                character.Message($"You locked the access ({direction})");
+                character.Message("You need a key for that.");
+                return false;
             }
 
-            character.RewardExperience(1);
+            connection.Lock();
+            // describe in current room
+            room.DescribeAction($"{character.GetName()} has locked the access ({direction})", character);
+            // describe in adjacent room
+            connection.toRoom.DescribeAction($"Someone locked the access from the other side.");
+            character.Message($"You locked the access ({direction})");
+
+            return true;
         }
     }
 }

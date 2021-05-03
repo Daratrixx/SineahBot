@@ -10,7 +10,6 @@ namespace SineahBot.Commands
 {
     public class CommandUnequip : Command
     {
-
         public CommandUnequip()
         {
             commandRegex = new Regex(@"^(unequip|uneq) (.+)$", RegexOptions.IgnoreCase);
@@ -54,12 +53,17 @@ namespace SineahBot.Commands
                 return;
             }
 
+            Unequip(character, room, item);
+
+            character.RewardExperience(1);
+        }
+
+        public static void Unequip(Character character, Room room, Equipment item)
+        {
             character.Message($"You unequiped {item.GetName(character)}.");
             character.Unequip(item.slot);
 
             room.DescribeAction($"{character.GetName()} unequiped {item.GetName()}.", character);
-
-            character.RewardExperience(1);
         }
     }
 }

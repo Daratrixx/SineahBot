@@ -10,7 +10,6 @@ namespace SineahBot.Commands
 {
     public class CommandSearchLeave : Command
     {
-
         public CommandSearchLeave()
         {
             commandRegex = new Regex(@"^(leave|exit|out|quit|off|done|away|escape)$", RegexOptions.IgnoreCase);

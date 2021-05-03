@@ -10,7 +10,6 @@ namespace SineahBot.Commands
 {
     public class CommandSay : Command
     {
-
         public CommandSay()
         {
             commandRegex = new Regex(@"^(talk |say |t |"" ?)(.+)$", RegexOptions.IgnoreCase);

@@ -10,7 +10,6 @@ namespace SineahBot.Commands
 {
     public class CommandLook : Command
     {
-
         public CommandLook()
         {
             commandRegex = new Regex(@"^(look|l)( .+)?$", RegexOptions.IgnoreCase);

@@ -11,7 +11,6 @@ namespace SineahBot.Commands
 {
     public class CommandMetaInventory : Command
     {
-
         public CommandMetaInventory()
         {
             commandRegex = new Regex(@"^(!inventory|!inv)?$", RegexOptions.IgnoreCase);

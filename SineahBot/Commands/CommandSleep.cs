@@ -10,7 +10,6 @@ namespace SineahBot.Commands
 {
     public class CommandSleep : Command
     {
-
         public CommandSleep()
         {
             commandRegex = new Regex(@"^sleep$", RegexOptions.IgnoreCase);

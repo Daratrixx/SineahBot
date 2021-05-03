@@ -528,6 +528,7 @@ namespace SineahBot.Data
         {
             var slot = equipment.slot;
             Unequip(slot);
+            if (equipment == null) return;
             equipments[slot] = equipment;
             equipment.Equip(this);
         }
@@ -543,6 +544,7 @@ namespace SineahBot.Data
 
         public bool IsEquiped(Equipment equipment)
         {
+            if (equipment == null) return false;
             return equipments.ContainsKey(equipment.slot) && equipments[equipment.slot] == equipment;
         }
 

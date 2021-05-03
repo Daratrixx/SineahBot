@@ -10,7 +10,6 @@ namespace SineahBot.Commands
 {
     public class CommandCombatAttack : Command
     {
-
         public CommandCombatAttack()
         {
             commandRegex = new Regex(@"^(atk|attack|hit|strike|fight|assault) (.+)$", RegexOptions.IgnoreCase);

@@ -12,7 +12,6 @@ namespace SineahBot.Commands
 {
     public class CommandMetaLevel : Command
     {
-
         public CommandMetaLevel()
         {
             commandRegex = new Regex(@"^(!level)( .+)?$", RegexOptions.IgnoreCase);

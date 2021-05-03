@@ -10,7 +10,6 @@ namespace SineahBot.Commands
 {
     public class CommandCast : Command
     {
-
         public CommandCast()
         {
             commandRegex = new Regex(@"^cast (.+)$", RegexOptions.IgnoreCase);

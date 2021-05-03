@@ -10,7 +10,6 @@ namespace SineahBot.Commands
 {
     public class CommandTrade : Command
     {
-
         public CommandTrade()
         {
             commandRegex = new Regex(@"^(trade|shop)( .+)?$", RegexOptions.IgnoreCase);

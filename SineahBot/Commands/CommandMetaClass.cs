@@ -10,7 +10,6 @@ namespace SineahBot.Commands
 {
     public class CommandMetaClass : Command
     {
-
         public CommandMetaClass()
         {
             commandRegex = new Regex(@"^!(class ?|c ?)(.*)$", RegexOptions.IgnoreCase);

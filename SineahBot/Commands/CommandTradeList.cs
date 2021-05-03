@@ -11,7 +11,6 @@ namespace SineahBot.Commands
 {
     public class CommandTradeList : Command
     {
-
         public CommandTradeList()
         {
             commandRegex = new Regex(@"^(l|list)( .*)?$", RegexOptions.IgnoreCase);

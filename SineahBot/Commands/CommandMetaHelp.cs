@@ -10,7 +10,6 @@ namespace SineahBot.Commands
 {
     public class CommandMetaHelp : Command
     {
-
         public CommandMetaHelp()
         {
             commandRegex = new Regex(@"^(!help)( .+)?$", RegexOptions.IgnoreCase);

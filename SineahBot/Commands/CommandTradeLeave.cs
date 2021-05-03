@@ -10,7 +10,6 @@ namespace SineahBot.Commands
 {
     public class CommandTradeLeave : Command
     {
-
         public CommandTradeLeave()
         {
             commandRegex = new Regex(@"^(leave|exit|out)$", RegexOptions.IgnoreCase);

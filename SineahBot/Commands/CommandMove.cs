@@ -10,7 +10,6 @@ namespace SineahBot.Commands
 {
     public class CommandMove : Command
     {
-
         public CommandMove()
         {
             commandRegex = new Regex(@"^(move |go |move to |go to )?(north|n|east|e|south|s|west|w|in|out|up|down)$", RegexOptions.IgnoreCase);

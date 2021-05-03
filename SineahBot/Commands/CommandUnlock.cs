@@ -80,10 +80,16 @@ namespace SineahBot.Commands
                     throw new Exception($@"Can't unlock unknown direction ""{directionName}""");
             }
 
+            if (Unlock(character, room, direction))
+                character.RewardExperience(1);
+        }
+
+        public static bool Unlock(Character character, Room room, MoveDirection direction)
+        {
             if (!room.IsValidDirection(direction))
             {
                 character.Message($@"This room doesn't have a ""{direction}"" access.");
-                return;
+                return false;
             }
 
             var connection = room.GetRoomConnectionInDirection(direction);
@@ -91,31 +97,20 @@ namespace SineahBot.Commands
             if (!connection.locked)
             {
                 character.Message("This access is already unlocked.");
-                return;
+                return false;
             }
 
-            if (connection.keyItemName != null)
+            if (connection.keyItemName != null && !character.IsItemInInventory(connection.keyItemName))
             {
-                if (!character.IsItemInInventory(connection.keyItemName))
-                {
-                    character.Message("You ned a key for that.");
-                    return;
-                }
-
-                connection.Unlock();
-                room.DescribeAction($"{character.GetName()} has unlocked the access ({direction})", character);
-                connection.toRoom.DescribeAction($"Someone unlocked the access from the other side.");
-                character.Message($"You unlocked the access ({direction})");
+                character.Message("You ned a key for that.");
+                return false;
             }
-            else
-            {
-                connection.Unlock();
-                room.DescribeAction($"{character.GetName()} has unlocked the access ({direction})", character);
-                connection.toRoom.DescribeAction($"Someone unlocked the access from the other side.");
-                character.Message($"You unlocked the access ({direction})");
-            }
+            connection.Unlock();
+            room.DescribeAction($"{character.GetName()} has unlocked the access ({direction})", character);
+            connection.toRoom.DescribeAction($"Someone unlocked the access from the other side.");
+            character.Message($"You unlocked the access ({direction})");
 
-            character.RewardExperience(1);
+            return true;
         }
     }
 }

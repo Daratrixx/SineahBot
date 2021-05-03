@@ -52,30 +52,36 @@ namespace SineahBot.Commands
                 return;
             }
 
+            Lock(character, room, container);
+
+            character.RewardExperience(1);
+        }
+
+        public static bool Lock(Character character, Room room, Container container)
+        {
             if (!container.lockable)
             {
                 character.Message($@"The container ""{container.GetName()}"" cannot be locked");
-                return;
+                return false;
             }
 
             if (container.locked)
             {
                 character.Message("This container is already locked.");
-                return;
+                return false;
             }
 
             if (container.keyItemName != null && !character.IsItemInInventory(container.keyItemName))
             {
                 character.Message("You need a key for that.");
-                return;
+                return false;
             }
 
             container.Lock();
             // describe in current room
             room.DescribeAction($"{character.GetName()} has locked **{container.GetName()}**.", character);
             character.Message($"You locked **{container.GetName()}**.");
-
-            character.RewardExperience(1);
+            return true;
         }
     }
 }

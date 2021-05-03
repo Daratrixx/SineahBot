@@ -10,7 +10,6 @@ namespace SineahBot.Commands
 {
     public class CommandAct : Command
     {
-
         public CommandAct()
         {
             commandRegex = new Regex(@"^(act |me |[*] ?)(.+)$", RegexOptions.IgnoreCase);

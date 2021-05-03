@@ -11,7 +11,6 @@ namespace SineahBot.Commands
 {
     public class CommandMetaSpells : Command
     {
-
         public CommandMetaSpells()
         {
             commandRegex = new Regex(@"^(!spells)( .+)?$", RegexOptions.IgnoreCase);
