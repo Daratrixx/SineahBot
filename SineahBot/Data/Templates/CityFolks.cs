@@ -165,6 +165,30 @@ namespace SineahBot.Data.Templates
             longDescription = "The pharmacian is ready to trade.",
             alternativeNames = new string[] { "pharma", "doctor", "heal", "pha", "ph", "p" }
         };
+        public static NPC Trader = new NPC()
+        {
+            level = 2,
+            baseHealth = 30,
+            health = 30,
+            gold = 40,
+            name = "Trader",
+            experience = 0,
+            shortDescription = "A trader is here to trade.",
+            longDescription = "The trader is ready to trade.",
+            alternativeNames = new string[] { "trader", "j" }
+        };
+        public static NPC Jeweler = new NPC()
+        {
+            level = 2,
+            baseHealth = 30,
+            health = 30,
+            gold = 40,
+            name = "Jeweler",
+            experience = 0,
+            shortDescription = "A jeweler is here to trade.",
+            longDescription = "The jeweler is ready to trade.",
+            alternativeNames = new string[] { "jewel", "j" }
+        };
         public static NPC Militian = new NPC()
         {
             level = 3,

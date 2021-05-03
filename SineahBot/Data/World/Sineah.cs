@@ -222,9 +222,9 @@ namespace SineahBot.Data.World
                 .RegisterEntry(Templates.Goods.BreadBundle, null, 10)
                 .RegisterEntry(Templates.Goods.MeatPackage, null, 20);
                 public static Shop ShadyConsumer = new Shop()
-                .RegisterEntry(Templates.Consumables.HealthPotion, 20, null)
-                .RegisterEntry(Templates.Consumables.ManaPotion, 20, null)
-                .RegisterEntry(Templates.Equipments.ShadowCloak, 500, null);
+                .RegisterEntry(Templates.Consumables.HealthPotion, 25, null)
+                .RegisterEntry(Templates.Consumables.ManaPotion, 25, null)
+                .RegisterEntry(Templates.Equipments.Armor.ShadowCloak, 500, null);
             }
             public static class Rooms
             {
@@ -841,24 +841,35 @@ namespace SineahBot.Data.World
                 .RegisterEntry(Templates.Consumables.Antidote, 10, null)
                 .RegisterEntry(Templates.Consumables.Medicine, 15, null);
                 public static Shop ChurchAttendant = new Shop()
-                .RegisterEntry(Templates.Equipments.PriestRobes, 150, null)
-                .RegisterEntry(Templates.Equipments.TemplarRobes, 400, null)
-                .RegisterEntry(Templates.Equipments.FanaticRobes, 400, null);
+                .RegisterEntry(Templates.Equipments.Armor.PriestRobes, 150, null)
+                .RegisterEntry(Templates.Equipments.Armor.TemplarRobes, 400, null)
+                .RegisterEntry(Templates.Equipments.Armor.FanaticRobes, 400, null);
                 public static Shop MagicVendor = new Shop()
-                .RegisterEntry(Templates.Equipments.Staff, 100, null)
-                .RegisterEntry(Templates.Equipments.EnchanterCloak, 150, null)
-                .RegisterEntry(Templates.Equipments.MageCloak, 500, null)
-                .RegisterEntry(Templates.Equipments.WizardCloak, 1000, null);
+                .RegisterEntry(Templates.Equipments.Weapons.Staff, 100, null)
+                .RegisterEntry(Templates.Equipments.Armor.EnchanterCloak, 150, null)
+                .RegisterEntry(Templates.Equipments.Armor.MageCloak, 500, null)
+                .RegisterEntry(Templates.Equipments.Armor.WizardCloak, 1000, null);
                 public static Shop WeaponSmith = new Shop()
-                .RegisterEntry(Templates.Equipments.Dagger, 50, 10)
-                .RegisterEntry(Templates.Equipments.Sword, 200, 40)
-                .RegisterEntry(Templates.Equipments.Axe, 150, 30)
-                .RegisterEntry(Templates.Equipments.Mace, 150, 30)
-                .RegisterEntry(Templates.Equipments.Spear, 200, 40);
+                .RegisterEntry(Templates.Equipments.Weapons.Dagger, 50, 10)
+                .RegisterEntry(Templates.Equipments.Weapons.Sword, 200, 40)
+                .RegisterEntry(Templates.Equipments.Weapons.Axe, 150, 30)
+                .RegisterEntry(Templates.Equipments.Weapons.Mace, 150, 30)
+                .RegisterEntry(Templates.Equipments.Weapons.Spear, 200, 40);
                 public static Shop ArmorSmith = new Shop()
-                .RegisterEntry(Templates.Equipments.MilitianArmor, 150, 75)
-                .RegisterEntry(Templates.Equipments.GuardArmor, 500, 250)
-                .RegisterEntry(Templates.Equipments.KnightArmor, 1000, 500);
+                .RegisterEntry(Templates.Equipments.Armor.MilitianArmor, 150, 75)
+                .RegisterEntry(Templates.Equipments.Armor.GuardArmor, 500, 250)
+                .RegisterEntry(Templates.Equipments.Armor.KnightArmor, 1000, 500);
+                public static Shop Trader = new Shop()
+                .RegisterEntry(Templates.Equipments.Weapons.Dagger, 50, 10)
+                .RegisterEntry(Templates.Equipments.Armor.TravelingCloak, 100, null)
+                .RegisterEntry(Templates.Consumables.DriedMeat, 3, null)
+                .RegisterEntry(Templates.Consumables.Water, 1, null);
+                public static Shop Jeweler = new Shop()
+                .RegisterEntry(Templates.Equipments.Rings.BladeRing, 100, null)
+                .RegisterEntry(Templates.Equipments.Rings.HealthRing, 200, null)
+                .RegisterEntry(Templates.Equipments.Rings.ManaRing, 200, null)
+                .RegisterEntry(Templates.Equipments.Rings.IronRing, 200, null)
+                .RegisterEntry(Templates.Equipments.Rings.AmethystRing, 200, null);
             }
             public static class Rooms
             {
@@ -1064,6 +1075,12 @@ namespace SineahBot.Data.World
                 public static NPC magicVendor = Templates.CityFolks.MagicVendor.Clone()
                     .RegisterShop(Shops.MagicVendor)
                     .GenerateTraderKnowledge();
+                public static NPC trader = Templates.CityFolks.Trader.Clone()
+                    .RegisterShop(Shops.Trader)
+                    .GenerateTraderKnowledge();
+                public static NPC jeweler = Templates.CityFolks.Jeweler.Clone()
+                    .RegisterShop(Shops.Jeweler)
+                    .GenerateTraderKnowledge();
             }
             public static Character[] GetCharacters()
             {
@@ -1104,24 +1121,7 @@ namespace SineahBot.Data.World
             }
         }
 
-        #region ROOMS
-        // SINEAH (city)
-        // The Inn - inner traveller
-        // The traveller shop - outer travellers
-        // The church - outer travellers
-
-        // The university - outer/inner science
-        // The arcane spire - outer science
-        // The workshop - inner science
-
-        // The barracks - outer military
-        // The weapon stack - inner military
-        // The armory - inner military
-
-        // The trader - outer commercial
-        // The fence - hidden commercial
         public static IEnumerable<Room> rooms;
-        #endregion
 
         #region CONNECTIONS
         public static RoomConnection[] cityToBuildingConnections = new RoomConnection[] {
@@ -1146,24 +1146,6 @@ namespace SineahBot.Data.World
                 directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.South, Commands.MoveDirection.Out }
             }
         };
-        #endregion
-
-        #region CHARACTERS
-
-        public static Character[] barrackCharacters = new Character[] {
-            Templates.CityFolks.Militian.Clone(),
-            Templates.CityFolks.Militian.Clone(),
-            Templates.CityFolks.Militian.Clone(),
-            Templates.CityFolks.Militian.Clone(),
-            Templates.CityFolks.Guard.Clone(),
-            Templates.CityFolks.Guard.Clone(),
-            Templates.CityFolks.Guard.Clone(),
-            Templates.CityFolks.Guard.Clone(),
-            Templates.CityFolks.Guard.Clone(),
-            Templates.CityFolks.Guard.Clone(),
-            Templates.CityFolks.GuardCaptain.Clone()
-        };
-
         #endregion
 
         public static void LoadWorld()
@@ -1261,9 +1243,11 @@ namespace SineahBot.Data.World
             Streets.Rooms.plaza.AddToRoom(Streets.Characters.plazaMilitian2); // militian at plaza
             Streets.Rooms.shady.AddToRoom(Streets.Characters.shadyRat); // rat at shady
             Streets.Rooms.outerCommercial.AddToRoom(Streets.Characters.baker); // baker at commercial
+            Streets.Rooms.outerCommercial.AddToRoom(Streets.Characters.jeweler); // jeweler at commercial
             Streets.Rooms.innerMilitary.AddToRoom(Streets.Characters.weaponSeller); // weaponsmith at inner military
             Streets.Rooms.innerMilitary.AddToRoom(Streets.Characters.armorSeller); // armorsmith at inner military
-            Streets.Rooms.outerTraveller.AddToRoom(Streets.Characters.churchAttendant); // armorsmith at outer traveller
+            Streets.Rooms.outerTraveller.AddToRoom(Streets.Characters.churchAttendant); // church attendant at outer traveller
+            Streets.Rooms.outerTraveller.AddToRoom(Streets.Characters.trader); // trader at outer traveller
             Streets.Rooms.outerScience.AddToRoom(Streets.Characters.magicVendor); // magic vendor at outer science
             Streets.Rooms.outerScience.AddToRoom(Streets.Characters.pharmacist); // pharmacist at outer science
 
