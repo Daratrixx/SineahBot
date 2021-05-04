@@ -121,11 +121,11 @@ namespace SineahBot.Tools
             .RegisterSpell(Data.Spells.Necromancer.BoneArmor, 3)
             .RegisterSpell(Data.Spells.Necromancer.BoneSlash, 5)
             .RegisterSpell(Data.Spells.Necromancer.Frenzy, 6)},
-            { CharacterClass.Rogue, new ClassProgression(CharacterClass.Rogue, 24, 13, 15, 4)
+            { CharacterClass.Rogue, new ClassProgression(CharacterClass.Rogue, 20, 11, 10, 3)
             .RegisterSpell(Data.Spells.Rogue.PoisonDart, 2)
             .RegisterSpell(Data.Spells.Rogue.Bleedout, 4)
             .RegisterSubclass(CharacterClass.Assassin, 10)},
-            { CharacterClass.Assassin, new ClassProgression(CharacterClass.Assassin, 24, 14, 15, 5)
+            { CharacterClass.Assassin, new ClassProgression(CharacterClass.Assassin, 30, 14, 15, 3)
             .RegisterSpell(Data.Spells.Rogue.PoisonDart, 2)
             .RegisterSpell(Data.Spells.Rogue.Bleedout, 4)
             .RegisterSpell(Data.Spells.Rogue.Disapear, 10)},
