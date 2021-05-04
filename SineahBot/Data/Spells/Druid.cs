@@ -12,6 +12,7 @@ namespace SineahBot.Data.Spells
     {
         public static Spell HealingTouch = new Spell("Healing touch", new string[] { "healingtouch", "healingt", "htouch", "ht", "healing", "heal" })
         {
+            description = "Heal the target for a decent amount.",
             manaCost = 10,
             needsTarget = true,
             canSelfCast = true,
@@ -20,10 +21,10 @@ namespace SineahBot.Data.Spells
                     baseHeal = 15
                 }
             },
-            description = "Heals the target for a decent amount."
         };
         public static Spell Wrath = new Spell("Wrath", new string[] { })
         {
+            description = "Damage the target for a decent amount.",
             manaCost = 10,
             needsTarget = true,
             canSelfCast = true,
@@ -32,10 +33,10 @@ namespace SineahBot.Data.Spells
                     baseDamage = 15
                 }
             },
-            description = "Damages the target for a decent amount."
         };
         public static Spell Metabolize = new Spell("Metabolize", new string[] { "metabol", "metab", "met", })
         {
+            description = "Cure the target from poison.",
             manaCost = 5,
             needsTarget = true,
             canSelfCast = true,
@@ -44,10 +45,10 @@ namespace SineahBot.Data.Spells
                     alteration = AlterationType.Poisoned
                 }
             },
-            description = "Cures the target from poison."
         };
         public static Spell VenomousWhip = new Spell("Venomous whip", new string[] { "venomouswhip", "venom whip", "venomwhip", "venom", "whip", "poison" })
         {
+            description = "Strike the target and poison them for a little while.",
             manaCost = 10,
             needsTarget = true,
             canSelfCast = false,
@@ -61,10 +62,10 @@ namespace SineahBot.Data.Spells
                     spellPowerDurationRatio = 0.5
                 }
             },
-            description = "Strikes the target and poison them for a little while."
         };
         public static Spell Hibernate = new Spell("Hibernate", new string[] { "sleep" })
         {
+            description = "Put the target to sleep until they take damage or their health and mana is full again.",
             manaCost = 15,
             needsTarget = true,
             canSelfCast = false,
@@ -85,7 +86,6 @@ namespace SineahBot.Data.Spells
                     return "- Puts the target to sleep.";
                 })
             },
-            description = "Puts the target to sleep until the take damage or their health and mana is full again."
         };
     }
 }

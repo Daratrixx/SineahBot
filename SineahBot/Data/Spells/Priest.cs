@@ -31,7 +31,7 @@ namespace SineahBot.Data.Spells
             effects = new Spell.Effect[] {
                 new Spell.Effect.RemoveAlter() {
                     alteration = AlterationType.Sickness
-                }
+                },
             },
         };
         public static Spell MajorHealing = new Spell("Major healing", new string[] { "majh", "majheal", "heal", "h", "bh" })
@@ -48,7 +48,7 @@ namespace SineahBot.Data.Spells
         };
         public static Spell Smite = new Spell("Smite", new string[] {  })
         {
-            description = "Harms foe with the power of the gods. Will deal additionnal damage to undead.",
+            description = "Harms foe with the power of the Goddess. Will deal additionnal damage to undead.",
             canSelfCast = false,
             needsTarget = true,
             manaCost = 10,
@@ -58,24 +58,66 @@ namespace SineahBot.Data.Spells
                 {
                     var damage = caster.GetSpellPower();
                     if (target is Character && (target as Character).HasCharacterTag(CharacterTag.Undead)) damage = damage * 2;
-                        (target as IDamageable).DamageHealth(damage, DamageType.Magical, caster);
+                        (target as IDamageable).DamageHealth(damage, DamageType.Pure, caster);
                 },
                 (caster) =>
                 {
-                    return "- Damages target (double damage against undead)";
+                        return $"- Damages target\n> Damaging potential : **{caster.GetSpellPower()} ([spell power])**\n> Damage type: {DamageType.Pure}\n>Damage doubled against Undead.";
                 })
             },
         };
-        public static Spell DivineHand = new Spell("Divine hand", new string[] { "divh", "divhand", "dh" })
+        public static Spell DivineHand = new Spell("Divine hand", new string[] { "divinehand", "divhand", "divh", "dh" })
         {
-            description = "Heal the targeted character for a high amount of health.",
+            description = "Heal the targeted character for a high amount of health, and dispell many ailment.",
             manaCost = 20,
             needsTarget = true,
             canSelfCast = true,
             effects = new Spell.Effect[] {
                 new Spell.Effect.Heal() {
                     baseHeal = 60
-                }
+                },
+                new Spell.Effect.RemoveAlter() {
+                    alteration = AlterationType.Blind
+                },
+                new Spell.Effect.RemoveAlter() {
+                    alteration = AlterationType.Burnt
+                },
+                new Spell.Effect.RemoveAlter() {
+                    alteration = AlterationType.Deaf
+                },
+                new Spell.Effect.RemoveAlter() {
+                    alteration = AlterationType.Weakened
+                },
+            },
+        };
+
+        public static Spell DivineMight = new Spell("Divine might", new string[] { "divinemight", "divmight", "divm", "dm" })
+        {
+            description = "Infuse the target with the might of the Goddess for a short time.",
+            manaCost = 20,
+            needsTarget = true,
+            canSelfCast = true,
+            effects = new Spell.Effect[] {
+                new Spell.Effect.AddAlter() {
+                    alteration = AlterationType.Amplified,
+                    baseDuration = 30,
+                    spellPowerDurationRatio = 2
+                },
+                new Spell.Effect.AddAlter() {
+                    alteration = AlterationType.Empowered,
+                    baseDuration = 30,
+                    spellPowerDurationRatio = 2
+                },
+                new Spell.Effect.AddAlter() {
+                    alteration = AlterationType.Hardened,
+                    baseDuration = 30,
+                    spellPowerDurationRatio = 2
+                },
+                new Spell.Effect.AddAlter() {
+                    alteration = AlterationType.Warded,
+                    baseDuration = 30,
+                    spellPowerDurationRatio = 2
+                },
             },
         };
     }

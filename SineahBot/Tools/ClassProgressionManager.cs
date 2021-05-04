@@ -77,7 +77,8 @@ namespace SineahBot.Tools
             .RegisterSpell(Data.Spells.Priest.Cure, 3)
             .RegisterSpell(Data.Spells.Priest.MajorHealing, 4)
             .RegisterSpell(Data.Spells.Priest.Smite, 5)
-            .RegisterSpell(Data.Spells.Priest.DivineHand, 6) },
+            .RegisterSpell(Data.Spells.Priest.DivineHand, 6)
+            .RegisterSpell(Data.Spells.Priest.DivineMight, 10) },
             // magic path
             { CharacterClass.Enchanter, new ClassProgression(CharacterClass.Enchanter, 20, 10, 20, 4)
             .RegisterSpell(Data.Spells.Mage.MagicDart, 2)
@@ -94,7 +95,8 @@ namespace SineahBot.Tools
             .RegisterSpell(Data.Spells.Mage.Amplify, 3)
             .RegisterSpell(Data.Spells.Mage.ArcaneBlast, 4)
             .RegisterSpell(Data.Spells.Mage.Incinerate, 5)
-            .RegisterSpell(Data.Spells.Mage.Overcharge, 7) },
+            .RegisterSpell(Data.Spells.Mage.Overcharge, 7)
+            .RegisterSpell(Data.Spells.Mage.AbsoluteZero, 10) },
 
             // secret class
             { CharacterClass.Druid, new ClassProgression(CharacterClass.Druid, 20, 15, 15, 3)
