@@ -12,10 +12,12 @@ namespace SineahBot.Tools
         public static CharacterClass[] starterClass = new CharacterClass[] { CharacterClass.Militian, CharacterClass.Scholar };
         public static CharacterClass[] secretClass = new CharacterClass[] { CharacterClass.Druid, CharacterClass.Necromancer };
         public static CharacterClass[] physicalClass = new CharacterClass[] { CharacterClass.Militian,
+        CharacterClass.Paladin,
         CharacterClass.Guard, CharacterClass.Footman, CharacterClass.Knight,
         CharacterClass.Ranger, CharacterClass.Archer, CharacterClass.Sharpshooter,
         CharacterClass.Druid };
         public static CharacterClass[] magicalClass = new CharacterClass[] { CharacterClass.Scholar,
+        CharacterClass.Paladin,
         CharacterClass.Abbot, CharacterClass.Prelate, CharacterClass.Bishop,
         CharacterClass.Enchanter, CharacterClass.Mage, CharacterClass.Wizard,
         CharacterClass.Druid, CharacterClass.Necromancer, CharacterClass.Lich };
@@ -41,7 +43,6 @@ namespace SineahBot.Tools
             return magicalClass.Contains(characterClass);
         }
 
-
         private static Dictionary<CharacterClass, ClassProgression> classProgressions = new Dictionary<CharacterClass, ClassProgression>()
         {
             // physical path
@@ -50,8 +51,11 @@ namespace SineahBot.Tools
             .RegisterSubclass(CharacterClass.Ranger, 3) },
             // melee path
             { CharacterClass.Guard, new ClassProgression(CharacterClass.Guard, 30, 13).RegisterSubclass(CharacterClass.Footman, 5) },
-            { CharacterClass.Footman, new ClassProgression(CharacterClass.Footman, 40, 16).RegisterSubclass(CharacterClass.Knight, 8) },
+            { CharacterClass.Footman, new ClassProgression(CharacterClass.Footman, 40, 16).RegisterSubclass(CharacterClass.Knight, 8).RegisterSubclass(CharacterClass.Paladin, 8) },
             { CharacterClass.Knight, new ClassProgression(CharacterClass.Knight, 50, 19) },
+            { CharacterClass.Paladin, new ClassProgression(CharacterClass.Paladin, 40, 16)
+            .RegisterSpell(Data.Spells.Priest.MinorHealing, 10)
+            .RegisterSpell(Data.Spells.Priest.Smite, 12) },
             // range path
             { CharacterClass.Ranger, new ClassProgression(CharacterClass.Ranger, 25, 12).RegisterSubclass(CharacterClass.Archer, 5) },
             { CharacterClass.Archer, new ClassProgression(CharacterClass.Archer, 30, 14).RegisterSubclass(CharacterClass.Sharpshooter, 8) },
@@ -112,11 +116,19 @@ namespace SineahBot.Tools
             .RegisterSpell(Data.Spells.Necromancer.BoneSlash, 5)
             .RegisterSpell(Data.Spells.Necromancer.Frenzy, 6)
             .RegisterSubclass(CharacterClass.Lich,10)},
-            { CharacterClass.Lich, new ClassProgression(CharacterClass.Lich, 24, 13, 15, 4)
+            { CharacterClass.Lich, new ClassProgression(CharacterClass.Lich, 24, 14, 15, 5)
             .RegisterSpell(Data.Spells.Necromancer.WitheringTouch, 2)
             .RegisterSpell(Data.Spells.Necromancer.BoneArmor, 3)
             .RegisterSpell(Data.Spells.Necromancer.BoneSlash, 5)
             .RegisterSpell(Data.Spells.Necromancer.Frenzy, 6)},
+            { CharacterClass.Rogue, new ClassProgression(CharacterClass.Rogue, 24, 13, 15, 4)
+            .RegisterSpell(Data.Spells.Rogue.PoisonDart, 2)
+            .RegisterSpell(Data.Spells.Rogue.Bleedout, 4)
+            .RegisterSubclass(CharacterClass.Assassin, 10)},
+            { CharacterClass.Assassin, new ClassProgression(CharacterClass.Assassin, 24, 14, 15, 5)
+            .RegisterSpell(Data.Spells.Rogue.PoisonDart, 2)
+            .RegisterSpell(Data.Spells.Rogue.Bleedout, 4)
+            .RegisterSpell(Data.Spells.Rogue.Disapear, 10)},
         };
         private static Dictionary<CharacterClass, string> classDescription = new Dictionary<CharacterClass, string>() {
             { CharacterClass.Militian, "Citizen following the path of arms, ready to take and give a beating." },

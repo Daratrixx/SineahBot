@@ -265,7 +265,7 @@ namespace SineahBot.Data
             if (sleeping) output *= 4;
             if (ClassProgressionManager.IsPhysicalClass(characterClass)) output += level / 2;
             if (HasAlteration(AlterationType.Burnt) && !HasCharacterTag(CharacterTag.Mecanical)) output /= 2;
-
+            if(characterStatus == CharacterStatus.Combat) output /= 2;
             return output;
         }
 
@@ -275,7 +275,7 @@ namespace SineahBot.Data
             if (sleeping) output *= 4;
             if (ClassProgressionManager.IsMagicalClass(characterClass)) output += level / 4;
             if (HasAlteration(AlterationType.Poisoned) && !HasCharacterTag(CharacterTag.Undead) && !HasCharacterTag(CharacterTag.Mecanical)) output /= 2;
-
+            if (characterStatus == CharacterStatus.Combat) output /= 2;
             return output;
         }
 
@@ -514,9 +514,13 @@ namespace SineahBot.Data
                     if (new Random().NextDouble() < 0.20)
                         AddAlteration(AlterationType.Burnt, 300);
                     break;
+                case AlterationType.Bleeding:
+                    if (HasCharacterTag(CharacterTag.Mecanical) || HasCharacterTag(CharacterTag.Undead) || HasCharacterTag(CharacterTag.Plant)) break;
+                    DamageHealth(3, DamageType.Pure, alteration);
+                    break;
                 case AlterationType.Sickness:
                     if (HasCharacterTag(CharacterTag.Mecanical)) break;
-                    DamageHealth(1, DamageType.Pure, alteration);
+                    DamageHealth(2, DamageType.Pure, alteration);
                     break;
                 case AlterationType.Taunted:
                     break;
@@ -658,6 +662,8 @@ namespace SineahBot.Data
         Druid,
         Shaman,
         Necromancer,
-        Lich
+        Lich,
+        Rogue,
+        Assassin,
     }
 }
