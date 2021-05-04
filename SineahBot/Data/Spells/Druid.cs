@@ -10,7 +10,7 @@ namespace SineahBot.Data.Spells
 {
     public static class Druid
     {
-        public static Spell HealingTouch = new Spell("Healing touch", new string[] { "healingtouch", "healingt", "htouch", "ht", "healing" })
+        public static Spell HealingTouch = new Spell("Healing touch", new string[] { "healingtouch", "healingt", "htouch", "ht", "healing", "heal" })
         {
             manaCost = 10,
             needsTarget = true,

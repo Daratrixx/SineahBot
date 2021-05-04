@@ -13,13 +13,15 @@ namespace SineahBot.Data.Templates
                 description = "A dagger lies around.",
                 details = "A sharp, quick dagger. Gives a small damage and mana boost",
                 bonusDamage = 5,
-                bonusMana = 10
+                bonusMana = 10,
+                bonusSpells = new List<Spell>() { Data.Spells.Equipment.DeepCut },
             };
             public static Equipment Sword = new Equipment("Sword", EquipmentSlot.Weapon, new string[] { })
             {
                 description = "A sword lies around.",
                 details = "A standard, well-made sword. Gives a large damage boost.",
                 bonusDamage = 20,
+                bonusSpells = new List<Spell>() { Data.Spells.Equipment.DeepCut },
             };
             public static Equipment Axe = new Equipment("Axe", EquipmentSlot.Weapon, new string[] { })
             {
@@ -27,6 +29,7 @@ namespace SineahBot.Data.Templates
                 details = "A dangerous looknig axe. Gives a decent damage and health boost.",
                 bonusDamage = 10,
                 bonusHealth = 20,
+                bonusSpells = new List<Spell>() { Data.Spells.Equipment.DeepCut },
             };
             public static Equipment Mace = new Equipment("Mace", EquipmentSlot.Weapon, new string[] { })
             {
@@ -34,6 +37,7 @@ namespace SineahBot.Data.Templates
                 details = "A reliable mace. Gives a decent damage and a small armor boost.",
                 bonusDamage = 10,
                 bonusArmor = 5,
+                bonusSpells = new List<Spell>() { Data.Spells.Equipment.CrushingBlow },
             };
             public static Equipment Staff = new Equipment("Staff", EquipmentSlot.Weapon, new string[] { })
             {
@@ -65,7 +69,8 @@ namespace SineahBot.Data.Templates
             {
                 description = "A shield lies around.",
                 details = "A sharp, quick dagger. Gives a small deflection boost.",
-                bonusDeflection = 10
+                bonusDeflection = 10,
+                bonusSpells = new List<Spell>() { Data.Spells.Equipment.ShieldBash },
             };
         }
         public static class Trinkets
@@ -124,6 +129,13 @@ namespace SineahBot.Data.Templates
                 details = "A silver ring with a small amethyst. Gives a decent health regen and mana regen boost.",
                 bonusHealthRegen = 4,
                 bonusManaRegen = 2,
+            };
+            public static Equipment DarkRing = new Equipment("Dark ring", EquipmentSlot.Ring, new string[] { "darkring", "darkr", "dring", "dr", "ring" })
+            {
+                description = "An dark ring thrones here.",
+                details = "A dark silver ring with a black gem. Gives the user a small damage boost and the ability to Shroud.",
+                bonusDamage = 5,
+                bonusSpells = new List<Spell>() { Data.Spells.Equipment.Shrouding },
             };
         }
 

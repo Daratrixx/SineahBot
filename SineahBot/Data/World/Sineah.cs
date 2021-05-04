@@ -224,7 +224,8 @@ namespace SineahBot.Data.World
                 public static Shop ShadyConsumer = new Shop()
                 .RegisterEntry(Templates.Consumables.HealthPotion, 25, null)
                 .RegisterEntry(Templates.Consumables.ManaPotion, 25, null)
-                .RegisterEntry(Templates.Equipments.Armor.ShadowCloak, 500, null);
+                .RegisterEntry(Templates.Equipments.Armor.ShadowCloak, 400, null)
+                .RegisterEntry(Templates.Equipments.Rings.DarkRing, 500, null);
             }
             public static class Rooms
             {

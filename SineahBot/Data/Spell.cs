@@ -101,6 +101,23 @@ namespace SineahBot.Data
                     }
                 }
             }
+            public class PureDamage : Effect
+            {
+                public int baseDamage = 0;
+                public override string GetEffectDescription(ICaster caster = null)
+                {
+                        return $"- Damages target\n> Damaging potential : **{baseDamage}**\n> Damage type: {DamageType.Pure}";
+                }
+
+                public override void RunEffect(ICaster caster, Entity target)
+                {
+                    if (target is IDamageable)
+                    {
+                        var damageAmount = baseDamage;
+                        (target as IDamageable).DamageHealth(damageAmount, DamageType.Pure, caster as Entity);
+                    }
+                }
+            }
             public class AttackDamage : Effect
             {
                 public int baseDamage = 0;
