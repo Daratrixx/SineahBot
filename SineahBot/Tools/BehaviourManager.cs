@@ -49,10 +49,19 @@ namespace SineahBot.Tools
             }
         }
 
+        private static void SwapMemory()
+        {
+            foreach (var behaviour in behaviours.Values)
+            {
+                behaviour.SwapMemory();
+            }
+        }
+
         public static void RunBehaviours()
         {
             lock (behaviours)
             {
+                SwapMemory();
                 foreach (var npc in behaviours)
                 {
                     RunBehaviour(npc.Value);
@@ -60,16 +69,15 @@ namespace SineahBot.Tools
             }
         }
 
-        public static void RunRoomEventForNPCs(IEnumerable<NPC> npcs, Room room, RoomEvent e)
+        public static void RegisterRoomEventForNPCs(IEnumerable<NPC> npcs, Room room, RoomEvent e)
         {
-            Behaviour behaviour;
             lock (behaviours)
             {
                 foreach (var npc in npcs)
                 {
-                    if (behaviours.TryGetValue(npc, out behaviour))
+                    if (behaviours.TryGetValue(npc, out Behaviour behaviour))
                     {
-                        behaviour.OnRoomEvent(room, e);
+                        behaviour.MemorizeEvent(e);
                     }
                 }
             }
@@ -80,6 +88,7 @@ namespace SineahBot.Tools
             if (!behaviour.active)
                 return;
             var room = RoomManager.GetRoom(behaviour.npc.currentRoomId);
+            behaviour.ParseMemory();
             behaviour.Run(room);
         }
     }

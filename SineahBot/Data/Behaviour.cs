@@ -18,12 +18,28 @@ namespace SineahBot.Data
         public BehaviourState defaultBehaviourState;
         public BehaviourState currentBehaviourState;
 
-        public List<object> memory = new List<object>();
+        public List<RoomEvent> memory = new List<RoomEvent>();
+        public List<RoomEvent> memorySwapped = new List<RoomEvent>();
+
+        public BehaviourMission currentMission;
+        protected List<BehaviourMission> missions = new List<BehaviourMission>();
 
         public virtual void Init(NPC npc)
         {
             this.npc = npc;
         }
+        public void MemorizeEvent(RoomEvent e)
+        {
+            memory.Add(e);
+        }
+        public void SwapMemory()
+        {
+            var swap = memorySwapped;
+            memorySwapped = memory;
+            memory = swap;
+            memory.Clear();
+        }
+        public abstract void ParseMemory();
         public abstract void Run(Room room);
         public virtual void RunTravel(Room room)
         {
@@ -73,6 +89,48 @@ namespace SineahBot.Data
         public Action<Behaviour, Room, RoomEvent> OnDestinationReached;
         public Action<Behaviour, Room, RoomEvent> OnAttacked;
         public Func<Behaviour, Room, RoomEvent, bool> OnRoomEvent;
+    }
+
+    public class BehaviourMission
+    {
+        public BehaviourMission(RoomEvent sourceEvent)
+        {
+            this.sourceEvent = sourceEvent;
+        }
+        public RoomEvent sourceEvent;
+        public int totalAge = 0;
+        public int activeAge = 0;
+        public float cycleValue { get; private set; }
+
+        public void SetCycleValue(float cycleValue)
+        {
+            this.cycleValue = cycleValue;
+        }
+
+        public class Idle : BehaviourMission
+        {
+            public Idle(RoomEvent sourceEvent) : base(sourceEvent) { }
+        }
+        public class Guard : BehaviourMission
+        {
+            public Guard(RoomEvent sourceEvent) : base(sourceEvent) { }
+        }
+        public class Roam : BehaviourMission
+        {
+            public Roam(RoomEvent sourceEvent) : base(sourceEvent) { }
+        }
+        public class Travel : BehaviourMission
+        {
+            public Travel(RoomEvent sourceEvent) : base(sourceEvent) { }
+        }
+        public class Snitch : BehaviourMission
+        {
+            public Snitch(RoomEvent sourceEvent) : base(sourceEvent) { }
+        }
+        public class Hunt : BehaviourMission
+        {
+            public Hunt(RoomEvent sourceEvent) : base(sourceEvent) { }
+        }
     }
 
     public class RoomEvent
