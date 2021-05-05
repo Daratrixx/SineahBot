@@ -1270,7 +1270,9 @@ namespace SineahBot.Data.World
             .ToArray();
 
             // register behaviours
-            BehaviourManager.RegisterNPC(Streets.Characters.beggar, new Behaviours.CityFolks.Beggar());
+            BehaviourManager.RegisterNPC(Streets.Characters.beggar, new Behaviours.Sineah.SineahBeggar());
+            BehaviourManager.RegisterNPC(Streets.Characters.armorSeller, new Behaviours.Sineah.SineahCitizen());
+            BehaviourManager.RegisterNPC(Streets.Characters.weaponSeller, new Behaviours.Sineah.SineahCitizen());
         }
     }
 }

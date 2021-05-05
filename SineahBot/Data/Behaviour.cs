@@ -13,6 +13,7 @@ namespace SineahBot.Data
 
         public NPC npc;
         public Random random = new Random();
+        public Room originalRoom;
 
         public List<RoomEvent> memory = new List<RoomEvent>();
         public List<RoomEvent> memorySwapped = new List<RoomEvent>();
@@ -20,10 +21,14 @@ namespace SineahBot.Data
         public BehaviourMission currentMission;
         protected List<BehaviourMission> missions = new List<BehaviourMission>();
 
+        public Behaviour() { }
+
         public virtual void Init(NPC npc)
         {
             this.npc = npc;
+            originalRoom = RoomManager.GetRoom(npc.currentRoomId);
         }
+
         public void MemorizeEvent(RoomEvent e)
         {
             memory.Add(e);
@@ -43,6 +48,11 @@ namespace SineahBot.Data
         public abstract void ParseMemory(RoomEvent e);
         public virtual void ElectMission()
         {
+            if (missions.Count == 0 && currentMission == null)
+            {
+                currentMission = new BehaviourMission.Idle();
+                missions.Add(currentMission);
+            }
             if (missions.Count == 1 && currentMission == null)
             {
                 currentMission = missions[0];
@@ -135,7 +145,13 @@ namespace SineahBot.Data
 
         public class Idle : BehaviourMission
         {
-            public Idle(RoomEvent sourceEvent) : base(sourceEvent) { }
+            public Idle() : base(null) { }
+        }
+        public class Rumor : BehaviourMission
+        {
+            public Rumor(RoomEvent sourceEvent, string rumorText) : base(sourceEvent) { this.rumorText = rumorText; }
+            public string rumorText;
+            public List<Character> spreadTo = new List<Character>();
         }
         public class Guard : BehaviourMission
         {
@@ -159,6 +175,19 @@ namespace SineahBot.Data
         {
             public Snitch(RoomEvent sourceEvent) : base(sourceEvent) { }
             public Room destination;
+
+            public string GetCrimeRumor()
+            {
+                switch (sourceEvent.type)
+                {
+                    case RoomEventType.CharacterAttacks:
+                        return $"**{sourceEvent.attackingCharacter}** attacked someone in *{sourceEvent.room.name}*!";
+                    case RoomEventType.CharacterKills:
+                        return $"**{sourceEvent.killingCharacter}** killed someone in *{sourceEvent.room.name}*!";
+                    default:
+                        return $"Someone commited a crime in *{sourceEvent.room.name}*";
+                }
+            }
         }
         public class Hunt : BehaviourMission
         {
