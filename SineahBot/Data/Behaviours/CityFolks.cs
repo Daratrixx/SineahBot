@@ -8,54 +8,101 @@ namespace SineahBot.Data.Behaviours
 {
     public abstract class CityFolks : Behaviour
     {
-        public override bool OnRoomEvent(Room room, RoomEvent e)
+        public class SineahSnitch : BehaviourMission.Snitch
+        {
+            public SineahSnitch(RoomEvent e) : base(e)
+            {
+                destination = World.Sineah.Barracks.Rooms.Hall;
+            }
+        }
+        public class SineahRoam : BehaviourMission.Roam
+        {
+            public SineahRoam(RoomEvent e) : base(e) { }
+        }
+        public override void ParseMemory(RoomEvent e)
         {
             switch (e.type)
             {
                 case RoomEventType.CharacterKills:
-                    CommandAct.Act(npc, room, "is horrified.");
-                    CommandSay.Say(npc, room, "Oh no!");
-                    break;
                 case RoomEventType.CharacterAttacks:
-                    destination = World.Sineah.Streets.Rooms.outerMilitary;
+                    if (e.attackingCharacter is NPC) return; // try to ignore guard retaliation
+                    CommandAct.Act(npc, e.room, "is horrified.");
+                    CommandSay.Say(npc, e.room, "Oh no!");
+                    missions.Add(new SineahSnitch(e));
                     break;
                 default:
                     break;
             }
-            return false;
         }
+
+        public override void ElectMission()
+        {
+            var snitch = missions.FirstOrDefault(x => x is BehaviourMission.Snitch);
+            if (snitch != null)
+            {
+                currentMission = snitch;
+            }
+            base.ElectMission();
+        }
+
+        public override void RunCurrentMission(Room room)
+        {
+            if (currentMission is BehaviourMission.Snitch snitch)
+            {
+                if (room != snitch.destination)
+                {
+                    RunTravel(room, snitch.destination);
+                    return;
+                }
+                // TODO: tell guards
+                CompleteCurrentMission();
+                return;
+            }
+            if (currentMission is BehaviourMission.Travel travel)
+            {
+                if (room != travel.destination)
+                {
+                    if (random.Next() % 2 == 0)
+                        RunTravel(room, travel.destination);
+                    return;
+                }
+                CompleteCurrentMission();
+                return;
+            }
+        }
+
         public class Beggar : CityFolks
         {
             public Beggar()
             {
-                defaultBehaviourState = currentBehaviourState = new DefaultBehaviour();
+                missions.Add(new SineahRoam(null));
             }
 
             public override void Init(NPC npc)
             {
                 base.Init(npc);
-
-                destination = World.Sineah.Streets.GetRooms().GetRandom();
             }
-            public override void Run(Room room)
+            public override void RunCurrentMission(Room room)
             {
-                if (random.Next() % 2 == 0)
-                    RunTravel(room);
+                if (currentMission is SineahRoam roam)
+                {
+                    currentMission = new BehaviourMission.Travel(World.Sineah.Streets.GetRooms().GetRandom());
+                    return;
+                }
+                base.RunCurrentMission(room);
             }
 
             public override void OnDestinationReached(Room room)
             {
-                destination = World.Sineah.Streets.GetRooms().GetRandom();
             }
 
             public override void OnEnterRoom(Room room)
             {
-                CommandAct.Act(npc, room, "notices you and smiles.");
-                CommandSay.Say(npc, room, "Go' a coin for a poor soul?");
-            }
-            public class DefaultBehaviour : BehaviourState
-            {
-
+                if (room.characters.Where(x => x.agent is Player).Count() > 0)
+                {
+                    CommandAct.Act(npc, room, "notices you and smiles.");
+                    CommandSay.Say(npc, room, "Go' a coin for a poor soul?");
+                }
             }
         }
     }

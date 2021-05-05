@@ -11,12 +11,8 @@ namespace SineahBot.Data
     {
         public bool active = true;
 
-        public Room destination;
         public NPC npc;
         public Random random = new Random();
-
-        public BehaviourState defaultBehaviourState;
-        public BehaviourState currentBehaviourState;
 
         public List<RoomEvent> memory = new List<RoomEvent>();
         public List<RoomEvent> memorySwapped = new List<RoomEvent>();
@@ -39,9 +35,45 @@ namespace SineahBot.Data
             memory = swap;
             memory.Clear();
         }
-        public abstract void ParseMemory();
-        public abstract void Run(Room room);
-        public virtual void RunTravel(Room room)
+        public void ParseMemories()
+        {
+            foreach (var e in memorySwapped)
+                ParseMemory(e);
+        }
+        public abstract void ParseMemory(RoomEvent e);
+        public virtual void ElectMission()
+        {
+            if (missions.Count == 1 && currentMission == null)
+            {
+                currentMission = missions[0];
+                return;
+            }
+        }
+        public abstract void RunCurrentMission(Room room);
+        public void CompleteCurrentMission()
+        {
+            missions.Remove(currentMission);
+            currentMission = null;
+        }
+        public void TickMissions()
+        {
+            foreach (var m in missions)
+            {
+                if (m.totalAge >= 0)
+                    ++m.totalAge;
+                if (m == currentMission)
+                    ++m.activeAge;
+            }
+        }
+        public void Run(Room room)
+        {
+
+            TickMissions();
+            ParseMemories();
+            ElectMission();
+            RunCurrentMission(room);
+        }
+        public virtual Room RunTravel(Room room, Room destination)
         {
             var newRoom = RunTravelMove(room, destination);
             if (newRoom != room)
@@ -51,14 +83,13 @@ namespace SineahBot.Data
             }
             if (room == destination)
             {
-                destination = null;
                 OnDestinationReached(room);
             }
+            return newRoom;
         }
 
         public virtual Room RunTravelMove(Room from, Room to)
         {
-            if (destination == null) return from;
             if (from == to) return from;
 
             var dir = PathBuilder.GetNextMove(from, to);
@@ -77,11 +108,6 @@ namespace SineahBot.Data
 
         public virtual void OnEnterRoom(Room room) { }
         public virtual void OnDestinationReached(Room room) { }
-        public virtual void OnAttacked(Room room) { }
-        public virtual bool OnRoomEvent(Room room, RoomEvent e)
-        {
-            return currentBehaviourState?.OnRoomEvent?.Invoke(this, room, e) == true;
-        }
     }
     public class BehaviourState
     {
@@ -119,13 +145,20 @@ namespace SineahBot.Data
         {
             public Roam(RoomEvent sourceEvent) : base(sourceEvent) { }
         }
+        public class Follow : BehaviourMission
+        {
+            public Follow(Character target) : base(null) { this.target = target; }
+            public Character target;
+        }
         public class Travel : BehaviourMission
         {
-            public Travel(RoomEvent sourceEvent) : base(sourceEvent) { }
+            public Travel(Room destination) : base(null) { this.destination = destination; }
+            public Room destination;
         }
         public class Snitch : BehaviourMission
         {
             public Snitch(RoomEvent sourceEvent) : base(sourceEvent) { }
+            public Room destination;
         }
         public class Hunt : BehaviourMission
         {

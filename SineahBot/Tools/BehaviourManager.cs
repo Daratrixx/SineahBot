@@ -88,7 +88,6 @@ namespace SineahBot.Tools
             if (!behaviour.active)
                 return;
             var room = RoomManager.GetRoom(behaviour.npc.currentRoomId);
-            behaviour.ParseMemory();
             behaviour.Run(room);
         }
     }

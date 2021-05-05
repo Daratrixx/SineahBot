@@ -1268,6 +1268,7 @@ namespace SineahBot.Data.World
             .Union(University.GetRooms())
             .Union(Underground.GetRooms())
             .Union(Streets.GetRooms())
+            .Union(Barracks.GetRooms())
             .ToArray();
 
             // register behaviours
