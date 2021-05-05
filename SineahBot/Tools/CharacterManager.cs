@@ -53,6 +53,7 @@ namespace SineahBot.Tools
                 characters[idCharacter] = character;
                 ClassProgressionManager.ApplyClassProgressionForCharacter(character, true);
                 LoadCharacterInventory(character);
+                character.faction = FactionManager.CreatePlayerRepFaction();
                 return character;
             }
             return characters[idCharacter];
@@ -119,6 +120,7 @@ namespace SineahBot.Tools
             }
             characters[character.id] = character;
             Program.database.Characters.Add(character);
+            character.faction = FactionManager.CreatePlayerRepFaction();
             state.player.idCharacter = character.id;
             state.player.character = character;
             return character;

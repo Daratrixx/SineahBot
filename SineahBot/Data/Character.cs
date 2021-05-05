@@ -23,6 +23,7 @@ namespace SineahBot.Data
         public Dictionary<AlterationType, Alteration> alterations = new Dictionary<AlterationType, Alteration>();
         public List<CharacterTag> tags = new List<CharacterTag>();
         public Dictionary<EquipmentSlot, Equipment> equipments = new Dictionary<EquipmentSlot, Equipment>();
+        public Faction faction;
 
         public string gender { get; set; }
         private string _pronouns = "they/them/theirs/their/themselves";
@@ -265,7 +266,7 @@ namespace SineahBot.Data
             if (sleeping) output *= 4;
             if (ClassProgressionManager.IsPhysicalClass(characterClass)) output += level / 2;
             if (HasAlteration(AlterationType.Burnt) && !HasCharacterTag(CharacterTag.Mecanical)) output /= 2;
-            if(characterStatus == CharacterStatus.Combat) output /= 2;
+            if (characterStatus == CharacterStatus.Combat) output /= 2;
             return output;
         }
 
@@ -511,7 +512,7 @@ namespace SineahBot.Data
                         DamageHealth(8, DamageType.Pure, alteration);
                     else
                         DamageHealth(2, DamageType.Pure, alteration);
-                    if (new Random().NextDouble() < 0.20)
+                    if (new Random().Next(1, 100) <= 20)
                         AddAlteration(AlterationType.Burnt, 300);
                     break;
                 case AlterationType.Bleeding:

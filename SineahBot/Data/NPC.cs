@@ -199,5 +199,10 @@ namespace SineahBot.Data
             base.Equip(equipment);
             return this;
         }
+        public NPC SetFaction(Faction faction)
+        {
+            this.faction = faction;
+            return this;
+        }
     }
 }
