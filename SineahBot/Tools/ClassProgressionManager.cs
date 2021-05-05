@@ -10,7 +10,7 @@ namespace SineahBot.Tools
     public static class ClassProgressionManager
     {
         public static CharacterClass[] starterClass = new CharacterClass[] { CharacterClass.Militian, CharacterClass.Scholar };
-        public static CharacterClass[] secretClass = new CharacterClass[] { CharacterClass.Druid, CharacterClass.Necromancer };
+        public static CharacterClass[] secretClass = new CharacterClass[] { CharacterClass.Druid, CharacterClass.Necromancer, CharacterClass.Rogue };
         public static CharacterClass[] physicalClass = new CharacterClass[] { CharacterClass.Militian,
         CharacterClass.Paladin,
         CharacterClass.Guard, CharacterClass.Footman, CharacterClass.Knight,
