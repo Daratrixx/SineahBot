@@ -1043,6 +1043,8 @@ namespace SineahBot.Data.World
 
             public static class Characters
             {
+                public static NPC citizen1 = Templates.CityFolks.Citizen.Clone().SetFaction(FactionManager.Sineah);
+                public static NPC citizen2 = Templates.CityFolks.Citizen.Clone().SetFaction(FactionManager.Sineah);
                 public static NPC beggar = Templates.CityFolks.Beggar.Clone().SetFaction(FactionManager.Sineah);
                 public static NPC wgGuard = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah);
                 public static NPC wgMilitian = Templates.CityFolks.Militian.Clone().SetFaction(FactionManager.Sineah);
@@ -1087,6 +1089,9 @@ namespace SineahBot.Data.World
             public static Character[] GetCharacters()
             {
                 return new Character[] {
+                    Characters.citizen1,
+                    Characters.citizen2,
+                    Characters.beggar,
                     Characters.wgGuard,
                     Characters.wgMilitian,
                     Characters.ngGuard,
@@ -1108,6 +1113,8 @@ namespace SineahBot.Data.World
                     Characters.pharmacist,
                     Characters.churchAttendant,
                     Characters.magicVendor,
+                    Characters.trader,
+                    Characters.jeweler,
                 };
             }
 
@@ -1226,7 +1233,9 @@ namespace SineahBot.Data.World
             Underground.Rooms.Altar.AddToRoom(Underground.Characters.Lich); // lich in altar
 
             // populate streets
-            Streets.Rooms.plaza.AddToRoom(Streets.Characters.beggar); // guard at west gate
+            Streets.Rooms.plaza.AddToRoom(Streets.Characters.citizen1); // citizen at west gate
+            Streets.Rooms.plaza.AddToRoom(Streets.Characters.citizen2); // citizen at east gate
+            Streets.Rooms.plaza.AddToRoom(Streets.Characters.beggar); // beggar at west gate
             Streets.Rooms.WGate.AddToRoom(Streets.Characters.wgGuard); // guard at west gate
             Streets.Rooms.WGate.AddToRoom(Streets.Characters.wgMilitian); // militian at west gate
             Streets.Rooms.NGate.AddToRoom(Streets.Characters.ngGuard); // guard at north gate
@@ -1270,6 +1279,8 @@ namespace SineahBot.Data.World
             .ToArray();
 
             // register behaviours
+            BehaviourManager.RegisterNPC(Streets.Characters.citizen1, new Behaviours.Sineah.SineahRoamingCitizen());
+            BehaviourManager.RegisterNPC(Streets.Characters.citizen2, new Behaviours.Sineah.SineahRoamingCitizen());
             BehaviourManager.RegisterNPC(Streets.Characters.beggar, new Behaviours.Sineah.SineahBeggar());
             BehaviourManager.RegisterNPC(Streets.Characters.armorSeller, new Behaviours.Sineah.SineahCitizen());
             BehaviourManager.RegisterNPC(Streets.Characters.weaponSeller, new Behaviours.Sineah.SineahCitizen());

@@ -204,5 +204,10 @@ namespace SineahBot.Data
             this.faction = faction;
             return this;
         }
+
+        public override string ToString()
+        {
+            return $"NPC {GetName()}";
+        }
     }
 }

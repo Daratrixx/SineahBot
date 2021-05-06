@@ -6,6 +6,18 @@ namespace SineahBot.Data.Templates
 {
     public static class CityFolks
     {
+        public static NPC Citizen = new NPC()
+        {
+            level = 1,
+            baseHealth = 20,
+            health = 20,
+            gold = 0,
+            name = "Citizen",
+            experience = 0,
+            shortDescription = "A citizen walks by.",
+            longDescription = "Just your average citizen. They seem busy.",
+            alternativeNames = new string[] { "dude" }
+        };
         public static NPC Beggar = new NPC()
         {
             level = 1,

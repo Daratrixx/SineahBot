@@ -602,6 +602,11 @@ namespace SineahBot.Data
             if (bonusArmor == 0) return 0;
             return bonusArmor / (bonusArmor + 20.0);
         }
+
+        public override string ToString()
+        {
+            return $"Character {GetName()}";
+        }
     }
 
     public class CharacterItem

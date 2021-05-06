@@ -3,6 +3,7 @@ using SineahBot.Interfaces;
 using SineahBot.Tools;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace SineahBot.Data
@@ -29,6 +30,12 @@ namespace SineahBot.Data
             originalRoom = RoomManager.GetRoom(npc.currentRoomId);
         }
 
+        public virtual void GenerateTravelToOriginMission()
+        {
+            currentMission = new BehaviourMission.Travel(originalRoom);
+            missions.Add(currentMission);
+        }
+
         public void MemorizeEvent(RoomEvent e)
         {
             memory.Add(e);
@@ -48,14 +55,28 @@ namespace SineahBot.Data
         public abstract void ParseMemory(RoomEvent e);
         public virtual void ElectMission()
         {
-            if (missions.Count == 0 && currentMission == null)
+            if (currentMission == null && missions.Count == 0)
             {
                 currentMission = new BehaviourMission.Idle();
                 missions.Add(currentMission);
+                return;
             }
-            if (missions.Count == 1 && currentMission == null)
+            if (currentMission == null && missions.Count == 1)
             {
-                currentMission = missions[0];
+                currentMission = missions.FirstOrDefault();
+                return;
+            }
+            if (currentMission == null)
+            {
+                currentMission = missions.FirstOrDefault(x => x is BehaviourMission.Idle);
+                if (currentMission != null)
+                    return;
+            }
+            if (currentMission != null)
+            {
+                if (currentMission.activeAge < 3)
+                    return;
+                currentMission = missions.GetRandom();
                 return;
             }
         }
@@ -65,7 +86,7 @@ namespace SineahBot.Data
             missions.Remove(currentMission);
             currentMission = null;
         }
-        public void TickMissions()
+        public virtual void TickMissions()
         {
             foreach (var m in missions)
             {
@@ -116,15 +137,8 @@ namespace SineahBot.Data
             return from;
         }
 
-        public virtual void OnEnterRoom(Room room) { }
+        public virtual bool OnEnterRoom(Room room) { return false; }
         public virtual void OnDestinationReached(Room room) { }
-    }
-    public class BehaviourState
-    {
-        public Action<Behaviour, Room, RoomEvent> OnEnterRoom;
-        public Action<Behaviour, Room, RoomEvent> OnDestinationReached;
-        public Action<Behaviour, Room, RoomEvent> OnAttacked;
-        public Func<Behaviour, Room, RoomEvent, bool> OnRoomEvent;
     }
 
     public class BehaviourMission
@@ -152,6 +166,11 @@ namespace SineahBot.Data
             public Rumor(RoomEvent sourceEvent, string rumorText) : base(sourceEvent) { this.rumorText = rumorText; }
             public string rumorText;
             public List<Character> spreadTo = new List<Character>();
+
+            public override string ToString()
+            {
+                return @$"Rumor: ""{rumorText}"" (from {sourceEvent?.speakingCharacter})";
+            }
         }
         public class Guard : BehaviourMission
         {
@@ -159,17 +178,27 @@ namespace SineahBot.Data
         }
         public class Roam : BehaviourMission
         {
-            public Roam(RoomEvent sourceEvent) : base(sourceEvent) { }
+            public Roam() : base(null) { }
         }
         public class Follow : BehaviourMission
         {
             public Follow(Character target) : base(null) { this.target = target; }
             public Character target;
+
+            public override string ToString()
+            {
+                return @$"Follow: {target}";
+            }
         }
         public class Travel : BehaviourMission
         {
             public Travel(Room destination) : base(null) { this.destination = destination; }
             public Room destination;
+
+            public override string ToString()
+            {
+                return @$"Travel: {destination}";
+            }
         }
         public class Snitch : BehaviourMission
         {
@@ -187,6 +216,11 @@ namespace SineahBot.Data
                     default:
                         return $"Someone commited a crime in *{sourceEvent.room.name}*";
                 }
+            }
+
+            public override string ToString()
+            {
+                return @$"Snitch: ""{GetCrimeRumor()}"" to {destination}";
             }
         }
         public class Hunt : BehaviourMission

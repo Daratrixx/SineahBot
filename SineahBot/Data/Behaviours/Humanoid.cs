@@ -15,6 +15,12 @@ namespace SineahBot.Data.Behaviours
 
         protected List<BehaviourMission.Rumor> rumors = new List<BehaviourMission.Rumor>();
         public Humanoid() : base() { }
+
+        public override void Init(NPC npc)
+        {
+            base.Init(npc);
+            missions.Add(new BehaviourMission.Idle());
+        }
         public abstract void GenerateRoamTravelMission();
         public abstract void GenerateSnitchMission(RoomEvent e);
         public virtual void GenerateRumorMission(RoomEvent e)
@@ -23,42 +29,35 @@ namespace SineahBot.Data.Behaviours
             match = AttackRumor.Match(e.speakingContent);
             if (match.Success)
             {
-                var existingRumor = rumors
-                .Where(x => x.sourceEvent.speakingContent == match.Groups[2].Value);
-                BehaviourMission.Rumor rumor;
-                if (existingRumor.Count() > 0)
-                {
-                    rumor = existingRumor.First();
-                }
-                else
-                {
-                    rumor = new BehaviourMission.Rumor(e, match.Groups[2].Value);
-                    rumors.Add(rumor);
-                }
-                SpreadRumor(e.room, rumor);
+                SpreadRumor(e.room, OnRumorRegexMatch(match));
                 return;
             }
             match = KillRumor.Match(e.speakingContent);
             if (match.Success)
             {
-                var existingRumor = rumors
-                .Where(x => x.sourceEvent.speakingContent == match.Groups[2].Value);
-                BehaviourMission.Rumor rumor;
-                if (existingRumor.Count() > 0)
-                {
-                    rumor = existingRumor.First();
-                }
-                else
-                {
-                    rumor = new BehaviourMission.Rumor(e, match.Groups[2].Value);
-                    rumors.Add(rumor);
-                }
-                SpreadRumor(e.room, rumor);
+                SpreadRumor(e.room, OnRumorRegexMatch(match));
                 return;
             }
         }
+        public virtual BehaviourMission.Rumor OnRumorRegexMatch(Match match)
+        {
+            var existingRumor = rumors
+            .Where(x => x.sourceEvent.speakingContent == match.Groups[2].Value);
+            BehaviourMission.Rumor rumor;
+            if (existingRumor.Count() > 0)
+            {
+                rumor = existingRumor.First();
+            }
+            else
+            {
+                rumor = new BehaviourMission.Rumor(e, match.Groups[2].Value);
+                rumors.Add(rumor);
+            }
+            return rumor;
+        }
         public bool SpreadRumor(Room room, BehaviourMission.Rumor rumor)
         {
+            if (rumor == null || room == null) return false;
             var characters = room.characters.Where(x => x != npc && !rumor.spreadTo.Contains(x));
             if (characters.Count() > 0)
             {
@@ -91,20 +90,33 @@ namespace SineahBot.Data.Behaviours
                     break;
             }
         }
-
+        public override void TickMissions()
+        {
+            base.TickMissions();
+            foreach (var r in rumors)
+            {
+                if (r.totalAge >= 0)
+                    ++r.totalAge;
+            }
+        }
         public override void ElectMission()
         {
             var snitch = missions.FirstOrDefault(x => x is BehaviourMission.Snitch);
             if (snitch != null)
             {
                 currentMission = snitch;
+                return;
             }
             base.ElectMission();
         }
-
         public override void RunCurrentMission(Room room)
         {
             if (currentMission == null) return;
+            if (currentMission is BehaviourMission.Roam roam)
+            {
+                GenerateRoamTravelMission();
+                return;
+            }
             if (currentMission is BehaviourMission.Snitch snitch)
             {
                 if (room != snitch.destination)
@@ -121,8 +133,13 @@ namespace SineahBot.Data.Behaviours
                 if (room != travel.destination)
                 {
                     if (random.Next(1, 100) <= 50)
+                    {
                         RunTravel(room, travel.destination);
-                    return;
+                        return;
+                    }
+                    var rumor = rumors.GetRandom();
+                    if (RunSpreadRumor(room, rumor))
+                        return;
                 }
                 CompleteCurrentMission();
                 return;
@@ -132,56 +149,34 @@ namespace SineahBot.Data.Behaviours
                 if (rumors.Count > 0 && random.Next(1, 100) <= 10)
                 {
                     var rumor = rumors.GetRandom();
-                    if (SpreadRumor(room, rumor))
-                    {
-                        CommandSay.Say(npc, room, $"Have you heard? {rumor.rumorText}");
-                    }
+                    RunSpreadRumor(room, rumor);
                     return;
                 }
                 if (room != originalRoom)
                 {
                     if (random.Next(1, 100) <= 50)
-                        RunTravel(room, originalRoom);
+                        GenerateTravelToOriginMission();
                     return;
                 }
             }
         }
-
-        public abstract class Beggar : Humanoid
+        public bool RunSpreadRumor(Room room, BehaviourMission.Rumor rumor)
         {
-            public Beggar() : base()
+            if (SpreadRumor(room, rumor))
             {
+                CommandSay.Say(npc, room, $"Have you heard? {rumor.rumorText}");
+                return true;
             }
-
-            public override void Init(NPC npc)
+            return false;
+        }
+        public override bool OnEnterRoom(Room room)
+        {
+            if (currentMission is BehaviourMission.Snitch snitch)
             {
-                base.Init(npc);
-                missions.Add(new BehaviourMission.Roam(null));
+                CommandSay.Say(npc, room, snitch.GetCrimeRumor());
+                return true;
             }
-
-            public override void RunCurrentMission(Room room)
-            {
-                if (currentMission is BehaviourMission.Roam roam)
-                {
-                    GenerateRoamTravelMission();
-                    return;
-                }
-                base.RunCurrentMission(room);
-            }
-
-            public override void OnEnterRoom(Room room)
-            {
-                if (currentMission is BehaviourMission.Snitch snitch)
-                {
-                    CommandSay.Say(npc, room, snitch.GetCrimeRumor());
-                    return;
-                }
-                if (room.characters.Where(x => x.agent is Player).Count() > 0)
-                {
-                    CommandAct.Act(npc, room, "notices you and smiles.");
-                    CommandSay.Say(npc, room, "Go' a coin for a poor soul?");
-                }
-            }
+            return false;
         }
     }
 }
