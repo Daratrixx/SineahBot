@@ -143,10 +143,20 @@ namespace SineahBot.Data.World
 
             public static class Characters
             {
+                public static NPC Guard1 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah);
+                public static NPC Guard2 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah);
+                public static NPC Guard3 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah);
+                public static NPC Guard4 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah);
+                public static NPC captain = Templates.CityFolks.GuardCaptain.Clone().SetFaction(FactionManager.Sineah);
             }
             public static Character[] GetCharacters()
             {
                 return new Character[] {
+                    Characters.Guard1,
+                    Characters.Guard2,
+                    Characters.Guard3,
+                    Characters.Guard4,
+                    Characters.captain,
                 };
             }
 
@@ -1260,6 +1270,13 @@ namespace SineahBot.Data.World
             Streets.Rooms.outerScience.AddToRoom(Streets.Characters.magicVendor); // magic vendor at outer science
             Streets.Rooms.outerScience.AddToRoom(Streets.Characters.pharmacist); // pharmacist at outer science
 
+            // populate barracks
+            Barracks.Rooms.Hall.AddToRoom(Barracks.Characters.Guard1);
+            Barracks.Rooms.Hall.AddToRoom(Barracks.Characters.Guard2);
+            Barracks.Rooms.GuardsRoom.AddToRoom(Barracks.Characters.Guard3);
+            Barracks.Rooms.GuardsRoom.AddToRoom(Barracks.Characters.Guard4);
+            Barracks.Rooms.CaptainRoom.AddToRoom(Barracks.Characters.captain);
+
             // signs
             Streets.Rooms.outerScience.AddToRoom(Display.Sign("University notice sign",
             "The reconstruction of the university is still underway. However, some part of the library are ready to welcome curious minds once again.\nKeep in mind that most books still need to be restored, and some might be moved to different sections as more aisle are being reopened."));
@@ -1284,6 +1301,26 @@ namespace SineahBot.Data.World
             BehaviourManager.RegisterNPC(Streets.Characters.beggar, new Behaviours.Sineah.SineahBeggar());
             BehaviourManager.RegisterNPC(Streets.Characters.armorSeller, new Behaviours.Sineah.SineahCitizen());
             BehaviourManager.RegisterNPC(Streets.Characters.weaponSeller, new Behaviours.Sineah.SineahCitizen());
+
+            BehaviourManager.RegisterNPC(Streets.Characters.plazaGuard1, new Behaviours.Sineah.GuardCitizen());
+            BehaviourManager.RegisterNPC(Streets.Characters.plazaGuard2, new Behaviours.Sineah.GuardCitizen());
+            BehaviourManager.RegisterNPC(Streets.Characters.plazaMilitian1, new Behaviours.Sineah.GuardCitizen());
+            BehaviourManager.RegisterNPC(Streets.Characters.plazaMilitian2, new Behaviours.Sineah.GuardCitizen());
+            BehaviourManager.RegisterNPC(Streets.Characters.egGuard1, new Behaviours.Sineah.GuardCitizen());
+            BehaviourManager.RegisterNPC(Streets.Characters.egGuard2, new Behaviours.Sineah.GuardCitizen());
+            BehaviourManager.RegisterNPC(Streets.Characters.egMilitian, new Behaviours.Sineah.GuardCitizen());
+            BehaviourManager.RegisterNPC(Streets.Characters.innerGuard, new Behaviours.Sineah.GuardCitizen());
+            BehaviourManager.RegisterNPC(Streets.Characters.ngGuard, new Behaviours.Sineah.GuardCitizen());
+            BehaviourManager.RegisterNPC(Streets.Characters.ngMilitian, new Behaviours.Sineah.GuardCitizen());
+            BehaviourManager.RegisterNPC(Streets.Characters.sgGuard, new Behaviours.Sineah.GuardCitizen());
+            BehaviourManager.RegisterNPC(Streets.Characters.sgMilitian, new Behaviours.Sineah.GuardCitizen());
+            BehaviourManager.RegisterNPC(Streets.Characters.wgGuard, new Behaviours.Sineah.GuardCitizen());
+            BehaviourManager.RegisterNPC(Streets.Characters.wgMilitian, new Behaviours.Sineah.GuardCitizen());
+
+            BehaviourManager.RegisterNPC(Barracks.Characters.Guard1, new Behaviours.Sineah.GuardCitizen());
+            BehaviourManager.RegisterNPC(Barracks.Characters.Guard2, new Behaviours.Sineah.GuardCitizen());
+            BehaviourManager.RegisterNPC(Barracks.Characters.Guard3, new Behaviours.Sineah.GuardCitizen());
+            BehaviourManager.RegisterNPC(Barracks.Characters.Guard4, new Behaviours.Sineah.GuardCitizen());
         }
     }
 }

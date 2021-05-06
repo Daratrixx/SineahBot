@@ -20,7 +20,6 @@ namespace SineahBot.Data
             id = Guid.NewGuid();
             name = roomName;
         }
-
         public override string ToString()
         {
             return @$"Room ""{name}"" ({id})";
@@ -152,20 +151,19 @@ namespace SineahBot.Data
 
         public void RaiseRoomEvent(RoomEvent e, Character source)
         {
-            var npcs = entities.Where(x => x is NPC && x != source).ToArray().Select(x=>x as NPC);
+            var npcs = entities.Where(x => x is NPC && x != source).ToArray().Select(x => x as NPC);
             Tools.BehaviourManager.RegisterRoomEventForNPCs(npcs, this, e);
             Player.CommitPlayerMessageBuffers();
         }
 
         public void AddToRoom(Entity entity, bool feedback = true)
         {
-            if (entity is NPC)
-                DescribeAction($"{entity.GetName()} has entered the room.", entity as IAgent);
-            else if (entity is Character)
-                DescribeAction($"{entity.GetName()} has entered the room.", entity as IAgent);
-            if (entity is IAgent && feedback)
+            if (entity is Character character)
             {
-                var agent = entity as IAgent;
+                DescribeAction($"{entity.GetName()} has entered the room.", entity as IAgent);
+            }
+            if (feedback && entity is IAgent agent)
+            {
                 agent.Message(GetFullDescription(agent));
             }
             entity.currentRoomId = this.id;
@@ -174,9 +172,8 @@ namespace SineahBot.Data
             {
                 entities.Add(entity);
             }
-            if (entity is NPC)
+            if (entity is NPC npc)
             {
-                var npc = entity as NPC;
                 if (npc.idSpawnRoom == Guid.Empty)
                     npc.idSpawnRoom = this.id;
             }
@@ -189,12 +186,9 @@ namespace SineahBot.Data
                 entities.Remove(entity);
             }
             entity.currentRoomId = Guid.Empty;
-            if (feedback)
+            if (feedback && entity is Character character)
             {
-                if (entity is NPC)
-                    DescribeAction($"{entity.name} has left the room.", entity as IAgent);
-                else if (entity is Character)
-                    DescribeAction($"{entity.name} has left the room.", entity as IAgent);
+                DescribeAction($"{entity.name} has left the room.", entity as IAgent);
             }
         }
 

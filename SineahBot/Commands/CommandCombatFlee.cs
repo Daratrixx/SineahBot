@@ -90,7 +90,7 @@ namespace SineahBot.Commands
         {
             if (CommandMove.MoveCharacter(character, room, direction))
             {
-                CombatManager.RemoveFromCombat(character, false);
+                CombatManager.RemoveFromCombat(character);
                 return true;
             }
             return false;

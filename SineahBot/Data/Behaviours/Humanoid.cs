@@ -29,17 +29,17 @@ namespace SineahBot.Data.Behaviours
             match = AttackRumor.Match(e.speakingContent);
             if (match.Success)
             {
-                SpreadRumor(e.room, OnRumorRegexMatch(match));
+                OnRumorRegexMatch(e, match);
                 return;
             }
             match = KillRumor.Match(e.speakingContent);
             if (match.Success)
             {
-                SpreadRumor(e.room, OnRumorRegexMatch(match));
+                OnRumorRegexMatch(e, match);
                 return;
             }
         }
-        public virtual BehaviourMission.Rumor OnRumorRegexMatch(Match match)
+        public virtual BehaviourMission.Rumor OnRumorRegexMatch(RoomEvent e, Match match)
         {
             var existingRumor = rumors
             .Where(x => x.sourceEvent.speakingContent == match.Groups[2].Value);
@@ -53,6 +53,7 @@ namespace SineahBot.Data.Behaviours
                 rumor = new BehaviourMission.Rumor(e, match.Groups[2].Value);
                 rumors.Add(rumor);
             }
+            SpreadRumor(e.room, rumor);
             return rumor;
         }
         public bool SpreadRumor(Room room, BehaviourMission.Rumor rumor)

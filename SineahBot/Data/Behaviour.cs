@@ -156,10 +156,13 @@ namespace SineahBot.Data
         {
             this.cycleValue = cycleValue;
         }
-
         public class Idle : BehaviourMission
         {
             public Idle() : base(null) { }
+        }
+        public class Fighting : BehaviourMission
+        {
+            public Fighting() : base(null) { }
         }
         public class Rumor : BehaviourMission
         {
@@ -226,6 +229,7 @@ namespace SineahBot.Data
         public class Hunt : BehaviourMission
         {
             public Hunt(RoomEvent sourceEvent) : base(sourceEvent) { }
+            public Character target;
         }
     }
 
@@ -241,10 +245,10 @@ namespace SineahBot.Data
         public RoomEventType type;
 
         public Character enteringCharacter;
-        public MoveDirection enteringDurection;
+        public MoveDirection enteringDirection;
 
         public Character leavingCharacter;
-        public MoveDirection leavingDurection;
+        public MoveDirection leavingDirection;
 
         public Character castingCharacter;
         public Entity castingTarget;

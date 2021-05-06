@@ -79,7 +79,7 @@ namespace SineahBot.Tools
 
         private static string GetPossibleClassList()
         {
-            return String.Join("/", $"**{ClassProgressionManager.starterClass}**");
+            return String.Join("/", ClassProgressionManager.starterClass.Select(x => $"**{x}**"));
         }
         private static string GetPossibleClassValues()
         {

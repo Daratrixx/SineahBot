@@ -334,7 +334,7 @@ namespace SineahBot.Data
             {
                 Message($"You died!");
             }
-            CombatManager.OnCharacterKilled(this, killer is NPC);
+            CombatManager.OnCharacterKilled(this);
             if (this.agent is Player)
             {
                 CharacterManager.DeletePlayerCharacter(this.agent as Player);
