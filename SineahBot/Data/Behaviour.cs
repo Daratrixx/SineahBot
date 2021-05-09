@@ -203,6 +203,16 @@ namespace SineahBot.Data
                 return @$"Travel: {destination}";
             }
         }
+        public class Report : BehaviourMission
+        {
+            public Report(RoomEvent sourceEvent) : base(sourceEvent) { }
+            public Room destination;
+
+            public override string ToString()
+            {
+                return @$"Report: to {destination}";
+            }
+        }
         public class Snitch : BehaviourMission
         {
             public Snitch(RoomEvent sourceEvent) : base(sourceEvent) { }

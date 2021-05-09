@@ -143,10 +143,10 @@ namespace SineahBot.Data.World
 
             public static class Characters
             {
-                public static NPC Guard1 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah);
-                public static NPC Guard2 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah);
-                public static NPC Guard3 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah);
-                public static NPC Guard4 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah);
+                public static NPC Guard1 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Thomas");
+                public static NPC Guard2 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Andre");
+                public static NPC Guard3 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Helen");
+                public static NPC Guard4 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Cornelius");
                 public static NPC captain = Templates.CityFolks.GuardCaptain.Clone().SetFaction(FactionManager.Sineah);
             }
             public static Character[] GetCharacters()
@@ -1056,18 +1056,18 @@ namespace SineahBot.Data.World
                 public static NPC citizen1 = Templates.CityFolks.Citizen.Clone().SetFaction(FactionManager.Sineah);
                 public static NPC citizen2 = Templates.CityFolks.Citizen.Clone().SetFaction(FactionManager.Sineah);
                 public static NPC beggar = Templates.CityFolks.Beggar.Clone().SetFaction(FactionManager.Sineah);
-                public static NPC wgGuard = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah);
+                public static NPC wgGuard = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Steve");
                 public static NPC wgMilitian = Templates.CityFolks.Militian.Clone().SetFaction(FactionManager.Sineah);
-                public static NPC ngGuard = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah);
+                public static NPC ngGuard = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Bob");
                 public static NPC ngMilitian = Templates.CityFolks.Militian.Clone().SetFaction(FactionManager.Sineah);
-                public static NPC egGuard1 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah);
-                public static NPC egGuard2 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah);
+                public static NPC egGuard1 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Sue");
+                public static NPC egGuard2 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Phin");
                 public static NPC egMilitian = Templates.CityFolks.Militian.Clone().SetFaction(FactionManager.Sineah);
-                public static NPC sgGuard = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah);
+                public static NPC sgGuard = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Seren");
                 public static NPC sgMilitian = Templates.CityFolks.Militian.Clone().SetFaction(FactionManager.Sineah);
-                public static NPC innerGuard = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah);
-                public static NPC plazaGuard1 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah);
-                public static NPC plazaGuard2 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah);
+                public static NPC innerGuard = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Zed");
+                public static NPC plazaGuard1 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Arnold");
+                public static NPC plazaGuard2 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Jenn");
                 public static NPC plazaMilitian1 = Templates.CityFolks.Militian.Clone().SetFaction(FactionManager.Sineah);
                 public static NPC plazaMilitian2 = Templates.CityFolks.Militian.Clone().SetFaction(FactionManager.Sineah);
                 public static NPC shadyRat = Templates.Critters.Rat.Clone().SetFaction(FactionManager.Beasts);
@@ -1275,7 +1275,7 @@ namespace SineahBot.Data.World
             Barracks.Rooms.Hall.AddToRoom(Barracks.Characters.Guard2);
             Barracks.Rooms.GuardsRoom.AddToRoom(Barracks.Characters.Guard3);
             Barracks.Rooms.GuardsRoom.AddToRoom(Barracks.Characters.Guard4);
-            Barracks.Rooms.CaptainRoom.AddToRoom(Barracks.Characters.captain);
+            Barracks.Rooms.Hall.AddToRoom(Barracks.Characters.captain);
 
             // signs
             Streets.Rooms.outerScience.AddToRoom(Display.Sign("University notice sign",
@@ -1296,31 +1296,32 @@ namespace SineahBot.Data.World
             .ToArray();
 
             // register behaviours
-            BehaviourManager.RegisterNPC(Streets.Characters.citizen1, new Behaviours.Sineah.SineahRoamingCitizen());
-            BehaviourManager.RegisterNPC(Streets.Characters.citizen2, new Behaviours.Sineah.SineahRoamingCitizen());
-            BehaviourManager.RegisterNPC(Streets.Characters.beggar, new Behaviours.Sineah.SineahBeggar());
-            BehaviourManager.RegisterNPC(Streets.Characters.armorSeller, new Behaviours.Sineah.SineahCitizen());
-            BehaviourManager.RegisterNPC(Streets.Characters.weaponSeller, new Behaviours.Sineah.SineahCitizen());
+            BehaviourManager.RegisterNPC(Streets.Characters.citizen1, new Behaviours.SineahBehaviour.RoamingCitizen());
+            BehaviourManager.RegisterNPC(Streets.Characters.citizen2, new Behaviours.SineahBehaviour.RoamingCitizen());
+            BehaviourManager.RegisterNPC(Streets.Characters.beggar, new Behaviours.SineahBehaviour.Beggar());
+            BehaviourManager.RegisterNPC(Streets.Characters.armorSeller, new Behaviours.SineahBehaviour.Citizen());
+            BehaviourManager.RegisterNPC(Streets.Characters.weaponSeller, new Behaviours.SineahBehaviour.Citizen());
 
-            BehaviourManager.RegisterNPC(Streets.Characters.plazaGuard1, new Behaviours.Sineah.GuardCitizen());
-            BehaviourManager.RegisterNPC(Streets.Characters.plazaGuard2, new Behaviours.Sineah.GuardCitizen());
-            BehaviourManager.RegisterNPC(Streets.Characters.plazaMilitian1, new Behaviours.Sineah.GuardCitizen());
-            BehaviourManager.RegisterNPC(Streets.Characters.plazaMilitian2, new Behaviours.Sineah.GuardCitizen());
-            BehaviourManager.RegisterNPC(Streets.Characters.egGuard1, new Behaviours.Sineah.GuardCitizen());
-            BehaviourManager.RegisterNPC(Streets.Characters.egGuard2, new Behaviours.Sineah.GuardCitizen());
-            BehaviourManager.RegisterNPC(Streets.Characters.egMilitian, new Behaviours.Sineah.GuardCitizen());
-            BehaviourManager.RegisterNPC(Streets.Characters.innerGuard, new Behaviours.Sineah.GuardCitizen());
-            BehaviourManager.RegisterNPC(Streets.Characters.ngGuard, new Behaviours.Sineah.GuardCitizen());
-            BehaviourManager.RegisterNPC(Streets.Characters.ngMilitian, new Behaviours.Sineah.GuardCitizen());
-            BehaviourManager.RegisterNPC(Streets.Characters.sgGuard, new Behaviours.Sineah.GuardCitizen());
-            BehaviourManager.RegisterNPC(Streets.Characters.sgMilitian, new Behaviours.Sineah.GuardCitizen());
-            BehaviourManager.RegisterNPC(Streets.Characters.wgGuard, new Behaviours.Sineah.GuardCitizen());
-            BehaviourManager.RegisterNPC(Streets.Characters.wgMilitian, new Behaviours.Sineah.GuardCitizen());
+            BehaviourManager.RegisterNPC(Streets.Characters.plazaGuard1, new Behaviours.SineahBehaviour.Guard(Barracks.Characters.captain));
+            BehaviourManager.RegisterNPC(Streets.Characters.plazaGuard2, new Behaviours.SineahBehaviour.Guard(Barracks.Characters.captain));
+            BehaviourManager.RegisterNPC(Streets.Characters.plazaMilitian1, new Behaviours.SineahBehaviour.Militian());
+            BehaviourManager.RegisterNPC(Streets.Characters.plazaMilitian2, new Behaviours.SineahBehaviour.Militian());
+            BehaviourManager.RegisterNPC(Streets.Characters.egGuard1, new Behaviours.SineahBehaviour.Guard(Barracks.Characters.captain));
+            BehaviourManager.RegisterNPC(Streets.Characters.egGuard2, new Behaviours.SineahBehaviour.Guard(Barracks.Characters.captain));
+            BehaviourManager.RegisterNPC(Streets.Characters.egMilitian, new Behaviours.SineahBehaviour.Militian());
+            BehaviourManager.RegisterNPC(Streets.Characters.innerGuard, new Behaviours.SineahBehaviour.Guard(Barracks.Characters.captain));
+            BehaviourManager.RegisterNPC(Streets.Characters.ngGuard, new Behaviours.SineahBehaviour.Guard(Barracks.Characters.captain));
+            BehaviourManager.RegisterNPC(Streets.Characters.ngMilitian, new Behaviours.SineahBehaviour.Militian());
+            BehaviourManager.RegisterNPC(Streets.Characters.sgGuard, new Behaviours.SineahBehaviour.Guard(Barracks.Characters.captain));
+            BehaviourManager.RegisterNPC(Streets.Characters.sgMilitian, new Behaviours.SineahBehaviour.Militian());
+            BehaviourManager.RegisterNPC(Streets.Characters.wgGuard, new Behaviours.SineahBehaviour.Guard(Barracks.Characters.captain));
+            BehaviourManager.RegisterNPC(Streets.Characters.wgMilitian, new Behaviours.SineahBehaviour.Militian());
 
-            BehaviourManager.RegisterNPC(Barracks.Characters.Guard1, new Behaviours.Sineah.GuardCitizen());
-            BehaviourManager.RegisterNPC(Barracks.Characters.Guard2, new Behaviours.Sineah.GuardCitizen());
-            BehaviourManager.RegisterNPC(Barracks.Characters.Guard3, new Behaviours.Sineah.GuardCitizen());
-            BehaviourManager.RegisterNPC(Barracks.Characters.Guard4, new Behaviours.Sineah.GuardCitizen());
+            BehaviourManager.RegisterNPC(Barracks.Characters.Guard1, new Behaviours.SineahBehaviour.Guard(Barracks.Characters.captain));
+            BehaviourManager.RegisterNPC(Barracks.Characters.Guard2, new Behaviours.SineahBehaviour.Guard(Barracks.Characters.captain));
+            BehaviourManager.RegisterNPC(Barracks.Characters.Guard3, new Behaviours.SineahBehaviour.Guard(Barracks.Characters.captain));
+            BehaviourManager.RegisterNPC(Barracks.Characters.Guard4, new Behaviours.SineahBehaviour.Guard(Barracks.Characters.captain));
+            BehaviourManager.RegisterNPC(Barracks.Characters.captain, new Behaviours.SineahBehaviour.Captain(Streets.GetRooms()));
         }
     }
 }

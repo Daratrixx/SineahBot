@@ -4,10 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace SineahBot.Data.Behaviours
 {
-    public static class Sineah
+    public static class SineahBehaviour
     {
         public class SineahSnitch : BehaviourMission.Snitch
         {
@@ -16,10 +17,17 @@ namespace SineahBot.Data.Behaviours
                 destination = World.Sineah.Barracks.Rooms.Hall;
             }
         }
-
-        public class SineahCitizen : Humanoid
+        public class SineahReport : BehaviourMission.Report
         {
-            public SineahCitizen() : base() { }
+            public SineahReport(RoomEvent e) : base(e)
+            {
+                destination = World.Sineah.Barracks.Rooms.Hall;
+            }
+        }
+
+        public class Citizen : Humanoid
+        {
+            public Citizen() : base() { }
 
             public override void Init(NPC npc)
             {
@@ -44,9 +52,9 @@ namespace SineahBot.Data.Behaviours
                 missions.Add(new SineahSnitch(e));
             }
         }
-        public class SineahBeggar : SineahCitizen
+        public class Beggar : Citizen
         {
-            public SineahBeggar() : base() { }
+            public Beggar() : base() { }
 
             public override void Init(NPC npc)
             {
@@ -66,9 +74,9 @@ namespace SineahBot.Data.Behaviours
                 return false;
             }
         }
-        public class SineahRoamingCitizen : SineahCitizen
+        public class RoamingCitizen : Citizen
         {
-            public SineahRoamingCitizen() : base() { }
+            public RoamingCitizen() : base() { }
 
             public override void Init(NPC npc)
             {
@@ -76,14 +84,13 @@ namespace SineahBot.Data.Behaviours
                 missions.Add(new BehaviourMission.Roam());
             }
         }
-        public class GuardCitizen : SineahCitizen
+        public class Militian : Citizen
         {
-            public GuardCitizen() : base() { }
+            public Militian() : base() { }
 
             public override void Init(NPC npc)
             {
                 base.Init(npc);
-                missions.Add(new BehaviourMission.Guard(null));
             }
 
             public override void ParseMemory(RoomEvent e)
@@ -117,12 +124,13 @@ namespace SineahBot.Data.Behaviours
             public override void ElectMission()
             {
                 if (currentMission is BehaviourMission.Fighting) return; // keep fighting mission
-                if (npc.characterStatus == CharacterStatus.Combat)
+                if (npc.characterStatus == CharacterStatus.Combat) // initiate fighting mission
                 {
                     currentMission = new BehaviourMission.Fighting();
                     missions.Add(currentMission);
                     return;
                 }
+                base.ElectMission();
             }
 
             public override bool OnEnterRoom(Room room)
@@ -151,9 +159,89 @@ namespace SineahBot.Data.Behaviours
                         return;
                     }
                     var target = room.characters.Where(x => enemies.Contains(x)).GetRandom();
-                    if(target != null)
-                    CommandCombatAttack.Attack(npc, room, target);
+                    if (target != null)
+                        CommandCombatAttack.Attack(npc, room, target);
                 }
+                base.RunCurrentMission(room);
+            }
+        }
+
+        public class Guard : Militian
+        {
+            protected NPC captain;
+
+            protected List<Character> suspiciousCharacters = new List<Character>();
+            protected List<Character> criminalCharacters = new List<Character>();
+
+            public Guard(NPC captain)
+            {
+                this.captain = captain;
+            }
+
+            public override void Init(NPC npc)
+            {
+                base.Init(npc);
+                Captain.RegisterCaptainGuardAffiliation(captain, npc);
+            }
+        }
+
+
+        public static Regex ReportRegex = new Regex(@$"Guard .+? reporting. (.+)", RegexOptions.IgnoreCase);
+        public static Regex AttackRumorReport = new Regex(@$"I have heard (\*\*(.+?)\*\* attacked (.+?) in (.+))", RegexOptions.IgnoreCase);
+        public static Regex KillRumorReport = new Regex(@$"I have heard (\*\*(.+?)\*\* killed (.+?) in (.+))", RegexOptions.IgnoreCase);
+
+        public class Captain : Militian
+        {
+            public static Dictionary<NPC, List<NPC>> captainAffiliation = new Dictionary<NPC, List<NPC>>();
+            public static void RegisterCaptainGuardAffiliation(NPC captain, NPC npc)
+            {
+                if (captainAffiliation.TryGetValue(captain, out var guards))
+                {
+                    guards.Add(npc);
+                    return;
+                }
+                guards = captainAffiliation[captain] = new List<NPC>();
+                guards.Add(npc);
+            }
+
+            protected readonly IEnumerable<Room> patrolRooms;
+            protected List<NPC> guardList;
+            protected List<Character> suspiciousCharacters = new List<Character>();
+            protected List<Character> criminalCharacters = new List<Character>();
+            protected List<NPC> passiveGuards = new List<NPC>();
+
+            public Captain(IEnumerable<Room> patrolRooms)
+            {
+                this.patrolRooms = patrolRooms;
+            }
+            public override void Init(NPC npc)
+            {
+                base.Init(npc);
+                if (captainAffiliation.TryGetValue(npc, out var guards))
+                    guardList = guards;
+                else
+                    guardList = captainAffiliation[npc] = new List<NPC>();
+            }
+
+            public override void GenerateRumorMission(RoomEvent e)
+            {
+                Match match;
+                match = ReportRegex.Match(e.speakingContent);
+                if (match.Success)
+                {
+                    OnRumorRegexMatch(e, match);
+                    return;
+                }
+                base.GenerateRumorMission(e);
+            }
+
+            public virtual void ParseReport(RoomEvent e, string report)
+            {
+
+            }
+
+            public override void RunCurrentMission(Room room)
+            {
                 base.RunCurrentMission(room);
             }
         }

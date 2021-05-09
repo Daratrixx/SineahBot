@@ -11,6 +11,8 @@ namespace SineahBot.Data
 {
     public class NPC : Character
     {
+        public string npcName;
+        public string npcStatus;
         public string shortDescription { get; set; }
         public string longDescription { get; set; }
 
@@ -204,10 +206,16 @@ namespace SineahBot.Data
             this.faction = faction;
             return this;
         }
-
+        public NPC SetNPCName(string npcName)
+        {
+            if (!string.IsNullOrEmpty(this.npcName)) return this;
+            this.npcName = npcName;
+            alternativeNames = alternativeNames.Append(npcName).Append($"{name} {npcName}").ToArray();
+            return this;
+        }
         public override string ToString()
         {
-            return $"NPC {GetName()}";
+            return $"NPC {GetName()} ({npcName})";
         }
     }
 }
