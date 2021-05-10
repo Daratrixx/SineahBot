@@ -12,7 +12,7 @@ namespace SineahBot.Data
     public class NPC : Character
     {
         public string npcName;
-        public string npcStatus;
+        public int npcStatus;
         public string shortDescription { get; set; }
         public string longDescription { get; set; }
 

@@ -38,5 +38,11 @@ namespace System.Linq
         {
             return values.Contains(i);
         }
+
+        public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> collection)
+        {
+            var random = new Random();
+            return collection.OrderBy(x => random.Next(0, 10000));
+        }
     }
 }

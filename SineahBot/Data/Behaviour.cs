@@ -169,6 +169,7 @@ namespace SineahBot.Data
             public Rumor(RoomEvent sourceEvent, string rumorText) : base(sourceEvent) { this.rumorText = rumorText; }
             public string rumorText;
             public List<Character> spreadTo = new List<Character>();
+            public bool reported;
 
             public override string ToString()
             {
@@ -207,7 +208,7 @@ namespace SineahBot.Data
         {
             public Report(RoomEvent sourceEvent) : base(sourceEvent) { }
             public Room destination;
-
+            public bool reported;
             public override string ToString()
             {
                 return @$"Report: to {destination}";
@@ -238,8 +239,22 @@ namespace SineahBot.Data
         }
         public class Hunt : BehaviourMission
         {
-            public Hunt(RoomEvent sourceEvent) : base(sourceEvent) { }
+            public Hunt(RoomEvent sourceEvent, Character target) : base(sourceEvent)
+            {
+                this.target = target;
+            }
             public Character target;
+            public bool reported;
+        }
+        public class Patrol : BehaviourMission
+        {
+            public Patrol(Room destination) : base(null) { this.destination = destination; }
+            public Room destination;
+
+            public override string ToString()
+            {
+                return @$"Patrol: {destination}";
+            }
         }
     }
 

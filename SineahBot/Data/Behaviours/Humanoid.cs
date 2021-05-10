@@ -10,8 +10,8 @@ namespace SineahBot.Data.Behaviours
 {
     public abstract class Humanoid : Behaviour
     {
-        public static Regex AttackRumor = new Regex(@$"(Have you heard\? )?(\*\*(.+?)\*\* attacked (.+?) in (.+))[\?\!\.]?", RegexOptions.IgnoreCase);
-        public static Regex KillRumor = new Regex(@$"(Have you heard\? )?(\*\*(.+?)\*\* killed (.+?) in (.+))[\?\!\.]?", RegexOptions.IgnoreCase);
+        public static Regex AttackRumor = new Regex(@$"Have you heard\? (\*\*(.+?)\*\* attacked (.+?) in (.+))[\?\!\.]?", RegexOptions.IgnoreCase);
+        public static Regex KillRumor = new Regex(@$"Have you heard\? (\*\*(.+?)\*\* killed (.+?) in (.+))[\?\!\.]?", RegexOptions.IgnoreCase);
 
         protected List<BehaviourMission.Rumor> rumors = new List<BehaviourMission.Rumor>();
         public Humanoid() : base() { }
@@ -22,8 +22,8 @@ namespace SineahBot.Data.Behaviours
             missions.Add(new BehaviourMission.Idle());
         }
         public abstract void GenerateRoamTravelMission();
-        public abstract void GenerateSnitchMission(RoomEvent e);
-        public virtual void GenerateRumorMission(RoomEvent e)
+        public abstract void ParseCrimeMemory(RoomEvent e);
+        public virtual void ParseSpeachMemory(RoomEvent e)
         {
             Match match;
             match = AttackRumor.Match(e.speakingContent);
@@ -72,20 +72,20 @@ namespace SineahBot.Data.Behaviours
             switch (e.type)
             {
                 case RoomEventType.CharacterSpeaks:
-                    GenerateRumorMission(e);
+                    ParseSpeachMemory(e);
                     break;
                 case RoomEventType.CharacterCasts:
                     if (!e.castingSpell.aggressiveSpell) return;
                     if (npc.faction == e.attackingCharacter.faction) return; // ignore actions from same faction
-                    GenerateSnitchMission(e);
+                    ParseCrimeMemory(e);
                     break;
                 case RoomEventType.CharacterKills:
                     if (npc.faction == e.killingCharacter.faction) return; // ignore actions from same action
-                    GenerateSnitchMission(e);
+                    ParseCrimeMemory(e);
                     break;
                 case RoomEventType.CharacterAttacks:
                     if (npc.faction == e.attackingCharacter.faction) return; // ignore actions from same action
-                    GenerateSnitchMission(e);
+                    ParseCrimeMemory(e);
                     break;
                 default:
                     break;
