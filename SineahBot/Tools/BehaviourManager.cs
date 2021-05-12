@@ -23,30 +23,21 @@ namespace SineahBot.Tools
         public static void RegisterNPC<BehaviourClass>(NPC npc, BehaviourClass behaviour) where BehaviourClass : Behaviour
         {
             behaviour.Init(npc);
-            lock (behaviours)
-            {
-                behaviours.Add(npc, behaviour);
-            }
+            behaviours.Add(npc, behaviour);
         }
 
         public static void SetActiveForNpc(NPC npc, bool active)
         {
             Behaviour behaviour;
-            lock (behaviours)
+            if (behaviours.TryGetValue(npc, out behaviour))
             {
-                if (behaviours.TryGetValue(npc, out behaviour))
-                {
-                    behaviour.active = active;
-                }
+                behaviour.active = active;
             }
         }
 
         public static void RemoveNPC(NPC npc)
         {
-            lock (behaviours)
-            {
-                behaviours.Remove(npc);
-            }
+            behaviours.Remove(npc);
         }
 
         private static void SwapMemory()
@@ -59,26 +50,20 @@ namespace SineahBot.Tools
 
         public static void RunBehaviours()
         {
-            lock (behaviours)
+            SwapMemory();
+            foreach (var npc in behaviours.ToArray())
             {
-                SwapMemory();
-                foreach (var npc in behaviours)
-                {
-                    RunBehaviour(npc.Value);
-                }
+                RunBehaviour(npc.Value);
             }
         }
 
         public static void RegisterRoomEventForNPCs(IEnumerable<NPC> npcs, Room room, RoomEvent e)
         {
-            lock (behaviours)
+            foreach (var npc in npcs)
             {
-                foreach (var npc in npcs)
+                if (behaviours.TryGetValue(npc, out Behaviour behaviour))
                 {
-                    if (behaviours.TryGetValue(npc, out Behaviour behaviour))
-                    {
-                        behaviour.MemorizeEvent(e);
-                    }
+                    behaviour.MemorizeEvent(e);
                 }
             }
         }

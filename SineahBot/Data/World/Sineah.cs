@@ -1321,7 +1321,7 @@ namespace SineahBot.Data.World
             BehaviourManager.RegisterNPC(Barracks.Characters.Guard2, new Behaviours.SineahBehaviour.Guard(Barracks.Characters.captain));
             BehaviourManager.RegisterNPC(Barracks.Characters.Guard3, new Behaviours.SineahBehaviour.Guard(Barracks.Characters.captain));
             BehaviourManager.RegisterNPC(Barracks.Characters.Guard4, new Behaviours.SineahBehaviour.Guard(Barracks.Characters.captain));
-            BehaviourManager.RegisterNPC(Barracks.Characters.captain, new Behaviours.SineahBehaviour.Captain(Streets.GetRooms()));
+            BehaviourManager.RegisterNPC(Barracks.Characters.captain, new Behaviours.SineahBehaviour.Captain());
         }
     }
 }

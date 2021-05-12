@@ -50,14 +50,18 @@ namespace SineahBot.Data
         protected List<string> messageBuffer = new List<string>();
         public void Message(string message)
         {
-            lock (messageBuffer)
+            lock (playerMessageBuffers)
             {
-                messageBuffer.Add(message);
+                lock (messageBuffer)
+                {
+                    messageBuffer.Add(message);
+                }
                 if (!playerMessageBuffers.Contains(this)) playerMessageBuffers.Add(this);
             }
         }
         public void CommitMessageBuffer()
         {
+            if (messageBuffer.Count == 0) return; // nothing to commint;
             string output;
             lock (messageBuffer)
             {
@@ -79,16 +83,10 @@ namespace SineahBot.Data
         {
             lock (playerMessageBuffers)
             {
-                foreach (var p in playerMessageBuffers) // to array for better thread-safety
+                foreach (var p in playerMessageBuffers)
                     p.CommitMessageBuffer();
                 playerMessageBuffers.Clear();
             }
-            //if (Messaging) return;
-            //if (!Monitor.IsEntered(playerMessageBuffers))
-            //    Monitor.TryEnter(playerMessageBuffers, 5000);
-            //Messaging = true;
-            //Messaging = false;
-            //Monitor.Exit(playerMessageBuffers);
         }
         public static bool Messaging { get; private set; }
         public string GetName(IAgent agent = null)

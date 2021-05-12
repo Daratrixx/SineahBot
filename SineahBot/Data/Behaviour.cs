@@ -53,33 +53,7 @@ namespace SineahBot.Data
                 ParseMemory(e);
         }
         public abstract void ParseMemory(RoomEvent e);
-        public virtual void ElectMission()
-        {
-            if (currentMission == null && missions.Count == 0)
-            {
-                currentMission = new BehaviourMission.Idle();
-                missions.Add(currentMission);
-                return;
-            }
-            if (currentMission == null && missions.Count == 1)
-            {
-                currentMission = missions.FirstOrDefault();
-                return;
-            }
-            if (currentMission == null)
-            {
-                currentMission = missions.FirstOrDefault(x => x is BehaviourMission.Idle);
-                if (currentMission != null)
-                    return;
-            }
-            if (currentMission != null)
-            {
-                if (currentMission.activeAge < 3)
-                    return;
-                currentMission = missions.GetRandom();
-                return;
-            }
-        }
+        public abstract void ElectMission();
         public abstract void RunCurrentMission(Room room);
         public void CompleteCurrentMission()
         {
@@ -98,7 +72,6 @@ namespace SineahBot.Data
         }
         public void Run(Room room)
         {
-
             TickMissions();
             ParseMemories();
             ElectMission();
@@ -118,7 +91,6 @@ namespace SineahBot.Data
             }
             return newRoom;
         }
-
         public virtual Room RunTravelMove(Room from, Room to)
         {
             if (from == to) return from;
@@ -136,7 +108,6 @@ namespace SineahBot.Data
 
             return from;
         }
-
         public virtual bool OnEnterRoom(Room room) { return false; }
         public virtual void OnDestinationReached(Room room) { }
     }
@@ -156,10 +127,6 @@ namespace SineahBot.Data
         {
             this.cycleValue = cycleValue;
         }
-        public class Idle : BehaviourMission
-        {
-            public Idle() : base(null) { }
-        }
         public class Fighting : BehaviourMission
         {
             public Fighting() : base(null) { }
@@ -176,13 +143,11 @@ namespace SineahBot.Data
                 return @$"Rumor: ""{rumorText}"" (from {sourceEvent?.speakingCharacter})";
             }
         }
-        public class Guard : BehaviourMission
-        {
-            public Guard(RoomEvent sourceEvent) : base(sourceEvent) { }
-        }
-        public class Roam : BehaviourMission
+        public abstract class Roam : BehaviourMission
         {
             public Roam() : base(null) { }
+
+            public abstract Room GetDestination();
         }
         public class Follow : BehaviourMission
         {
@@ -206,12 +171,21 @@ namespace SineahBot.Data
         }
         public class Report : BehaviourMission
         {
-            public Report(RoomEvent sourceEvent) : base(sourceEvent) { }
+            public Report() : base(null) { }
             public Room destination;
             public bool reported;
             public override string ToString()
             {
                 return @$"Report: to {destination}";
+            }
+        }
+        public class Rest : BehaviourMission
+        {
+            public Rest() : base(null) { }
+            public Room destination;
+            public override string ToString()
+            {
+                return @$"Rest: to {destination}";
             }
         }
         public class Snitch : BehaviourMission
@@ -235,6 +209,13 @@ namespace SineahBot.Data
             public override string ToString()
             {
                 return @$"Snitch: ""{GetCrimeRumor()}"" to {destination}";
+            }
+
+            public static Snitch New<T>(RoomEvent e) where T: Snitch
+            {
+                var ctor = typeof(T).GetConstructor(new Type[] { typeof(RoomEvent) });
+                T output = (T)ctor.Invoke(new object[] { e });
+                return output;
             }
         }
         public class Hunt : BehaviourMission

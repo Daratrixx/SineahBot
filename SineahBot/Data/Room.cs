@@ -153,7 +153,6 @@ namespace SineahBot.Data
         {
             var npcs = entities.Where(x => x is NPC && x != source).ToArray().Select(x => x as NPC);
             Tools.BehaviourManager.RegisterRoomEventForNPCs(npcs, this, e);
-            Player.CommitPlayerMessageBuffers();
         }
 
         public void AddToRoom(Entity entity, bool feedback = true)

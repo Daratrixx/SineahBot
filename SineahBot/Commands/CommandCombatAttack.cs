@@ -101,12 +101,11 @@ namespace SineahBot.Commands
                         room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterKills) { killingCharacter = character, killedTarget = killableTarget }, character);
                     }
                 }
+                return;
             }
-            else
-            {
-                character.Message($"You attacked {target.GetName()}.");
-                room.DescribeAction($"{character.GetName()} attacked {target.GetName()}.", character, target as IAgent);
-            }
+
+            character.Message($"You attacked {target.GetName()}.");
+            room.DescribeAction($"{character.GetName()} attacked {target.GetName()}.", character, target as IAgent);
         }
     }
 }
