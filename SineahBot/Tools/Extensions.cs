@@ -7,11 +7,11 @@ namespace System.Linq
 {
     public static class Extensions
     {
+        private static Random random = new Random();
         public static T GetRandom<T>(this IEnumerable<T> enumerable)
         {
             if (enumerable.Count() == 0)
                 return default(T);
-            var random = new Random();
             return enumerable.OrderBy(x => random.Next(int.MinValue, int.MaxValue)).First();
         }
 
@@ -41,7 +41,6 @@ namespace System.Linq
 
         public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> collection)
         {
-            var random = new Random();
             return collection.OrderBy(x => random.Next(0, 10000));
         }
     }

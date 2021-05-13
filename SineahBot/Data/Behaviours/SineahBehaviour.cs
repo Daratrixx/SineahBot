@@ -28,7 +28,8 @@ namespace SineahBot.Data.Behaviours
         {
             public SineahReport() : base()
             {
-                destination = World.Sineah.Barracks.Rooms.Hall;
+                reportRoom = World.Sineah.Barracks.Rooms.Hall;
+                restRoom = World.Sineah.Barracks.Rooms.GuardsRoom;
             }
         }
         public class SineahRest : BehaviourMission.Rest

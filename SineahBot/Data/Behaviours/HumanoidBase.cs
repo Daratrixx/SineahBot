@@ -10,8 +10,8 @@ namespace SineahBot.Data.Behaviours
 {
     public abstract class HumanoidBase : Behaviour
     {
-        public static Regex AttackRumor = new Regex(@$"Have you heard\? (\*\*(.+?)\*\* attacked (.+?) in (.+))[\?\!\.]?", RegexOptions.IgnoreCase);
-        public static Regex KillRumor = new Regex(@$"Have you heard\? (\*\*(.+?)\*\* killed (.+?) in (.+))[\?\!\.]?", RegexOptions.IgnoreCase);
+        public static Regex AttackRumor = new Regex(@$"(Have you heard\?|Help!) (\*(.+?)\* attacked (.+?) in (.+))[\?\!\.]?", RegexOptions.IgnoreCase);
+        public static Regex KillRumor = new Regex(@$"(Have you heard\?|Help!) (\*(.+?)\* killed (.+?) in (.+))[\?\!\.]?", RegexOptions.IgnoreCase);
 
         protected List<BehaviourMission.Rumor> rumors = new List<BehaviourMission.Rumor>();
         public HumanoidBase() : base() { }
@@ -311,7 +311,15 @@ namespace SineahBot.Data.Behaviours
                     CommandCombatAttack.Attack(npc, room, target);
                 return;
             }
-            base.RunCurrentMission(room);
+            if (currentMission == null)
+            {
+                if (rumors.Count > 0 && random.Next(1, 100) <= 10)
+                {
+                    var rumor = rumors.GetRandom();
+                    RunSpreadRumor(room, rumor);
+                    return;
+                }
+            }
         }
 
         public override bool OnEnterRoom(Room room)
@@ -328,8 +336,10 @@ namespace SineahBot.Data.Behaviours
     where ReportType : BehaviourMission.Report, new()
     where RestType : BehaviourMission.Rest, new()
     {
-        public static Regex PatrolRegex = new Regex(@$"Guard (.+?), patrol to (.+).", RegexOptions.IgnoreCase);
-        public static Regex InvestigateRegex = new Regex(@$"Guard (.+?), investigate (.+).", RegexOptions.IgnoreCase);
+        public static Regex PatrolRegex = new Regex(@$"Guard (.+?), patrol to (.+)\.", RegexOptions.IgnoreCase);
+        public static Regex InvestigateRegex = new Regex(@$"Guard (.+?), investigate (.+?)\.", RegexOptions.IgnoreCase);
+
+        public static Regex InvestigateCrimeRegex = new Regex(@$"\*(.+?)\* (attacked|killed) (.+?) in (.+)[\?\!\.]?", RegexOptions.IgnoreCase);
         protected NPC captain;
 
         protected List<Character> suspiciousCharacters = new List<Character>();
@@ -343,7 +353,7 @@ namespace SineahBot.Data.Behaviours
         public override void Init(NPC npc)
         {
             base.Init(npc);
-            npc.npcStatus = 20;
+            npc.npcStatus = 10;
             CaptainBase.RegisterCaptainGuardAffiliation(captain, npc);
         }
 
@@ -353,7 +363,7 @@ namespace SineahBot.Data.Behaviours
             match = InvestigateRegex.Match(e.speakingContent);
             if (match.Success)
             {
-                OnRumorRegexMatch(e, match);
+                OnInvestigateRegexMatch(e, match);
                 return;
             }
             match = PatrolRegex.Match(e.speakingContent);
@@ -365,6 +375,27 @@ namespace SineahBot.Data.Behaviours
             base.ParseSpeachEvent(e);
         }
 
+        public BehaviourMission OnInvestigateRegexMatch(RoomEvent e, Match match)
+        {
+            // check if the order is targeted toward this NPC
+            if (string.Equals(match.Groups[1].Value, npc.npcName, StringComparison.OrdinalIgnoreCase))
+            {
+                var investigationString = match.Groups[2].Value;
+                match = InvestigateCrimeRegex.Match(investigationString);
+                if (match.Success)
+                {
+                    CompleteCurrentMission(); // make sure the report mission is gone...
+                    var targetRoom = RoomManager.GetRoom(match.Groups[4].Value);
+                    if (targetRoom == null) return null;
+                    var mission = new BehaviourMission.Investigate(e, targetRoom, match.Groups[1].Value, match.Groups[3].Value);
+                    missions.Add(mission);
+                    currentMission = mission;
+                    return mission;
+                }
+            }
+            return null;
+        }
+
         public BehaviourMission OnPatrolRegexMatch(RoomEvent e, Match match)
         {
             // check if the order is targeted toward this NPC
@@ -373,6 +404,7 @@ namespace SineahBot.Data.Behaviours
                 var targetRoom = RoomManager.GetRoom(match.Groups[2].Value);
                 if (targetRoom != null)
                 {
+                    CompleteCurrentMission(); // make sure the report mission is gone...
                     var mission = new BehaviourMission.Patrol(targetRoom);
                     missions.Add(mission);
                     currentMission = mission;
@@ -391,15 +423,22 @@ namespace SineahBot.Data.Behaviours
                 missions.Add(currentMission);
                 return;
             }
+            var investigate = missions.FirstOrDefault(x => x is BehaviourMission.Investigate) as BehaviourMission.Investigate;
+            if (investigate != null)
+            {
+                currentMission = investigate;
+                return;
+            }
             var patrol = missions.FirstOrDefault(x => x is BehaviourMission.Patrol) as BehaviourMission.Patrol;
             if (patrol != null)
             {
                 currentMission = patrol;
                 return;
             }
-            if (npc.npcStatus == 0 || currentMission == null || !(currentMission is ReportType))
+            if (npc.npcStatus == 0 || currentMission == null || !(currentMission is BehaviourMission.Report))
             {
                 currentMission = missions.FirstOrDefault(x => x is ReportType) as ReportType ?? new ReportType();
+                if (!missions.Contains(currentMission)) missions.Add(currentMission);
             }
         }
 
@@ -408,19 +447,29 @@ namespace SineahBot.Data.Behaviours
             if (currentMission == null) return;
             if (currentMission is BehaviourMission.Report report)
             {
-                if (room != report.destination)
+                if (room != report.reportRoom)
                 {
-                    RunTravel(room, report.destination);
+                    RunTravel(room, report.reportRoom);
                     return;
                 }
                 if (!report.reported)
                 {
-                    GuardReport(room);
+                    GuardReport(room, report);
                     report.reported = true;
-                    npc.npcStatus = 50;
+                    npc.npcStatus = 20;
                 }
-                npc.npcStatus += 3; // rest more the longer the guard awaits orders
+                npc.npcStatus += 2; // rest more the longer the guard awaits orders
                 return;
+            }
+            if (currentMission is BehaviourMission.Investigate investigate)
+            {
+                if (room != investigate.destination)
+                {
+                    RunTravel(room, investigate.destination);
+                    return;
+                }
+                InvestigateRoom(room, investigate);
+                CompleteCurrentMission();
             }
             if (npc.npcStatus > 0) --npc.npcStatus;
             if (currentMission is BehaviourMission.Patrol patrol)
@@ -436,27 +485,59 @@ namespace SineahBot.Data.Behaviours
             base.RunCurrentMission(room);
         }
 
-        public void GuardReport(Room room)
+        public string[] emptyReports = new string[] {
+            "I have nothing to report.",
+            "All is clear.",
+            "All is good.",
+            "Everything is fine.",
+            "Nothing wrong out there.",
+        };
+        public void GuardReport(Room room, BehaviourMission.Report report)
         {
-            string eventReport;
-            if (rumors.Count == 0)
-                eventReport = "I have nothing to report.";
+            List<string> eventReport = new List<string>();
+            if (report.toReport != null)
+            {
+                eventReport.Add(GetInvestigationReport(report.toReport));
+                report.toReport = null;
+            }
             else
             {
-                eventReport = string.Join("; ", rumors.Where(x => x.reported == false).Select(x => $"I have heard {x.rumorText}"));
+                eventReport.AddRange(rumors.Where(x => x.reported == false).Select(x => $"I have heard {x.rumorText}"));
                 rumors.ForEach(x => x.reported = true);
             }
-            string report = $@"Guard {npc.npcName} reporting. {eventReport}";
+            if (eventReport.Count == 0)
+                eventReport.Add(emptyReports.GetRandom());
+            string output = $@"Guard {npc.npcName} reporting. {string.Join("; ", eventReport.Where(x => !string.IsNullOrWhiteSpace(x)))}";
 
-            CommandSay.Say(npc, room, report);
+            CommandSay.Say(npc, room, output);
+        }
+
+        public string GetInvestigationReport(BehaviourMission.Investigate investigate)
+        {
+            var output = $"I have investigated in {investigate.destination.GetName()}, and found that";
+            if (investigate.confirmVictim)
+            {
+                return output + $" {investigate.victimName} was killed.";
+            }
+            return output + $" {investigate.victimName} was not killed.";
+        }
+
+        public void InvestigateRoom(Room room, BehaviourMission.Investigate investigate)
+        {
+            CommandAct.Act(npc, room, "investigates the room.");
+            var victimBody = room.FindInRoom<Container>(investigate.victimName);
+            investigate.confirmVictim = victimBody != null;
+            var report = missions.FirstOrDefault(x => x is ReportType) as ReportType ?? new ReportType();
+            report.toReport = investigate;
+            if (!missions.Contains(report)) missions.Add(report);
         }
     }
 
     public class CaptainBase : MilitianBase
     {
         public static Regex ReportRegex = new Regex(@$"Guard .+? reporting\. (.+)", RegexOptions.IgnoreCase);
-        public static Regex AttackRumorReport = new Regex(@$"I have heard (\*\*(.+?)\*\* attacked (.+?) in (.+))", RegexOptions.IgnoreCase);
-        public static Regex KillRumorReport = new Regex(@$"I have heard (\*\*(.+?)\*\* killed (.+?) in (.+))", RegexOptions.IgnoreCase);
+        public static Regex AttackRumorReport = new Regex(@$"I have heard (\*(.+?)\* attacked (.+?) in (.+))", RegexOptions.IgnoreCase);
+        public static Regex KillRumorReport = new Regex(@$"I have heard (\*(.+?)\* killed (.+?) in (.+))", RegexOptions.IgnoreCase);
         public static Dictionary<NPC, List<NPC>> captainAffiliation = new Dictionary<NPC, List<NPC>>();
         public static void RegisterCaptainGuardAffiliation(NPC captain, NPC npc)
         {

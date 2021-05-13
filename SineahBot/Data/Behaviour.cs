@@ -169,14 +169,35 @@ namespace SineahBot.Data
                 return @$"Travel: {destination}";
             }
         }
+        public class Investigate : BehaviourMission
+        {
+            public Investigate(RoomEvent e, Room destination, string perpetrator, string victim) : base(e)
+            {
+                this.destination = destination;
+                this.perpetratorName = perpetrator;
+                this.victimName = victim;
+            }
+            public Room destination;
+            public string perpetratorName;
+            public string victimName;
+            public bool confirmPerpetrator;
+            public bool confirmVictim;
+
+            public override string ToString()
+            {
+                return @$"Investigate: {perpetratorName}:{victimName} ({destination})";
+            }
+        }
         public class Report : BehaviourMission
         {
             public Report() : base(null) { }
-            public Room destination;
+            public Room reportRoom;
+            public Room restRoom;
             public bool reported;
+            public Investigate toReport;
             public override string ToString()
             {
-                return @$"Report: to {destination}";
+                return @$"Report: to {reportRoom}";
             }
         }
         public class Rest : BehaviourMission
@@ -198,11 +219,11 @@ namespace SineahBot.Data
                 switch (sourceEvent.type)
                 {
                     case RoomEventType.CharacterAttacks:
-                        return $"**{sourceEvent.attackingCharacter}** attacked someone in *{sourceEvent.room.name}*!";
+                        return $"Help! *{sourceEvent.attackingCharacter}* attacked someone in {sourceEvent.room.name}.";
                     case RoomEventType.CharacterKills:
-                        return $"**{sourceEvent.killingCharacter}** killed someone in *{sourceEvent.room.name}*!";
+                        return $"Help! *{sourceEvent.killingCharacter}* killed someone in {sourceEvent.room.name}.";
                     default:
-                        return $"Someone commited a crime in *{sourceEvent.room.name}*";
+                        return $"Help! Someone committed a crime in {sourceEvent.room.name}.";
                 }
             }
 
@@ -211,7 +232,7 @@ namespace SineahBot.Data
                 return @$"Snitch: ""{GetCrimeRumor()}"" to {destination}";
             }
 
-            public static Snitch New<T>(RoomEvent e) where T: Snitch
+            public static Snitch New<T>(RoomEvent e) where T : Snitch
             {
                 var ctor = typeof(T).GetConstructor(new Type[] { typeof(RoomEvent) });
                 T output = (T)ctor.Invoke(new object[] { e });
