@@ -44,7 +44,7 @@ namespace SineahBot.Tools
         {
             foreach (var behaviour in behaviours.Values)
             {
-                behaviour.SwapMemory();
+                behaviour.PrepareMemory();
             }
         }
 

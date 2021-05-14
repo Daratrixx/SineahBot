@@ -88,7 +88,7 @@ namespace SineahBot.Commands
 
         public static bool Flee(Character character, Room room, MoveDirection direction)
         {
-            if (CommandMove.MoveCharacter(character, room, direction))
+            if (CommandMove.Move(character, room, direction))
             {
                 CombatManager.RemoveFromCombat(character);
                 return true;

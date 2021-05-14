@@ -10,10 +10,11 @@ namespace SineahBot.Data.Behaviours
 {
     public abstract class HumanoidBase : Behaviour
     {
-        public static Regex AttackRumor = new Regex(@$"(Have you heard\?|Help!) (\*(.+?)\* attacked (.+?) in (.+))[\?\!\.]?", RegexOptions.IgnoreCase);
-        public static Regex KillRumor = new Regex(@$"(Have you heard\?|Help!) (\*(.+?)\* killed (.+?) in (.+))[\?\!\.]?", RegexOptions.IgnoreCase);
+        public static Regex AttackRumor = new Regex(@$"(Did you hear\?|Have you heard\?|Help!) (\*(.+?)\* attacked (.+?) in (.+))[\?\!\.]?", RegexOptions.IgnoreCase);
+        public static Regex KillRumor = new Regex(@$"(Did you hear\?|Have you heard\?|Help!) (\*(.+?)\* killed (.+?) in (.+))[\?\!\.]?", RegexOptions.IgnoreCase);
 
-        protected List<BehaviourMission.Rumor> rumors = new List<BehaviourMission.Rumor>();
+        protected MemoryTracker memoryTracker = new MemoryTracker();
+        protected RumorTracker rumorTracker = new RumorTracker();
         public HumanoidBase() : base() { }
 
         public virtual void GenerateRoamTravelMission(BehaviourMission.Roam roam)
@@ -38,24 +39,24 @@ namespace SineahBot.Data.Behaviours
                 return;
             }
         }
-        public virtual BehaviourMission.Rumor OnRumorRegexMatch(RoomEvent e, Match match)
+        public virtual Rumor OnRumorRegexMatch(RoomEvent e, Match match)
         {
-            var existingRumor = rumors
-            .Where(x => x.sourceEvent.speakingContent == match.Groups[2].Value);
-            BehaviourMission.Rumor rumor;
+            var existingRumor = rumorTracker
+            .Where(x => x.rumorText == match.Groups[2].Value);
+            Rumor rumor;
             if (existingRumor.Count() > 0)
             {
                 rumor = existingRumor.First();
             }
             else
             {
-                rumor = new BehaviourMission.Rumor(e, match.Groups[2].Value);
-                rumors.Add(rumor);
+                rumor = new Rumor(e, match.Groups[2].Value);
+                rumorTracker.Add(rumor);
             }
             SpreadRumor(e.room, rumor);
             return rumor;
         }
-        public bool SpreadRumor(Room room, BehaviourMission.Rumor rumor)
+        public bool SpreadRumor(Room room, Rumor rumor)
         {
             if (rumor == null || room == null) return false;
             var characters = room.characters.Where(x => x != npc && !rumor.spreadTo.Contains(x));
@@ -68,21 +69,22 @@ namespace SineahBot.Data.Behaviours
         }
         public override void ParseMemory(RoomEvent e)
         {
+            memoryTracker.Add(e);
             switch (e.type)
             {
                 case RoomEventType.CharacterSpeaks:
                     ParseSpeachEvent(e);
-                    break;
+                    return;
                 case RoomEventType.CharacterCasts:
-                    if (!e.castingSpell.aggressiveSpell) return;
-                    ParseHostileEvent(e, e.attackingCharacter);
-                    break;
+                    if (!e.spell.aggressiveSpell) return;
+                    ParseHostileEvent(e, e.source);
+                    return;
                 case RoomEventType.CharacterKills:
-                    ParseHostileEvent(e, e.attackingCharacter);
-                    break;
+                    ParseHostileEvent(e, e.source);
+                    return;
                 case RoomEventType.CharacterAttacks:
-                    ParseHostileEvent(e, e.attackingCharacter);
-                    break;
+                    ParseHostileEvent(e, e.source);
+                    return;
                 default:
                     break;
             }
@@ -90,7 +92,7 @@ namespace SineahBot.Data.Behaviours
         public override void TickMissions()
         {
             base.TickMissions();
-            foreach (var r in rumors)
+            foreach (var r in rumorTracker)
             {
                 if (r.totalAge >= 0)
                     ++r.totalAge;
@@ -139,7 +141,7 @@ namespace SineahBot.Data.Behaviours
                         RunTravel(room, travel.destination);
                         return;
                     }
-                    var rumor = rumors.GetRandom();
+                    var rumor = rumorTracker.GetRandom();
                     if (RunSpreadRumor(room, rumor))
                         return;
                 }
@@ -153,11 +155,14 @@ namespace SineahBot.Data.Behaviours
             }
             if (currentMission == null)
             {
-                if (rumors.Count > 0 && random.Next(1, 100) <= 10)
+                if (rumorTracker.Count > 0)
                 {
-                    var rumor = rumors.GetRandom();
-                    RunSpreadRumor(room, rumor);
-                    return;
+                    if (random.Next(1, 100) <= 10)
+                    {
+                        var rumor = rumorTracker.GetRandom();
+                        RunSpreadRumor(room, rumor);
+                        return;
+                    }
                 }
                 if (room != originalRoom)
                 {
@@ -167,7 +172,7 @@ namespace SineahBot.Data.Behaviours
                 }
             }
         }
-        public bool RunSpreadRumor(Room room, BehaviourMission.Rumor rumor)
+        public bool RunSpreadRumor(Room room, Rumor rumor)
         {
             if (SpreadRumor(room, rumor))
             {
@@ -189,7 +194,33 @@ namespace SineahBot.Data.Behaviours
     public class CitizenBase<SnitchType> : HumanoidBase
     where SnitchType : BehaviourMission.Snitch
     {
+        public static Regex AskRoomEvent = new Regex(@$"Did you see (.+?) (enter|leave) (.+)\?", RegexOptions.IgnoreCase);
+        public static Regex AskTargetEvent = new Regex(@$"Did you see (.+?) (attack|kill) (.+?) in (.+)\?", RegexOptions.IgnoreCase);
+
         public CitizenBase() : base() { }
+
+        public override void ParseSpeachEvent(RoomEvent e)
+        {
+            Match match;
+            match = AskRoomEvent.Match(e.speakingContent);
+            if (match.Success)
+            {
+                var source = match.Groups[1].Value;
+                var verb = RoomEvent.GetTypeFromVerb(match.Groups[2].Value);
+                var room = match.Groups[3].Value;
+                Say(RoomManager.GetRoom(npc.currentRoomId), memoryTracker.ConfirmMemory(source, verb, room));
+            }
+            match = AskTargetEvent.Match(e.speakingContent);
+            if (match.Success)
+            {
+                var source = match.Groups[1].Value;
+                var verb = RoomEvent.GetTypeFromVerb(match.Groups[2].Value);
+                var target = match.Groups[3].Value;
+                var room = match.Groups[4].Value;
+                Say(RoomManager.GetRoom(npc.currentRoomId), memoryTracker.ConfirmMemory(source, verb, target, room));
+            }
+            base.ParseSpeachEvent(e);
+        }
 
         public override void ParseHostileEvent(RoomEvent e, Character source)
         {
@@ -244,21 +275,21 @@ namespace SineahBot.Data.Behaviours
             switch (e.type)
             {
                 case RoomEventType.CharacterEnters:
-                    if (targets.Count == 0 || targets.Count(x => x.target == e.enteringCharacter) == 0) return;
-                    CombatManager.EngageCombat(npc, e.enteringCharacter);
+                    if (targets.Count == 0 || targets.Count(x => x.target == e.source) == 0) return;
+                    CombatManager.EngageCombat(npc, e.source);
                     return;
                 case RoomEventType.CharacterSpeaks:
                     ParseSpeachEvent(e);
                     break;
                 case RoomEventType.CharacterCasts:
-                    if (!e.castingSpell.aggressiveSpell) return;
-                    ParseHostileEvent(e, e.attackingCharacter);
+                    if (!e.spell.aggressiveSpell) return;
+                    ParseHostileEvent(e, e.source);
                     break;
                 case RoomEventType.CharacterKills:
-                    ParseHostileEvent(e, e.killingCharacter);
+                    ParseHostileEvent(e, e.source);
                     break;
                 case RoomEventType.CharacterAttacks:
-                    ParseHostileEvent(e, e.attackingCharacter);
+                    ParseHostileEvent(e, e.source);
                     break;
                 default:
                     break;
@@ -313,9 +344,9 @@ namespace SineahBot.Data.Behaviours
             }
             if (currentMission == null)
             {
-                if (rumors.Count > 0 && random.Next(1, 100) <= 10)
+                if (rumorTracker.Count > 0 && random.Next(1, 100) <= 10)
                 {
-                    var rumor = rumors.GetRandom();
+                    var rumor = rumorTracker.GetRandom();
                     RunSpreadRumor(room, rumor);
                     return;
                 }
@@ -502,8 +533,9 @@ namespace SineahBot.Data.Behaviours
             }
             else
             {
-                eventReport.AddRange(rumors.Where(x => x.reported == false).Select(x => $"I have heard {x.rumorText}"));
-                rumors.ForEach(x => x.reported = true);
+                eventReport.AddRange(rumorTracker.Where(x => x.reported == false).Select(x => $"I have heard {x.rumorText}"));
+                foreach (var rumor in rumorTracker)
+                    rumor.reported = true;
             }
             if (eventReport.Count == 0)
                 eventReport.Add(emptyReports.GetRandom());
@@ -538,6 +570,7 @@ namespace SineahBot.Data.Behaviours
         public static Regex ReportRegex = new Regex(@$"Guard .+? reporting\. (.+)", RegexOptions.IgnoreCase);
         public static Regex AttackRumorReport = new Regex(@$"I have heard (\*(.+?)\* attacked (.+?) in (.+))", RegexOptions.IgnoreCase);
         public static Regex KillRumorReport = new Regex(@$"I have heard (\*(.+?)\* killed (.+?) in (.+))", RegexOptions.IgnoreCase);
+        public static Regex crimeConfirmationReport = new Regex(@$"I confirm (\*(.+?)\* killed (.+?) in (.+))", RegexOptions.IgnoreCase);
         public static Dictionary<NPC, List<NPC>> captainAffiliation = new Dictionary<NPC, List<NPC>>();
         public static void RegisterCaptainGuardAffiliation(NPC captain, NPC npc)
         {
@@ -552,8 +585,7 @@ namespace SineahBot.Data.Behaviours
 
         protected readonly List<Room> patrolRooms;
         protected List<NPC> guardList;
-        protected List<Character> suspiciousCharacters = new List<Character>();
-        protected List<Character> criminalCharacters = new List<Character>();
+        protected CrimeTracker crimeTracker = new CrimeTracker();
         protected List<NPC> passiveGuards = new List<NPC>();
 
         public CaptainBase(IEnumerable<Room> patrolRooms)
@@ -569,6 +601,12 @@ namespace SineahBot.Data.Behaviours
                 guardList = captainAffiliation[npc] = new List<NPC>();
             var room = RoomManager.GetRoom(npc.currentRoomId);
             passiveGuards.AddRange(guardList.Where(x => room.npcs.Contains(x)));
+        }
+
+        public override void TickMissions()
+        {
+            base.TickMissions();
+            crimeTracker.TickAffectations();
         }
 
         public override void ParseSpeachEvent(RoomEvent e)
@@ -600,20 +638,33 @@ namespace SineahBot.Data.Behaviours
                     continue;
                 }
             }
-            if (e.speakingCharacter is NPC guard && guardList.Contains(guard))
+            if (e.source is NPC guard && guardList.Contains(guard))
                 passiveGuards.Add(guard);
         }
 
         public void OnReportRumorRegexMatch(RoomEvent e, Match match)
         {
             var rumorText = match.Groups[1].Value;
-            var existingRumor = rumors
-            .Where(x => x.sourceEvent.speakingContent == rumorText);
+            var existingRumor = rumorTracker
+            .Where(x => x.rumorText == rumorText);
             if (existingRumor.Count() == 0)
             {
-                BehaviourMission.Rumor rumor = new BehaviourMission.Rumor(e, rumorText);
-                rumors.Add(rumor);
+                Rumor rumor = new Rumor(e, rumorText);
+                rumorTracker.Add(rumor);
             }
+        }
+
+        public void OnReportCrimeRegexMatch(RoomEvent e, Match match)
+        {
+            var rumorText = match.Groups[1].Value;
+            var existingRumor = rumorTracker
+            .Where(x => x.rumorText == rumorText);
+            if (existingRumor.Count() == 0)
+            {
+                CommandSay.Say(npc, e.room, @$"Trying to confirm an unknown rumor: ""{rumorText}""");
+                return;
+            }
+            var rumor = existingRumor.FirstOrDefault();
         }
 
         public override void RunCurrentMission(Room room)
@@ -648,7 +699,7 @@ namespace SineahBot.Data.Behaviours
 
         public void GiveOrderToGuard(Room room, NPC guard)
         {
-            var rumor = rumors.Where(x => x.reported == false).FirstOrDefault();
+            var rumor = rumorTracker.Where(x => x.reported == false).FirstOrDefault();
             if (rumor != null)
             {
                 // send to investigate

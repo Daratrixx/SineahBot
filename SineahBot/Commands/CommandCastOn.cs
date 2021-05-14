@@ -107,7 +107,7 @@ namespace SineahBot.Commands
             character.CastSpellOn(spell, target);
             character.StartActionCooldown();
 
-            room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterCasts) { castingCharacter = character, castingSpell = spell, castingTarget = target }, character);
+            room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterCasts) { source = character, spell = spell, target = target as Character }, character);
 
             if (target is IKillable)
             {
@@ -118,7 +118,7 @@ namespace SineahBot.Commands
                     room.DescribeAction($"{character.GetName()} killed {target.GetName()}!", character, target as IAgent);
 
                     if(target is Character)
-                    room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterKills) { killingCharacter = character, killedTarget = target as Character }, character);
+                    room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterKills) { source = character, target = target as Character }, character);
                 }
             }
         }

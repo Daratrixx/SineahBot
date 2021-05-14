@@ -38,7 +38,7 @@ namespace SineahBot.Commands
         public static void Say(Character character, Room room, string speach)
         {
             room.DescribeAction($@"**{character.GetName()}** said: ""{speach}""", character);
-            room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterSpeaks) { speakingCharacter = character, speakingContent = speach }, character);
+            room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterSpeaks) { source = character, speakingContent = speach }, character);
             character.Message($@"You said: ""{speach}""");
         }
     }

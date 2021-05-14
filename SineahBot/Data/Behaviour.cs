@@ -40,7 +40,7 @@ namespace SineahBot.Data
         {
             memory.Add(e);
         }
-        public void SwapMemory()
+        public void PrepareMemory()
         {
             var swap = memorySwapped;
             memorySwapped = memory;
@@ -51,6 +51,7 @@ namespace SineahBot.Data
         {
             foreach (var e in memorySwapped)
                 ParseMemory(e);
+            memorySwapped.Clear();
         }
         public abstract void ParseMemory(RoomEvent e);
         public abstract void ElectMission();
@@ -100,8 +101,8 @@ namespace SineahBot.Data
                 return from;
 
             if (npc.characterStatus == CharacterStatus.Combat
-            ? CommandCombatFlee.Flee(npc, from, dir)
-            : CommandMove.MoveCharacter(npc, from, dir))
+            ? Flee(from, dir)
+            : Move(from, dir))
             {
                 return RoomManager.GetRoom(npc.currentRoomId);
             }
@@ -110,6 +111,27 @@ namespace SineahBot.Data
         }
         public virtual bool OnEnterRoom(Room room) { return false; }
         public virtual void OnDestinationReached(Room room) { }
+
+        public bool Move(Room from, MoveDirection dir)
+        {
+            return CommandMove.Move(npc, from, dir);
+        }
+        public bool Flee(Room from, MoveDirection dir)
+        {
+           return CommandCombatFlee.Flee(npc, from, dir);
+        }
+        public void Say(Room room, string say)
+        {
+            CommandSay.Say(npc, room, say);
+        }
+        public void Act(Room room, string act)
+        {
+            CommandAct.Act(npc, room, act);
+        }
+        public void Attack(Room room, Character target)
+        {
+            CommandCombatAttack.Attack(npc, room, target);
+        }
     }
 
     public class BehaviourMission
@@ -131,18 +153,7 @@ namespace SineahBot.Data
         {
             public Fighting() : base(null) { }
         }
-        public class Rumor : BehaviourMission
-        {
-            public Rumor(RoomEvent sourceEvent, string rumorText) : base(sourceEvent) { this.rumorText = rumorText; }
-            public string rumorText;
-            public List<Character> spreadTo = new List<Character>();
-            public bool reported;
-
-            public override string ToString()
-            {
-                return @$"Rumor: ""{rumorText}"" (from {sourceEvent?.speakingCharacter})";
-            }
-        }
+        
         public abstract class Roam : BehaviourMission
         {
             public Roam() : base(null) { }
@@ -219,9 +230,9 @@ namespace SineahBot.Data
                 switch (sourceEvent.type)
                 {
                     case RoomEventType.CharacterAttacks:
-                        return $"Help! *{sourceEvent.attackingCharacter}* attacked someone in {sourceEvent.room.name}.";
+                        return $"Help! *{sourceEvent.source}* attacked someone in {sourceEvent.room.name}.";
                     case RoomEventType.CharacterKills:
-                        return $"Help! *{sourceEvent.killingCharacter}* killed someone in {sourceEvent.room.name}.";
+                        return $"Help! *{sourceEvent.source}* killed someone in {sourceEvent.room.name}.";
                     default:
                         return $"Help! Someone committed a crime in {sourceEvent.room.name}.";
                 }
@@ -271,27 +282,39 @@ namespace SineahBot.Data
         public Room room;
         public RoomEventType type;
 
-        public Character enteringCharacter;
-        public MoveDirection enteringDirection;
-
-        public Character leavingCharacter;
-        public MoveDirection leavingDirection;
-
-        public Character castingCharacter;
-        public Entity castingTarget;
-        public Spell castingSpell;
-
-        public Character attackingCharacter;
-        public IAttackable attackTarget;
-
-        public Character killingCharacter;
-        public IKillable killedTarget;
-
-        public Character speakingCharacter;
+        public Character source;
+        public MoveDirection direction;
+        public Character target;
+        public Spell spell;
         public string speakingContent;
-
-        public Character actingCharacter;
         public string actingContent;
+
+        public static RoomEventType GetTypeFromVerb(string verb)
+        {
+            switch (verb)
+            {
+                case "attack":
+                case "attacked":
+                case "attacking":
+                    return RoomEventType.CharacterAttacks;
+                case "kill":
+                case "killed":
+                case "killing":
+                    return RoomEventType.CharacterKills;
+                case "enter":
+                case "enters":
+                case "entered":
+                case "entering":
+                    return RoomEventType.CharacterEnters;
+                case "leave":
+                case "leaves":
+                case "leaved":
+                case "leaving":
+                    return RoomEventType.CharacterLeaves;
+                default:
+                    return RoomEventType.CharacterActs;
+            }
+        }
     }
 
     public enum RoomEventType

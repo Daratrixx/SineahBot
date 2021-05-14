@@ -80,11 +80,11 @@ namespace SineahBot.Commands
                     throw new Exception($@"Can't move to unknown direction ""{directionName}""");
             }
 
-            if (MoveCharacter(character, room, direction))
+            if (Move(character, room, direction))
                 character.RewardExperience(1);
         }
 
-        public static bool MoveCharacter(Character character, Room room, MoveDirection direction)
+        public static bool Move(Character character, Room room, MoveDirection direction)
         {
             if (!room.IsValidDirection(direction))
             {

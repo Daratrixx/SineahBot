@@ -58,10 +58,10 @@ namespace SineahBot.Tools
         {
             var destination = room.GetRoomConnectionInDirection(direction);
             if (destination.locked) return false;
-            room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterLeaves) { leavingCharacter = character, leavingDirection = direction }, character);
+            room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterLeaves) { source = character, direction = direction }, character);
             room.RemoveFromRoom(character);
             destination.toRoom.AddToRoom(character);
-            destination.toRoom.RaiseRoomEvent(new RoomEvent(destination.toRoom, RoomEventType.CharacterEnters) { enteringCharacter = character}, character);
+            destination.toRoom.RaiseRoomEvent(new RoomEvent(destination.toRoom, RoomEventType.CharacterEnters) { source = character}, character);
             return true;
         }
         public static void RemoveFromCurrentRoom(Entity entity, bool feedback = true)

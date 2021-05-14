@@ -103,14 +103,14 @@ namespace SineahBot.Commands
             character.CastSpell(spell);
             character.StartActionCooldown();
 
-            room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterCasts) { castingCharacter = character, castingSpell = spell, castingTarget = character }, character);
+            room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterCasts) { source = character, spell = spell, target = character }, character);
 
             if (character.IsDead()) // true if target died
             {
                 character.OnKilled(character);
                 character.Message($"You killed yourself!");
                 room.DescribeAction($"{character.GetName()} killed {character.themselves}!", character);
-                room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterKills) { killingCharacter = character, killedTarget = character }, character);
+                room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterKills) { source = character, target = character }, character);
             }
         }
     }

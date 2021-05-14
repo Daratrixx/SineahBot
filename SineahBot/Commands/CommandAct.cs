@@ -42,7 +42,7 @@ namespace SineahBot.Commands
             room.DescribeAction($@"***{character.GetName()}** {act}*", character);
             character.Message($@"***{character.GetName()}** {act}*");
 
-            room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterActs) { actingCharacter = character, actingContent = act }, character);
+            room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterActs) { source = character, actingContent = act }, character);
         }
     }
 }

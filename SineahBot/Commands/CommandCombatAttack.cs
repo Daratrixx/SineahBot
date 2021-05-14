@@ -68,7 +68,7 @@ namespace SineahBot.Commands
 
         public static void Attack(Character character, Room room, IAttackable target)
         {
-            room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterAttacks) { attackingCharacter = character, attackTarget = target }, character);
+            room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterAttacks) { source = character, target = target as Character}, character);
 
             if (target is IDamageable)
             {
@@ -98,7 +98,7 @@ namespace SineahBot.Commands
                         character.Message($"You killed {target.GetName()}!");
                         room.DescribeAction($"{character.GetName()} killed {target.GetName()}!", character, target as IAgent);
                         killableTarget.OnKilled(character);
-                        room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterKills) { killingCharacter = character, killedTarget = killableTarget }, character);
+                        room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterKills) { source = character, target = killableTarget as Character }, character);
                     }
                 }
                 return;
