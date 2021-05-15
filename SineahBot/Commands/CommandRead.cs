@@ -58,7 +58,13 @@ namespace SineahBot.Commands
             int.TryParse(pageIndex, out page);
             if (page > 0) --page;
 
-            character.Message($"**{target.GetName(character)}**{(target.HasMultiplePages() ? $" (*page {(page + 1)}/{target.GetPageCount()}*)" : "")}\n{target.GetContent(character, page)}");
+            var display = $"**{target.GetName(character)}**";
+            if (target.HasMultiplePages())
+                display += $" (*page {(page + 1)}/{target.GetPageCount()}*)";
+            display += $"\n{target.GetContent(character, page)}";
+            if (target.HasMultiplePages() && page + 1 < target.GetPageCount())
+                display += $"\n*Type `read {target.GetName(character)} {page + 2}` to read the next page.*";
+            character.Message(display);
 
             character.RewardExperience(1);
         }

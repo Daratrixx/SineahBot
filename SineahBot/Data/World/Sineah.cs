@@ -71,11 +71,11 @@ namespace SineahBot.Data.World
                 };
                 public static Room Hall = new Room("Barracks hall")
                 {
-                    description = "Heart of barracks, branching to the other sections. North is the guards room, east is the captain room, west is the equipment room, and south leads back out."
+                    description = "Heart of the barracks, branching to the other sections. North is the guards room, east is the captain room, west is the equipment room, and south leads back out."
                 };
                 public static Room GuardsRoom = new Room("Guards room")
                 {
-                    description = "Main gathering place for guards."
+                    description = "Main gathering place for guards, where they rest between patrols."
                 };
                 public static Room LivingQuarters = new Room("Guards living quarters")
                 {
@@ -887,67 +887,54 @@ namespace SineahBot.Data.World
             {
                 public static Room WGate = new Room("Sineah western city gate")
                 {
-                    isSpawnRoom = false,
                     description = "Massive gates marking the entrance to the city-state of Sineah."
                 };
                 public static Room NGate = new Room("Sineah northen city gate")
                 {
-                    isSpawnRoom = false,
                     description = "Massive gates marking the entrance to the city-state of Sineah."
                 };
                 public static Room EGate = new Room("Sineah eastern city gate")
                 {
-                    isSpawnRoom = false,
                     description = "Massive gates marking the entrance to the city-state of Sineah, facing the Neraji desert to the east, unforgiving land of the dangerous Kobolds."
                 };
                 public static Room SGate = new Room("Sineah southern city gate")
                 {
-                    isSpawnRoom = false,
                     description = "Massive gates marking the entrance to the city-state of Sineah."
                 };
                 public static Room outerScience = new Room("Sineah outer science district")
                 {
-                    isSpawnRoom = false,
                     description = "This long district reaches from the western gate all the way to the central plaza. North is the University. South is the Arcane Spire [CLOSED]. To the west is the city gate. The district continues further east, ending on the plaza."
                 };
                 public static Room outerTraveller = new Room("Sineah outer travellers avenue")
                 {
-                    isSpawnRoom = false,
                     description = "This avenue stretches from the northen gate to the central plaza. West is a shop [CLOSED]. East is the Church [CLOSED]. To the north is the city gate. The avenue continues further south, ending on the plaza."
                 };
                 public static Room outerMilitary = new Room("Sineah outer military path")
                 {
-                    isSpawnRoom = false,
                     description = "This fortified path connects the eastern gate to the city. North are the city Barracks. To the east is the city gate. The path continues further west, leading to the plaza."
                 };
                 public static Room outerCommercial = new Room("Sineah commercial street")
                 {
-                    isSpawnRoom = false,
                     description = "The nice smell of freshly baked bread fills the street. This street is a direct access from the southern gate to the central plaza. West is a Shop [CLOSED]. To the south is the city gate. North is the plaza."
                 };
                 public static Room innerScience = new Room("Sineah inner science district")
                 {
-                    isSpawnRoom = false,
                     description = "This long district reaches from the western gate all the way to the central plaza. South is the Workshop [CLOSED]. The district continues further west, ending at the city gate. East is the plaza."
                 };
                 public static Room innerTraveller = new Room("Sineah inner travellers avenue")
                 {
-                    isSpawnRoom = false,
                     description = "This avenue stretches from the northen gate to the central plaza. East is the Four winds inn. The avenue continues further north, ending at the city gate. South is the plaza."
                 };
                 public static Room innerMilitary = new Room("Sineah inner military path")
                 {
-                    isSpawnRoom = false,
                     description = "This fortified path connects the eastern gate to the city. North is the Armory [CLOSED]. South is the Blacksmith [CLOSED]. The path continues further east, ending at city gate. West is the plaza."
                 };
                 public static Room shady = new Room("Sineah hidden street")
                 {
-                    isSpawnRoom = false,
                     description = "A shady back alley. West will lead back to the safety of the Commercial street. A manhole is pried open."
                 };
                 public static Room plaza = new Room("Sineah central plaza")
                 {
-                    isSpawnRoom = false,
                     description = "The heart of Sineah, center of the city, hub of activity. Many guards, merchants, street artists, and adventurers go about their daily lifes."
                 };
             }
@@ -1285,6 +1272,7 @@ namespace SineahBot.Data.World
             University.Rooms.LibraryEntrance.AddToRoom(Templates.Books.SineahHistory);
             University.Rooms.LibraryEntrance.AddToRoom(Templates.Books.PurgeTheUndead);
             University.Rooms.LibraryEntrance.AddToRoom(Templates.Books.CityCritters);
+            University.Rooms.LibraryEntrance.AddToRoom(Templates.Books.Spirits);
 
 
             // populate global room list for graph construction
