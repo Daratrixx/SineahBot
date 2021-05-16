@@ -143,11 +143,16 @@ namespace SineahBot.Data.World
 
             public static class Characters
             {
-                public static NPC Guard1 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Thomas");
-                public static NPC Guard2 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Andre");
-                public static NPC Guard3 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Helen");
-                public static NPC Guard4 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Cornelius");
-                public static NPC captain = Templates.CityFolks.GuardCaptain.Clone().SetFaction(FactionManager.Sineah);
+                public static NPC Guard1 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Thomas")
+                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
+                public static NPC Guard2 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Andre")
+                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
+                public static NPC Guard3 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Helen")
+                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
+                public static NPC Guard4 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Cornelius")
+                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
+                public static NPC captain = Templates.CityFolks.GuardCaptain.Clone().SetFaction(FactionManager.Sineah)
+                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.KnightArmor, Templates.Equipments.Shields.Shield, Templates.Equipments.Trinkets.SineahEmblem, Templates.Equipments.Rings.IronRing);
             }
             public static Character[] GetCharacters()
             {
@@ -229,8 +234,8 @@ namespace SineahBot.Data.World
                 .RegisterEntry(Templates.Consumables.Wine, 8, null)
                 .RegisterEntry(Templates.Consumables.FourWindsBlanquette, 10, null);
                 public static Shop Cook = new Shop()
-                .RegisterEntry(Templates.Goods.BreadBundle, null, 10)
-                .RegisterEntry(Templates.Goods.MeatPackage, null, 20);
+                .RegisterEntry(Templates.Goods.BreadBundle, null, 12)
+                .RegisterEntry(Templates.Goods.MeatPackage, null, 25);
                 public static Shop ShadyConsumer = new Shop()
                 .RegisterEntry(Templates.Consumables.HealthPotion, 25, null)
                 .RegisterEntry(Templates.Consumables.ManaPotion, 25, null)
@@ -1043,20 +1048,34 @@ namespace SineahBot.Data.World
                 public static NPC citizen1 = Templates.CityFolks.Citizen.Clone().SetFaction(FactionManager.Sineah);
                 public static NPC citizen2 = Templates.CityFolks.Citizen.Clone().SetFaction(FactionManager.Sineah);
                 public static NPC beggar = Templates.CityFolks.Beggar.Clone().SetFaction(FactionManager.Sineah);
-                public static NPC wgGuard = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Steve");
-                public static NPC wgMilitian = Templates.CityFolks.Militian.Clone().SetFaction(FactionManager.Sineah);
-                public static NPC ngGuard = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Bob");
-                public static NPC ngMilitian = Templates.CityFolks.Militian.Clone().SetFaction(FactionManager.Sineah);
-                public static NPC egGuard1 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Sue");
-                public static NPC egGuard2 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Phin");
-                public static NPC egMilitian = Templates.CityFolks.Militian.Clone().SetFaction(FactionManager.Sineah);
-                public static NPC sgGuard = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Seren");
-                public static NPC sgMilitian = Templates.CityFolks.Militian.Clone().SetFaction(FactionManager.Sineah);
-                public static NPC innerGuard = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Zed");
-                public static NPC plazaGuard1 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Arnold");
-                public static NPC plazaGuard2 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Jenn");
-                public static NPC plazaMilitian1 = Templates.CityFolks.Militian.Clone().SetFaction(FactionManager.Sineah);
-                public static NPC plazaMilitian2 = Templates.CityFolks.Militian.Clone().SetFaction(FactionManager.Sineah);
+                public static NPC wgGuard = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Steve")
+                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
+                public static NPC wgMilitian = Templates.CityFolks.Militian.Clone().SetFaction(FactionManager.Sineah)
+                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.MilitianArmor);
+                public static NPC ngGuard = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Bob")
+                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
+                public static NPC ngMilitian = Templates.CityFolks.Militian.Clone().SetFaction(FactionManager.Sineah)
+                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.MilitianArmor);
+                public static NPC egGuard1 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Sue")
+                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
+                public static NPC egGuard2 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Phin")
+                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
+                public static NPC egMilitian = Templates.CityFolks.Militian.Clone().SetFaction(FactionManager.Sineah)
+                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.MilitianArmor);
+                public static NPC sgGuard = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Seren")
+                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
+                public static NPC sgMilitian = Templates.CityFolks.Militian.Clone().SetFaction(FactionManager.Sineah)
+                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.MilitianArmor);
+                public static NPC innerGuard = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Zed")
+                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
+                public static NPC plazaGuard1 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Arnold")
+                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
+                public static NPC plazaGuard2 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Jenn")
+                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
+                public static NPC plazaMilitian1 = Templates.CityFolks.Militian.Clone().SetFaction(FactionManager.Sineah)
+                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.MilitianArmor);
+                public static NPC plazaMilitian2 = Templates.CityFolks.Militian.Clone().SetFaction(FactionManager.Sineah)
+                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.MilitianArmor);
                 public static NPC shadyRat = Templates.Critters.Rat.Clone().SetFaction(FactionManager.Beasts);
                 public static NPC baker = Templates.CityFolks.Baker.Clone().SetFaction(FactionManager.Sineah)
                     .RegisterShop(Shops.Baker)

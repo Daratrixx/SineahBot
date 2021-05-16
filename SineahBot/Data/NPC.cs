@@ -196,9 +196,13 @@ namespace SineahBot.Data
                 knowledgeDefaultResponse = knowledgeDefaultResponse
             };
         }
-        public NPC Equipment(Equipment equipment)
+        public NPC SetEquipment(params Equipment[] equipments)
         {
-            base.Equip(equipment);
+            foreach (var equipment in equipments)
+            {
+                AddToInventory(equipment);
+                Equip(equipment);
+            }
             return this;
         }
         public NPC SetFaction(Faction faction)

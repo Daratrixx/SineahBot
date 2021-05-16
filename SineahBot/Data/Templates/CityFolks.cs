@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SineahBot.Tools;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -17,7 +18,7 @@ namespace SineahBot.Data.Templates
             shortDescription = "A citizen walks by.",
             longDescription = "Just your average citizen. They seem busy.",
             alternativeNames = new string[] { "dude" }
-        };
+        }.RegisterGlobalKnowledge();
         public static NPC Beggar = new NPC()
         {
             level = 1,
@@ -29,7 +30,7 @@ namespace SineahBot.Data.Templates
             shortDescription = "A beggar hassles over.",
             longDescription = "They are clothed in rags, they look hungry, and noticed you were looking at them.\n\"**Can you toss a poor soul a coin?**\"",
             alternativeNames = new string[] { "beg", "poor" }
-        };
+        }.RegisterGlobalKnowledge();
         public static NPC Drunk = new NPC()
         {
             level = 3,
@@ -41,7 +42,7 @@ namespace SineahBot.Data.Templates
             shortDescription = "A drunk stumbles around.",
             longDescription = "They can barely keep their balance, and smell alcool from meters away.",
             alternativeNames = new string[] { "drnk" }
-        };
+        }.RegisterGlobalKnowledge();
         public static NPC Customer = new NPC()
         {
             level = 2,
@@ -53,7 +54,7 @@ namespace SineahBot.Data.Templates
             shortDescription = "A customer enjoys the establishment.",
             longDescription = "This okay-looking individual is relaxing, not causing troubles.",
             alternativeNames = new string[] { }
-        };
+        }.RegisterGlobalKnowledge();
         public static NPC ShadyConsumer = new NPC()
         {
             level = 4,
@@ -67,7 +68,7 @@ namespace SineahBot.Data.Templates
             longDescription = "This individual radiates danger. They are most likely armed, and better left alone.",
             alternativeNames = new string[] { "shady looking consumer", "shadyconsumer", "shadycons", "shadyc", "sconsumer", "scons", "consumer", "sc", "shady" },
             knowledgeDefaultResponse = "*They look at you with piercing eyes and stay silent.*"
-        };
+        }.RegisterGlobalKnowledge();
         public static NPC Waiter = new NPC()
         {
             level = 2,
@@ -79,7 +80,7 @@ namespace SineahBot.Data.Templates
             shortDescription = "A waiter is serving customers.",
             longDescription = "The waiter walks back and forth, taking orders and serving customers.",
             alternativeNames = new string[] { "waitress" }
-        };
+        }.RegisterGlobalKnowledge();
         public static NPC Cook = new NPC()
         {
             level = 2,
@@ -92,8 +93,8 @@ namespace SineahBot.Data.Templates
             longDescription = "The cook is busy making food for the customers.",
             alternativeNames = new string[] { },
             knowledgeDefaultResponse = "\"**Sorry, I'm a bit busy.**\""
-        };
-        public static NPC Bartender = (NPC)new NPC()
+        }.RegisterGlobalKnowledge();
+        public static NPC Bartender = new NPC()
         {
             level = 2,
             baseHealth = 20,
@@ -104,7 +105,7 @@ namespace SineahBot.Data.Templates
             shortDescription = "The bartender is ready to serve drinks at the bar.",
             longDescription = "The bartender hangs behind the bar, cleaning glasses and serving drinks to the customers of the inn.",
             alternativeNames = new string[] { "host" }
-        }.AddToInventory(Consumables.Candy, 2);
+        }.RegisterGlobalKnowledge();
         public static NPC Baker = new NPC()
         {
             level = 2,
@@ -116,7 +117,7 @@ namespace SineahBot.Data.Templates
             shortDescription = "A baker is here to trade.",
             longDescription = "The baker is ready to trade.",
             alternativeNames = new string[] { }
-        };
+        }.RegisterGlobalKnowledge();
         public static NPC WeaponSeller = new NPC()
         {
             level = 2,
@@ -128,7 +129,7 @@ namespace SineahBot.Data.Templates
             shortDescription = "A weapon seller is here to trade.",
             longDescription = "The weapon seller is ready to trade.",
             alternativeNames = new string[] { "weaponseller", "weapons", "weapon", "weaponsmith" }
-        };
+        }.RegisterGlobalKnowledge();
         public static NPC ArmorSeller = new NPC()
         {
             level = 2,
@@ -140,7 +141,7 @@ namespace SineahBot.Data.Templates
             shortDescription = "An armor seller is here to trade.",
             longDescription = "The armor seller is ready to trade.",
             alternativeNames = new string[] { "armorseller", "armors", "armor", "armorsmith" }
-        };
+        }.RegisterGlobalKnowledge();
         public static NPC ChurchAttendant = new NPC()
         {
             level = 2,
@@ -152,7 +153,7 @@ namespace SineahBot.Data.Templates
             shortDescription = "A church attendant is here to trade.",
             longDescription = "The church attendant is ready to trade.",
             alternativeNames = new string[] { "churchattendant", "churchatt", "churcha", "cattendant", "ca" }
-        };
+        }.RegisterGlobalKnowledge();
         public static NPC MagicVendor = new NPC()
         {
             level = 2,
@@ -164,7 +165,7 @@ namespace SineahBot.Data.Templates
             shortDescription = "A magic vendor is here to trade.",
             longDescription = "The magic vendor is ready to trade.",
             alternativeNames = new string[] { "magicvendor", "magicv", "mvendor", "cattendant", "mv" }
-        };
+        }.RegisterGlobalKnowledge();
         public static NPC Pharmacian = new NPC()
         {
             level = 2,
@@ -176,7 +177,7 @@ namespace SineahBot.Data.Templates
             shortDescription = "A pharmacian is here to trade.",
             longDescription = "The pharmacian is ready to trade.",
             alternativeNames = new string[] { "pharma", "doctor", "heal", "pha", "ph", "p" }
-        };
+        }.RegisterGlobalKnowledge();
         public static NPC Trader = new NPC()
         {
             level = 2,
@@ -188,7 +189,7 @@ namespace SineahBot.Data.Templates
             shortDescription = "A trader is here to trade.",
             longDescription = "The trader is ready to trade.",
             alternativeNames = new string[] { "trader", "j" }
-        };
+        }.RegisterGlobalKnowledge();
         public static NPC Jeweler = new NPC()
         {
             level = 2,
@@ -200,7 +201,7 @@ namespace SineahBot.Data.Templates
             shortDescription = "A jeweler is here to trade.",
             longDescription = "The jeweler is ready to trade.",
             alternativeNames = new string[] { "jewel", "j" }
-        };
+        }.RegisterGlobalKnowledge();
         public static NPC Militian = new NPC()
         {
             level = 3,
@@ -212,7 +213,7 @@ namespace SineahBot.Data.Templates
             shortDescription = "A militian patrols the area.",
             longDescription = "Citizen enlisted in the city defence. Lightly armed and protected, but can easily dispatch trouble makers.",
             alternativeNames = new string[] { "militia" }
-        };
+        }.RegisterGlobalKnowledge();
         public static NPC Guard = new NPC()
         {
             level = 5,
@@ -224,7 +225,7 @@ namespace SineahBot.Data.Templates
             shortDescription = "A guard patrols the area.",
             longDescription = "Defender of the city. Heavily armed, well protected, and military trained.",
             alternativeNames = new string[] { "guard", "grd" }
-        };
+        }.RegisterGlobalKnowledge();
         public static NPC GuardCaptain = new NPC()
         {
             level = 7,
@@ -237,6 +238,6 @@ namespace SineahBot.Data.Templates
             shortDescription = "The captain is ordering the guards.",
             longDescription = "The captain of the city guards. Their equipment is of the highest quality, and their are a renowned fighter.",
             alternativeNames = new string[] { "captain", "cpt" }
-        };
+        }.RegisterGlobalKnowledge();
     }
 }

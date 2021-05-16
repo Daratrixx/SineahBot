@@ -88,7 +88,7 @@ namespace SineahBot.Tools
         private static CharacterCreationStep InputClass = new CharacterCreationStep($"What will be your characters starting **class**? (*type a class name such as [{GetPossibleClassList()}]*)",
         $"^({GetPossibleClassValues()})$",
         (state, match) => { state.characterClass = Enum.Parse<CharacterClass>(match.Groups[1].Value); },
-        (state, input) => { state.player.Message("Invalid value, please input one of the possible numbers."); });
+        (state, input) => { state.player.Message("Invalid value, please input one of the possible values."); });
         private static CharacterCreationStep ConfirmClass = new CharacterCreationStepValidation<CharacterClass>((state) => state.characterClass);
 
 
