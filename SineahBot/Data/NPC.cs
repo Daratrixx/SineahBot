@@ -205,6 +205,11 @@ namespace SineahBot.Data
             }
             return this;
         }
+        public NPC AddInventory(Item item, int count = 1)
+        {
+            AddToInventory(item, count);
+            return this;
+        }
         public NPC SetFaction(Faction faction)
         {
             this.faction = faction;

@@ -19,7 +19,7 @@ namespace SineahBot.Data.Templates
             longDescription = "A regular rat, common pest.",
             alternativeNames = new string[] { "rat", "small rat", "smallrat", "srat", "sr" },
             knowledgeDefaultResponse = null,
-        };
+        }.AddInventory(Items.RatTail);
         public static NPC RabidRat = new NPC()
         {
             characterStatus = CharacterStatus.Normal,
@@ -32,7 +32,7 @@ namespace SineahBot.Data.Templates
             longDescription = "This red eyed rat seems very aggressive and territorial. His bight might infect you.",
             alternativeNames = new string[] { "rat", "aggressive rat", "aggressive", "rrabid", "rabid", "rrat", "rr" },
             knowledgeDefaultResponse = null,
-        };
+        }.AddInventory(Items.RatTail);
         public static NPC GiantRat = new NPC()
         {
             characterStatus = CharacterStatus.Normal,
@@ -45,6 +45,6 @@ namespace SineahBot.Data.Templates
             longDescription = "A huge ass rat. Dangerous enough to take out an adventurer.",
             alternativeNames = new string[] { "rat", "huge rat", "grat", "gr" },
             knowledgeDefaultResponse = null,
-        };
+        }.AddInventory(Items.RatTail, 2);
     }
 }

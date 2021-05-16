@@ -227,7 +227,8 @@ namespace SineahBot.Data.World
                 public static Shop Bartender = new Shop()
                 .RegisterEntry(Templates.Consumables.Water, 1, null)
                 .RegisterEntry(Templates.Consumables.Beer, 2, null)
-                .RegisterEntry(Templates.Consumables.Wine, 8, null);
+                .RegisterEntry(Templates.Consumables.Wine, 8, null)
+                .RegisterEntry(Templates.Items.RatTail, null, 2);
                 public static Shop Waiter = new Shop()
                 .RegisterEntry(Templates.Consumables.Water, 1, null)
                 .RegisterEntry(Templates.Consumables.Beer, 2, null)
@@ -390,19 +391,22 @@ namespace SineahBot.Data.World
                     .RegisterKnowlede(new string[] { "drink", "drinks" }, "\"**We can serve you a refreshing drink to help you gather your thoughts.**\"")
                     .RegisterKnowlede("drunk", "\"**Oh, he's been here everyday for weeks... I wonder what happened to that poor soul. They used to have a good life. They open up, though.**\"")
                     .RegisterKnowlede("shady consumer", "\"**Leave them alone, unless you want to get into trouble. I'm sure they dwel in some illegal activities...**\"")
-                    .RegisterKnowlede("waiter", "\"**Ask them for drinks, or the inn's specility.**\"");
+                    .RegisterKnowlede("waiter", "\"**Ask them for drinks, or the inn's specility.**\"")
+                    .RegisterKnowlede(new string[] { "rat", "rats", "cellar" }, "\"**Yeah we have a rat infestation in the cellar. Do you mind helping with that? I'll give you `2` gold pieces for each rat tail you can bring me.**\"");
                 public static Character Waiter = Templates.CityFolks.Waiter.Clone().SetFaction(FactionManager.Sineah)
                     .RegisterShop(Shops.Waiter)
                     .GenerateTraderKnowledge()
                     .AddSineahCommonKnowledge()
                     .AddSineahInnKnowledge()
-                    .RegisterKnowlede(new string[] { "food", "meal", "drink", "drinks" }, "\"**I can serve you food and drinks if you order.**\"");
+                    .RegisterKnowlede(new string[] { "food", "meal", "drink", "drinks" }, "\"**I can serve you food and drinks if you order.**\"")
+                    .RegisterKnowlede(new string[] { "rat", "rats", "cellar" }, "\"**Yeah we have a rat infestation in the cellar. Do you mind helping with that? The bartender ll give you `2` gold pieces for each rat tail you can bring me.**\"");
                 public static Character Cook = Templates.CityFolks.Cook.Clone().SetFaction(FactionManager.Sineah)
                     .RegisterShop(Shops.Cook)
                     .GenerateTraderKnowledge()
                     .AddSineahCommonKnowledge()
                     .RegisterKnowlede(new string[] { "food", "meal", "drink", "drinks" }, "\"**The **waiter** can serve you food and drinks if you order.**\"")
-                    .RegisterKnowlede(new string[] { "speciality", "blanquette" }, "*The cook smiles at you.* \"**My blanquette is the best. Family recipe! Order it from the waiter and taste it for yourself.**\"");
+                    .RegisterKnowlede(new string[] { "speciality", "blanquette" }, "*The cook smiles at you.* \"**My blanquette is the best. Family recipe! Order it from the waiter and taste it for yourself.**\"")
+                    .RegisterKnowlede(new string[] { "rat", "rats", "cellar" }, "\"**Yeah we have a rat infestation in the cellar. Do you mind helping with that? The bartender ll give you `2` gold pieces for each rat tail you can bring me.**\"");
                 public static Character Drunk = Templates.CityFolks.Drunk.Clone().SetFaction(FactionManager.Sineah)
                     .RegisterKnowlede(new string[] { "sineah", "city", "town" }, "\"**I used to love this city. I fought for her for many years. Maybe I should leave now though...**\"")
                     .RegisterKnowlede("guards", "*They smile for a bit.*\n\"**I used to be a guard myself.**\"")
