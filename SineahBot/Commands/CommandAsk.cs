@@ -12,7 +12,7 @@ namespace SineahBot.Commands
     {
         public CommandAsk()
         {
-            commandRegex = new Regex(@"^ask (.+)( ?about ?| ?: ?)(.+)$", RegexOptions.IgnoreCase);
+            commandRegex = new Regex(@"^ask (.+?)( about (.+))?$", RegexOptions.IgnoreCase);
         }
 
         public override bool IsCombatCommand(Character character = null)
@@ -67,7 +67,7 @@ namespace SineahBot.Commands
 
             if (String.IsNullOrWhiteSpace(knowledge))
             {
-                character.Message("What are you asking?");
+                character.Message("What do you want to ask?");
                 return;
             }
             var response = target.GetKnowledgeResponse(knowledge);
@@ -76,7 +76,7 @@ namespace SineahBot.Commands
                 character.Message($"You can't ask {target.GetName()}");
                 return;
             }
-            character.Message($"**{target.GetName()}** (about \"*{knowledge}*\")\n{response}");
+            character.Message($"> **{target.GetName()}** (about \"*{knowledge}*\")\n> {response}");
 
             character.RewardExperience(1);
         }

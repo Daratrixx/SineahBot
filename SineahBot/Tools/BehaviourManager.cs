@@ -75,5 +75,14 @@ namespace SineahBot.Tools
             var room = RoomManager.GetRoom(behaviour.npc.currentRoomId);
             behaviour.Run(room);
         }
+
+        public static string GetRumorKnowledge(NPC npc)
+        {
+            if (behaviours.TryGetValue(npc, out var behaviour))
+            {
+                return behaviour.GetRumorKnowledge();
+            }
+            return null;
+        }
     }
 }

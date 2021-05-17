@@ -101,6 +101,10 @@ namespace SineahBot.Data
         public string GetKnowledgeResponse(string knowledge)
         {
             knowledge = knowledge.ToLower().Replace(" ", "");
+            if (knowledge.Is("rumor", "rumors"))
+            {
+                return $"\"**{BehaviourManager.GetRumorKnowledge(this)}**\"";
+            }
             if (!knowledgeBase.ContainsKey(knowledge))
             {
                 return knowledgeDefaultResponse;

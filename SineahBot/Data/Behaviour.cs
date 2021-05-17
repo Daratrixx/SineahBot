@@ -92,6 +92,12 @@ namespace SineahBot.Data
             }
             return newRoom;
         }
+
+        public virtual string GetRumorKnowledge()
+        {
+            return null;
+        }
+
         public virtual Room RunTravelMove(Room from, Room to)
         {
             if (from == to) return from;

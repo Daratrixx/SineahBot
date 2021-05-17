@@ -190,6 +190,13 @@ namespace SineahBot.Data.Behaviours
             }
             return false;
         }
+
+        public override string GetRumorKnowledge()
+        {
+            if (rumorTracker.Count == 0)
+                return "I haven't heard any rumors as of late.";
+            return $"I have heard {string.Join("; ", rumorTracker.Select(x => x.rumorText))}.";
+        }
     }
     public class CitizenBase<SnitchType> : HumanoidBase
     where SnitchType : BehaviourMission.Snitch
