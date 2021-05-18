@@ -13,6 +13,10 @@ namespace SineahBot.Commands
         public CommandSay()
         {
             commandRegex = new Regex(@"^(talk |say |t |"" ?)(.+)$", RegexOptions.IgnoreCase);
+            isNormalCommand = true;
+            isCombatCommand = true;
+            isTradeCommand = true;
+            isSearchCommand = true;
         }
 
         public override void Run(Character character, Room room)

@@ -13,26 +13,10 @@ namespace SineahBot.Commands
         public CommandTradeSell()
         {
             commandRegex = new Regex(@"^(s|sell) (\d+ |all |[*] )?(.+)$", RegexOptions.IgnoreCase);
-        }
-
-        public override bool IsNormalCommand(Character character = null)
-        {
-            return false;
-        }
-
-        public override bool IsCombatCommand(Character character = null)
-        {
-            return false;
-        }
-
-        public override bool IsWorkbenchCommand(Character character = null)
-        {
-            return false;
-        }
-
-        public override bool IsSearchCommand(Character character = null)
-        {
-            return false;
+            isNormalCommand = false;
+            isCombatCommand = false;
+            isTradeCommand = true;
+            isSearchCommand = false;
         }
 
         public override void Run(Character character, Room room)

@@ -51,6 +51,7 @@ namespace SineahBot.Tools
                 var character = Program.database.Characters.FirstOrDefault(x => x.id == idCharacter);
                 if (character == null) throw new Exception($"Impossible to find character with id {idCharacter}");
                 characters[idCharacter] = character;
+                character.pronouns = character.pronouns; // update the properties
                 ClassProgressionManager.ApplyClassProgressionForCharacter(character, true);
                 LoadCharacterInventory(character);
                 character.faction = FactionManager.CreatePlayerRepFaction();

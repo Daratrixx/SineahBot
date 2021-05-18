@@ -128,26 +128,25 @@ namespace SineahBot.Tools
         public static void ParseInCharacterMessage(Character character, string command, Room room)
         {
             var characterStatus = character.characterStatus;
-            switch (characterStatus)
+
+            var matchingCommands = InCharacterCommands.Where(x => x.IsMessageMatchingCommand(command));
+            if (matchingCommands.Count() == 0)
             {
-                case CharacterStatus.Normal:
-                    InCharacterCommands.Where(x => x.IsNormalCommand(character)).FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(character, room);
-                    break;
-                case CharacterStatus.Combat:
-                    InCharacterCommands.Where(x => x.IsCombatCommand(character)).FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(character, room);
-                    break;
-                case CharacterStatus.Trade:
-                    InCharacterCommands.Where(x => x.IsTradeCommand(character)).FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(character, room);
-                    break;
-                case CharacterStatus.Search:
-                    InCharacterCommands.Where(x => x.IsSearchCommand(character)).FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(character, room);
-                    break;
-                case CharacterStatus.Workbench:
-                    InCharacterCommands.Where(x => x.IsWorkbenchCommand(character)).FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(character, room);
-                    break;
-                default:
-                    throw new Exception($"Impossible to parse an in-character command for a character in the unsupported character state : {characterStatus}");
+                character.Message("Error: message didn't match any known command or is missing some arguments.");
+                return;
             }
+            var usableCommands = matchingCommands.Where(x => x.CanUseCommand(character));
+            if (usableCommands.Count() == 0)
+            {
+                character.Message("Impossible to use this command right now.");
+                return;
+            }
+            if (usableCommands.Count() > 1)
+            {
+                character.Message($"Error: ambiguous call [{string.Join(',', usableCommands.Select(x => x.GetType().Name))}]");
+                return;
+            }
+            usableCommands.First().Run(character, room);
         }
         public static void ParseOutCharacterMessage(IAgent agent, string command)
         {

@@ -13,26 +13,10 @@ namespace SineahBot.Commands
         public CommandSearchLeave()
         {
             commandRegex = new Regex(@"^(leave|exit|out|quit|off|done|away|escape)$", RegexOptions.IgnoreCase);
-        }
-
-        public override bool IsNormalCommand(Character character = null)
-        {
-            return false;
-        }
-
-        public override bool IsCombatCommand(Character character = null)
-        {
-            return false;
-        }
-
-        public override bool IsWorkbenchCommand(Character character = null)
-        {
-            return false;
-        }
-
-        public override bool IsTradeCommand(Character character = null)
-        {
-            return false;
+            isNormalCommand = false;
+            isCombatCommand = false;
+            isTradeCommand = false;
+            isSearchCommand = true;
         }
 
         public override void Run(Character character, Room room)

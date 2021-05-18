@@ -13,21 +13,10 @@ namespace SineahBot.Commands
         public CommandEquip()
         {
             commandRegex = new Regex(@"^(equip|eq) (.+)$", RegexOptions.IgnoreCase);
-        }
-
-        public override bool IsCombatCommand(Character character = null)
-        {
-            return false;
-        }
-
-        public override bool IsWorkbenchCommand(Character character = null)
-        {
-            return false;
-        }
-
-        public override bool IsTradeCommand(Character character = null)
-        {
-            return false;
+            isNormalCommand = true;
+            isCombatCommand = false;
+            isTradeCommand = false;
+            isSearchCommand = false;
         }
 
         public override void Run(Character character, Room room)

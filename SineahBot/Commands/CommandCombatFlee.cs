@@ -13,26 +13,10 @@ namespace SineahBot.Commands
         public CommandCombatFlee()
         {
             commandRegex = new Regex(@"^(flee) (north|n|east|e|south|s|west|w|in|out|up|down)$", RegexOptions.IgnoreCase);
-        }
-
-        public override bool IsNormalCommand(Character character = null)
-        {
-            return false;
-        }
-
-        public override bool IsWorkbenchCommand(Character character = null)
-        {
-            return false;
-        }
-
-        public override bool IsTradeCommand(Character character = null)
-        {
-            return false;
-        }
-
-        public override bool IsSearchCommand(Character character = null)
-        {
-            return false;
+            isNormalCommand = false;
+            isCombatCommand = true;
+            isTradeCommand = false;
+            isSearchCommand = false;
         }
 
         public override void Run(Character character, Room room)

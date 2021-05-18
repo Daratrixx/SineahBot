@@ -14,26 +14,10 @@ namespace SineahBot.Commands
         public CommandSearchLook()
         {
             commandRegex = new Regex(@"^(l|look|list)( .*)?$", RegexOptions.IgnoreCase);
-        }
-
-        public override bool IsNormalCommand(Character character = null)
-        {
-            return false;
-        }
-
-        public override bool IsCombatCommand(Character character = null)
-        {
-            return false;
-        }
-
-        public override bool IsWorkbenchCommand(Character character = null)
-        {
-            return false;
-        }
-
-        public override bool IsTradeCommand(Character character = null)
-        {
-            return false;
+            isNormalCommand = false;
+            isCombatCommand = false;
+            isTradeCommand = false;
+            isSearchCommand = true;
         }
 
         public override void Run(Character character, Room room)

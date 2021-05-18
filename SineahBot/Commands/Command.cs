@@ -12,6 +12,11 @@ namespace SineahBot.Commands
         protected Regex commandRegex;
         protected Match commandMatch;
 
+        protected bool isNormalCommand = true;
+        protected bool isCombatCommand = true;
+        protected bool isTradeCommand = true;
+        protected bool isSearchCommand = true;
+
         public bool IsMessageMatchingCommand(string message)
         {
             commandMatch = commandRegex.Match(message);
@@ -25,25 +30,17 @@ namespace SineahBot.Commands
         }
 
         public abstract void Run(Character character, Room room = null);
-        public virtual bool IsNormalCommand(Character character = null)
+
+        public virtual bool CanUseCommand(Character character)
         {
-            return true;
-        }
-        public virtual bool IsCombatCommand(Character character = null)
-        {
-            return true;
-        }
-        public virtual bool IsTradeCommand(Character character = null)
-        {
-            return true;
-        }
-        public virtual bool IsSearchCommand(Character character = null)
-        {
-            return true;
-        }
-        public virtual bool IsWorkbenchCommand(Character character = null)
-        {
-            return true;
+            switch (character.characterStatus)
+            {
+                case CharacterStatus.Normal: return isNormalCommand;
+                case CharacterStatus.Combat: return isCombatCommand;
+                case CharacterStatus.Trade: return isTradeCommand;
+                case CharacterStatus.Search: return isSearchCommand;
+                default: return false;
+            }
         }
     }
 }

@@ -42,7 +42,7 @@ namespace SineahBot.Data
                 Theirs = theirs.Capitalize();
                 their = split[3];
                 Their = their.Capitalize();
-                themselves = split[3];
+                themselves = split[4];
                 Themselves = themselves.Capitalize();
             }
         }
