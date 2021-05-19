@@ -114,18 +114,6 @@ namespace SineahBot.Data
         {
             get { return entities.Where(x => x is IObservable).Select(x => x as IObservable); }
         }
-        public IEnumerable<IAttackable> attackables
-        {
-            get { return entities.Where(x => x is IAttackable).Select(x => x as IAttackable); }
-        }
-        public IEnumerable<IPickable> pickables
-        {
-            get { return entities.Where(x => x is IPickable).Select(x => x as IPickable); }
-        }
-        public IEnumerable<IObserver> observers
-        {
-            get { return entities.Where(x => x is IObserver).Select(x => x as IObserver); }
-        }
         public IEnumerable<IAgent> agents
         {
             get { return entities.Where(x => x is IAgent).Select(x => x as IAgent); }
@@ -138,6 +126,7 @@ namespace SineahBot.Data
 
         public string GetFullDescription(IAgent agent = null)
         {
+            var observables = this.observables;
             return $"{GetShortDescription(agent)}{(observables.Count() > 0 ? $"\n> \\> {String.Concat(observables.Where(x => x != agent).Select(x => " " + x.GetShortDescription(agent)))}" : "")}";
         }
 

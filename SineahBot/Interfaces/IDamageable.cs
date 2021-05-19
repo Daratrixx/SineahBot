@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SineahBot.Interfaces
 {
-    public interface IDamageable : IAttackable
+    public interface IDamageable
     {
         void DamageHealth(int damageAmount, DamageType type, INamed source = null);
     }

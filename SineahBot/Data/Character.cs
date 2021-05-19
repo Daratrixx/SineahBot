@@ -10,7 +10,7 @@ using System.Text;
 
 namespace SineahBot.Data
 {
-    public class Character : Entity, IAgent, IAttackable, IAttacker, IKillable, IObservable, IObserver, IDamageable, IInventory<Character>, ICaster, IHealable
+    public class Character : Entity, IAgent, IAttacker, IKillable, IObservable, IDamageable, IInventory<Character>, ICaster, IHealable
     {
         public IAgent agent;
         public CharacterStatus characterStatus;
@@ -155,11 +155,6 @@ namespace SineahBot.Data
         public void Message(string message)
         {
             if (agent != null) agent.Message(message);
-        }
-
-        public void OnAttacked(IAgent agent)
-        {
-            throw new NotImplementedException();
         }
 
         public bool DeflectionCheck()
@@ -353,11 +348,6 @@ namespace SineahBot.Data
         public virtual int GetGoldReward()
         {
             return this.gold;
-        }
-
-        public void OnObserving(IObservable observable)
-        {
-            throw new NotImplementedException();
         }
 
         public Character AddToInventory(Item item, int count = 1)

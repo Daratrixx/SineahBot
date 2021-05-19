@@ -41,7 +41,7 @@ namespace SineahBot.Commands
                 return;
             }
 
-            var target = room.FindInRoom(targetName) as IAttackable;
+            var target = room.FindInRoom(targetName);
 
             if (target == null)
 
@@ -55,7 +55,7 @@ namespace SineahBot.Commands
             character.RewardExperience(1);
         }
 
-        public static void Attack(Character character, Room room, IAttackable target)
+        public static void Attack(Character character, Room room, Entity target)
         {
             room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterAttacks) { source = character, target = target as Character}, character);
 

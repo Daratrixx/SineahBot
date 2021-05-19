@@ -95,7 +95,6 @@ namespace SineahBot.Data
         }
     }
 
-
     public enum PlayerStatus
     {
         None,
