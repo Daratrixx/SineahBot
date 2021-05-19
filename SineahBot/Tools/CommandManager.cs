@@ -12,65 +12,10 @@ namespace SineahBot.Tools
 {
     public static class CommandManager
     {
-        private static Regex createPrivateChannelRegex = new Regex(@"!create (\d+) (\d+)");
         public static void ParseUserMessage(ulong userId, string message, ulong? channelId = null)
         {
+            if (ParseAdminCommand(userId, message, channelId)) return;
             var player = PlayerManager.GetPlayer(userId);
-            if (message.StartsWith("!"))
-            {
-                var m2 = message.ToLower();
-                if (userId == 109406259643437056)
-                {
-                    var create = createPrivateChannelRegex.Match(message);
-                    if (create.Success)
-                    {
-                        ulong createGuildId = ulong.Parse(create.Groups[1].Value);
-                        ulong createUserId = ulong.Parse(create.Groups[2].Value);
-                        Program.CreatePrivateChannel(createGuildId, createUserId);
-                        return;
-                    }
-                    if (m2 == "!save")
-                    {
-                        Program.SaveData();
-                        return;
-                    }
-                    if (m2 == "!stop")
-                    {
-                        Program.DiscordClient.StopAsync();
-                        Program.SaveData();
-                        Environment.Exit(0);
-                    }
-                    if (m2 == "!boost" && player.character != null)
-                    {
-                        var exp = ClassProgressionManager.ExperienceForNextLevel(player.character.level);
-                        player.character.experience += exp;
-                        player.Message($"Earned {exp} experience.");
-                        return;
-                    }
-                    if (m2 == "!boosts")
-                    {
-                        foreach (var c in Program.database.Characters)
-                        {
-                            var exp = ClassProgressionManager.ExperienceForNextLevel(c.level);
-                            c.experience += exp;
-                        }
-                        return;
-                    }
-                }
-                if (m2.Is("!die", "!kill", "!death", "!suicide", "!reroll") && player.character != null && player.character.currentRoomId != Guid.Empty)
-                {
-                    RoomManager.GetRoom(player.character.currentRoomId).DescribeAction($"**{player.GetName()}** died.");
-                    player.character.OnKilled(null); // calls combat manager and removes player
-                    return;
-                }
-
-                if (m2.Is("!disconnect", "!logout", "!off") && player.character != null && player.character.currentRoomId != Guid.Empty)
-                {
-                    // set the disconnection timer to 0 minutes before alert
-                    player.SetDisconnectTimer(0);
-                    return;
-                }
-            }
             if (channelId.HasValue) player.channelId = channelId.Value;
             if (ParseMetaCommand(player, message)) return;
             switch (player.playerStatus)
@@ -89,9 +34,6 @@ namespace SineahBot.Tools
                     }
                     ParseInCharacterMessage(character, message, room);
                     break;
-                case PlayerStatus.OutCharacter:
-                    ParseOutCharacterMessage(player, message);
-                    break;
                 case PlayerStatus.CharacterCreation:
                 case PlayerStatus.None:
                     ParseCharacterCreationMessage(player, message);
@@ -99,6 +41,68 @@ namespace SineahBot.Tools
             }
             // reset the afk disconnection timer to "10 minutes before alert"
             player.SetDisconnectTimer(10);
+        }
+
+        private static Regex createPrivateChannelRegex = new Regex(@"!create (\d+) (\d+)");
+        public static bool ParseAdminCommand(ulong userId, string message, ulong? channelId = null)
+        {
+            if (message.StartsWith("!"))
+            {
+                var player = PlayerManager.GetPlayer(userId);
+                var m2 = message.ToLower();
+                if (userId == 109406259643437056)
+                {
+                    var create = createPrivateChannelRegex.Match(message);
+                    if (create.Success)
+                    {
+                        ulong createGuildId = ulong.Parse(create.Groups[1].Value);
+                        ulong createUserId = ulong.Parse(create.Groups[2].Value);
+                        Program.CreatePrivateChannel(createGuildId, createUserId);
+                        return true;
+                    }
+                    if (m2 == "!save")
+                    {
+                        Program.SaveData();
+                        return true;
+                    }
+                    if (m2 == "!stop")
+                    {
+                        Program.DiscordClient.StopAsync();
+                        Program.SaveData();
+                        Environment.Exit(0);
+                    }
+                    if (m2 == "!boost" && player.character != null)
+                    {
+                        var exp = ClassProgressionManager.ExperienceForNextLevel(player.character.level);
+                        player.character.experience += exp;
+                        player.Message($"Earned {exp} experience.");
+                        return true;
+                    }
+                    if (m2 == "!boosts")
+                    {
+                        foreach (var c in Program.database.Characters)
+                        {
+                            var exp = ClassProgressionManager.ExperienceForNextLevel(c.level);
+                            c.experience += exp;
+                        }
+                        return true;
+                    }
+                }
+                if (m2.Is("!die", "!kill", "!death", "!suicide", "!reroll") && player.character != null && player.character.currentRoomId != Guid.Empty)
+                {
+                    RoomManager.GetRoom(player.character.currentRoomId).DescribeAction($"**{player.GetName()}** died.");
+                    player.character.OnKilled(null); // calls combat manager and removes player
+                    return true;
+                }
+
+                if (m2.Is("!disconnect", "!logout", "!off") && player.character != null && player.character.currentRoomId != Guid.Empty)
+                {
+                    // set the disconnection timer to 0 minutes before alert
+                    player.SetDisconnectTimer(0);
+                    return true;
+                }
+            }
+            return false;
         }
 
         public static bool ParseMetaCommand(IAgent agent, string command)
@@ -148,17 +152,12 @@ namespace SineahBot.Tools
             }
             usableCommands.First().Run(character, room);
         }
-        public static void ParseOutCharacterMessage(IAgent agent, string command)
-        {
-            //OutCharacterCommands.FirstOrDefault(x => x.IsMessageMatchingCommand(command))?.Run(agent);
-        }
 
         public static List<Command> MetaCommands = new List<Command>() {
             new CommandMetaInformation(), new CommandMetaInventory(),
             new CommandMetaLevel(),
             new CommandMetaSpells(), new CommandMetaClass(), new CommandMetaAlteration(),
             new CommandMetaHelp() };
-        public static List<Command> NoCharacterCommands = new List<Command>() { };
         public static List<Command> InCharacterCommands = new List<Command>() {
             new CommandMove(), new CommandLook(), new CommandDirection(),
             new CommandPickup(), new CommandDrop(), new CommandConsume(),
@@ -171,6 +170,5 @@ namespace SineahBot.Tools
             new CommandTrade(), new CommandTradeList(), new CommandTradeBuy(), new CommandTradeSell(), new CommandTradeLeave(),
             new CommandSearch(), new CommandSearchLook(), new CommandSearchPickup(), new CommandSearchStash(), new CommandSearchLeave()
         };
-        public static List<Command> OutCharacterCommands = new List<Command>() { };
     }
 }

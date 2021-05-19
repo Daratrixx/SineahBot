@@ -100,7 +100,6 @@ namespace SineahBot.Data
     {
         None,
         CharacterCreation,
-        InCharacter,
-        OutCharacter
+        InCharacter
     }
 }
