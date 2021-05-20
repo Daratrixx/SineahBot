@@ -30,7 +30,6 @@ namespace SineahBot
         public async Task MainAsync()
         {
             Worlds.LoadWorlds();
-            PathBuilder.BuildGraphs();
             BehaviourManager.StartBehaviourTimer();
             new MudInterval(300, () => {
                 SaveData();

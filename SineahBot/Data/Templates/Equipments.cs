@@ -19,7 +19,15 @@ namespace SineahBot.Data.Templates
             public static Equipment Sword = new Equipment("Sword", EquipmentSlot.Weapon, new string[] { })
             {
                 description = "A sword lies around.",
-                details = "A standard, well-made sword. Gives a large damage boost.",
+                details = "A standard, well-made sword. Gives a decent damage and deflect boost.",
+                bonusDamage = 10,
+                bonusDeflection = 5,
+                bonusSpells = new List<Spell>() { Data.Spells.Equipment.DeepCut },
+            };
+            public static Equipment CurvedSword = new Equipment("Curved sword", EquipmentSlot.Weapon, new string[] { })
+            {
+                description = "A curved sword lies around.",
+                details = "An exotic curved sword. Gives a large damage boost.",
                 bonusDamage = 20,
                 bonusSpells = new List<Spell>() { Data.Spells.Equipment.DeepCut },
             };
@@ -68,7 +76,7 @@ namespace SineahBot.Data.Templates
             public static Equipment Shield = new Equipment("Shield", EquipmentSlot.Shield, new string[] { })
             {
                 description = "A shield lies around.",
-                details = "A sharp, quick dagger. Gives a small deflection boost.",
+                details = "A sharp, quick dagger. Gives a decent deflection boost.",
                 bonusDeflection = 10,
                 bonusSpells = new List<Spell>() { Data.Spells.Equipment.ShieldBash },
             };
@@ -104,6 +112,13 @@ namespace SineahBot.Data.Templates
                 description = "A blade ring thrones here.",
                 details = "A simple ring engraved with a dagger. Gives a small damage boost.",
                 bonusDamage = 5,
+            };
+            public static Equipment ClawRing = new Equipment("Claw ring", EquipmentSlot.Ring, new string[] { "bladering", "blader", "bring", "br", "ring" })
+            {
+                description = "A claw ring thrones here.",
+                details = "A simple ring engraved with a claw. Gives a small damage and armor boost.",
+                bonusDamage = 5,
+                bonusArmor = 5,
             };
             public static Equipment HealthRing = new Equipment("Health ring", EquipmentSlot.Ring, new string[] { "healthring", "healthr", "hring", "hr", "ring" })
             {
@@ -141,6 +156,21 @@ namespace SineahBot.Data.Templates
 
         public static class Armor
         {
+            public static Equipment KoboldTunic = new Equipment("Kobold tunic", EquipmentSlot.Armor, new string[] { "militianarmor", "marmor", "armor" })
+            {
+                description = "A kobold tunic is stored here.",
+                details = "Simple protective gear. Gives a small health regen boost.",
+                bonusHealthRegen = 2,
+            };
+            public static Equipment KoboldArmor = new Equipment("Kobold armor", EquipmentSlot.Armor, new string[] { "militianarmor", "marmor", "armor" })
+            {
+                description = "A kobold armor is stored here.",
+                details = "Simple protective gear. Gives a small armor, health and health regen bonus.",
+                bonusArmor = 5,
+                bonusHealth = 10,
+                bonusHealthRegen = 2,
+            };
+
             public static Equipment MilitianArmor = new Equipment("Militian armor", EquipmentSlot.Armor, new string[] { "militianarmor", "marmor", "armor" })
             {
                 description = "A militian armor is stored here.",

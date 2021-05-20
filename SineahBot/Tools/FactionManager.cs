@@ -10,12 +10,14 @@ namespace SineahBot.Tools
         public static void InitFactions()
         {
             RegisterFaction(Sineah);
+            RegisterFaction(Kobolds);
             RegisterFaction(Undead);
             RegisterFaction(Beasts);
             RegisterFaction(AllHostile);
         }
 
         public static Faction Sineah = new Faction() { defaultRelation = FactionRelation.Neutral };
+        public static Faction Kobolds = new Faction() { defaultRelation = FactionRelation.Negative };
         public static Faction Undead = new Faction() { defaultRelation = FactionRelation.Negative };
         public static Faction Beasts = new Faction() { defaultRelation = FactionRelation.Negative };
         public static Faction AllHostile = new Faction() { defaultRelation = FactionRelation.Hostile };

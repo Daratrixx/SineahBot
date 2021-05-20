@@ -17,6 +17,11 @@ namespace SineahBot.Data
             this.idRoomA = idRoomA;
             this.idRoomB = idRoomB;
         }
+        public RoomConnection(Room roomA, Room roomB)
+        {
+            this.idRoomA = roomA.id;
+            this.idRoomB = roomB.id;
+        }
         public Guid idRoomA { get; set; }
         public Guid idRoomB { get; set; }
         public MoveDirection[] directionFromA { get; set; } // list of direction in room A that will lead to room B
