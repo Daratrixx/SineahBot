@@ -23,7 +23,8 @@ namespace SineahBot.Commands
         }
         public void DisplayinformationForCharacter(Character character, string spellName)
         {
-            if (character.spells.Count() == 0)
+            var spells = character.GetSpells();
+            if (spells.Count() == 0)
             {
                 character.Message($@"> You do not know any spells yet.");
                 return;
