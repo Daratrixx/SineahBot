@@ -39,6 +39,8 @@ namespace SineahBot.Tools
         {
             if (a == null || b == null)
                 return FactionRelation.Hostile;
+            if (a == AllHostile || b == AllHostile)
+                return FactionRelation.Hostile;
             if (a.relations.TryGetValue(b, out var relation))
                 return relation;
             return (FactionRelation)Math.Min((int)a.defaultRelation, (int)b.defaultRelation);
