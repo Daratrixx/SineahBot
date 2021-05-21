@@ -486,7 +486,7 @@ namespace SineahBot.Data
             foreach (var a in alterations.Values.ToArray())
             {
                 OnAlterationTick(a);
-                a.remainingTime -= tickDuration;
+                a.remainingTime -= sleeping ? tickDuration * 2 : tickDuration; // alteration expire faster while sleeping
             }
             var expired = alterations.Values.Where(x => x.remainingTime <= 0).ToList();
             foreach (var a in expired)
