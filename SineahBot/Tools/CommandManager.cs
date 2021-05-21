@@ -71,6 +71,13 @@ namespace SineahBot.Tools
                         Program.SaveData();
                         Environment.Exit(0);
                     }
+                    if (m2 == "!gold" && player.character != null)
+                    {
+                        var gold = 200;
+                        player.character.gold += gold;
+                        player.Message($"Earned {gold} gold.");
+                        return true;
+                    }
                     if (m2 == "!boost" && player.character != null)
                     {
                         var exp = ClassProgressionManager.ExperienceForNextLevel(player.character.level);
@@ -164,7 +171,7 @@ namespace SineahBot.Tools
             new CommandLock(), new CommandLockContainer(), new CommandUnlock(),new CommandUnlockContainer(),
             new CommandSay(), new CommandAct(),
             new CommandCombatAttack(), new CommandCombatFlee(),
-            new CommandCastOn(), new CommandCast(),
+            new CommandCast(),
             new CommandEquip(), new CommandUnequip(),
             new CommandSleep(), new CommandAsk(), new CommandRead(),
             new CommandTrade(), new CommandTradeList(), new CommandTradeBuy(), new CommandTradeSell(), new CommandTradeLeave(),

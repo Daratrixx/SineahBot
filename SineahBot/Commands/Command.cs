@@ -29,6 +29,12 @@ namespace SineahBot.Commands
             return commandMatch.Groups[argumentGroupIndex].Value?.Trim();
         }
 
+        protected bool HasArgument(int argumentGroupIndex)
+        {
+            if (argumentGroupIndex >= commandMatch.Groups.Count) return false;
+            return !string.IsNullOrWhiteSpace(commandMatch.Groups[argumentGroupIndex].Value);
+        }
+
         public abstract void Run(Character character, Room room = null);
 
         public virtual bool CanUseCommand(Character character)
