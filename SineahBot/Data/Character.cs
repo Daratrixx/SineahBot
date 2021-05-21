@@ -607,6 +607,13 @@ namespace SineahBot.Data
         public int StackSize { get; set; }
     }
 
+    public class CharacterEquipment
+    {
+        public Guid id { get; set; }
+        public Guid idCharacter { get; set; }
+        public string ItemName { get; set; }
+    }
+
     public enum DamageType
     {
         Physical,

@@ -18,7 +18,7 @@ namespace SineahBot.Tools
         static CharacterManager()
         {
             // start the character regeneration interval
-            new MudInterval(10, () =>
+            new MudInterval(RegenerationInterval, () =>
             {
                 foreach (var c in characters)
                 {
@@ -54,6 +54,7 @@ namespace SineahBot.Tools
                 character.pronouns = character.pronouns; // update the properties
                 ClassProgressionManager.ApplyClassProgressionForCharacter(character, true);
                 LoadCharacterInventory(character);
+                LoadCharacterEquipment(character);
                 character.faction = FactionManager.CreatePlayerRepFaction();
                 return character;
             }
@@ -65,6 +66,7 @@ namespace SineahBot.Tools
             foreach (var data in characters.Where(x => x.Value.agent is Player))
             {
                 SaveCharacterInventory(data.Value);
+                SaveCharacterEquipment(data.Value);
             }
         }
 
@@ -82,6 +84,19 @@ namespace SineahBot.Tools
             Program.database.CharacterItems.AddRange(items);
         }
 
+        public static void SaveCharacterEquipment(Character character)
+        {
+            var equipment = Program.database.CharacterEquipment.AsQueryable().Where(x => x.idCharacter == character.id);
+            Program.database.CharacterEquipment.RemoveRange(equipment);
+            equipment = character.equipments.Values.AsQueryable().Where(x => x != null).Select(item => new CharacterEquipment()
+            {
+                id = Guid.NewGuid(),
+                idCharacter = character.id,
+                ItemName = item.name,
+            });
+            Program.database.CharacterEquipment.AddRange(equipment);
+        }
+
         public static void LoadCharacterInventory(Character character)
         {
             var items = Program.database.CharacterItems.AsEnumerable().Where(x => x.idCharacter == character.id).ToList();
@@ -90,6 +105,19 @@ namespace SineahBot.Tools
                 .Distinct()
                 .ToList();
             character.items = new Dictionary<Item, int>(matchedItems);
+        }
+
+        public static void LoadCharacterEquipment(Character character)
+        {
+            var equipments = Program.database.CharacterEquipment.AsQueryable().Where(x => x.idCharacter == character.id).ToList();
+            foreach (var equipment in equipments)
+            {
+                var item = character.FindInInventory(equipment.ItemName) as Equipment;
+                if (item != null)
+                {
+                    character.Equip(item);
+                }
+            }
         }
 
         public static Character CreateCharacterForPlayer(CharacterCreationState state)
@@ -134,6 +162,8 @@ namespace SineahBot.Tools
             var character = player.character;
             character.agent = null;
             characters.Remove(character.id);
+            Program.database.CharacterEquipment.RemoveRange(Program.database.CharacterEquipment.AsQueryable().Where(x=>x.idCharacter == character.id));
+            Program.database.CharacterItems.RemoveRange(Program.database.CharacterItems.AsQueryable().Where(x => x.idCharacter == character.id));
             Program.database.Characters.Remove(character);
             player.idCharacter = null;
             player.character = null;
