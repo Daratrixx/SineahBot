@@ -27,6 +27,7 @@ namespace SineahBot.Data
         public virtual void Init(NPC npc)
         {
             this.npc = npc;
+            npc.behaviour = this;
             originalRoom = RoomManager.GetRoom(npc.currentRoomId);
         }
 

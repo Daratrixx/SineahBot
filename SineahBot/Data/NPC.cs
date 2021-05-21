@@ -11,6 +11,8 @@ namespace SineahBot.Data
 {
     public class NPC : Character
     {
+        public Behaviour behaviour;
+
         public string npcName;
         public int npcStatus;
         public string shortDescription { get; set; }
@@ -134,7 +136,7 @@ namespace SineahBot.Data
         public override void DamageHealth(int damageAmount, DamageType type, INamed source = null)
         {
             base.DamageHealth(damageAmount, type, source);
-            if (!IsDead() && source != null)
+            if (!IsDead() && source != null && behaviour == null) // if alive, damage comes from somewhere, and no behaviour attached
             {
                 new MudTimer(1, () =>
                 {

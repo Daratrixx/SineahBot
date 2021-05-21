@@ -360,6 +360,12 @@ namespace SineahBot.Data.World
             .ToArray();
 
             // register behaviours
+            BehaviourManager.RegisterNPC(CityOfAsh.Characters.scout0, new Behaviours.MonsterBase());
+            BehaviourManager.RegisterNPC(CityOfAsh.Characters.scout1, new Behaviours.MonsterBase());
+            BehaviourManager.RegisterNPC(CityOfAsh.Characters.warrior0, new Behaviours.MonsterBase());
+            BehaviourManager.RegisterNPC(CityOfAsh.Characters.warrior1, new Behaviours.MonsterBase());
+            BehaviourManager.RegisterNPC(CityOfAsh.Characters.warrior2, new Behaviours.MonsterBase());
+            BehaviourManager.RegisterNPC(CityOfAsh.Characters.lieutenant, new Behaviours.MonsterBase());
 
         }
     }

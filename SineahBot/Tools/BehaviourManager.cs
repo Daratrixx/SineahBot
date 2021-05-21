@@ -31,7 +31,9 @@ namespace SineahBot.Tools
             Behaviour behaviour;
             if (behaviours.TryGetValue(npc, out behaviour))
             {
+                if (behaviour.active == active) return;
                 behaviour.active = active;
+                if (active) behaviour.OnEnterRoom(RoomManager.GetRoom(behaviour.npc.currentRoomId));
             }
         }
 
@@ -40,7 +42,7 @@ namespace SineahBot.Tools
             behaviours.Remove(npc);
         }
 
-        private static void SwapMemory()
+        private static void PrepareMemory()
         {
             foreach (var behaviour in behaviours.Values)
             {
@@ -50,7 +52,7 @@ namespace SineahBot.Tools
 
         public static void RunBehaviours()
         {
-            SwapMemory();
+            PrepareMemory();
             foreach (var npc in behaviours.ToArray())
             {
                 RunBehaviour(npc.Value);

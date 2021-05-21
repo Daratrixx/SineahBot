@@ -41,7 +41,7 @@ namespace SineahBot.Tools
                 return FactionRelation.Hostile;
             if (a.relations.TryGetValue(b, out var relation))
                 return relation;
-            return (FactionRelation)Math.Max((int)a.defaultRelation, (int)b.defaultRelation);
+            return (FactionRelation)Math.Min((int)a.defaultRelation, (int)b.defaultRelation);
         }
 
         public static Faction CreatePlayerRepFaction()

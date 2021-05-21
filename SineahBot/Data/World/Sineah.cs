@@ -417,9 +417,9 @@ namespace SineahBot.Data.World
                     .AddSineahCommonKnowledge();
                 public static Character ShadyConsumer = Templates.CityFolks.ShadyConsumer.Clone().SetFaction(FactionManager.Sineah)
                     .RegisterShop(Shops.ShadyConsumer);
-                public static Character Rat1 = Templates.Critters.Rat.Clone().SetFaction(FactionManager.Beasts);
-                public static Character Rat2 = Templates.Critters.Rat.Clone().SetFaction(FactionManager.Beasts);
-                public static Character Rat3 = Templates.Critters.Rat.Clone().SetFaction(FactionManager.Beasts);
+                public static Character Rat1 = Templates.Critters.Rat.Clone().SetFaction(FactionManager.Beasts).SetFaction(FactionManager.Beasts);
+                public static Character Rat2 = Templates.Critters.Rat.Clone().SetFaction(FactionManager.Beasts).SetFaction(FactionManager.Beasts);
+                public static Character Rat3 = Templates.Critters.Rat.Clone().SetFaction(FactionManager.Beasts).SetFaction(FactionManager.Beasts);
             }
             public static Character[] GetCharacters()
             {
@@ -783,27 +783,27 @@ namespace SineahBot.Data.World
 
             public static class Characters
             {
-                public static Character Rat1 = Templates.Critters.Rat.Clone(); // tunnel
-                public static Character Rat2 = Templates.Critters.Rat.Clone(); // convergence
-                public static Character Rat3 = Templates.Critters.Rat.Clone(); // convergence
-                public static Character RabidRat1 = Templates.Critters.RabidRat.Clone(); // convergence
-                public static Character RabidRat2 = Templates.Critters.RabidRat.Clone(); // toxic tunnel
-                public static Character RabidRat3 = Templates.Critters.RabidRat.Clone(); // toxic tunnel
-                public static Character GiantRat1 = Templates.Critters.GiantRat.Clone(); // toxic waste
-                public static Character GiantRat2 = Templates.Critters.GiantRat.Clone(); // toxic waste
-                public static Character RabidRat4 = Templates.Critters.RabidRat.Clone(); // toxic waste
-                public static Character RabidRat5 = Templates.Critters.RabidRat.Clone(); // toxic waste
-                public static Character Rat4 = Templates.Critters.Rat.Clone(); // collector 1
-                public static Character RabidRat6 = Templates.Critters.RabidRat.Clone(); // deteriorated
-                public static Character Skeleton1 = Templates.Undeads.Skeleton.Clone(); // crumbled
-                public static Character Skeleton2 = Templates.Undeads.Skeleton.Clone(); // heart
-                public static Character Skeleton3 = Templates.Undeads.Skeleton.Clone(); // heart
-                public static Character Zombi1 = Templates.Undeads.Zombi.Clone(); // heart
-                public static Character Zombi2 = Templates.Undeads.Zombi.Clone(); // heart
-                public static Character Skeleton4 = Templates.Undeads.Skeleton.Clone(); // crypt
-                public static Character Skeleton5 = Templates.Undeads.Skeleton.Clone(); // crypt
-                public static Character Ghoul = Templates.Undeads.Ghoul.Clone(); // ossuary
-                public static Character Lich = Templates.Undeads.Lich.Clone() // altar
+                public static NPC Rat1 = Templates.Critters.Rat.Clone().SetFaction(FactionManager.Beasts); // tunnel
+                public static NPC Rat2 = Templates.Critters.Rat.Clone().SetFaction(FactionManager.Beasts); // convergence
+                public static NPC Rat3 = Templates.Critters.Rat.Clone().SetFaction(FactionManager.Beasts); // convergence
+                public static NPC RabidRat1 = Templates.Critters.RabidRat.Clone().SetFaction(FactionManager.Beasts); // convergence
+                public static NPC RabidRat2 = Templates.Critters.RabidRat.Clone().SetFaction(FactionManager.Beasts); // toxic tunnel
+                public static NPC RabidRat3 = Templates.Critters.RabidRat.Clone().SetFaction(FactionManager.Beasts); // toxic tunnel
+                public static NPC GiantRat1 = Templates.Critters.GiantRat.Clone().SetFaction(FactionManager.Beasts); // toxic waste
+                public static NPC GiantRat2 = Templates.Critters.GiantRat.Clone().SetFaction(FactionManager.Beasts); // toxic waste
+                public static NPC RabidRat4 = Templates.Critters.RabidRat.Clone().SetFaction(FactionManager.Beasts); // toxic waste
+                public static NPC RabidRat5 = Templates.Critters.RabidRat.Clone().SetFaction(FactionManager.Beasts); // toxic waste
+                public static NPC Rat4 = Templates.Critters.Rat.Clone().SetFaction(FactionManager.Beasts); // collector 1
+                public static NPC RabidRat6 = Templates.Critters.RabidRat.Clone().SetFaction(FactionManager.Beasts); // deteriorated
+                public static NPC Skeleton1 = Templates.Undeads.Skeleton.Clone().SetFaction(FactionManager.Undead); // crumbled
+                public static NPC Skeleton2 = Templates.Undeads.Skeleton.Clone().SetFaction(FactionManager.Undead); // heart
+                public static NPC Skeleton3 = Templates.Undeads.Skeleton.Clone().SetFaction(FactionManager.Undead); // heart
+                public static NPC Zombi1 = Templates.Undeads.Zombi.Clone().SetFaction(FactionManager.Undead); // heart
+                public static NPC Zombi2 = Templates.Undeads.Zombi.Clone().SetFaction(FactionManager.Undead); // heart
+                public static NPC Skeleton4 = Templates.Undeads.Skeleton.Clone().SetFaction(FactionManager.Undead); // crypt
+                public static NPC Skeleton5 = Templates.Undeads.Skeleton.Clone().SetFaction(FactionManager.Undead); // crypt
+                public static NPC Ghoul = Templates.Undeads.Ghoul.Clone().SetFaction(FactionManager.AllHostile); // ossuary
+                public static NPC Lich = Templates.Undeads.Lich.Clone() // altar
                 .RegisterKnowlede(new string[] { "Lich", "become lich" }, "\"**You shouldn't aim to become a lich. Trust me, it's not pleasant. But if one becomes a __Necromancer__**, they can reach that state if they are powerful enough.\"")
                 .RegisterKnowlede(new string[] { "Necromancer", "become necromancer" }, "\"**Through rebirth, you can become a `Necromancer`.\"")
                 .RegisterKnowlede(new string[] { "Ernaldz", "Bishop Ernaldz" }, "\"**Oh, I assume you came accross the work of that old agent of the church propaganda ?`\"")
@@ -1333,6 +1333,15 @@ namespace SineahBot.Data.World
             BehaviourManager.RegisterNPC(Barracks.Characters.Guard3, new Behaviours.SineahBehaviour.Guard(Barracks.Characters.captain));
             BehaviourManager.RegisterNPC(Barracks.Characters.Guard4, new Behaviours.SineahBehaviour.Guard(Barracks.Characters.captain));
             BehaviourManager.RegisterNPC(Barracks.Characters.captain, new Behaviours.SineahBehaviour.Captain());
+
+            BehaviourManager.RegisterNPC(Underground.Characters.Skeleton1, new Behaviours.MonsterBase());
+            BehaviourManager.RegisterNPC(Underground.Characters.Skeleton2, new Behaviours.MonsterBase());
+            BehaviourManager.RegisterNPC(Underground.Characters.Skeleton3, new Behaviours.MonsterBase());
+            BehaviourManager.RegisterNPC(Underground.Characters.Skeleton4, new Behaviours.MonsterBase());
+            BehaviourManager.RegisterNPC(Underground.Characters.Skeleton5, new Behaviours.MonsterBase());
+            BehaviourManager.RegisterNPC(Underground.Characters.Zombi1, new Behaviours.MonsterBase());
+            BehaviourManager.RegisterNPC(Underground.Characters.Zombi2, new Behaviours.MonsterBase());
+            BehaviourManager.RegisterNPC(Underground.Characters.Ghoul, new Behaviours.MonsterBase());
         }
     }
 }

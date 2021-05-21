@@ -14,10 +14,10 @@ namespace SineahBot.Data
 
     public enum FactionRelation
     {
-        Friendly,
-        Good,
-        Neutral,
+        Hostile,
         Negative,
-        Hostile
+        Neutral,
+        Good,
+        Friendly,
     }
 }
