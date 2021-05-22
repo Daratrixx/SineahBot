@@ -34,6 +34,8 @@ namespace SineahBot.Data
             {
                 _pronouns = value;
                 var split = value.Split('/');
+                if (split.Length <= 4)
+                    split = CharacterCreator.possiblePronouns[0].Split('/');
                 they = split[0];
                 They = they.Capitalize();
                 them = split[1];
@@ -312,7 +314,13 @@ namespace SineahBot.Data
         }
         public virtual void OnKilled(Entity killer = null)
         {
-            RoomManager.GetRoom(currentRoomId).AddToRoom(Containers.CreateContainerFromCharacter(this), false);
+            var corpse = Containers.CreateContainerFromCharacter(this);
+            var room = RoomManager.GetRoom(currentRoomId);
+            room.AddToRoom(corpse, false);
+            new MudTimer(300, () =>
+            {
+                room.RemoveFromRoom(corpse, false);
+            });
             RoomManager.RemoveFromCurrentRoom(this, false);
             if (killer != null)
             {
@@ -473,7 +481,7 @@ namespace SineahBot.Data
         }
         public void StartActionCooldown()
         {
-            actionCooldown = new MudTimer(5, () => { actionCooldown = null; });
+            actionCooldown = new MudTimer(4, () => { actionCooldown = null; });
             if (sleeping)
             {
                 CommandSleep.Awake(this, RoomManager.GetRoom(currentRoomId), this is NPC);

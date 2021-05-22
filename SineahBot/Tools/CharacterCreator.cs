@@ -58,7 +58,7 @@ namespace SineahBot.Tools
         null);
         private static CharacterCreationStep ConfirmGender = new CharacterCreationStepValidation<string>((state) => state.gender);
 
-        private static string[] possiblePronouns = new string[] {
+        public static readonly string[] possiblePronouns = new string[] {
             "they/them/theirs/their/themselves",
             "she/her/hers/her/herself",
             "he/him/his/his/himself"

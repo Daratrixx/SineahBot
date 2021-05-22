@@ -51,7 +51,7 @@ namespace SineahBot.Commands
 
             if (String.IsNullOrWhiteSpace(knowledge))
             {
-                character.Message("What do you want to ask?");
+                character.Message($"What do you want to ask?\n> Type `ask {targetName} about [subject]`.");
                 return;
             }
             var response = target.GetKnowledgeResponse(knowledge);

@@ -39,6 +39,8 @@ namespace SineahBot.Commands
 
         public virtual bool CanUseCommand(Character character)
         {
+            if (character.HasAlteration(AlterationType.Stunned)) return false; // can't act while stunned
+            if (character.sleeping) return false; // can't act while sleeping
             switch (character.characterStatus)
             {
                 case CharacterStatus.Normal: return isNormalCommand;

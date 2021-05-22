@@ -88,10 +88,10 @@ namespace SineahBot.Tools
                             enemy.Message($"You are no longer in combat.");
                         }
                     }
+                    enemies.Remove(character);
+                    character.characterStatus = CharacterStatus.Normal;
+                    character.Message($"You are no longer in combat.");
                 }
-                enemies.Remove(character);
-                character.characterStatus = CharacterStatus.Normal;
-                character.Message($"You are no longer in combat.");
             }
         }
     }

@@ -53,6 +53,7 @@ namespace SineahBot.Commands
             room.RemoveFromRoom(item);
             room.DescribeAction($"{character.GetName()} picked up {item.GetName()}.", character);
             character.AddToInventory(item);
+            character.Message($"You picked up {item.GetName()}.");
         }
     }
 }

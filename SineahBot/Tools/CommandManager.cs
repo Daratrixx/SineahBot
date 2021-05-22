@@ -136,17 +136,20 @@ namespace SineahBot.Tools
         {
             CharacterCreator.ParsePlayerCharacterCreationInput(player, command);
         }
-        public static void ParseInCharacterMessage(Character character, string command, Room room)
+        public static void ParseInCharacterMessage(Character character, string message, Room room)
         {
-            var characterStatus = character.characterStatus;
-
-            var matchingCommands = InCharacterCommands.Where(x => x.IsMessageMatchingCommand(command));
+            var player = character.agent as Player;
+            var matchingCommands = InCharacterCommands.Where(command => command.IsMessageMatchingCommand(message));
             if (matchingCommands.Count() == 0)
             {
-                character.Message("Error: message didn't match any known command or is missing some arguments.");
+                if (player != null && player.canPostError)
+                {
+                    player.canPostError = false;
+                    character.Message("Error: message didn't match any known command or is missing some arguments.");
+                }
                 return;
             }
-            var usableCommands = matchingCommands.Where(x => x.CanUseCommand(character));
+            var usableCommands = matchingCommands.Where(command => command.CanUseCommand(character));
             if (usableCommands.Count() == 0)
             {
                 character.Message("Impossible to use this command right now.");
@@ -158,6 +161,10 @@ namespace SineahBot.Tools
                 return;
             }
             usableCommands.First().Run(character, room);
+            if (player != null)
+            {
+                player.canPostError = true;
+            }
         }
 
         public static List<Command> MetaCommands = new List<Command>() {

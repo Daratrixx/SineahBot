@@ -176,7 +176,7 @@ namespace SineahBot.Data.World
                 };
                 public static Room road1 = new Room("Antique road")
                 {
-                    description = "Standing on the timeless stones of this road, you can spot the ruins of a city up North. The ruins are craddled under a mountains burnt by the sun. You can make out the shape of a few streets between the destroyed buildings. Only a singular tower still stands. There is a gigantic pit, larger that the city itself, border the ruins."
+                    description = "Standing on the timeless stones of this road, you can spot the ruins of a city up North. The ruins are craddled under a mountain burnt by the sun. You can make out the shape of a few streets between the destroyed buildings. Only a singular tower still stands. There is a gigantic pit, larger than the city itself, bordering the ruins."
                 };
                 public static Room gate = new Room("Crumbled gate")
                 {

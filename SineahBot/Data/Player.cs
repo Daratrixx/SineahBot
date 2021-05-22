@@ -27,6 +27,8 @@ namespace SineahBot.Data
         public Character character;
         public CancelableMudTimer disconnectTimer = null;
 
+        public bool canPostError = false;
+
         public void SetDisconnectTimer(int minutes)
         {
             if (disconnectTimer != null)

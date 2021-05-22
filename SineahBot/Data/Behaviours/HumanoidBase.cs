@@ -306,6 +306,7 @@ namespace SineahBot.Data.Behaviours
         public override void ParseHostileEvent(RoomEvent e, Character source)
         {
             if (source.faction == npc.faction) return;
+            if (FactionManager.GetFactionRelation(source.faction, npc.faction) <= FactionRelation.Neutral) return;
             var targetHunt = targets.FirstOrDefault(x => x.target == source);
             if (targetHunt != null) return;
             targetHunt = new BehaviourMission.Hunt(e, source);
