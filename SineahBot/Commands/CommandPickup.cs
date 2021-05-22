@@ -12,7 +12,7 @@ namespace SineahBot.Commands
     {
         public CommandPickup()
         {
-            commandRegex = new Regex(@"^(get|g|pickup|pick up|grab|take) (.+)$", RegexOptions.IgnoreCase);
+            commandRegex = new Regex($@"^(get|g|pickup|pick up|grab|take) {targetRegex_3}$", RegexOptions.IgnoreCase);
             isNormalCommand = true;
             isCombatCommand = false;
             isTradeCommand = false;
@@ -27,21 +27,8 @@ namespace SineahBot.Commands
                 return;
             }
 
-            var targetName = GetArgument(2);
-
-            if (String.IsNullOrWhiteSpace(targetName))
-            {
-                character.Message("What are you trying to get ?");
-                return;
-            }
-
-            var item = room.FindInRoom(targetName) as Item;
-
-            if (item == null)
-            {
-                character.Message($@"Can't find any ""{targetName}"" here !");
-                return;
-            }
+            var item = GetTarget<Item>(character, room, 2);
+            if (item == null) return; // error message already given in GetTarget
 
             Pickup(character, room, item);
 

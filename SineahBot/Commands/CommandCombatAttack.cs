@@ -12,7 +12,7 @@ namespace SineahBot.Commands
     {
         public CommandCombatAttack()
         {
-            commandRegex = new Regex(@"^(atk|attack|hit|strike|fight|assault) (.+)$", RegexOptions.IgnoreCase);
+            commandRegex = new Regex($@"^(atk|attack|hit|strike|fight|assault) {targetRegex_3}$", RegexOptions.IgnoreCase);
             isNormalCommand = true;
             isCombatCommand = true;
             isTradeCommand = false;
@@ -32,23 +32,8 @@ namespace SineahBot.Commands
                 return;
             }
 
-            bool direct = character is NPC;
-            var targetName = GetArgument(2);
-
-            if (String.IsNullOrWhiteSpace(targetName))
-            {
-                character.Message("What are you trying to attack ?");
-                return;
-            }
-
-            var target = room.FindInRoom(targetName);
-
-            if (target == null)
-
-            {
-                character.Message($@"Can't find any ""{targetName}"" to attack here !");
-                return;
-            }
+            var target = GetTarget<Entity>(character, room, 2);
+            if (target == null) return; // error message already given in GetTarget
 
             Attack(character, room, target);
 

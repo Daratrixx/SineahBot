@@ -12,7 +12,7 @@ namespace SineahBot.Commands
     {
         public CommandLockContainer()
         {
-            commandRegex = new Regex(@"^(lock) (.+)$", RegexOptions.IgnoreCase);
+            commandRegex = new Regex($@"^(lock) {targetRegex_3}$", RegexOptions.IgnoreCase);
             isNormalCommand = true;
             isCombatCommand = false;
             isTradeCommand = false;
@@ -27,14 +27,8 @@ namespace SineahBot.Commands
                 return;
             }
 
-            string containerName = GetArgument(2);
-            Container container = room.FindInRoom<Container>(containerName);
-
-            if (container == null)
-            {
-                character.Message($@"This room doesn't have a ""{containerName}"" container to lock.");
-                return;
-            }
+            var container = GetTarget<Container>(character, room, 2);
+            if (container == null) return; // error message already given in GetTarget
 
             Lock(character, room, container);
 

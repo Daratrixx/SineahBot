@@ -12,7 +12,7 @@ namespace SineahBot.Commands
     {
         public CommandAsk()
         {
-            commandRegex = new Regex(@"^ask (.+?)( about (.+))?$", RegexOptions.IgnoreCase);
+            commandRegex = new Regex($@"^ask {targetRegex_3}( about (.+))?$", RegexOptions.IgnoreCase);
             isNormalCommand = true;
             isCombatCommand = false;
             isTradeCommand = false;
@@ -27,27 +27,11 @@ namespace SineahBot.Commands
                 return;
             }
 
-            if (!character.ActionCooldownOver())
-            {
-                return;
-            }
-
-            bool direct = character is NPC;
             var targetName = GetArgument(1);
-            var knowledge = GetArgument(3);
+            var knowledge = GetArgument(4);
 
-            if (String.IsNullOrWhiteSpace(targetName))
-            {
-                character.Message("Who are you asking?");
-                return;
-            }
-
-            var target = room.FindInRoom(targetName) as NPC;
-            if (target == null)
-            {
-                character.Message($@"Can't find any ""{targetName}"" here.");
-                return;
-            }
+            var target = GetTarget<NPC>(character, room, 1);
+            if (target == null) return; // error message already given in GetTarget
 
             if (String.IsNullOrWhiteSpace(knowledge))
             {

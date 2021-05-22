@@ -13,7 +13,7 @@ namespace SineahBot.Commands
     {
         public CommandSearch()
         {
-            commandRegex = new Regex(@"^(search|loot) (.+)?$", RegexOptions.IgnoreCase);
+            commandRegex = new Regex($@"^(search|loot) {targetRegex_3}?$", RegexOptions.IgnoreCase);
             isNormalCommand = true;
             isCombatCommand = false;
             isTradeCommand = false;
@@ -27,20 +27,10 @@ namespace SineahBot.Commands
                 character.Message("You are asleep.");
                 return;
             }
-            var containerName = GetArgument(2);
 
-            if (String.IsNullOrWhiteSpace(containerName))
-            {
-                character.Message("What are you trying to search?");
-                return;
-            }
+            var container = GetTarget<Container>(character, room, 2);
+            if (container == null) return; // error message already given in GetTarget
 
-            var container = room.FindInRoom<Container>(containerName);
-            if (container == null)
-            {
-                character.Message($"There is no \"{containerName}\" to search in this room.");
-                return;
-            }
 
             if (container.lockable && container.locked)
             {

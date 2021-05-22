@@ -2,6 +2,7 @@
 using SineahBot.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -9,6 +10,8 @@ namespace SineahBot.Commands
 {
     public abstract class Command
     {
+        protected static readonly string targetRegex_3 = @"((.+?)( \d+)?)";
+
         protected Regex commandRegex;
         protected Match commandMatch;
 
@@ -49,6 +52,30 @@ namespace SineahBot.Commands
                 case CharacterStatus.Search: return isSearchCommand;
                 default: return false;
             }
+        }
+
+        public TargetType GetTarget<TargetType>(Character character, Room room, int targetRegexIndex, bool messages = true) where TargetType : Entity
+        {
+            var targetName = GetArgument(targetRegexIndex + 1);
+            if (String.IsNullOrWhiteSpace(targetName))
+            {
+                if (messages) character.Message("What are you trying to search?");
+                return null;
+            }
+
+            var targets = room.FindAllInRoom<TargetType>(targetName);
+            if (targets.Count() == 0)
+            {
+                if (messages) character.Message($"There is no \"{targetName}\" to search in this room.");
+                return null;
+            }
+            if (HasArgument(targetRegexIndex + 2) && int.TryParse(GetArgument(targetRegexIndex + 2), out int targetIndex))
+            {
+                if (targetIndex > targets.Count()) return targets.Last();
+                if (targetIndex < 0) return targets.First();
+                return targets.ElementAt(targetIndex - 1);
+            }
+            return targets.First();
         }
     }
 }

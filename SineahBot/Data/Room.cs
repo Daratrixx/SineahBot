@@ -59,6 +59,15 @@ namespace SineahBot.Data
                 output = reducedList.FirstOrDefault(x => x.alternativeNames.Contains(entityName));
             return output;
         }
+        public IEnumerable<FindType> FindAllInRoom<FindType>(string entityName) where FindType : Entity
+        {
+            entityName = entityName.ToLower();
+            var reducedList = entities.Where(x => x is FindType).Select(x => x as FindType);
+            var output = reducedList.Where(x => x.name.ToLower() == entityName);
+            if (output.Count() == 0)
+                output = reducedList.Where(x => x.alternativeNames.Contains(entityName));
+            return output;
+        }
         public Shop FindShopInRoom(string shopName)
         {
             if (!string.IsNullOrWhiteSpace(shopName))

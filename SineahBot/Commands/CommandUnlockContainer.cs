@@ -12,7 +12,7 @@ namespace SineahBot.Commands
     {
         public CommandUnlockContainer()
         {
-            commandRegex = new Regex(@"^(unlock) (.+)$", RegexOptions.IgnoreCase);
+            commandRegex = new Regex($@"^(unlock) {targetRegex_3}$", RegexOptions.IgnoreCase);
             isNormalCommand = true;
             isCombatCommand = false;
             isTradeCommand = false;
@@ -27,14 +27,8 @@ namespace SineahBot.Commands
                 return;
             }
 
-            string containerName = GetArgument(2);
-            Container container = room.FindInRoom<Container>(containerName);
-
-            if (container == null)
-            {
-                character.Message($@"This room doesn't have a ""{containerName}"" container to lock.");
-                return;
-            }
+            var container = GetTarget<Container>(character, room, 2);
+            if (container == null) return; // error message already given in GetTarget
 
             if (Unlock(character, room, container))
                 character.RewardExperience(1);
