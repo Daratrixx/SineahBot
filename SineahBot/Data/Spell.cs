@@ -96,7 +96,7 @@ namespace SineahBot.Data
                 {
                     if (target is IDamageable)
                     {
-                        var damageAmount = baseDamage + caster.GetSpellPower() + new Random().Next(5, 10);
+                        var damageAmount = ((baseDamage + caster.GetSpellPower()) * new Random().Next(50, 100) / 100);
                         (target as IDamageable).DamageHealth(damageAmount, DamageType.Magical, caster as Entity);
                     }
                 }
@@ -120,7 +120,7 @@ namespace SineahBot.Data
                 {
                     if (target is IDamageable)
                     {
-                        var damageAmount = baseDamage + caster.GetPhysicalPower() + new Random().Next(5, 10);
+                        var damageAmount = ((baseDamage + caster.GetPhysicalPower()) * new Random().Next(50, 100)) / 100;
                         (target as IDamageable).DamageHealth(damageAmount, DamageType.Physical, caster as Entity);
                     }
                 }
@@ -130,14 +130,14 @@ namespace SineahBot.Data
                 public int baseDamage = 0;
                 public override string GetEffectDescription(ICaster caster = null)
                 {
-                        return $"- Damages target\n> Damaging potential : **{baseDamage}**\n> Damage type: {DamageType.Pure}";
+                    return $"- Damages target\n> Damaging potential : **{baseDamage}**\n> Damage type: {DamageType.Pure}";
                 }
 
                 public override void RunEffect(ICaster caster, Entity target)
                 {
                     if (target is IDamageable)
                     {
-                        var damageAmount = baseDamage;
+                        var damageAmount = (baseDamage * new Random().Next(50, 100)) / 100;
                         (target as IDamageable).DamageHealth(damageAmount, DamageType.Pure, caster as Entity);
                     }
                 }

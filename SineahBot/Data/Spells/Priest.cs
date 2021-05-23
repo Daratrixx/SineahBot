@@ -46,7 +46,7 @@ namespace SineahBot.Data.Spells
                 }
             },
         };
-        public static Spell Smite = new Spell("Smite", new string[] {  })
+        public static Spell Smite = new Spell("Smite", new string[] { })
         {
             description = "Harms foe with the power of the Goddess. Will deal additionnal damage to undead.",
             canSelfCast = false,
@@ -56,7 +56,7 @@ namespace SineahBot.Data.Spells
                 new Spell.Effect.Custom(
                 (caster,target) =>
                 {
-                    var damage = caster.GetSpellPower();
+                    var damage = (caster.GetSpellPower() * new Random().Next(50, 100)) / 100;
                     if (target is Character && (target as Character).HasCharacterTag(CharacterTag.Undead)) damage = damage * 2;
                         (target as IDamageable).DamageHealth(damage, DamageType.Pure, caster);
                 },

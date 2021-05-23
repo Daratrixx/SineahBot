@@ -42,12 +42,12 @@ namespace SineahBot.Commands
 
         public static void Attack(Character character, Room room, Entity target)
         {
-            room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterAttacks) { source = character, target = target as Character}, character);
+            room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterAttacks) { source = character, target = target as Character }, character);
 
             if (target is IDamageable)
             {
                 var damageableTarget = target as IDamageable;
-                var damage = character.GetWeaponDamage() + new Random().Next(5, 10);
+                var damage = (character.GetWeaponDamage() * new Random().Next(50, 100)) / 100;
                 character.Message($"You attacked {target.GetName()} for {damage} damages.");
                 room.DescribeAction($"{character.GetName()} attacked {target.GetName()}.", character, target as IAgent);
 
