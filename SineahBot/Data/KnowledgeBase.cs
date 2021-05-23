@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace SineahBot.Data
@@ -15,6 +16,11 @@ namespace SineahBot.Data
             {
                 knowledge[key] = value;
             }
+            return this;
+        }
+        public KnowledgeBase SetKnowledge(string key, string value)
+        {
+            knowledge[key] = value;
             return this;
         }
 
@@ -35,7 +41,7 @@ namespace SineahBot.Data
                 var stringVal = knowledge[key];
                 foreach (var key2 in knowledge.Keys)
                 {
-                    if (stringVal.Contains(key2, StringComparison.OrdinalIgnoreCase))
+                    if (key != key2 && stringVal.Contains(key2, StringComparison.OrdinalIgnoreCase) && stringVal.Contains("[" + key2, StringComparison.OrdinalIgnoreCase))
                         stringVal = stringVal.Replace(key2, $"[{key2}]", StringComparison.OrdinalIgnoreCase);
                 }
                 knowledgeCompiled[key.ToLowerInvariant()] = stringVal;
@@ -50,8 +56,12 @@ namespace SineahBot.Data
             return null;
         }
 
-    }
+        public string GetRandomKnowledge()
+        {
+            return knowledgeCompiled.Values.GetRandom();
+        }
 
+    }
 
     public class MultiDictionnary<Tkey, Tvalue> where Tkey : notnull
     {
