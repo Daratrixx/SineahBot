@@ -70,6 +70,7 @@ namespace SineahBot.Data
         Shield,
         Armor,
         Trinket,
-        Ring
+        Ring,
+        Familiar
     }
 }

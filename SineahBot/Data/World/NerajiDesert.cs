@@ -159,10 +159,12 @@ namespace SineahBot.Data.World
 
             public static class Items
             {
+                public static Item secretLizardPet = Templates.Familiars.Lizard;
             }
             public static Item[] GetItems()
             {
                 return new Item[] {
+                    Items.secretLizardPet,
                 };
             }
         }
@@ -334,7 +336,7 @@ namespace SineahBot.Data.World
 
 
             // PLACE ITEMS IN ROOMS
-
+            Desert.Rooms.DesertRoad9.AddToRoom(Desert.Items.secretLizardPet);
 
             // PLACE ITEMS IN CONTAINERS
 

@@ -11,7 +11,6 @@ namespace SineahBot.Data.World
             NerajiDesert.LoadWorld();
             Roads.LoadWorld();
 
-
             // after all the world parts have been loaded
             PathBuilder.BuildGraphs();
         }

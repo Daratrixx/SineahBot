@@ -121,10 +121,28 @@ namespace SineahBot.Data
                 output.Add($"> {Their} eyes glow with knowledge and power.");
             if (ClassProgressionManager.IsSecretClass(characterClass))
                 output.Add($"> {They} are shrouded by an aura of mistery.");
+            output.Add(GetEquipmentDescription(agent as Character));
             output.Add(GetStateDescription(agent));
             output.Add(GetPowerDescription(agent as Character));
             output.Add(GetAlterationDescription(agent as Character));
             return String.Join("\n", output.Where(x => !string.IsNullOrWhiteSpace(x)));
+        }
+
+        public string GetEquipmentDescription(Character character)
+        {
+            // check for visible equipment
+            equipments.TryGetValue(EquipmentSlot.Weapon, out var Weapon);
+            equipments.TryGetValue(EquipmentSlot.Armor, out var Armor);
+            equipments.TryGetValue(EquipmentSlot.Shield, out var Shield);
+            equipments.TryGetValue(EquipmentSlot.Familiar, out var Familiar);
+            if (Weapon == null && Armor == null && Shield == null && Familiar == null)
+                return $"> {They} don't seem to have any equipment";
+            List<string> output = new List<string>();
+            if (Weapon != null) output.Add($"{They} wield a {Weapon.GetName()}.");
+            if (Armor != null) output.Add($"A {Armor.GetName()} covers {their} body.");
+            if (Shield != null) output.Add($"{They} use a {Shield.GetName()}.");
+            if (Familiar != null) output.Add($"A {Familiar.GetName()} follows {them}.");
+            return $"> {String.Join(" ", output)}";
         }
 
         public string GetStateDescription(IAgent agent = null)
