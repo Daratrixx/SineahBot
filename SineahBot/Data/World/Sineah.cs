@@ -12,9 +12,9 @@ namespace SineahBot.Data.World
         public static NPC AddSineahCommonKnowledge(this NPC npc)
         {
             return npc
-                .RegisterKnowlede(new string[] { "town", "city", "sineah" }, "\"**Sineah is a nice city to live in. You can learn about the history of the town at the Library.**\"")
-                .RegisterKnowlede(new string[] { "guard", "guards", "militia", "militian" }, "\"**The guards are keeping the city safe from danger, both from external menace and internal chaos.**\"")
-                .RegisterKnowlede(new string[] { "inn", "four winds", "four winds inn" }, "\"**The Four Winds inn is renowned even outside of Sineah. It's a popular stop for travellers and adventurers alike. You have to try their speciality!**\"");
+                .RegisterKnowlede(new string[] { "town", "city", "Sineah" }, "\"**Sineah is a nice city to live in. You can learn about the history of the town at the Library.**\"")
+                .RegisterKnowlede(new string[] { "guards", "militia", "militian" }, "\"**The guards are keeping the city safe from danger, both from external menace and internal chaos.**\"")
+                .RegisterKnowlede(new string[] { "inn", "Four Winds", "Four Winds inn" }, "\"**The Four Winds inn is renowned even outside of Sineah. It's a popular stop for travellers and adventurers alike. You have to try their speciality!**\"");
         }
         public static NPC AddSineahInnKnowledge(this NPC npc)
         {
@@ -144,15 +144,25 @@ namespace SineahBot.Data.World
             public static class Characters
             {
                 public static NPC Guard1 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Thomas")
-                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede()
+                    .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
                 public static NPC Guard2 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Andre")
-                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede()
+                    .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
                 public static NPC Guard3 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Helen")
-                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede()
+                    .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
                 public static NPC Guard4 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Cornelius")
-                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede()
+                    .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
                 public static NPC captain = Templates.CityFolks.GuardCaptain.Clone().SetFaction(FactionManager.Sineah)
-                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.KnightArmor, Templates.Equipments.Shields.Shield, Templates.Equipments.Trinkets.SineahEmblem, Templates.Equipments.Rings.IronRing);
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede()
+                    .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.KnightArmor, Templates.Equipments.Shields.Shield, Templates.Equipments.Trinkets.SineahEmblem, Templates.Equipments.Rings.IronRing);
             }
             public static Character[] GetCharacters()
             {
@@ -384,37 +394,47 @@ namespace SineahBot.Data.World
             {
                 public static Character Bartender = Templates.CityFolks.Bartender.Clone().SetFaction(FactionManager.Sineah)
                     .RegisterShop(Shops.Bartender)
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
                     .GenerateTraderKnowledge()
                     .AddSineahCommonKnowledge()
                     .AddSineahInnKnowledge()
-                    .RegisterKnowlede(new string[] { "food", "meal" }, "\"**Have a seat and order from the **waiter**. Nothing beats a full stomach on a hard day.**\"")
-                    .RegisterKnowlede(new string[] { "drink", "drinks" }, "\"**We can serve you a refreshing drink to help you gather your thoughts.**\"")
+                    .RegisterKnowlede(new string[] { "food", "meals", "meal" }, "\"**Have a seat and order from the **waiter**. Nothing beats a full stomach on a hard day.**\"")
+                    .RegisterKnowlede(new string[] { "drinks", "drink" }, "\"**We can serve you a refreshing drink to help you gather your thoughts.**\"")
                     .RegisterKnowlede("drunk", "\"**Oh, he's been here everyday for weeks... I wonder what happened to that poor soul. They used to have a good life. They open up, though.**\"")
                     .RegisterKnowlede("shady consumer", "\"**Leave them alone, unless you want to get into trouble. I'm sure they dwel in some illegal activities...**\"")
-                    .RegisterKnowlede("waiter", "\"**Ask them for drinks, or the inn's specility.**\"")
-                    .RegisterKnowlede(new string[] { "rat", "rats", "cellar" }, "\"**Yeah we have a rat infestation in the cellar. Do you mind helping with that? I'll give you `2` gold pieces for each rat tail you can bring me.**\"");
+                    .RegisterKnowlede("waiter", "\"**Ask them for drinks, or the [inn specility].**\"")
+                    .RegisterKnowlede(new string[] { "Rat", "Rats", "cellar" }, "\"**Yeah we have a rat infestation in the cellar. Do you mind helping with that? I'll give you `2` gold pieces for each rat tail you can bring me.**\"")
+                    .CompileKnowlede();
                 public static Character Waiter = Templates.CityFolks.Waiter.Clone().SetFaction(FactionManager.Sineah)
                     .RegisterShop(Shops.Waiter)
                     .GenerateTraderKnowledge()
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
                     .AddSineahCommonKnowledge()
                     .AddSineahInnKnowledge()
                     .RegisterKnowlede(new string[] { "food", "meal", "drink", "drinks" }, "\"**I can serve you food and drinks if you order.**\"")
-                    .RegisterKnowlede(new string[] { "rat", "rats", "cellar" }, "\"**Yeah we have a rat infestation in the cellar. Do you mind helping with that? The bartender ll give you `2` gold pieces for each rat tail you can bring me.**\"");
+                    .RegisterKnowlede(new string[] { "Rat", "Rats", "cellar" }, "\"**Yeah we have a rat infestation in the cellar. Do you mind helping with that? The bartender will give you `2` gold pieces for each rat tail you can bring them.**\"")
+                    .CompileKnowlede();
                 public static Character Cook = Templates.CityFolks.Cook.Clone().SetFaction(FactionManager.Sineah)
                     .RegisterShop(Shops.Cook)
                     .GenerateTraderKnowledge()
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
                     .AddSineahCommonKnowledge()
                     .RegisterKnowlede(new string[] { "food", "meal", "drink", "drinks" }, "\"**The **waiter** can serve you food and drinks if you order.**\"")
                     .RegisterKnowlede(new string[] { "speciality", "blanquette" }, "*The cook smiles at you.* \"**My blanquette is the best. Family recipe! Order it from the waiter and taste it for yourself.**\"")
-                    .RegisterKnowlede(new string[] { "rat", "rats", "cellar" }, "\"**Yeah we have a rat infestation in the cellar. Do you mind helping with that? The bartender ll give you `2` gold pieces for each rat tail you can bring me.**\"");
+                    .RegisterKnowlede(new string[] { "Rat", "Rats", "cellar" }, "\"**Yeah we have a rat infestation in the cellar. Do you mind helping with that? The bartender will give you `2` gold pieces for each rat tail you can bring them.**\"")
+                    .CompileKnowlede();
                 public static Character Drunk = Templates.CityFolks.Drunk.Clone().SetFaction(FactionManager.Sineah)
-                    .RegisterKnowlede(new string[] { "sineah", "city", "town" }, "\"**I used to love this city. I fought for her for many years. Maybe I should leave now though...**\"")
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .RegisterKnowlede(new string[] { "Sineah", "city", "town" }, "\"**I used to love this city. I fought for her for many years. Maybe I should leave now though...**\"")
                     .RegisterKnowlede("guards", "*They smile for a bit.*\n\"**I used to be a guard myself.**\"")
                     .RegisterKnowlede("sewer", "*They shiver, visibly scared.*\n\"**Don't go down there. You'll regret it.**\"")
-                    .RegisterKnowlede("undead", "*Their eyes widen for a second.*\n\"**They are better left alone. But the church won't do anything about it...**\"" +
-                    "\n*They shake their head.*\n\"**Just don't go there. It's not safe. I can't go there...**\"");
+                    .RegisterKnowlede("Undead", "*Their eyes widen for a second.*\n\"**They are better left alone. But the church won't do anything about it...**\"" +
+                    "\n*They shake their head.*\n\"**Just don't go there. It's not safe. I can't go there...**\"")
+                    .CompileKnowlede();
                 public static Character Customer = Templates.CityFolks.Customer.Clone().SetFaction(FactionManager.Sineah)
-                    .AddSineahCommonKnowledge();
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .AddSineahCommonKnowledge()
+                    .CompileKnowlede();
                 public static Character ShadyConsumer = Templates.CityFolks.ShadyConsumer.Clone().SetFaction(FactionManager.Sineah)
                     .RegisterShop(Shops.ShadyConsumer);
                 public static Character Rat1 = Templates.Critters.Rat.Clone().SetFaction(FactionManager.Beasts).SetFaction(FactionManager.Beasts);
@@ -1049,62 +1069,112 @@ namespace SineahBot.Data.World
 
             public static class Characters
             {
-                public static NPC citizen1 = Templates.CityFolks.Citizen.Clone().SetFaction(FactionManager.Sineah);
-                public static NPC citizen2 = Templates.CityFolks.Citizen.Clone().SetFaction(FactionManager.Sineah);
-                public static NPC beggar = Templates.CityFolks.Beggar.Clone().SetFaction(FactionManager.Sineah);
+                public static NPC citizen1 = Templates.CityFolks.Citizen.Clone().SetFaction(FactionManager.Sineah)
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede();
+                public static NPC citizen2 = Templates.CityFolks.Citizen.Clone().SetFaction(FactionManager.Sineah)
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede();
+                public static NPC beggar = Templates.CityFolks.Beggar.Clone().SetFaction(FactionManager.Sineah)
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede();
                 public static NPC wgGuard = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Steve")
-                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede()
+                    .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
                 public static NPC wgMilitian = Templates.CityFolks.Militian.Clone().SetFaction(FactionManager.Sineah)
-                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.MilitianArmor);
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede()
+                    .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.MilitianArmor);
                 public static NPC ngGuard = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Bob")
-                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede()
+                    .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
                 public static NPC ngMilitian = Templates.CityFolks.Militian.Clone().SetFaction(FactionManager.Sineah)
-                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.MilitianArmor);
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede()
+                    .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.MilitianArmor);
                 public static NPC egGuard1 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Sue")
-                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede()
+                    .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
                 public static NPC egGuard2 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Phin")
-                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede()
+                    .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
                 public static NPC egMilitian = Templates.CityFolks.Militian.Clone().SetFaction(FactionManager.Sineah)
-                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.MilitianArmor);
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede()
+                    .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.MilitianArmor);
                 public static NPC sgGuard = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Seren")
-                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede()
+                    .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
                 public static NPC sgMilitian = Templates.CityFolks.Militian.Clone().SetFaction(FactionManager.Sineah)
-                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.MilitianArmor);
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede()
+                    .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.MilitianArmor);
                 public static NPC innerGuard = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Zed")
-                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede()
+                    .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
                 public static NPC plazaGuard1 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Arnold")
-                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede()
+                    .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
                 public static NPC plazaGuard2 = Templates.CityFolks.Guard.Clone().SetFaction(FactionManager.Sineah).SetNPCName("Jenn")
-                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede()
+                    .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.GuardArmor);
                 public static NPC plazaMilitian1 = Templates.CityFolks.Militian.Clone().SetFaction(FactionManager.Sineah)
-                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.MilitianArmor);
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede()
+                    .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.MilitianArmor);
                 public static NPC plazaMilitian2 = Templates.CityFolks.Militian.Clone().SetFaction(FactionManager.Sineah)
-                .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.MilitianArmor);
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede()
+                    .SetEquipment(Templates.Equipments.Weapons.Spear, Templates.Equipments.Armor.MilitianArmor);
                 public static NPC shadyRat = Templates.Critters.Rat.Clone().SetFaction(FactionManager.Beasts);
                 public static NPC baker = Templates.CityFolks.Baker.Clone().SetFaction(FactionManager.Sineah)
                     .RegisterShop(Shops.Baker)
-                    .GenerateTraderKnowledge();
+                    .GenerateTraderKnowledge()
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede();
                 public static NPC weaponSeller = Templates.CityFolks.WeaponSeller.Clone().SetFaction(FactionManager.Sineah)
                     .RegisterShop(Shops.WeaponSmith)
-                    .GenerateTraderKnowledge();
+                    .GenerateTraderKnowledge()
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede();
                 public static NPC armorSeller = Templates.CityFolks.ArmorSeller.Clone().SetFaction(FactionManager.Sineah)
                     .RegisterShop(Shops.ArmorSmith)
-                    .GenerateTraderKnowledge();
+                    .GenerateTraderKnowledge()
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede();
                 public static NPC pharmacist = Templates.CityFolks.Pharmacian.Clone().SetFaction(FactionManager.Sineah)
                     .RegisterShop(Shops.Pharmacist)
-                    .GenerateTraderKnowledge();
+                    .GenerateTraderKnowledge()
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede();
                 public static NPC churchAttendant = Templates.CityFolks.ChurchAttendant.Clone().SetFaction(FactionManager.Sineah)
                     .RegisterShop(Shops.ChurchAttendant)
-                    .GenerateTraderKnowledge();
+                    .GenerateTraderKnowledge()
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede();
                 public static NPC magicVendor = Templates.CityFolks.MagicVendor.Clone().SetFaction(FactionManager.Sineah)
                     .RegisterShop(Shops.MagicVendor)
-                    .GenerateTraderKnowledge();
+                    .GenerateTraderKnowledge()
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede();
                 public static NPC trader = Templates.CityFolks.Trader.Clone().SetFaction(FactionManager.Sineah)
                     .RegisterShop(Shops.Trader)
-                    .GenerateTraderKnowledge();
+                    .GenerateTraderKnowledge()
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede();
                 public static NPC jeweler = Templates.CityFolks.Jeweler.Clone().SetFaction(FactionManager.Sineah)
                     .RegisterShop(Shops.Jeweler)
-                    .GenerateTraderKnowledge();
+                    .GenerateTraderKnowledge()
+                    .AddKnowledgeBase(Knowledge.Global.HumanAll)
+                    .CompileKnowlede();
             }
             public static Character[] GetCharacters()
             {

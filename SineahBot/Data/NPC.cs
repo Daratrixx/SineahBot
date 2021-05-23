@@ -23,7 +23,7 @@ namespace SineahBot.Data
 
         public Shop shop { get; private set; }
         public string knowledgeDefaultResponse = "I don't know anything about that.";
-        public Dictionary<string, string> knowledgeBase = new Dictionary<string, string>();
+        public KnowledgeBase knowledgeBase = new KnowledgeBase();
         public NPC RegisterShop(Shop shop)
         {
             this.shop = shop;
@@ -38,21 +38,24 @@ namespace SineahBot.Data
         {
             return this;
         }
+        public NPC AddKnowledgeBase(KnowledgeBase knowledgeBase)
+        {
+            this.knowledgeBase.MergeKnowledge(knowledgeBase);
+            return this;
+        }
         public NPC RegisterKnowlede(IEnumerable<string> knowledges, string response)
         {
-            foreach (var knowledge in knowledges)
-            {
-                knowledgeBase[knowledge.ToLower()] = response;
-                if (knowledge.Contains(" "))
-                    knowledgeBase[knowledge.ToLower().Replace(" ", "")] = response;
-            }
+            knowledgeBase.SetKnowledge(knowledges, response);
             return this;
         }
         public NPC RegisterKnowlede(string knowledge, string response)
         {
-            knowledgeBase[knowledge.ToLower()] = response;
-            if (knowledge.Contains(" "))
-                knowledgeBase[knowledge.ToLower().Replace(" ", "")] = response;
+            knowledgeBase.SetKnowledge(knowledge, response);
+            return this;
+        }
+        public NPC CompileKnowlede()
+        {
+            knowledgeBase.CompileKnowledge();
             return this;
         }
         public NPC GenerateTraderKnowledge()
@@ -63,8 +66,8 @@ namespace SineahBot.Data
             {
                 return RegisterKnowlede(new string[] { "trade", "trades", "trading", "sell", "selling", "buy", "buying" }, "\"*I don't trade*\"");
             }
-            var sellingMessage = $"I am selling **{String.Join("**, **", selling.Select(x => x.referenceItem.GetName()))}**.";
-            var buyingMessage = $"I am buying **{String.Join("**, **", buying.Select(x => x.referenceItem.GetName()))}**.";
+            var sellingMessage = $"I am selling {String.Join(", ", selling.Select(x => $"**{x.referenceItem.GetName()}**"))}.";
+            var buyingMessage = $"I am buying {String.Join(", ", buying.Select(x => $"**{x.referenceItem.GetName()}**"))}.";
             if (selling.Count() > 0 && buying.Count() > 0)
             {
                 RegisterKnowlede(new string[] { "trade", "trades", "trading" }, $"\"*{sellingMessage}\n{buyingMessage}*\"");
@@ -88,7 +91,7 @@ namespace SineahBot.Data
                     RegisterKnowlede(new string[] { "buy", "buying" }, $"\"*I don't buy anything.*\"");
                 }
             }
-            foreach (var s in selling)
+            /*foreach (var s in selling)
             {
                 var item = s.referenceItem;
                 RegisterKnowlede(new string[] { item.GetName() }, $"\"*{item.GetFullDescription()}*\"");
@@ -97,21 +100,27 @@ namespace SineahBot.Data
             {
                 var item = b.referenceItem;
                 RegisterKnowlede(new string[] { item.GetName() }, $"\"*{item.GetFullDescription()}*\"");
-            }
+            }*/
             return this;
         }
         public string GetKnowledgeResponse(string knowledge)
         {
-            knowledge = knowledge.ToLower().Replace(" ", "");
+            knowledge = knowledge.ToLower();
             if (knowledge.Is("rumor", "rumors"))
             {
                 return $"\"**{BehaviourManager.GetRumorKnowledge(this)}**\"";
             }
-            if (!knowledgeBase.ContainsKey(knowledge))
+            if (knowledgeBase.needCompile) // in case we forget to compile the knowledge, do it now
             {
-                return knowledgeDefaultResponse;
+                knowledgeBase.CompileKnowledge();
+                Logging.Log($"Late knowledge compiling for NPC {name} ({npcName}).");
             }
-            return knowledgeBase[knowledge];
+            var answer = knowledgeBase.GetKnowledge(knowledge);
+            if (answer != null)
+            {
+                return answer;
+            }
+            return knowledgeDefaultResponse;
         }
 
         public override string GetFullDescription(IAgent agent = null)
@@ -198,7 +207,7 @@ namespace SineahBot.Data
                 agent = agent,
                 items = new Dictionary<Item, int>(items),
                 tags = new List<CharacterTag>(tags),
-                knowledgeBase = new Dictionary<string, string>(knowledgeBase),
+                knowledgeBase = new KnowledgeBase().MergeKnowledge(knowledgeBase),
                 knowledgeDefaultResponse = knowledgeDefaultResponse
             };
         }

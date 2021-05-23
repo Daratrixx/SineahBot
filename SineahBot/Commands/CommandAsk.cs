@@ -28,7 +28,7 @@ namespace SineahBot.Commands
             }
 
             var targetName = GetArgument(1);
-            var knowledge = GetArgument(4);
+            var knowledge = GetArgument(5);
 
             var target = GetTarget<NPC>(character, room, 1);
             if (target == null) return; // error message already given in GetTarget

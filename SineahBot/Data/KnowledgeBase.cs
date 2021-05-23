@@ -1,7 +1,7 @@
-﻿using System;
+﻿using SineahBot.Tools;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace SineahBot.Data
 {
@@ -41,10 +41,20 @@ namespace SineahBot.Data
                 var stringVal = knowledge[key];
                 foreach (var key2 in knowledge.Keys)
                 {
-                    if (key != key2 && stringVal.Contains(key2, StringComparison.OrdinalIgnoreCase) && stringVal.Contains("[" + key2, StringComparison.OrdinalIgnoreCase))
+                    if (key != key2 && stringVal.Contains(key2, StringComparison.OrdinalIgnoreCase)
+                    && !stringVal.Contains("[" + key2, StringComparison.OrdinalIgnoreCase)
+                    && !stringVal.Contains(key2 + "]", StringComparison.OrdinalIgnoreCase))
                         stringVal = stringVal.Replace(key2, $"[{key2}]", StringComparison.OrdinalIgnoreCase);
                 }
-                knowledgeCompiled[key.ToLowerInvariant()] = stringVal;
+                var key3 = key.ToLowerInvariant();
+                if (knowledgeCompiled.ContainsKey(key3))
+                    Logging.Log($"Error compiling knowledge: {key3} replaced.");
+                knowledgeCompiled[key3] = stringVal;
+            }
+            if (knowledgeCompiled.Count != knowledge.Count)
+            {
+                var missing = $"[MISSING: {String.Join(',', knowledge.Keys.Where(x => !knowledgeCompiled.ContainsKey(x.ToLowerInvariant())))}]";
+                Logging.Log($"Error compiling knowledge: {knowledgeCompiled.Count}/{knowledge.Count} compiled. {missing}");
             }
             return this;
         }
@@ -53,6 +63,8 @@ namespace SineahBot.Data
         {
             if (knowledgeCompiled.TryGetValue(key, out string val))
                 return val;
+            if (key.Last() != 's')
+                return GetKnowledge(key + "s");
             return null;
         }
 
@@ -61,6 +73,7 @@ namespace SineahBot.Data
             return knowledgeCompiled.Values.GetRandom();
         }
 
+        public bool needCompile { get => knowledgeCompiled.Count == 0 || knowledgeCompiled.Count != knowledge.Count; }
     }
 
     public class MultiDictionnary<Tkey, Tvalue> where Tkey : notnull
