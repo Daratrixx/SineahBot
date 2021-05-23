@@ -26,8 +26,8 @@ namespace SineahBot.Commands
             return $@"
 **INFORMATION** - ***{character.name}***
 > *{character.characterClass.ToString().ToUpper()}* *level **{character.level}*** (*{character.experience}/{ClassProgressionManager.ExperienceForNextLevel(character.level)} exp*)
-> *Health* : **{character.health}/{character.MaxHealth}** (**+{character.bonusHealth}**)
-> *Mana* : **{character.mana}/{character.MaxMana}** (**+{character.bonusMana}**)
+> *Health* : **{character.health}/{character.MaxHealth}** (**+{character.bonusHealth}**) *regen*: **{character.GetHealthRegeneration()}** (**+{character.bonusHealthRegen}**)
+> *Mana* : **{character.mana}/{character.MaxMana}** (**+{character.bonusMana}**) *regen*: **{character.GetManaRegeneration()}** (**+{character.bonusManaRegen}**)
 > *Spell power* : **{character.GetSpellPower()}** ({(ClassProgressionManager.IsMagicalClass(character.characterClass) ? "2" : "1")} x level **+{character.bonusSpellPower}**)
 > *Physical power* : **{character.GetWeaponDamage()}** ({(ClassProgressionManager.IsPhysicalClass(character.characterClass) ? "2" : "1")} x level **+{character.bonusDamage}**)
 > *Armor*: **{character.bonusArmor}** ({(int)(damageRedution * 100)}% physical damage reduction)
