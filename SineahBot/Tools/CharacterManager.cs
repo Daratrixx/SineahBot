@@ -162,7 +162,7 @@ namespace SineahBot.Tools
             var character = player.character;
             character.agent = null;
             characters.Remove(character.id);
-            Program.database.CharacterEquipment.RemoveRange(Program.database.CharacterEquipment.AsQueryable().Where(x=>x.idCharacter == character.id));
+            Program.database.CharacterEquipment.RemoveRange(Program.database.CharacterEquipment.AsQueryable().Where(x => x.idCharacter == character.id));
             Program.database.CharacterItems.RemoveRange(Program.database.CharacterItems.AsQueryable().Where(x => x.idCharacter == character.id));
             Program.database.Characters.Remove(character);
             player.idCharacter = null;
@@ -170,18 +170,17 @@ namespace SineahBot.Tools
             player.playerStatus = PlayerStatus.CharacterCreation;
         }
 
-        public static Character TestCharacter
+        public static Character CreateTestCharacter()
         {
-            get
+            var character = new Character()
             {
-                return new Character()
-                {
-                    characterStatus = CharacterStatus.Normal,
-                    id = Guid.NewGuid(),
-                    name = "test character",
-                    //description = "You notice the test character."
-                };
-            }
+                characterStatus = CharacterStatus.Normal,
+                id = Guid.NewGuid(),
+                name = "test character",
+                //description = "You notice the test character."
+            };
+            characters[character.id] = character;
+            return character;
         }
     }
 }

@@ -8,34 +8,39 @@ namespace SineahBot.Tools
 {
     public static class PlayerManager
     {
-        private static Dictionary<ulong, Player> players = new Dictionary<ulong, Player>() { { 0000, TestPlayer } };
+        private static Dictionary<ulong, Player> players = new Dictionary<ulong, Player>() { };
 
         public static Player GetPlayer(ulong userId)
         {
-            if (!players.ContainsKey(userId))
+            // player already loaded
+            if (players.TryGetValue(userId, out Player player))
+                return player;
+
+            // attempt to load player from database
+            player = Program.database.Players.FirstOrDefault(x => x.userId == userId);
+            // create and return new player
+            if (player == null)
             {
-                Player player = Program.database.Players.FirstOrDefault(x => x.userId == userId);
-                if (player == null)
+                player = players[userId] = new Player()
                 {
-                    player = players[userId] = new Player()
-                    {
-                        userId = userId,
-                        playerStatus = PlayerStatus.None,
-                    }; // todo: try loading from bdd
-                    Program.database.Players.Add(player);
-                }
-                else
-                {
-                    if (player.idCharacter != null)
-                    {
-                        player.character = CharacterManager.GetCharacter(player.idCharacter.Value);
-                        player.character.agent = player;
-                        player.playerStatus = PlayerStatus.InCharacter;
-                    }
-                }
+                    userId = userId,
+                    playerStatus = PlayerStatus.None,
+                    playerSettings = new PlayerSettings(),
+                }; // todo: try loading from bdd
+                Program.database.Players.Add(player);
+                players[userId] = player;
                 return player;
             }
-            return players[userId];
+            // load and returns existing player
+            if (player.idCharacter != null)
+            {
+                player.character = CharacterManager.GetCharacter(player.idCharacter.Value);
+                player.character.agent = player;
+                player.playerStatus = PlayerStatus.InCharacter;
+                player.playerSettings = player.settings != null ? Newtonsoft.Json.JsonConvert.DeserializeObject<PlayerSettings>(player.settings) : new PlayerSettings();
+            }
+            players[userId] = player;
+            return player;
         }
 
         public static void DisconnectPlayer(Player player)
@@ -43,29 +48,40 @@ namespace SineahBot.Tools
             if (player.character != null && player.character.currentRoomId != Guid.Empty)
             {
                 CharacterManager.SaveCharacterInventory(player.character);
+                CharacterManager.SaveCharacterEquipment(player.character);
                 RoomManager.RemoveFromCurrentRoom(player.character, false);
             }
+            player.settings = Newtonsoft.Json.JsonConvert.SerializeObject(player.playerSettings);
+            Program.database.Update(player);
+            players.Remove(player.userId);
         }
 
-        public static Player TestPlayer
+        public static void SavePlayers()
         {
-            get
+            foreach (var player in players.Values)
             {
-                var character = CharacterManager.TestCharacter;
-                var player = new Player()
-                {
-                    playerStatus = PlayerStatus.InCharacter,
-                    //characterStatus = CharacterStatus.Normal,
-                    //id = Guid.NewGuid(),
-                    //name = "test player",
-                    //description = "You notice the test player.",
-                    userId = 0000,
-                    character = character
-                };
-                character.agent = player;
-
-                return player;
+                player.settings = Newtonsoft.Json.JsonConvert.SerializeObject(player.playerSettings);
             }
+            Program.database.UpdateRange(players.Values);
+        }
+
+        public static Player CreateTestPlayer()
+        {
+            var character = CharacterManager.CreateTestCharacter();
+            var player = new Player()
+            {
+                playerStatus = PlayerStatus.InCharacter,
+                //characterStatus = CharacterStatus.Normal,
+                //id = Guid.NewGuid(),
+                //name = "test player",
+                //description = "You notice the test player.",
+                userId = 0000,
+                character = character
+            };
+            character.agent = player;
+            players[0] = player;
+
+            return player;
         }
     }
 }

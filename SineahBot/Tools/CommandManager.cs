@@ -171,7 +171,7 @@ namespace SineahBot.Tools
             new CommandMetaInformation(), new CommandMetaInventory(),
             new CommandMetaLevel(),
             new CommandMetaSpells(), new CommandMetaClass(), new CommandMetaAlteration(),
-            new CommandMetaHelp(),
+            new CommandMetaHelp(), new CommandMetaSettings(),
             new CommandMetaCredits()
         };
         public static List<Command> InCharacterCommands = new List<Command>() {

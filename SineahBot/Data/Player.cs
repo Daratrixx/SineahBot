@@ -23,9 +23,11 @@ namespace SineahBot.Data
         [Key]
         public ulong userId { get; set; }
         public Guid? idCharacter { get; set; }
+        public string settings { get; set; }
 
         public Character character;
         public CancelableMudTimer disconnectTimer = null;
+        public PlayerSettings playerSettings = new PlayerSettings();
 
         public bool canPostError = false;
 
@@ -102,5 +104,34 @@ namespace SineahBot.Data
         None,
         CharacterCreation,
         InCharacter
+    }
+
+    public class PlayerSettings
+    {
+        [PlayerSettingIgnore]
+        [PlayerSettingDescription("If True, display the full room description every time a room is entered")]
+        public bool AutoLook { get; set; } = true;
+        [PlayerSettingDescription("If True, will censor some words the bot relays to you")]
+        public bool Censor { get; set; } = true;
+        [PlayerSettingIgnore]
+        [PlayerSettingDescription("If True, will skip Gender and Pronouns selection during character creation")]
+        public bool IgnoreGender { get; set; } = true;
+    }
+
+    public class PlayerSettingIgnore : Attribute
+    {
+    }
+
+    public class PlayerSettingDescription : Attribute
+    {
+        public string description;
+        public PlayerSettingDescription(string description) {
+            this.description = description;
+        }
+
+        public override string ToString()
+        {
+            return description;
+        }
     }
 }

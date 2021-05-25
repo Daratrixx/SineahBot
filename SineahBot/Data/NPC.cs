@@ -91,16 +91,6 @@ namespace SineahBot.Data
                     RegisterKnowlede(new string[] { "buy", "buying" }, $"\"*I don't buy anything.*\"");
                 }
             }
-            /*foreach (var s in selling)
-            {
-                var item = s.referenceItem;
-                RegisterKnowlede(new string[] { item.GetName() }, $"\"*{item.GetFullDescription()}*\"");
-            }
-            foreach (var b in buying)
-            {
-                var item = b.referenceItem;
-                RegisterKnowlede(new string[] { item.GetName() }, $"\"*{item.GetFullDescription()}*\"");
-            }*/
             return this;
         }
         public string GetKnowledgeResponse(string knowledge)

@@ -21,6 +21,7 @@ namespace SineahBot
         public static void SaveData()
         {
             CharacterManager.SaveLoadedCharacters();
+            PlayerManager.SavePlayers();
             database.SaveChanges();
         }
 
@@ -55,8 +56,9 @@ namespace SineahBot
         }
         private void OfflinePlay()
         {
+            var player = PlayerManager.CreateTestPlayer();
             var spawnRoom = RoomManager.GetRoom(RoomManager.GetSpawnRoomId());
-            RoomManager.MoveToRoom(PlayerManager.GetPlayer(0).character, spawnRoom);
+            RoomManager.MoveToRoom(player.character, spawnRoom);
             string input = "";
             while (input != "quit")
             {
