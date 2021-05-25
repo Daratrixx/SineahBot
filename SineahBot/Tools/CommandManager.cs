@@ -23,14 +23,14 @@ namespace SineahBot.Tools
                 case PlayerStatus.InCharacter:
                     Room room = null;
                     var character = player.character;
-                    if (character.currentRoomId == Guid.Empty)
+                    if (character.currentRoomId == null)
                     {
-                        room = RoomManager.GetRoom(RoomManager.GetSpawnRoomId());
+                        room = RoomManager.GetRoomById(RoomManager.GetSpawnRoomId());
                         room.AddToRoom(character, false); // add the player character to room but don't show it to the player
                     }
                     else
                     {
-                        room = RoomManager.GetRoom(character.currentRoomId);
+                        room = RoomManager.GetRoomById(character.currentRoomId);
                     }
                     ParseInCharacterMessage(character, message, room);
                     break;
@@ -95,14 +95,14 @@ namespace SineahBot.Tools
                         return true;
                     }
                 }
-                if (m2.Is("!die", "!kill", "!death", "!suicide", "!reroll") && player.character != null && player.character.currentRoomId != Guid.Empty)
+                if (m2.Is("!die", "!kill", "!death", "!suicide", "!reroll") && player.character != null && player.character.currentRoomId != Guid.Empty.ToString())
                 {
-                    RoomManager.GetRoom(player.character.currentRoomId).DescribeAction($"**{player.GetName()}** died.");
+                    RoomManager.GetRoomByName(player.character.currentRoomId).DescribeAction($"**{player.GetName()}** died.");
                     player.character.OnKilled(null); // calls combat manager and removes player
                     return true;
                 }
 
-                if (m2.Is("!disconnect", "!logout", "!off") && player.character != null && player.character.currentRoomId != Guid.Empty)
+                if (m2.Is("!disconnect", "!logout", "!off") && player.character != null && player.character.currentRoomId != Guid.Empty.ToString())
                 {
                     // set the disconnection timer to 0 minutes before alert
                     player.SetDisconnectTimer(0);

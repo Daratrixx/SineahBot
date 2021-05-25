@@ -8,6 +8,7 @@ namespace SineahBot.Data.World
 {
     public static class NerajiDesert
     {
+        public static readonly string RegionPrefix = "NERAJI";
         public static class s
         {
             public static class Rooms
@@ -50,35 +51,35 @@ namespace SineahBot.Data.World
         {
             public static class Rooms
             {
-                public static Room DesertRoad2 = new Room("Neraji desert")
+                public static Room DesertRoad2 = new Room("Neraji desert", $"{RegionPrefix}_DE_R2")
                 {
                     description = $"Looking West you can see a road. Every other directions look like endless sand."
                 };
-                public static Room DesertRoad3 = new Room("Neraji emptiness")
+                public static Room DesertRoad3 = new Room("Neraji emptiness", $"{RegionPrefix}_DE_R3")
                 {
                     description = $"You are surounded by sand in every direction. You can make out a road to the West."
                 };
-                public static Room DesertRoad4 = new Room("Neraji dunes")
+                public static Room DesertRoad4 = new Room("Neraji dunes", $"{RegionPrefix}_DE_R4")
                 {
                     description = $"You are surounded by sand in every direction."
                 };
-                public static Room DesertRoad5 = new Room("Neraji plateau")
+                public static Room DesertRoad5 = new Room("Neraji plateau", $"{RegionPrefix}_DE_R5")
                 {
                     description = $"You are surounded by sand in every direction. You see an oasis to the East. Or is it a mirage ?"
                 };
-                public static Room DesertRoad6 = new Room("Neraji plateau")
+                public static Room DesertRoad6 = new Room("Neraji plateau", $"{RegionPrefix}_DE_R6")
                 {
                     description = $"You are surounded by sand in every direction. You see an oasis to the East. Or is it a mirage ?"
                 };
-                public static Room DesertRoad7 = new Room("Neraji plateau")
+                public static Room DesertRoad7 = new Room("Neraji plateau", $"{RegionPrefix}_DE_R7")
                 {
                     description = $"You are surounded by sand in every direction. You see an oasis to the East. Or is it a mirage ?"
                 };
-                public static Room DesertRoad8 = new Room("Neraji plateau")
+                public static Room DesertRoad8 = new Room("Neraji plateau", $"{RegionPrefix}_DE_R8")
                 {
                     description = $"You are surounded by sand in every direction. You see an oasis to the East. Or is it a mirage ?"
                 };
-                public static Room DesertRoad9 = new Room("Neraji oasis")
+                public static Room DesertRoad9 = new Room("Neraji oasis", $"{RegionPrefix}_DE_R9")
                 {
                     description = $"You reached the oasis. The tall palmtrees offer a welcome shelter from the burning sun, and the clear water will quench your thirst."
                 };
@@ -172,35 +173,35 @@ namespace SineahBot.Data.World
         {
             public static class Rooms
             {
-                public static Room road0 = new Room("Antique stone path")
+                public static Room road0 = new Room("Antique stone path", $"{RegionPrefix}_CA_R0")
                 {
                     description = "You find an incredibly old stone path running through the dunes. It leads up North to a mountain range."
                 };
-                public static Room road1 = new Room("Antique road")
+                public static Room road1 = new Room("Antique road", $"{RegionPrefix}_CA_R1")
                 {
                     description = "Standing on the timeless stones of this road, you can spot the ruins of a city up North. The ruins are craddled under a mountain burnt by the sun. You can make out the shape of a few streets between the destroyed buildings. Only a singular tower still stands. There is a gigantic pit, larger than the city itself, bordering the ruins."
                 };
-                public static Room gate = new Room("Crumbled gate")
+                public static Room gate = new Room("Crumbled gate", $"{RegionPrefix}_CA_CG")
                 {
                     description = ""
                 };
-                public static Room streets = new Room("Collapsed streets")
+                public static Room streets = new Room("Collapsed streets", $"{RegionPrefix}_CA_CS0")
                 {
                     description = ""
                 };
-                public static Room plaza = new Room("Ruined plaza")
+                public static Room plaza = new Room("Ruined plaza", $"{RegionPrefix}_CA_RP0")
                 {
                     description = ""
                 };
-                public static Room tower = new Room("Scorched tower")
+                public static Room tower = new Room("Scorched tower", $"{RegionPrefix}_CA_ST")
                 {
                     description = ""
                 };
-                public static Room stairs = new Room("Corroded starway")
+                public static Room stairs = new Room("Corroded starway", $"{RegionPrefix}_CA_CS1")
                 {
                     description = ""
                 };
-                public static Room platform = new Room("Ravaged platform")
+                public static Room platform = new Room("Ravaged platform", $"{RegionPrefix}_CA_RP1")
                 {
                     description = ""
                 };
@@ -308,15 +309,15 @@ namespace SineahBot.Data.World
         }
 
         public static IEnumerable<Room> rooms;
-        #region CONNECTIONS
-        public static RoomConnection[] desertConnections = new RoomConnection[] {
+
+        public static RoomConnection[] GetAreaConnections() => new RoomConnection[] {
             // desert to city of ash
             new RoomConnection(Desert.Rooms.DesertRoad5, CityOfAsh.Rooms.road0) {
                 directionFromA = new Commands.MoveDirection[]{ Commands.MoveDirection.North },
                 directionFromB = new Commands.MoveDirection[]{ Commands.MoveDirection.South },
             }
         };
-        #endregion
+
         public static void LoadWorld()
         {
             // LOAD ROADS
@@ -330,7 +331,7 @@ namespace SineahBot.Data.World
             CharacterManager.LoadCharacters(CityOfAsh.GetCharacters());
 
             // CONNECT ROADS
-            RoomManager.LoadRoomConnections(desertConnections);
+            RoomManager.LoadRoomConnections(GetAreaConnections());
 
             // PLACE CONTAINERS IN ROOMS
 

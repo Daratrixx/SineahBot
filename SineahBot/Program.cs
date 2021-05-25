@@ -57,7 +57,7 @@ namespace SineahBot
         private void OfflinePlay()
         {
             var player = PlayerManager.CreateTestPlayer();
-            var spawnRoom = RoomManager.GetRoom(RoomManager.GetSpawnRoomId());
+            var spawnRoom = RoomManager.GetRoomById(RoomManager.GetSpawnRoomId());
             RoomManager.MoveToRoom(player.character, spawnRoom);
             string input = "";
             while (input != "quit")

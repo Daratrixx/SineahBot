@@ -227,7 +227,7 @@ namespace SineahBot.Data
             }
             if (sleeping)
             {
-                CommandSleep.Awake(this, RoomManager.GetRoom(currentRoomId), this is NPC);
+                CommandSleep.Awake(this, RoomManager.GetRoomByName(currentRoomId), this is NPC);
             }
             if (currentShop != null) currentShop.RemoveClient(this);
             if (currentContainer != null) currentContainer = null;
@@ -266,7 +266,7 @@ namespace SineahBot.Data
             {
                 if (sleeping)
                 {
-                    CommandSleep.Awake(this, RoomManager.GetRoom(currentRoomId), true);
+                    CommandSleep.Awake(this, RoomManager.GetRoomByName(currentRoomId), true);
                 }
                 return;
             }
@@ -338,7 +338,7 @@ namespace SineahBot.Data
         public virtual void OnKilled(Entity killer = null)
         {
             var corpse = Containers.CreateContainerFromCharacter(this);
-            var room = RoomManager.GetRoom(currentRoomId);
+            var room = RoomManager.GetRoomByName(currentRoomId);
             room.AddToRoom(corpse, false);
             new MudTimer(300, () =>
             {
@@ -507,7 +507,7 @@ namespace SineahBot.Data
             actionCooldown = new MudTimer(4, () => { actionCooldown = null; });
             if (sleeping)
             {
-                CommandSleep.Awake(this, RoomManager.GetRoom(currentRoomId), this is NPC);
+                CommandSleep.Awake(this, RoomManager.GetRoomByName(currentRoomId), this is NPC);
             }
         }
 

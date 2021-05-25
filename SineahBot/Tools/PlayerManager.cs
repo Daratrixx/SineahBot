@@ -45,7 +45,7 @@ namespace SineahBot.Tools
 
         public static void DisconnectPlayer(Player player)
         {
-            if (player.character != null && player.character.currentRoomId != Guid.Empty)
+            if (player.character != null && player.character.currentRoomId != Guid.Empty.ToString())
             {
                 CharacterManager.SaveCharacterInventory(player.character);
                 CharacterManager.SaveCharacterEquipment(player.character);

@@ -38,7 +38,7 @@ namespace SineahBot.Data
                 disconnectTimer.Cancel();
                 disconnectTimer = null;
             }
-            if (character == null || character.currentRoomId == Guid.Empty) return;
+            if (character == null || character.currentRoomId == Guid.Empty.ToString()) return;
             disconnectTimer = new CancelableMudTimer(minutes * 60, () =>
             {
                 Message("```You will be disconnected in 1 minute.```");

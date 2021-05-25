@@ -9,6 +9,7 @@ namespace SineahBot.Data.World
 {
     public static class Sineah
     {
+        public static readonly string RegionPrefix = "SINEAH";
         public static NPC AddSineahCommonKnowledge(this NPC npc)
         {
             return npc
@@ -65,27 +66,27 @@ namespace SineahBot.Data.World
         {
             public static class Rooms
             {
-                public static Room Entrance = new Room("Barracks entrance")
+                public static Room Entrance = new Room("Barracks entrance", $"{RegionPrefix}_BA_EN")
                 {
                     description = "This narrow, easily defendable corridor connects the barracks to the streets."
                 };
-                public static Room Hall = new Room("Barracks hall")
+                public static Room Hall = new Room("Barracks hall", $"{RegionPrefix}_BHA")
                 {
                     description = "Heart of the barracks, branching to the other sections. North is the guards room, east is the captain room, west is the equipment room, and south leads back out."
                 };
-                public static Room GuardsRoom = new Room("Guards room")
+                public static Room GuardsRoom = new Room("Guards room", $"{RegionPrefix}_BGR")
                 {
                     description = "Main gathering place for guards, where they rest between patrols."
                 };
-                public static Room LivingQuarters = new Room("Guards living quarters")
+                public static Room LivingQuarters = new Room("Guards living quarters", $"{RegionPrefix}_BLQ")
                 {
                     description = "Military quarters housing the city's garrison. Rows of beds are lined up, and a few cupboards are used to store the guards personal effects."
                 };
-                public static Room CaptainRoom = new Room("Captain room")
+                public static Room CaptainRoom = new Room("Captain room", $"{RegionPrefix}_BCR")
                 {
                     description = "The room serves both as a meeting room and as the captains office. A small altar thrones in a corner."
                 };
-                public static Room EquipmentRoom = new Room("Equipment storage room")
+                public static Room EquipmentRoom = new Room("Equipment storage room", $"{RegionPrefix}_BER")
                 {
                     description = "Room cramped with standard guard equipment and other supplies."
                 };
@@ -256,48 +257,48 @@ namespace SineahBot.Data.World
             }
             public static class Rooms
             {
-                public static Room CommonRoom = new Room("The Four Winds common room")
+                public static Room CommonRoom = new Room("The Four Winds common room", $"{RegionPrefix}_ICR")
                 {
                     isSpawnRoom = true,
                     description = "Several tables and chairs take most of the space in this large room. Next to the eastern door leading to the back room, a fireplace warms the body and soul on weary travellers. The large western door leads outside, the small northern door leads to the kitchen. On the south wall, a flight of stairs leads to the bedrooms above."
                 };
-                public static Room Kitchen = new Room("Kitchen")
+                public static Room Kitchen = new Room("Kitchen", $"{RegionPrefix}_IKI")
                 {
                     description = "A room steaming with all the cooking taking place here. A large furnace and an imposing chauldron are actively exhaling the smell of food cooking. At the northern end of the room is a flight of stairs leading down to the cellar."
                 };
-                public static Room Cellar = new Room("Cellar")
+                public static Room Cellar = new Room("Cellar", $"{RegionPrefix}_ICE")
                 {
                     description = "A very simple room, cramped with rows of barrels, boxes, and racks. In the north wall, a flight of stairs leads back to the kitchen."
                 };
-                public static Room MeetingRoom = new Room("Meeting room")
+                public static Room MeetingRoom = new Room("Meeting room", $"{RegionPrefix}_IMR")
                 {
                     description = "Only one large table occupy the space of this room reserved for private meetings and dinners. Cut from the main room by the eastern door, the northern door leads to the inkeepers office."
                 };
-                public static Room InnkeeprsOffice = new Room("Innkeepers office")
+                public static Room InnkeeprsOffice = new Room("Innkeepers office", $"{RegionPrefix}_IIO")
                 {
                     description = "This small room only has a chair, a desk, a simple but comfortable futon, and a heavy, solid looking, locked chest."
                 };
-                public static Room SecondFloorLanding = new Room("Second floor landing")
+                public static Room SecondFloorLanding = new Room("Second floor landing", $"{RegionPrefix}_ISL")
                 {
                     description = "The start of the corridor has two doors for bedrooms #1 and #2 on the eastern and western wall respectively. A flight of stairs go south back down to the main hall, and the corridor extends north to more rooms."
                 };
-                public static Room SecondFloorCorridor = new Room("Second floor corridor")
+                public static Room SecondFloorCorridor = new Room("Second floor corridor", $"{RegionPrefix}_ISC")
                 {
                     description = "The end section of the corridor has two doors for bedrooms #3 and #4 on the eastern and western wall respectively."
                 };
-                public static Room Bedroom1 = new Room("Bedroom #1")
+                public static Room Bedroom1 = new Room("Bedroom #1", $"{RegionPrefix}_IB1")
                 {
                     description = "A smaller bedroom, granting privacy for up to two people."
                 };
-                public static Room Bedroom2 = new Room("Bedroom #2")
+                public static Room Bedroom2 = new Room("Bedroom #2", $"{RegionPrefix}_IB2")
                 {
                     description = "A larger shared dormitory, that can hold up to 8 people."
                 };
-                public static Room Bedroom3 = new Room("Bedroom #3")
+                public static Room Bedroom3 = new Room("Bedroom #3", $"{RegionPrefix}_IB3")
                 {
                     description = "A smaller bedroom, granting privacy for up to two people."
                 };
-                public static Room Bedroom4 = new Room("Bedroom #4")
+                public static Room Bedroom4 = new Room("Bedroom #4", $"{RegionPrefix}_IB4")
                 {
                     description = "A larger shared dormitory, that can hold up to 8 people."
                 };
@@ -505,12 +506,12 @@ namespace SineahBot.Data.World
             }
             public static class Rooms
             {
-                public static Room MainHall = new Room("University main hall")
+                public static Room MainHall = new Room("University main hall", $"{RegionPrefix}_UMH")
                 {
                     isSpawnRoom = true,
                     description = "This large hall serve as both an entry point and a gathering area. The only door opened to the public is the western door labeled \"**Library**\""
                 };
-                public static Room LibraryEntrance = new Room("Library entrance")
+                public static Room LibraryEntrance = new Room("Library entrance", $"{RegionPrefix}_ULE")
                 {
                     isSpawnRoom = true,
                     description = "This is the entrance area for the library. It's not possible to enter yet, but a few books are displayed here for the public to read."
@@ -561,87 +562,87 @@ namespace SineahBot.Data.World
         {
             public static class Rooms
             {
-                public static Room SewerAccess = new Room("Illegal sewer access")
+                public static Room SewerAccess = new Room("Illegal sewer access", $"{RegionPrefix}_UG_SA")
                 {
                     description = "This damp underground room is an illegitimate entry point to the sewer system. Contaminated water flows from the western tunnel, and runs into to the brighter eastern tunnel. Up north is a ladder leading out of the sewer system."
                 };
-                public static Room DischargeTunnel = new Room("Discharge tunnel")
+                public static Room DischargeTunnel = new Room("Discharge tunnel", $"{RegionPrefix}_UG_DT")
                 {
                     description = "This steep tunnel evacuate the water coming from the western tunnel out of the city sewer system. Daylight can be seen at the eastern end."
                 };
-                public static Room SewerTunnel = new Room("Sewer tunnel")
+                public static Room SewerTunnel = new Room("Sewer tunnel", $"{RegionPrefix}_UG_ST")
                 {
                     description = "A tunnel part of the sewer system. Water flows from the north and drains to the east."
                 };
-                public static Room ConvergenceRoom = new Room("Convergence room")
+                public static Room ConvergenceRoom = new Room("Convergence room", $"{RegionPrefix}_UG_CR")
                 {
                     description = "This massive underground room has multiple tunnels discharging their wastes in a collection of large pools, all connected to the southern exit. Water from the west seems way more polluted than the water from the north and the east."
                 };
-                public static Room ToxicDrain = new Room("Toxic drain")
+                public static Room ToxicDrain = new Room("Toxic drain", $"{RegionPrefix}_UG_WD")
                 {
                     description = "The water going down this tunnel is unusually tainted. It comes from the western collector and leaks into the eastern tunnel."
                 };
-                public static Room ToxicWaste = new Room("Toxic waste")
+                public static Room ToxicWaste = new Room("Toxic waste", $"{RegionPrefix}_UG_WC")
                 {
                     description = "This collector is filled to the brim with corrupted mater, result of the Spire experiments. It affects the sewer dwellers. The waste slowly drains to the east."
                 };
-                public static Room SteepDrain = new Room("Steep drain")
+                public static Room SteepDrain = new Room("Steep drain", $"{RegionPrefix}_UG_ND")
                 {
                     description = "This tunnel comes from the north, the angle allowing the numerous wastes to be evacuated more easily. Water is drained south."
                 };
-                public static Room CollectingRoom1 = new Room("Collecting room")
+                public static Room CollectingRoom1 = new Room("Collecting room", $"{RegionPrefix}_UG_NC")
                 {
                     description = "This collecting room is relatively clean thanks to the effective water drain evacuating the water down south."
                 };
-                public static Room EasternDrain = new Room("Eastern drain")
+                public static Room EasternDrain = new Room("Eastern drain", $"{RegionPrefix}_UG_ED")
                 {
                     description = "This tunnel drains the water from the eastern waste collecting room to the western convergence room. Another tunnel opens on the northern wall, but no water comes from it."
                 };
-                public static Room CollectingRoom2 = new Room("Collecting room")
+                public static Room CollectingRoom2 = new Room("Collecting room", $"{RegionPrefix}_UG_EC")
                 {
                     description = "This collector is in decent condition. Its water drains westward."
                 };
-                public static Room DeterioratedDrain = new Room("Deteriorated drain")
+                public static Room DeterioratedDrain = new Room("Deteriorated drain", $"{RegionPrefix}_UG_DD")
                 {
                     description = "This tunnel is very damaged, and dry. Its collecting room is up north, and the waste would run down south if there was any."
                 };
-                public static Room CrumbledCollector = new Room("Crumbled collector")
+                public static Room CrumbledCollector = new Room("Crumbled collector", $"{RegionPrefix}_UG_CC")
                 {
                     description = "This waste collector hasn't been used in years and is perfectly dry. However, a cold, moist atmosphere seemingly leaks out of the eastern wall. In the past, water would have run down the southern tunnel."
                 };
-                public static Room ForgottenPassage = new Room("Forgotten passage")
+                public static Room ForgottenPassage = new Room("Forgotten passage", $"{RegionPrefix}_UG_FP")
                 {
                     description = "This gallery seems way older than the sewer system. The access to the sewers is westward. After a tight turn, the tunnel goes north, deeper into the unknown."
                 };
-                public static Room LowArchway = new Room("Low archway")
+                public static Room LowArchway = new Room("Low archway", $"{RegionPrefix}_UG_LA")
                 {
                     description = "The southern gallery led to a low-ceiling tunnel, with sculpted arches every few steps. It seems to open up to a room further north."
                 };
-                public static Room Heart = new Room("Heart of the catacombs")
+                public static Room Heart = new Room("Heart of the catacombs", $"{RegionPrefix}_UG_HC")
                 {
                     description = "This vast underground room is littered with bones and remains. Pillars support large arches, and smaller arches decorate the other openings, situated at the western, northern, and eastern ends of the room."
                 };
-                public static Room Underway1 = new Room("Underway")
+                public static Room Underway1 = new Room("Underway", $"{RegionPrefix}_UG_WU")
                 {
                     description = "This underway leads from the eastern Heart and continues westward."
                 };
-                public static Room Crypt = new Room("Ancient crypt gate")
+                public static Room Crypt = new Room("Ancient crypt gate", $"{RegionPrefix}_UG_AC")
                 {
                     description = "The tunnel ends on massive stones gate. They seem unmovable. The only exit is the eastern tunnel you came from."
                 };
-                public static Room Underway2 = new Room("Underway")
+                public static Room Underway2 = new Room("Underway", $"{RegionPrefix}_UG_NW")
                 {
                     description = "This underway leads from the southern Heart and continues northward."
                 };
-                public static Room Ossuary = new Room("Ossuary")
+                public static Room Ossuary = new Room("Ossuary", $"{RegionPrefix}_UG_OS")
                 {
                     description = "This wide, low-ceiling room walls and floor are covered in bones. No visible exit beside the southern tunnel."
                 };
-                public static Room Underway3 = new Room("Underway")
+                public static Room Underway3 = new Room("Underway", $"{RegionPrefix}_UG_NE")
                 {
                     description = "This underway leads from the western Heart and continues eastward."
                 };
-                public static Room Altar = new Room("Destroyed altar")
+                public static Room Altar = new Room("Destroyed altar", $"{RegionPrefix}_UG_DA")
                 {
                     description = "The broken altar dedicated to the practicices of an unknown cult. The only visible exit is westward."
                 };
@@ -916,55 +917,55 @@ namespace SineahBot.Data.World
             }
             public static class Rooms
             {
-                public static Room WGate = new Room("Sineah western city gate")
+                public static Room WGate = new Room("Sineah western city gate", $"{RegionPrefix}_ST_WG")
                 {
                     description = "Massive gates marking the entrance to the city-state of Sineah."
                 };
-                public static Room NGate = new Room("Sineah northen city gate")
+                public static Room NGate = new Room("Sineah northen city gate", $"{RegionPrefix}_ST_NG")
                 {
                     description = "Massive gates marking the entrance to the city-state of Sineah."
                 };
-                public static Room EGate = new Room("Sineah eastern city gate")
+                public static Room EGate = new Room("Sineah eastern city gate", $"{RegionPrefix}_ST_EG")
                 {
                     description = "Massive gates marking the entrance to the city-state of Sineah, facing the Neraji desert to the east, unforgiving land of the dangerous Kobolds."
                 };
-                public static Room SGate = new Room("Sineah southern city gate")
+                public static Room SGate = new Room("Sineah southern city gate", $"{RegionPrefix}_ST_SG")
                 {
                     description = "Massive gates marking the entrance to the city-state of Sineah."
                 };
-                public static Room outerScience = new Room("Sineah outer science district")
+                public static Room outerScience = new Room("Sineah outer science district", $"{RegionPrefix}_ST_W1")
                 {
                     description = "This long district reaches from the western gate all the way to the central plaza. North is the University. South is the Arcane Spire [CLOSED]. To the west is the city gate. The district continues further east, ending on the plaza."
                 };
-                public static Room outerTraveller = new Room("Sineah outer travellers avenue")
+                public static Room outerTraveller = new Room("Sineah outer travellers avenue", $"{RegionPrefix}_ST_N1")
                 {
                     description = "This avenue stretches from the northen gate to the central plaza. West is a shop [CLOSED]. East is the Church [CLOSED]. To the north is the city gate. The avenue continues further south, ending on the plaza."
                 };
-                public static Room outerMilitary = new Room("Sineah outer military path")
+                public static Room outerMilitary = new Room("Sineah outer military path", $"{RegionPrefix}_ST_E1")
                 {
                     description = "This fortified path connects the eastern gate to the city. North are the city Barracks. To the east is the city gate. The path continues further west, leading to the plaza."
                 };
-                public static Room outerCommercial = new Room("Sineah commercial street")
+                public static Room outerCommercial = new Room("Sineah commercial street", $"{RegionPrefix}_ST_S1")
                 {
                     description = "The nice smell of freshly baked bread fills the street. This street is a direct access from the southern gate to the central plaza. West is a Shop [CLOSED]. To the south is the city gate. North is the plaza."
                 };
-                public static Room innerScience = new Room("Sineah inner science district")
+                public static Room innerScience = new Room("Sineah inner science district", $"{RegionPrefix}_ST_W2")
                 {
                     description = "This long district reaches from the western gate all the way to the central plaza. South is the Workshop [CLOSED]. The district continues further west, ending at the city gate. East is the plaza."
                 };
-                public static Room innerTraveller = new Room("Sineah inner travellers avenue")
+                public static Room innerTraveller = new Room("Sineah inner travellers avenue", $"{RegionPrefix}_ST_N2")
                 {
                     description = "This avenue stretches from the northen gate to the central plaza. East is the Four winds inn. The avenue continues further north, ending at the city gate. South is the plaza."
                 };
-                public static Room innerMilitary = new Room("Sineah inner military path")
+                public static Room innerMilitary = new Room("Sineah inner military path", $"{RegionPrefix}_ST_E2")
                 {
                     description = "This fortified path connects the eastern gate to the city. North is the Armory [CLOSED]. South is the Blacksmith [CLOSED]. The path continues further east, ending at city gate. West is the plaza."
                 };
-                public static Room shady = new Room("Sineah hidden street")
+                public static Room shady = new Room("Sineah hidden street", $"{RegionPrefix}_ST_S2")
                 {
                     description = "A shady back alley. West will lead back to the safety of the Commercial street. A manhole is pried open."
                 };
-                public static Room plaza = new Room("Sineah central plaza")
+                public static Room plaza = new Room("Sineah central plaza", $"{RegionPrefix}_ST_PL")
                 {
                     description = "The heart of Sineah, center of the city, hub of activity. Many guards, merchants, street artists, and adventurers go about their daily lifes."
                 };
@@ -1224,7 +1225,7 @@ namespace SineahBot.Data.World
 
         public static IEnumerable<Room> rooms;
         #region CONNECTIONS
-        public static RoomConnection[] cityToBuildingConnections = new RoomConnection[] {
+        public static RoomConnection[] GetAreaConnections() => new RoomConnection[] {
             new RoomConnection(Streets.Rooms.outerMilitary.id, Barracks.Rooms.Entrance.id) // outer military to barracks
             {
                 directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.North },
@@ -1272,7 +1273,7 @@ namespace SineahBot.Data.World
             CharacterManager.LoadCharacters(Streets.GetCharacters());
 
             // CONNECT BUILDINGS TO STREETS
-            RoomManager.LoadRoomConnections(cityToBuildingConnections);
+            RoomManager.LoadRoomConnections(GetAreaConnections());
 
             // PLACE CONTAINERS IN ROOMS
             Inn.Rooms.InnkeeprsOffice.AddToRoom(Inn.Containers.OfficeDesk);

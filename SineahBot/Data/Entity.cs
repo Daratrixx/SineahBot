@@ -12,7 +12,7 @@ namespace SineahBot.Data
         {
             id = Guid.NewGuid();
         }
-        public Guid currentRoomId;
+        public string currentRoomId;
 
         public virtual string GetName(IAgent agent = null)
         {

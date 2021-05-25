@@ -78,7 +78,7 @@ namespace SineahBot.Data.Spells
                         var character = target as Character;
                         if (character.characterStatus == CharacterStatus.Combat)
                             CombatManager.RemoveFromCombat(character);
-                        CommandSleep.Sleep(character, RoomManager.GetRoom(target.currentRoomId));
+                        CommandSleep.Sleep(character, RoomManager.GetRoomByName(target.currentRoomId));
                     }
                 },
                 (caster) =>

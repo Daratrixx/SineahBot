@@ -215,7 +215,7 @@ namespace SineahBot.Data.Behaviours
                 var source = match.Groups[1].Value;
                 var verb = RoomEvent.GetTypeFromVerb(match.Groups[2].Value);
                 var room = match.Groups[3].Value;
-                Say(RoomManager.GetRoom(npc.currentRoomId), memoryTracker.ConfirmMemory(source, verb, room));
+                Say(RoomManager.GetRoomByName(npc.currentRoomId), memoryTracker.ConfirmMemory(source, verb, room));
             }
             match = AskTargetEvent.Match(e.speakingContent);
             if (match.Success)
@@ -224,7 +224,7 @@ namespace SineahBot.Data.Behaviours
                 var verb = RoomEvent.GetTypeFromVerb(match.Groups[2].Value);
                 var target = match.Groups[3].Value;
                 var room = match.Groups[4].Value;
-                Say(RoomManager.GetRoom(npc.currentRoomId), memoryTracker.ConfirmMemory(source, verb, target, room));
+                Say(RoomManager.GetRoomByName(npc.currentRoomId), memoryTracker.ConfirmMemory(source, verb, target, room));
             }
             base.ParseSpeachEvent(e);
         }
@@ -424,7 +424,7 @@ namespace SineahBot.Data.Behaviours
                 if (match.Success)
                 {
                     CompleteCurrentMission(); // make sure the report mission is gone...
-                    var targetRoom = RoomManager.GetRoom(match.Groups[4].Value);
+                    var targetRoom = RoomManager.GetRoomByName(match.Groups[4].Value);
                     if (targetRoom == null) return null;
                     var mission = new BehaviourMission.Investigate(e, targetRoom, match.Groups[1].Value, match.Groups[3].Value);
                     missions.Add(mission);
@@ -440,7 +440,7 @@ namespace SineahBot.Data.Behaviours
             // check if the order is targeted toward this NPC
             if (string.Equals(match.Groups[1].Value, npc.npcName, StringComparison.OrdinalIgnoreCase))
             {
-                var targetRoom = RoomManager.GetRoom(match.Groups[2].Value);
+                var targetRoom = RoomManager.GetRoomByName(match.Groups[2].Value);
                 if (targetRoom != null)
                 {
                     CompleteCurrentMission(); // make sure the report mission is gone...
@@ -607,7 +607,7 @@ namespace SineahBot.Data.Behaviours
                 guardList = guards;
             else
                 guardList = captainAffiliation[npc] = new List<NPC>();
-            var room = RoomManager.GetRoom(npc.currentRoomId);
+            var room = RoomManager.GetRoomById(npc.currentRoomId);
             passiveGuards.AddRange(guardList.Where(x => room.npcs.Contains(x)));
         }
 

@@ -8,6 +8,7 @@ namespace SineahBot.Data.World
 {
     public static class Roads
     {
+        public static readonly string RegionPrefix = "ROADS";
         public static class s
         {
             public static class Rooms
@@ -51,27 +52,27 @@ namespace SineahBot.Data.World
             public static class Rooms
             {
                 private static string description = "You are on the road connecting Sineah to the Neraji desert";
-                public static Room EasternRoad0 = new Room("Eastern road")
+                public static Room EasternRoad0 = new Room("Eastern road", $"{RegionPrefix}_SD_R0")
                 {
                     description = $"{description}. West is the Eastern Gate leading into the city. Following the road East will eventually lead you to the Neraji desert."
                 };
-                public static Room EasternRoad1 = new Room("Eastern road stretch")
+                public static Room EasternRoad1 = new Room("Eastern road stretch", $"{RegionPrefix}_SD_R1")
                 {
                     description = $"{description}. Close by to the West is the city of Sineah. Following the road East will lead you to the Neraji desert."
                 };
-                public static Room EasternRoad2 = new Room("Eastern road highway")
+                public static Room EasternRoad2 = new Room("Eastern road highway", $"{RegionPrefix}_SD_R2")
                 {
                     description = $"{description}. In the distance to the West, you can see the city of Sineah. Following the road East will lead you to the Neraji desert."
                 };
-                public static Room EasternRoad3 = new Room("Eastern road summit")
+                public static Room EasternRoad3 = new Room("Eastern road summit", $"{RegionPrefix}_SD_R3")
                 {
                     description = $"{description}. Far to the West is the city of Sineah. To the East, you can see the Neraji desert stretch across the horizon."
                 };
-                public static Room DesertRoad0 = new Room("Desertic road")
+                public static Room DesertRoad0 = new Room("Desertic road", $"{RegionPrefix}_SD_D0")
                 {
                     description = $"{description}. Following the road West will lead you to Sineah. Heading East, the road leads deeper into the Neraji desert."
                 };
-                public static Room DesertRoad1 = new Room("Neraji road")
+                public static Room DesertRoad1 = new Room("Neraji road", $"{RegionPrefix}_SD_D1")
                 {
                     description = $"{description}. Following the road West will lead you to Sineah. Heading East, the road ends into the Neraji desert."
                 };
@@ -148,7 +149,7 @@ namespace SineahBot.Data.World
 
         public static IEnumerable<Room> rooms;
         #region CONNECTIONS
-        public static RoomConnection[] roadConnections = new RoomConnection[] {
+        public static RoomConnection[] GetAreaConnections() => new RoomConnection[] {
             // sineah to eastern road
             new RoomConnection(Sineah.Streets.Rooms.EGate, SineahToDesert.Rooms.EasternRoad0)
             {
@@ -172,7 +173,7 @@ namespace SineahBot.Data.World
             CharacterManager.LoadCharacters(SineahToDesert.GetCharacters());
 
             // CONNECT ROADS
-            RoomManager.LoadRoomConnections(roadConnections);
+            RoomManager.LoadRoomConnections(GetAreaConnections());
 
             // PLACE CONTAINERS IN ROOMS
 

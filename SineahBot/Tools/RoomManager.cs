@@ -10,12 +10,14 @@ namespace SineahBot.Tools
 {
     public static class RoomManager
     {
-        public static Dictionary<Guid, Room> rooms = new Dictionary<Guid, Room>();
+        public static Dictionary<string, Room> rooms = new Dictionary<string, Room>();
         public static void LoadRooms(IEnumerable<Room> rooms)
         {
             foreach (var room in rooms)
             {
-                RoomManager.rooms.Add(room.id, room);
+                if (RoomManager.rooms.TryGetValue(room.id, out var r))
+                    Logging.Log($"Warning: room {r.name} will replace room {room.name} with id \"{room.id}\"");
+                RoomManager.rooms[room.id] = room;
             }
         }
         public static void LoadRoomConnections(IEnumerable<RoomConnection> roomConnections)
@@ -61,25 +63,25 @@ namespace SineahBot.Tools
             room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterLeaves) { source = character, direction = direction }, character);
             room.RemoveFromRoom(character);
             destination.toRoom.AddToRoom(character);
-            destination.toRoom.RaiseRoomEvent(new RoomEvent(destination.toRoom, RoomEventType.CharacterEnters) { source = character}, character);
+            destination.toRoom.RaiseRoomEvent(new RoomEvent(destination.toRoom, RoomEventType.CharacterEnters) { source = character }, character);
             return true;
         }
         public static void RemoveFromCurrentRoom(Entity entity, bool feedback = true)
         {
-            if (entity.currentRoomId != Guid.Empty)
+            if (entity.currentRoomId != Guid.Empty.ToString())
             {
                 rooms[entity.currentRoomId].RemoveFromRoom(entity, feedback);
             }
         }
-        public static Room GetRoom(Guid idRoom)
+        public static Room GetRoomById(string idRoom)
         {
             return rooms[idRoom];
         }
-        public static Room GetRoom(string name)
+        public static Room GetRoomByName(string name)
         {
             return rooms.Values.FirstOrDefault(x => string.Equals(x.name, name, StringComparison.OrdinalIgnoreCase));
         }
-        public static Guid GetSpawnRoomId()
+        public static string GetSpawnRoomId()
         {
             return rooms.Values.First(x => x.isSpawnRoom).id;
         }

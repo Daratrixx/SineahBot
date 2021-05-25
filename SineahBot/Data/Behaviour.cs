@@ -28,7 +28,7 @@ namespace SineahBot.Data
         {
             this.npc = npc;
             npc.behaviour = this;
-            originalRoom = RoomManager.GetRoom(npc.currentRoomId);
+            originalRoom = RoomManager.GetRoomByName(npc.currentRoomId);
         }
 
         public virtual void GenerateTravelToOriginMission()
@@ -111,7 +111,7 @@ namespace SineahBot.Data
             ? Flee(from, dir)
             : Move(from, dir))
             {
-                return RoomManager.GetRoom(npc.currentRoomId);
+                return RoomManager.GetRoomById(npc.currentRoomId);
             }
 
             return from;

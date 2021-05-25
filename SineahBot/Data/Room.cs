@@ -9,23 +9,28 @@ using System.Text;
 
 namespace SineahBot.Data
 {
-    public class Room : DataItem, IObservable, INeighbor<Room>
+    public class Room : IObservable, INeighbor<Room>
     {
         public Room()
         {
-            id = Guid.NewGuid();
         }
         public Room(string roomName)
         {
-            id = Guid.NewGuid();
+            name = roomName;
+        }
+        public Room(string roomName, string roomId)
+        {
+            id = roomId;
             name = roomName;
         }
         public override string ToString()
         {
             return @$"Room ""{name}"" ({id})";
         }
-        public bool isSpawnRoom { get; set; }
-        public string description { get; set; }
+        public string id = "VOID";
+        public string name = "The Void";
+        public bool isSpawnRoom = false;
+        public string description = "Pure emptiness.";
 
         public List<Entity> entities = new List<Entity>();
         public IEnumerable<Character> characters { get { return entities.Where(x => x is Character).Select(x => x as Character); } }
@@ -171,7 +176,7 @@ namespace SineahBot.Data
             }
             if (entity is NPC npc)
             {
-                if (npc.idSpawnRoom == Guid.Empty)
+                if (npc.idSpawnRoom == Guid.Empty.ToString())
                     npc.idSpawnRoom = this.id;
             }
         }
@@ -182,7 +187,7 @@ namespace SineahBot.Data
             {
                 entities.Remove(entity);
             }
-            entity.currentRoomId = Guid.Empty;
+            entity.currentRoomId = Guid.Empty.ToString();
             if (feedback && entity is Character character)
             {
                 DescribeAction($"{entity.name} has left the room.", entity as IAgent);

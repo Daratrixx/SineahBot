@@ -18,7 +18,7 @@ namespace SineahBot.Data
         public string shortDescription { get; set; }
         public string longDescription { get; set; }
 
-        public Guid idSpawnRoom { get; set; }
+        public string idSpawnRoom { get; set; }
         public bool elite;
 
         public Shop shop { get; private set; }
@@ -141,7 +141,7 @@ namespace SineahBot.Data
                 {
                     if (!IsDead() && source != null)
                     {
-                        CommandManager.ParseInCharacterMessage(this, $"atk {source.GetName()}", RoomManager.GetRoom(currentRoomId));
+                        CommandManager.ParseInCharacterMessage(this, $"atk {source.GetName()}", RoomManager.GetRoomByName(currentRoomId));
                     }
                 });
             }
@@ -157,7 +157,7 @@ namespace SineahBot.Data
             {
                 health = baseHealth;
                 mana = baseMana;
-                var room = RoomManager.GetRoom(idSpawnRoom);
+                var room = RoomManager.GetRoomByName(idSpawnRoom);
                 RoomManager.MoveToRoom(this, room);
                 BehaviourManager.SetActiveForNpc(this, true);
             });
