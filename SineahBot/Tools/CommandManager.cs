@@ -139,6 +139,13 @@ namespace SineahBot.Tools
         public static void ParseInCharacterMessage(Character character, string message, Room room)
         {
             var player = character.agent as Player;
+
+            if (player.HasMessageBypass())
+            {
+                player.ConsumeMessageBypass(character, room, message);
+                return;
+            }
+
             var matchingCommands = InCharacterCommands.Where(command => command.IsMessageMatchingCommand(message));
             if (matchingCommands.Count() == 0)
             {

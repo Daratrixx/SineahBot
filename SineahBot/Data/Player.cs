@@ -82,6 +82,29 @@ namespace SineahBot.Data
             Console.WriteLine(output);
         }
 
+        private Action<Character, Room, string> messageBypassHandler = null;
+        public void RegisterMessageBypass(Action<Character, Room, string> handler)
+        {
+            messageBypassHandler = handler;
+            Message("Type `cancel` if you want to abort the action.");
+        }
+        public bool HasMessageBypass()
+        {
+            return messageBypassHandler != null;
+        }
+        public void ConsumeMessageBypass(Character character, Room room, string message)
+        {
+            if (string.Equals(message, "cancel", StringComparison.OrdinalIgnoreCase))
+            {
+                Message("Action canceled.");
+                return;
+            }
+            messageBypassHandler?.Invoke(character, room, message);
+            messageBypassHandler = null;
+        }
+
+
+
         private static ConcurrentBag<Player> playerMessageBuffers = new ConcurrentBag<Player>();
         public static void CommitPlayerMessageBuffers()
         {
@@ -125,7 +148,8 @@ namespace SineahBot.Data
     public class PlayerSettingDescription : Attribute
     {
         public string description;
-        public PlayerSettingDescription(string description) {
+        public PlayerSettingDescription(string description)
+        {
             this.description = description;
         }
 
