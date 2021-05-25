@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace SineahBot.Data.Templates
@@ -87,6 +88,32 @@ namespace SineahBot.Data.Templates
             details = "Consuming this will heal you from common sickness.",
             combatConsumable = false,
             OnConsumed = (character) => { character.RemoveAlteration(AlterationType.Sickness); }
+        };
+        public static Consumable Quill = new Consumable("Quill", new string[] { })
+        {
+            description = "There's a Quill.",
+            details = "Using this will allow you to leave a message in the room you are currently situated.",
+            combatConsumable = false,
+            OnConsumed = (c) =>
+            {
+                c.Message("The next message you send will be written in the room for all to see (replaces any previously written message).");
+                c.RegisterMessageBypass((character, room, message) =>
+                {
+                    var display = room.displays.Where(x => x is Display.PlayerMessage).FirstOrDefault(x => (x as Display.PlayerMessage).writter == character) as Display.PlayerMessage;
+                    if (display != null)
+                    {
+                        room.RemoveFromRoom(display);
+                    }
+                    room.AddToRoom(new Display.PlayerMessage(character, message), false);
+                    c.Message($"You wrote the message: \"{message}\"");
+                    room.DescribeAction($"{character.GetName()} just left a message here.", character);
+                },
+                (character, room) =>
+                {
+                    c.AddToInventory(Quill);
+                    c.Message($"You received a replacement Quill.");
+                });
+            },
         };
 
         // mixte

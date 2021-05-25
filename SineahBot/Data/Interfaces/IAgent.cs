@@ -9,6 +9,6 @@ namespace SineahBot.Interfaces
     public interface IAgent : INamed
     {
         void Message(string message);
-        void RegisterMessageBypass(Action<Character, Room, string> handler);
+        void RegisterMessageBypass(Action<Character, Room, string> handler, Action<Character, Room> cancelHandler = null);
     }
 }

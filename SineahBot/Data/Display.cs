@@ -62,5 +62,17 @@ namespace SineahBot.Data
                 content = content,
             };
         }
+
+        public class PlayerMessage : Display
+        {
+            public readonly Character writter;
+            public PlayerMessage(Character character, string message) : base("Message", new string[] { })
+            {
+                description = "You spot a message.";
+                details = $"Someone left this message here.\n> Type `read message` to read it.";
+                content = new string[] { message };
+                writter = character;
+            }
+        }
     }
 }

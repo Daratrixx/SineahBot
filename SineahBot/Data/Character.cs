@@ -177,6 +177,11 @@ namespace SineahBot.Data
             if (agent != null) agent.Message(message);
         }
 
+        public void RegisterMessageBypass(Action<Character, Room, string> handler, Action<Character, Room> cancelHandler = null)
+        {
+            if (agent != null) agent.RegisterMessageBypass(handler, cancelHandler);
+        }
+
         public bool DeflectionCheck()
         {
             var checkRoll = new Random().Next(1, 100);

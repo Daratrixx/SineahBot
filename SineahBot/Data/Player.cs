@@ -83,9 +83,11 @@ namespace SineahBot.Data
         }
 
         private Action<Character, Room, string> messageBypassHandler = null;
-        public void RegisterMessageBypass(Action<Character, Room, string> handler)
+        private Action<Character, Room> messageBypassCancelHandler = null;
+        public void RegisterMessageBypass(Action<Character, Room, string> handler, Action<Character, Room> cancelHandler = null)
         {
             messageBypassHandler = handler;
+            messageBypassCancelHandler = cancelHandler;
             Message("Type `cancel` if you want to abort the action.");
         }
         public bool HasMessageBypass()
@@ -97,6 +99,9 @@ namespace SineahBot.Data
             if (string.Equals(message, "cancel", StringComparison.OrdinalIgnoreCase))
             {
                 Message("Action canceled.");
+                messageBypassCancelHandler?.Invoke(character, room);
+                messageBypassHandler = null;
+                messageBypassCancelHandler = null;
                 return;
             }
             messageBypassHandler?.Invoke(character, room, message);
