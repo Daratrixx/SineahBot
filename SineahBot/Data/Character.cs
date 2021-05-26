@@ -24,6 +24,7 @@ namespace SineahBot.Data
         public List<CharacterTag> tags = new List<CharacterTag>();
         public Dictionary<EquipmentSlot, Equipment> equipments = new Dictionary<EquipmentSlot, Equipment>();
         public Faction faction;
+        public List<CharacterMessage> messages = new List<CharacterMessage>();
 
         public string gender { get; set; }
         private string _pronouns = "they/them/theirs/their/themselves";
@@ -227,7 +228,7 @@ namespace SineahBot.Data
             }
             if (sleeping)
             {
-                CommandSleep.Awake(this, RoomManager.GetRoomByName(currentRoomId), this is NPC);
+                CommandSleep.Awake(this, RoomManager.GetRoomById(currentRoomId), this is NPC);
             }
             if (currentShop != null) currentShop.RemoveClient(this);
             if (currentContainer != null) currentContainer = null;
@@ -266,7 +267,7 @@ namespace SineahBot.Data
             {
                 if (sleeping)
                 {
-                    CommandSleep.Awake(this, RoomManager.GetRoomByName(currentRoomId), true);
+                    CommandSleep.Awake(this, RoomManager.GetRoomById(currentRoomId), true);
                 }
                 return;
             }
@@ -338,7 +339,7 @@ namespace SineahBot.Data
         public virtual void OnKilled(Entity killer = null)
         {
             var corpse = Containers.CreateContainerFromCharacter(this);
-            var room = RoomManager.GetRoomByName(currentRoomId);
+            var room = RoomManager.GetRoomById(currentRoomId);
             room.AddToRoom(corpse, false);
             new MudTimer(300, () =>
             {
@@ -507,7 +508,7 @@ namespace SineahBot.Data
             actionCooldown = new MudTimer(4, () => { actionCooldown = null; });
             if (sleeping)
             {
-                CommandSleep.Awake(this, RoomManager.GetRoomByName(currentRoomId), this is NPC);
+                CommandSleep.Awake(this, RoomManager.GetRoomById(currentRoomId), this is NPC);
             }
         }
 
@@ -643,6 +644,14 @@ namespace SineahBot.Data
         public Guid id { get; set; }
         public Guid idCharacter { get; set; }
         public string ItemName { get; set; }
+    }
+
+    public class CharacterMessage
+    {
+        public Guid id { get; set; }
+        public Guid idCharacter { get; set; }
+        public string idRoom { get; set; }
+        public string message { get; set; }
     }
 
     public enum DamageType

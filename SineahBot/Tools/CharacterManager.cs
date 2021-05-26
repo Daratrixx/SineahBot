@@ -55,6 +55,7 @@ namespace SineahBot.Tools
                 ClassProgressionManager.ApplyClassProgressionForCharacter(character, true);
                 LoadCharacterInventory(character);
                 LoadCharacterEquipment(character);
+                character.messages.AddRange(Program.database.CharacterMessages.AsQueryable().Where(x => x.idCharacter == character.id));
                 character.faction = FactionManager.CreatePlayerRepFaction();
                 return character;
             }
@@ -160,8 +161,9 @@ namespace SineahBot.Tools
             if (player == null) throw new Exception("Player cannot be null.");
             if (player.character == null || player.idCharacter == null) throw new Exception("This player doesn't have a character to be deleted.");
             var character = player.character;
-            character.agent = null;
             characters.Remove(character.id);
+            character.agent = null;
+            RoomManager.RemoveCharacterMessages(character);
             Program.database.CharacterEquipment.RemoveRange(Program.database.CharacterEquipment.AsQueryable().Where(x => x.idCharacter == character.id));
             Program.database.CharacterItems.RemoveRange(Program.database.CharacterItems.AsQueryable().Where(x => x.idCharacter == character.id));
             Program.database.Characters.Remove(character);

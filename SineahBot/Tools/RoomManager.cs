@@ -3,8 +3,6 @@ using SineahBot.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace SineahBot.Tools
 {
@@ -17,8 +15,42 @@ namespace SineahBot.Tools
             {
                 if (RoomManager.rooms.TryGetValue(room.id, out var r))
                     Logging.Log($"Warning: room {r.name} will replace room {room.name} with id \"{room.id}\"");
+                LoadRoomMessages(room);
                 RoomManager.rooms[room.id] = room;
             }
+        }
+        public static void LoadRoomMessages(Room room)
+        {
+            var messages = Program.database.CharacterMessages.AsQueryable().Where(x => x.idRoom == room.id).ToArray();
+            if (messages.Count() == 0) return;
+            foreach (var message in messages)
+            {
+                room.AddToRoom(new Display.PlayerMessage(message.idCharacter, message.message), false);
+            }
+        }
+        public static void SaveRooms()
+        {
+            SaveRoomMessages();
+        }
+        public static void SaveRoomMessages()
+        {
+            // erase existing messages
+            Program.database.CharacterMessages.RemoveRange(Program.database.CharacterMessages);
+            foreach (var room in rooms.Values)
+            {
+                // insert current messages
+                var messages = room.displays.Where(x => x is Display.PlayerMessage).Select(x => x as Display.PlayerMessage);
+                Program.database.CharacterMessages.AddRange(messages.Select(x => new CharacterMessage() { id = Guid.NewGuid(), idCharacter = x.idWritter, idRoom = room.id, message = x.content.First() }));
+            }
+        }
+        public static void RemoveCharacterMessages(Character character)
+        {
+            foreach (var message in character.messages)
+            {
+                var room = rooms[message.idRoom];
+                room.entities.RemoveAll(x => x is Display.PlayerMessage m && m.idWritter == character.id);
+            }
+            Program.database.CharacterMessages.RemoveRange(Program.database.CharacterMessages.AsQueryable().Where(x => x.idCharacter == character.id));
         }
         public static void LoadRoomConnections(IEnumerable<RoomConnection> roomConnections)
         {

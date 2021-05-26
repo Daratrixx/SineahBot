@@ -141,7 +141,7 @@ namespace SineahBot.Data
                 {
                     if (!IsDead() && source != null)
                     {
-                        CommandManager.ParseInCharacterMessage(this, $"atk {source.GetName()}", RoomManager.GetRoomByName(currentRoomId));
+                        CommandManager.ParseInCharacterMessage(this, $"atk {source.GetName()}", RoomManager.GetRoomById(currentRoomId));
                     }
                 });
             }
@@ -157,7 +157,7 @@ namespace SineahBot.Data
             {
                 health = baseHealth;
                 mana = baseMana;
-                var room = RoomManager.GetRoomByName(idSpawnRoom);
+                var room = RoomManager.GetRoomById(idSpawnRoom);
                 RoomManager.MoveToRoom(this, room);
                 BehaviourManager.SetActiveForNpc(this, true);
             });

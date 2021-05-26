@@ -97,7 +97,7 @@ namespace SineahBot.Tools
                 }
                 if (m2.Is("!die", "!kill", "!death", "!suicide", "!reroll") && player.character != null && player.character.currentRoomId != Guid.Empty.ToString())
                 {
-                    RoomManager.GetRoomByName(player.character.currentRoomId).DescribeAction($"**{player.GetName()}** died.");
+                    RoomManager.GetRoomById(player.character.currentRoomId).DescribeAction($"**{player.GetName()}** died.");
                     player.character.OnKilled(null); // calls combat manager and removes player
                     return true;
                 }

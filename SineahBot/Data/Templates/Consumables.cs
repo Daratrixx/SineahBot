@@ -99,12 +99,14 @@ namespace SineahBot.Data.Templates
                 c.Message("The next message you send will be written in the room for all to see (replaces any previously written message).");
                 c.RegisterMessageBypass((character, room, message) =>
                 {
-                    var display = room.displays.Where(x => x is Display.PlayerMessage).FirstOrDefault(x => (x as Display.PlayerMessage).writter == character) as Display.PlayerMessage;
+                    var display = room.displays.Where(x => x is Display.PlayerMessage).FirstOrDefault(x => (x as Display.PlayerMessage).idWritter == character.id) as Display.PlayerMessage;
                     if (display != null)
                     {
                         room.RemoveFromRoom(display);
+                        character.messages.RemoveAll(x => x.idRoom == room.id);
                     }
                     room.AddToRoom(new Display.PlayerMessage(character, message), false);
+                    character.messages.Add(new CharacterMessage() { idCharacter = character.id, idRoom = room.id });
                     c.Message($"You wrote the message: \"{message}\"");
                     room.DescribeAction($"{character.GetName()} just left a message here.", character);
                 },

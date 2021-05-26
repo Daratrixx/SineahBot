@@ -22,6 +22,7 @@ namespace SineahBot
         {
             CharacterManager.SaveLoadedCharacters();
             PlayerManager.SavePlayers();
+            RoomManager.SaveRooms();
             database.SaveChanges();
         }
 
@@ -32,7 +33,8 @@ namespace SineahBot
         {
             Worlds.LoadWorlds();
             BehaviourManager.StartBehaviourTimer();
-            new MudInterval(300, () => {
+            new MudInterval(300, () =>
+            {
                 SaveData();
             });
             try

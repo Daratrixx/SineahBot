@@ -65,13 +65,20 @@ namespace SineahBot.Data
 
         public class PlayerMessage : Display
         {
-            public readonly Character writter;
+            public readonly Guid idWritter;
+            public PlayerMessage(Guid idCharacter, string message) : base("Message", new string[] { })
+            {
+                description = "You spot a message.";
+                details = $"Someone left this message here.\n> Type `read message` to read it.";
+                content = new string[] { message };
+                idWritter = idCharacter;
+            }
             public PlayerMessage(Character character, string message) : base("Message", new string[] { })
             {
                 description = "You spot a message.";
                 details = $"Someone left this message here.\n> Type `read message` to read it.";
                 content = new string[] { message };
-                writter = character;
+                idWritter = character.id;
             }
         }
     }

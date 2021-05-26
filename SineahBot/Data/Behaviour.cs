@@ -28,11 +28,12 @@ namespace SineahBot.Data
         {
             this.npc = npc;
             npc.behaviour = this;
-            originalRoom = RoomManager.GetRoomByName(npc.currentRoomId);
+            originalRoom = RoomManager.GetRoomById(npc.currentRoomId);
         }
 
         public virtual void GenerateTravelToOriginMission()
         {
+            if (originalRoom == null) return;
             currentMission = new BehaviourMission.Travel(originalRoom);
             missions.Add(currentMission);
         }
@@ -125,7 +126,7 @@ namespace SineahBot.Data
         }
         public bool Flee(Room from, MoveDirection dir)
         {
-           return CommandCombatFlee.Flee(npc, from, dir);
+            return CommandCombatFlee.Flee(npc, from, dir);
         }
         public void Say(Room room, string say)
         {
@@ -160,7 +161,7 @@ namespace SineahBot.Data
         {
             public Fighting() : base(null) { }
         }
-        
+
         public abstract class Roam : BehaviourMission
         {
             public Roam() : base(null) { }

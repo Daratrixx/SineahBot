@@ -19,7 +19,10 @@ namespace SineahBot.Data.Behaviours
 
         public virtual void GenerateRoamTravelMission(BehaviourMission.Roam roam)
         {
-            currentMission = new BehaviourMission.Travel(roam.GetDestination());
+            var travel = new BehaviourMission.Travel(roam.GetDestination());
+            if (travel.destination == null)
+                Logging.Log("Error: Roam generated Travel without destination.");
+            currentMission = travel;
             missions.Add(currentMission);
         }
         public abstract void ParseHostileEvent(RoomEvent e, Character source);
@@ -215,7 +218,7 @@ namespace SineahBot.Data.Behaviours
                 var source = match.Groups[1].Value;
                 var verb = RoomEvent.GetTypeFromVerb(match.Groups[2].Value);
                 var room = match.Groups[3].Value;
-                Say(RoomManager.GetRoomByName(npc.currentRoomId), memoryTracker.ConfirmMemory(source, verb, room));
+                Say(RoomManager.GetRoomById(npc.currentRoomId), memoryTracker.ConfirmMemory(source, verb, room));
             }
             match = AskTargetEvent.Match(e.speakingContent);
             if (match.Success)
@@ -224,7 +227,7 @@ namespace SineahBot.Data.Behaviours
                 var verb = RoomEvent.GetTypeFromVerb(match.Groups[2].Value);
                 var target = match.Groups[3].Value;
                 var room = match.Groups[4].Value;
-                Say(RoomManager.GetRoomByName(npc.currentRoomId), memoryTracker.ConfirmMemory(source, verb, target, room));
+                Say(RoomManager.GetRoomById(npc.currentRoomId), memoryTracker.ConfirmMemory(source, verb, target, room));
             }
             base.ParseSpeachEvent(e);
         }

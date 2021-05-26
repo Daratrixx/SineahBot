@@ -34,7 +34,7 @@ namespace SineahBot.Tools
                 var character = CharacterManager.CreateCharacterForPlayer(state); // create character
                 character.currentRoomId = RoomManager.GetSpawnRoomId(); // get spawn room
                 p.Message($@"You are now ready to walk the world. Type **!help** to learn how to play. Farewell for now, mortal."); // display informations
-                RoomManager.GetRoomByName(character.currentRoomId).AddToRoom(character); // add player to room, will display room description
+                RoomManager.GetRoomById(character.currentRoomId).AddToRoom(character); // add player to room, will display room description
                 p.playerStatus = PlayerStatus.InCharacter; // indicate that the player is now in character and further commands must go in that pipeline
                 playerCharacterCreation.Remove(p); // forget the creation state for the player
                 return;
