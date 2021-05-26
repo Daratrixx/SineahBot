@@ -26,24 +26,25 @@ namespace SineahBot.Commands
                 character.Message("You are asleep.");
                 return;
             }
-            var speach = GetArgument(2);
+            var speech = GetArgument(2);
 
-            if (String.IsNullOrWhiteSpace(speach))
+            if (String.IsNullOrWhiteSpace(speech))
             {
                 character.Message("What are you trying to say ?");
                 return;
             }
 
-            Say(character, room, speach);
+            Say(character, room, speech);
 
             character.RewardExperience(1);
         }
 
-        public static void Say(Character character, Room room, string speach)
+        public static void Say(Character character, Room room, string speech)
         {
-            room.DescribeAction($@"**{character.GetName()}** said: ""{speach}""", character);
-            room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterSpeaks) { source = character, speakingContent = speach }, character);
-            character.Message($@"You said: ""{speach}""");
+            speech = CensorManager.FilterMessage(speech);
+            room.DescribeAction($@"**{character.GetName()}** said: ""{speech}""", character);
+            room.RaiseRoomEvent(new RoomEvent(room, RoomEventType.CharacterSpeaks) { source = character, speakingContent = speech }, character);
+            character.Message($@"You said: ""{speech}""");
         }
     }
 }

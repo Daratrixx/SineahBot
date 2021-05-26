@@ -39,6 +39,7 @@ namespace SineahBot.Commands
 
         public static void Act(Character character, Room room, string act)
         {
+            act = CensorManager.FilterMessage(act);
             room.DescribeAction($@"***{character.GetName()}** {act}*", character);
             character.Message($@"***{character.GetName()}** {act}*");
 

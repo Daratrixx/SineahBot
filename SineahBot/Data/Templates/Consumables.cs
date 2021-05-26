@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SineahBot.Tools;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -105,6 +106,7 @@ namespace SineahBot.Data.Templates
                         room.RemoveFromRoom(display);
                         character.messages.RemoveAll(x => x.idRoom == room.id);
                     }
+                    message = CensorManager.FilterMessage(message);
                     room.AddToRoom(new Display.PlayerMessage(character, message), false);
                     character.messages.Add(new CharacterMessage() { idCharacter = character.id, idRoom = room.id });
                     c.Message($"You wrote the message: \"{message}\"");
@@ -113,7 +115,7 @@ namespace SineahBot.Data.Templates
                 (character, room) =>
                 {
                     c.AddToInventory(Quill);
-                    c.Message($"You received a replacement Quill.");
+                    c.Message($"You recovered your Quill.");
                 });
             },
         };

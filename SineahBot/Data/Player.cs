@@ -54,6 +54,13 @@ namespace SineahBot.Data
         protected List<string> messageBuffer = new List<string>();
         public void Message(string message)
         {
+            if (playerSettings.Censor)
+            {
+                var tmp = message;
+                message = CensorManager.CensorMessage(message);
+                if (tmp != message)
+                    Logging.Log($"Censor: \"{tmp}\"\n\t=>\t\"{message}\"");
+            }
             lock (playerMessageBuffers)
             {
                 lock (messageBuffer)
