@@ -132,7 +132,7 @@ namespace SineahBot.Tools
             character.characterClass = state.characterClass;
             character.level = 1;
             character.experience = 0;
-            character.gold = 20;
+            character.gold = 90;
             ClassProgressionManager.ApplyClassProgressionForCharacter(character, true);
             if (ClassProgressionManager.IsPhysicalClass(character.characterClass))
             {
@@ -148,6 +148,8 @@ namespace SineahBot.Tools
             {
                 character.AddToInventory(Data.Templates.Consumables.Candy);
             }
+            character.AddToInventory(Data.Templates.Equipments.Weapons.Dagger);
+            character.Equip(Data.Templates.Equipments.Weapons.Dagger);
             characters[character.id] = character;
             Program.database.Characters.Add(character);
             character.faction = FactionManager.CreatePlayerRepFaction();
