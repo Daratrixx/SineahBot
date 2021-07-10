@@ -84,11 +84,11 @@ namespace SineahBot.Data
                 {
                     if (caster != null)
                     {
-                        return $"- Damages target\n> Damaging potential : **{baseDamage + caster.GetSpellPower()} ({baseDamage} + [spell power])**\n> Damage type: {DamageType.Magical}";
+                        return $"- Damages target\n> Damaging potential : **{baseDamage + caster.GetSpellPower()} ({baseDamage} + [spell power])**\n> Damage type: {DamageType.Arcane}";
                     }
                     else
                     {
-                        return $"- Damages target\n> Damaging potential : **{baseDamage} + [spell power]**\n> Damage type: {DamageType.Magical}";
+                        return $"- Damages target\n> Damaging potential : **{baseDamage} + [spell power]**\n> Damage type: {DamageType.Arcane}";
                     }
                 }
 
@@ -97,7 +97,7 @@ namespace SineahBot.Data
                     if (target is IDamageable)
                     {
                         var damageAmount = ((baseDamage + caster.GetSpellPower()) * new Random().Next(50, 100) / 100);
-                        (target as IDamageable).DamageHealth(damageAmount, DamageType.Magical, caster as Entity);
+                        (target as IDamageable).DamageHealth(damageAmount, DamageType.Arcane, caster as Entity);
                     }
                 }
             }

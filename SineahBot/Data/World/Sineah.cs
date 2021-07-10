@@ -394,7 +394,7 @@ namespace SineahBot.Data.World
 
             public static class Characters
             {
-                public static Character Bartender = Templates.CityFolks.Bartender.Clone().SetFaction(FactionManager.Sineah)
+                public static NPC Bartender = Templates.CityFolks.Bartender.Clone().SetFaction(FactionManager.Sineah)
                     .RegisterShop(Shops.Bartender)
                     .AddKnowledgeBase(Knowledge.Global.HumanAll)
                     .GenerateTraderKnowledge()
@@ -407,7 +407,7 @@ namespace SineahBot.Data.World
                     .RegisterKnowlede("waiter", "\"**Ask them for drinks, or the [inn specility].**\"")
                     .RegisterKnowlede(new string[] { "Rat", "Rats", "cellar" }, "\"**Yeah we have a rat infestation in the cellar. Do you mind helping with that? I'll give you `2` gold pieces for each rat tail you can bring me.**\"")
                     .CompileKnowlede();
-                public static Character Waiter = Templates.CityFolks.Waiter.Clone().SetFaction(FactionManager.Sineah)
+                public static NPC Waiter = Templates.CityFolks.Waiter.Clone().SetFaction(FactionManager.Sineah)
                     .RegisterShop(Shops.Waiter)
                     .GenerateTraderKnowledge()
                     .AddKnowledgeBase(Knowledge.Global.HumanAll)
@@ -416,7 +416,7 @@ namespace SineahBot.Data.World
                     .RegisterKnowlede(new string[] { "food", "meal", "drink", "drinks" }, "\"**I can serve you food and drinks if you order.**\"")
                     .RegisterKnowlede(new string[] { "Rat", "Rats", "cellar" }, "\"**Yeah we have a rat infestation in the cellar. Do you mind helping with that? The bartender will give you `2` gold pieces for each rat tail you can bring them.**\"")
                     .CompileKnowlede();
-                public static Character Cook = Templates.CityFolks.Cook.Clone().SetFaction(FactionManager.Sineah)
+                public static NPC Cook = Templates.CityFolks.Cook.Clone().SetFaction(FactionManager.Sineah)
                     .RegisterShop(Shops.Cook)
                     .GenerateTraderKnowledge()
                     .AddKnowledgeBase(Knowledge.Global.HumanAll)
@@ -425,7 +425,7 @@ namespace SineahBot.Data.World
                     .RegisterKnowlede(new string[] { "speciality", "blanquette" }, "*The cook smiles at you.* \"**My blanquette is the best. Family recipe! Order it from the waiter and taste it for yourself.**\"")
                     .RegisterKnowlede(new string[] { "Rat", "Rats", "cellar" }, "\"**Yeah we have a rat infestation in the cellar. Do you mind helping with that? The bartender will give you `2` gold pieces for each rat tail you can bring them.**\"")
                     .CompileKnowlede();
-                public static Character Drunk = Templates.CityFolks.Drunk.Clone().SetFaction(FactionManager.Sineah)
+                public static NPC Drunk = Templates.CityFolks.Drunk.Clone().SetFaction(FactionManager.Sineah)
                     .AddKnowledgeBase(Knowledge.Global.HumanAll)
                     .RegisterKnowlede(new string[] { "Sineah", "city", "town" }, "\"**I used to love this city. I fought for her for many years. Maybe I should leave now though...**\"")
                     .RegisterKnowlede("guards", "*They smile for a bit.*\n\"**I used to be a guard myself.**\"")
@@ -433,15 +433,15 @@ namespace SineahBot.Data.World
                     .RegisterKnowlede("Undead", "*Their eyes widen for a second.*\n\"**They are better left alone. But the church won't do anything about it...**\"" +
                     "\n*They shake their head.*\n\"**Just don't go there. It's not safe. I can't go there...**\"")
                     .CompileKnowlede();
-                public static Character Customer = Templates.CityFolks.Customer.Clone().SetFaction(FactionManager.Sineah)
+                public static NPC Customer = Templates.CityFolks.Customer.Clone().SetFaction(FactionManager.Sineah)
                     .AddKnowledgeBase(Knowledge.Global.HumanAll)
                     .AddSineahCommonKnowledge()
                     .CompileKnowlede();
-                public static Character ShadyConsumer = Templates.CityFolks.ShadyConsumer.Clone().SetFaction(FactionManager.Sineah)
+                public static NPC ShadyConsumer = Templates.CityFolks.ShadyConsumer.Clone().SetFaction(FactionManager.Sineah)
                     .RegisterShop(Shops.ShadyConsumer);
-                public static Character Rat1 = Templates.Critters.Rat.Clone().SetFaction(FactionManager.Beasts).SetFaction(FactionManager.Beasts);
-                public static Character Rat2 = Templates.Critters.Rat.Clone().SetFaction(FactionManager.Beasts).SetFaction(FactionManager.Beasts);
-                public static Character Rat3 = Templates.Critters.Rat.Clone().SetFaction(FactionManager.Beasts).SetFaction(FactionManager.Beasts);
+                public static NPC Rat1 = Templates.Critters.Rat.Clone().SetFaction(FactionManager.Beasts).SetFaction(FactionManager.Beasts);
+                public static NPC Rat2 = Templates.Critters.Rat.Clone().SetFaction(FactionManager.Beasts).SetFaction(FactionManager.Beasts);
+                public static NPC Rat3 = Templates.Critters.Rat.Clone().SetFaction(FactionManager.Beasts).SetFaction(FactionManager.Beasts);
             }
             public static Character[] GetCharacters()
             {
@@ -462,31 +462,31 @@ namespace SineahBot.Data.World
                 {
                     description = "A heavy iron key is laying around.",
                     details = "A key giving access to the iron chest in the Four Winds innkeepers office.",
-                    permanant = false
+                    permanent = false
                 };
                 public static Item OfficeKey = new Item("Innkeepers office key", new string[] { "key", "office key" })
                 {
                     description = "An ornate key is lying around.",
                     details = "A key giving access to the Four Winds innkeepers office, behind the private meeting room.",
-                    permanant = false
+                    permanent = false
                 };
                 public static Item Room1Key = new Item("Room #1 key", new string[] { "key", "room key" })
                 {
                     description = "A room key is lying around.",
                     details = "A key giving access to the room #1 at the Four Winds inn, on the second floor.",
-                    permanant = false
+                    permanent = false
                 };
                 public static Item Room3Key = new Item("Room #3 key", new string[] { "key", "room key" })
                 {
                     description = "A room key is lying around.",
                     details = "A key giving access to the room #3 at the Four Winds inn, on the second floor.",
-                    permanant = false
+                    permanent = false
                 };
                 public static Item Ragdoll = new Item("Ragdoll", new string[] { "doll", "rdoll" })
                 {
                     description = "A ragdoll lies around.",
                     details = "A little doll shaped out of rags.",
-                    permanant = false
+                    permanent = false
                 };
             }
             public static Item[] GetItems()
@@ -1380,6 +1380,7 @@ namespace SineahBot.Data.World
             .ToArray();
 
             // register behaviours
+            BehaviourManager.RegisterNPC(Inn.Characters.Customer, new Behaviours.SineahBehaviour.Adventurer());
             BehaviourManager.RegisterNPC(Streets.Characters.citizen1, new Behaviours.SineahBehaviour.RoamingCitizen());
             BehaviourManager.RegisterNPC(Streets.Characters.citizen2, new Behaviours.SineahBehaviour.RoamingCitizen());
             BehaviourManager.RegisterNPC(Streets.Characters.beggar, new Behaviours.SineahBehaviour.Beggar());

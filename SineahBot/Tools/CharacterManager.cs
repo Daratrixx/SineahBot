@@ -75,7 +75,7 @@ namespace SineahBot.Tools
         {
             var items = Program.database.CharacterItems.AsQueryable().Where(x => x.idCharacter == character.id);
             Program.database.CharacterItems.RemoveRange(items);
-            items = character.items.AsQueryable().Where(x => x.Key.permanant).Select(item => new CharacterItem()
+            items = character.items.AsQueryable().Where(x => x.Key.permanent).Select(item => new CharacterItem()
             {
                 id = Guid.NewGuid(),
                 idCharacter = character.id,

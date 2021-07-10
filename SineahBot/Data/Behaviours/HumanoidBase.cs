@@ -309,7 +309,7 @@ namespace SineahBot.Data.Behaviours
         public override void ParseHostileEvent(RoomEvent e, Character source)
         {
             if (source.faction == npc.faction) return;
-            if (FactionManager.GetFactionRelation(source.faction, npc.faction) <= FactionRelation.Neutral) return;
+            //if (FactionManager.GetFactionRelation(source.faction, npc.faction) <= FactionRelation.Neutral) return;
             var targetHunt = targets.FirstOrDefault(x => x.target == source);
             if (targetHunt != null) return;
             targetHunt = new BehaviourMission.Hunt(e, source);
@@ -371,6 +371,23 @@ namespace SineahBot.Data.Behaviours
             if (hunted.Count() == 0) return false;
             CombatManager.EngageCombat(npc, hunted.Select(x => x.target).ToArray());
             return true;
+        }
+    }
+
+    public class AdventurerBase : MilitianBase
+    {
+        public override void ParseMemory(RoomEvent e)
+        {
+            switch (e.type)
+            {
+                case RoomEventType.CharacterKills:
+                    Say(RoomManager.GetRoomById(npc.currentRoomId), "This is bad!");
+                    ParseHostileEvent(e, e.source);
+                    return;
+                default:
+                    break;
+            }
+            base.ParseMemory(e);
         }
     }
 

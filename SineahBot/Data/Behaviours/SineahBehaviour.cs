@@ -56,6 +56,10 @@ namespace SineahBot.Data.Behaviours
         {
             public Militian() : base() { }
         }
+        public class Adventurer : AdventurerBase
+        {
+            public Adventurer() : base() { }
+        }
         public class Guard : GuardBase<SineahReport, SineahRest>
         {
             public Guard(NPC captain) : base(captain) { }

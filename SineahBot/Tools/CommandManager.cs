@@ -140,7 +140,7 @@ namespace SineahBot.Tools
         {
             var player = character.agent as Player;
 
-            if (player.HasMessageBypass())
+            if (player?.HasMessageBypass() == true)
             {
                 player.ConsumeMessageBypass(character, room, message);
                 return;

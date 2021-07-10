@@ -139,9 +139,9 @@ namespace SineahBot.Data
             {
                 new MudTimer(1, () =>
                 {
-                    if (!IsDead() && source != null)
+                    if (!IsDead() && source is Entity e)
                     {
-                        CommandManager.ParseInCharacterMessage(this, $"atk {source.GetName()}", RoomManager.GetRoomById(currentRoomId));
+                        Commands.CommandCombatAttack.Attack(this, RoomManager.GetRoomById(currentRoomId), e);
                     }
                 });
             }

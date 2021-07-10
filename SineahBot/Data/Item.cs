@@ -18,12 +18,12 @@ namespace SineahBot.Data
         public string description { get; set; }
         public string details { get; set; }
 
-        public bool permanant = true; // non-permanant items are removed from players inventory when the bot resets.
+        public bool permanent = true; // non-permanant items are removed from players inventory when the bot resets.
 
         public virtual string GetFullDescription(IAgent agent = null)
         {
             return details 
-            + (permanant ? "" : " (*Will be lost upon bot restart*)");
+            + (permanent ? "" : " (*Will be lost upon bot restart*)");
         }
 
         public string GetShortDescription(IAgent agent = null)

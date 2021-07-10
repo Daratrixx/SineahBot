@@ -95,6 +95,13 @@ namespace SineahBot.Data
         public int bonusDeflection = 0;
         public int bonusEvasion = 0;
 
+        public List<DamageType> resistances = new List<DamageType>();
+        public List<DamageType> weaknesses = new List<DamageType>();
+
+        public DamageType defaultAttackDamageType;
+        public DamageType? weaponAttackDamageType = null;
+
+
         public List<Spell> bonusSpells = new List<Spell>();
 
         public int RewardExperience(int amount)
@@ -210,7 +217,7 @@ namespace SineahBot.Data
                         (source as IAgent)?.Message($"{GetName()} deflected your attack.");
                     }
                     break;
-                case DamageType.Magical:
+                case DamageType.Arcane:
                     if (HasAlteration(AlterationType.Warded))
                         damageAmount /= 2;
                     break;
@@ -656,9 +663,20 @@ namespace SineahBot.Data
 
     public enum DamageType
     {
-        Physical,
-        Magical,
-        Pure
+        // physical
+        Bludgeoning,
+        Slashing,
+        Piercing,
+        // magical
+        Arcane,
+        Fire,
+        Cold,
+        Divine,
+        // other
+        Lightning,
+        Corrosive,
+        Poison,
+        Pure,
     }
 
     public enum CharacterStatus
