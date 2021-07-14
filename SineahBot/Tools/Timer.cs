@@ -26,6 +26,9 @@ namespace SineahBot.Tools
                 {
                     // it's ok!
                 }
+                catch (Exception e) {
+                    Logging.Log(e);
+                }
             })).Start();
             startTime = DateTime.Now;
         }
@@ -63,8 +66,20 @@ namespace SineahBot.Tools
             {
                 while (true)
                 {
-                    Thread.Sleep(interval * 1000);
-                    handler?.Invoke();
+                    try
+                    {
+                        Thread.Sleep(interval * 1000);
+                        handler?.Invoke();
+                        expired = true;
+                    }
+                    catch (ThreadInterruptedException)
+                    {
+                        // it's ok!
+                    }
+                    catch (Exception e)
+                    {
+                        Logging.Log(e);
+                    }
                 }
             })).Start();
             startTime = DateTime.Now;

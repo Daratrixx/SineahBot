@@ -95,6 +95,7 @@ namespace SineahBot
             }
             catch (Exception e)
             {
+                Logging.Log(e);
                 message.Channel.SendMessageAsync("Error : " + e.Message);
             }
             Player.CommitPlayerMessageBuffers();
