@@ -57,13 +57,19 @@ namespace SineahBot.Tools
         // must be run when forwarding content to player with censor toggled on
         public static string CensorMessage(string message)
         {
+            var builder = new StringBuilder(message);
             // filter words
             foreach (var w in bannedWords)
             {
-                if (message.Contains(w, StringComparison.OrdinalIgnoreCase))
-                    message = message.Replace(w, Stars(w.Length));
+                var matches = new Regex(@$"(^|\W){bannedWords}(\W|$)", RegexOptions.IgnoreCase | RegexOptions.Multiline).Matches(message).AsEnumerable();
+                foreach (var match in matches)
+                {
+                    builder
+                        .Remove(match.Index, match.Length)
+                        .Insert(match.Index, Stars(match.Length));
+                }
             }
-            return message;
+            return builder.ToString();
         }
         public static string Stars(int length)
         {

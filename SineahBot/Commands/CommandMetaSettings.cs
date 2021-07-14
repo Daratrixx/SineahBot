@@ -46,7 +46,7 @@ namespace SineahBot.Commands
             }
 
             setting.SetValue(settings, !(bool)setting.GetValue(settings));
-            character.Message($"**SETTINGS**\nNew value for setting `{setting.Name}` is now *{setting.GetValue(settings)}*.");
+            character.Message($"**SETTINGS**\nValue for setting `{setting.Name}` is now **{setting.GetValue(settings)}**.");
         }
         public string GetCharacterPlayerSettings(Character character)
         {
