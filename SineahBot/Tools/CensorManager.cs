@@ -8,8 +8,8 @@ namespace SineahBot.Tools
 {
     public static class CensorManager
     {
-        private static readonly string censorFilePath = "./config/censor.txt";
-        private static readonly string whitelistFilePath = "./config/whitelist.txt";
+        private static readonly string censorFilePath = "../config/censor.txt";
+        private static readonly string whitelistFilePath = "../config/whitelist.txt";
         static CensorManager()
         {
             var censorLines = File.ReadAllLines(censorFilePath);
