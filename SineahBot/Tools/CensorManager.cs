@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -8,12 +8,19 @@ namespace SineahBot.Tools
 {
     public static class CensorManager
     {
+        private static readonly string censorFilePath = "./config/censor.txt";
+        private static readonly string whitelistFilePath = "./config/whitelist.txt";
+        static CensorManager()
+        {
+            var censorLines = File.ReadAllLines(censorFilePath);
+            var whitelistLines = File.ReadAllLines(whitelistFilePath);
+            bannedWords = censorLines;
+            urlWhitelist = whitelistLines;
+        }
+        private static readonly string[] urlWhitelist;
+        private static string[] bannedWords;
 
         private static readonly Regex urlRegex = new Regex(@"(https?:\/\/)?(www\.)?(([a-zA-Z1-9-_\.]+)\.([a-zA-Z]+))(\/[^ >]*)?");
-        private static readonly string[] urlWhitelist = new string[] {
-            "youtube.com",
-            "discord.com",
-        };
         // must be run on every player-generated content
         public static string FilterMessage(string message)
         {
@@ -35,24 +42,6 @@ namespace SineahBot.Tools
 
             return FilterMessageUrl(message, urlMatch.Index + urlMatch.Length); // check again beyond what was not filtered
         }
-
-        private static string[] bannedWords = new string[] {
-            "nigger",
-            "nigga",
-            "dick",
-            "cock",
-            "penis",
-            "ass",
-            "boobs",
-            "pussy",
-            "cunt",
-            "vagina",
-            "clitoris",
-            "clit",
-            "slut",
-            "whore",
-            "hoe",
-        };
 
         // must be run when forwarding content to player with censor toggled on
         public static string CensorMessage(string message)
