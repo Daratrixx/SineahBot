@@ -176,7 +176,7 @@ namespace SineahBot.Data
             }
             if (entity is NPC npc)
             {
-                if (npc.idSpawnRoom == Guid.Empty.ToString())
+                if (npc.idSpawnRoom == null)
                     npc.idSpawnRoom = this.id;
             }
         }

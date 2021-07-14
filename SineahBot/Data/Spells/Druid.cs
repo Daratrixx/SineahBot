@@ -16,6 +16,7 @@ namespace SineahBot.Data.Spells
             manaCost = 10,
             needsTarget = true,
             canSelfCast = true,
+            aggressiveSpell = false,
             effects = new Spell.Effect[] {
                 new Spell.Effect.Heal() {
                     baseHeal = 15
@@ -40,6 +41,7 @@ namespace SineahBot.Data.Spells
             manaCost = 5,
             needsTarget = true,
             canSelfCast = true,
+            aggressiveSpell = false,
             effects = new Spell.Effect[] {
                 new Spell.Effect.RemoveAlter() {
                     alteration = AlterationType.Poisoned
@@ -69,6 +71,7 @@ namespace SineahBot.Data.Spells
             manaCost = 15,
             needsTarget = true,
             canSelfCast = false,
+            aggressiveSpell = false,
             effects = new Spell.Effect[] {
                 new Spell.Effect.Custom(
                 (caster,target) =>

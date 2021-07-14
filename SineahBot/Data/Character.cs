@@ -25,6 +25,7 @@ namespace SineahBot.Data
         public Dictionary<EquipmentSlot, Equipment> equipments = new Dictionary<EquipmentSlot, Equipment>();
         public Faction faction;
         public List<CharacterMessage> messages = new List<CharacterMessage>();
+        public Character tauntSource = null;
 
         public string gender { get; set; }
         private string _pronouns = "they/them/theirs/their/themselves";
@@ -98,8 +99,12 @@ namespace SineahBot.Data
         public List<DamageType> resistances = new List<DamageType>();
         public List<DamageType> weaknesses = new List<DamageType>();
 
-        public DamageType defaultAttackDamageType;
-        public DamageType? weaponAttackDamageType = null;
+        public DamageType defaultAttackDamageType = DamageType.Bludgeoning;
+        public DamageType? weaponDamageOverwrite = null;
+        public DamageType GetDamageType()
+        {
+            return weaponDamageOverwrite ?? defaultAttackDamageType;
+        }
 
 
         public List<Spell> bonusSpells = new List<Spell>();
@@ -204,9 +209,19 @@ namespace SineahBot.Data
 
         public virtual void DamageHealth(int damageAmount, DamageType type, INamed source = null)
         {
+            if (weaknesses.Contains(type))
+            {
+                damageAmount = damageAmount * 2;
+            }
+            if (resistances.Contains(type))
+            {
+                damageAmount = damageAmount / 2;
+            }
             switch (type)
             {
-                case DamageType.Physical:
+                case DamageType.Bludgeoning:
+                case DamageType.Slashing:
+                case DamageType.Piercing:
                     if (HasAlteration(AlterationType.Hardened))
                         damageAmount /= 2;
                     damageAmount = (int)(damageAmount * (1 - GetArmorDamageReduction()));
@@ -218,20 +233,26 @@ namespace SineahBot.Data
                     }
                     break;
                 case DamageType.Arcane:
+                case DamageType.Fire:
+                case DamageType.Cold:
+                case DamageType.Divine:
                     if (HasAlteration(AlterationType.Warded))
                         damageAmount /= 2;
+                    break;
+                case DamageType.Corrosive:
+                    AddAlteration(AlterationType.Corroded, damageAmount);
                     break;
                 default: break;
             }
             health = Math.Max(0, health - damageAmount);
             if (source != null && source != this && source != agent)
             {
-                Message($"You took {damageAmount} damage from {source.GetName()}.");
-                (source as IAgent)?.Message($"You dealt {damageAmount} damage to {GetName()}.");
+                Message($"You took {damageAmount} {type} damage from {source.GetName()}.");
+                (source as IAgent)?.Message($"You dealt {damageAmount} {type} damage to {GetName()}.");
             }
             else
             {
-                Message($"You took {damageAmount} damage.");
+                Message($"You took {damageAmount} {type} damage.");
             }
             if (sleeping)
             {
@@ -536,11 +557,7 @@ namespace SineahBot.Data
             switch (alteration.alteration)
             {
                 case AlterationType.Burning:
-                    if (HasCharacterTag(CharacterTag.Mecanical)) break;
-                    if (HasCharacterTag(CharacterTag.Undead) || HasCharacterTag(CharacterTag.Plant))
-                        DamageHealth(8, DamageType.Pure, alteration);
-                    else
-                        DamageHealth(2, DamageType.Pure, alteration);
+                    DamageHealth(2, DamageType.Fire, alteration);
                     if (new Random().Next(1, 100) <= 20)
                         AddAlteration(AlterationType.Burnt, 300);
                     break;
@@ -549,12 +566,19 @@ namespace SineahBot.Data
                     DamageHealth(3, DamageType.Pure, alteration);
                     break;
                 case AlterationType.Sickness:
-                    if (HasCharacterTag(CharacterTag.Mecanical)) break;
-                    DamageHealth(2, DamageType.Pure, alteration);
+                    if (HasCharacterTag(CharacterTag.Mecanical) || HasCharacterTag(CharacterTag.Undead)) break;
+                    DamageHealth(2, DamageType.Poison, alteration);
                     break;
                 case AlterationType.Taunted:
+                    Room tr = RoomManager.GetRoomById(currentRoomId);
+                    if (tauntSource != null && tr.characters.Contains(tauntSource))
+                        CommandCombatAttack.Attack(this, tr, tauntSource);
                     break;
                 case AlterationType.Frenzied:
+                    Room fr = RoomManager.GetRoomById(currentRoomId);
+                    Entity target = fr.characters.Where(x => x != this).FirstOrDefault();
+                    if (target != null)
+                        CommandCombatAttack.Attack(this, fr, target);
                     break;
                 default: break;
             }
@@ -629,7 +653,10 @@ namespace SineahBot.Data
         public double GetArmorDamageReduction()
         {
             if (bonusArmor == 0) return 0;
-            return bonusArmor / (bonusArmor + 20.0);
+            var reduction = bonusArmor / (bonusArmor + 20.0);
+            if (HasAlteration(AlterationType.Corroded))
+                return reduction / 2;
+            return reduction;
         }
 
         public override string ToString()
@@ -659,24 +686,6 @@ namespace SineahBot.Data
         public Guid idCharacter { get; set; }
         public string idRoom { get; set; }
         public string message { get; set; }
-    }
-
-    public enum DamageType
-    {
-        // physical
-        Bludgeoning,
-        Slashing,
-        Piercing,
-        // magical
-        Arcane,
-        Fire,
-        Cold,
-        Divine,
-        // other
-        Lightning,
-        Corrosive,
-        Poison,
-        Pure,
     }
 
     public enum CharacterStatus
@@ -726,5 +735,6 @@ namespace SineahBot.Data
         Lich,
         Rogue,
         Assassin,
+        Barbarian
     }
 }

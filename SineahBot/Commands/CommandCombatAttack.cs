@@ -51,7 +51,7 @@ namespace SineahBot.Commands
                 character.Message($"You attacked {target.GetName()} for {damage} damages.");
                 room.DescribeAction($"{character.GetName()} attacked {target.GetName()}.", character, target as IAgent);
 
-                damageableTarget.DamageHealth(damage, DamageType.Physical, character);
+                damageableTarget.DamageHealth(damage, character.GetDamageType(), character);
                 character.StartActionCooldown();
 
                 if (damageableTarget is IDestructible)

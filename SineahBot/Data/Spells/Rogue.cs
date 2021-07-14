@@ -47,6 +47,7 @@ namespace SineahBot.Data.Spells
             manaCost = 20,
             needsTarget = false,
             canSelfCast = true,
+            aggressiveSpell = false,
             effects = new Spell.Effect[] {
                 new Spell.Effect.AddAlter() {
                     alteration = AlterationType.Invisible,

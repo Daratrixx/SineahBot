@@ -18,6 +18,8 @@ namespace SineahBot.Data
         public int bonusDeflection;
         public int bonusEvasion;
 
+        public DamageType? weaponDamageOverwrite = null;
+
         public List<Spell> bonusSpells = new List<Spell>();
 
         public EquipmentSlot slot { get; private set; }
@@ -42,6 +44,8 @@ namespace SineahBot.Data
             c.bonusDeflection += bonusDeflection;
             c.bonusEvasion += bonusEvasion;
             c.bonusSpells.AddRange(bonusSpells);
+            if (weaponDamageOverwrite != null && c.weaponDamageOverwrite == null)
+                c.weaponDamageOverwrite = weaponDamageOverwrite;
         }
         public void Unequip(Character c)
         {
@@ -58,6 +62,8 @@ namespace SineahBot.Data
             if (c.health > c.MaxHealth) c.health = c.MaxHealth;
             if (c.mana > c.MaxMana) c.mana = c.MaxMana;
             c.bonusSpells.RemoveAll(x => bonusSpells.Contains(x));
+            if (weaponDamageOverwrite != null && c.weaponDamageOverwrite == weaponDamageOverwrite)
+                c.weaponDamageOverwrite = null;
         }
 
         public Action<Character> OnEquipped;

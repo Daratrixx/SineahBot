@@ -18,10 +18,9 @@ namespace SineahBot.Commands
 
         public override void Run(Character character, Room room)
         {
-            var spellName = GetArgument(2);
-            DisplayinformationForCharacter(character, spellName);
+            DisplayInventoryForCharacter(character);
         }
-        public void DisplayinformationForCharacter(Character character, string spellName)
+        public void DisplayInventoryForCharacter(Character character)
         {
             character.Message(GetCharacterInventory(character));
         }

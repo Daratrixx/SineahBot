@@ -79,16 +79,16 @@ namespace SineahBot.Data
             public class SpellDamage : Effect
             {
                 public int baseDamage = 0;
-
+                public DamageType damageType = DamageType.Arcane;
                 public override string GetEffectDescription(ICaster caster = null)
                 {
                     if (caster != null)
                     {
-                        return $"- Damages target\n> Damaging potential : **{baseDamage + caster.GetSpellPower()} ({baseDamage} + [spell power])**\n> Damage type: {DamageType.Arcane}";
+                        return $"- Damages target\n> Damaging potential : **{baseDamage + caster.GetSpellPower()} ({baseDamage} + [spell power])**\n> Damage type: {damageType}";
                     }
                     else
                     {
-                        return $"- Damages target\n> Damaging potential : **{baseDamage} + [spell power]**\n> Damage type: {DamageType.Arcane}";
+                        return $"- Damages target\n> Damaging potential : **{baseDamage} + [spell power]**\n> Damage type: {damageType}";
                     }
                 }
 
@@ -97,22 +97,27 @@ namespace SineahBot.Data
                     if (target is IDamageable)
                     {
                         var damageAmount = ((baseDamage + caster.GetSpellPower()) * new Random().Next(50, 100) / 100);
-                        (target as IDamageable).DamageHealth(damageAmount, DamageType.Arcane, caster as Entity);
+                        (target as IDamageable).DamageHealth(damageAmount, damageType, caster as Entity);
                     }
                 }
             }
             public class AttackDamage : Effect
             {
                 public int baseDamage = 0;
+                public DamageType? damageTypeOverwrite = null;
+                public string GetWeaponDamageText(ICaster caster)
+                {
+                    return damageTypeOverwrite?.ToString() ?? $"{caster.GetDamageType()} (Weapon damage)";
+                }
                 public override string GetEffectDescription(ICaster caster = null)
                 {
                     if (caster != null)
                     {
-                        return $"- Damages target\n> Damaging potential : **{baseDamage + caster.GetPhysicalPower()} ({baseDamage} + [physical power])**\n> Damage type: {DamageType.Physical}";
+                        return $"- Damages target\n> Damaging potential : **{baseDamage + caster.GetPhysicalPower()} ({baseDamage} + [physical power])**\n> Damage type: {GetWeaponDamageText(caster)}";
                     }
                     else
                     {
-                        return $"- Damages target\n> Damaging potential : **{baseDamage} + [physical power]**\n> Damage type: {DamageType.Physical}";
+                        return $"- Damages target\n> Damaging potential : **{baseDamage} + [physical power]**\n> Damage type: {damageTypeOverwrite.ToString() ?? "Caster weapon damage"}";
                     }
                 }
 
@@ -121,7 +126,7 @@ namespace SineahBot.Data
                     if (target is IDamageable)
                     {
                         var damageAmount = ((baseDamage + caster.GetPhysicalPower()) * new Random().Next(50, 100)) / 100;
-                        (target as IDamageable).DamageHealth(damageAmount, DamageType.Physical, caster as Entity);
+                        (target as IDamageable).DamageHealth(damageAmount, damageTypeOverwrite ?? caster.GetDamageType(), caster as Entity);
                     }
                 }
             }
@@ -190,6 +195,37 @@ namespace SineahBot.Data
                     }
                 }
             }
+            public class ConditionalEffect : Effect
+            {
+                public ConditionalEffect(Effect primaryEffect, Effect alternativeEffect, ConditionalEffectConditionHandler conditionHandler, ConditionalDescriptionHandler descriptionHandler)
+                {
+                    this.primaryEffect = primaryEffect;
+                    this.alternativeEffect = alternativeEffect;
+                    this.conditionHandler = conditionHandler;
+                    this.descriptionHandler = descriptionHandler;
+                }
+                private Effect primaryEffect;
+                private Effect alternativeEffect;
+                private ConditionalEffectConditionHandler conditionHandler;
+                private ConditionalDescriptionHandler descriptionHandler;
+
+                public override void RunEffect(ICaster caster, Entity target)
+                {
+                    if (conditionHandler.Invoke(caster, target))
+                    {
+                        alternativeEffect.RunEffect(caster, target);
+                    }
+                    else
+                    {
+                        primaryEffect.RunEffect(caster, target);
+                    }
+                }
+
+                public override string GetEffectDescription(ICaster caster = null)
+                {
+                    return descriptionHandler(primaryEffect.GetEffectDescription(caster), alternativeEffect.GetEffectDescription(caster), caster);
+                }
+            }
             public class Custom : Effect
             {
                 public Custom(EffectRunHandler runHandler, EffectDescriptionHandler descriptionHandler)
@@ -213,6 +249,8 @@ namespace SineahBot.Data
 
             public delegate void EffectRunHandler(ICaster caster, Entity target);
             public delegate string EffectDescriptionHandler(ICaster caster = null);
+            public delegate bool ConditionalEffectConditionHandler(ICaster caster, Entity target);
+            public delegate string ConditionalDescriptionHandler(string s1, string s2, ICaster caster = null);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace SineahBot.Commands
 
             if (string.IsNullOrWhiteSpace(className))
             {
-                character.Message("Type **!alterations [alteration name]** to get some details about the specified alteration.");
+                character.Message("Type `!alterations [alteration name]` to get some details about the specified alteration.");
                 return;
             }
 

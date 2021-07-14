@@ -201,6 +201,16 @@ namespace SineahBot.Data
                 knowledgeDefaultResponse = knowledgeDefaultResponse
             };
         }
+        public NPC SetResistances(params DamageType[] types)
+        {
+            resistances.AddRange(types);
+            return this;
+        }
+        public NPC SetWeaknesses(params DamageType[] types)
+        {
+            weaknesses.AddRange(types);
+            return this;
+        }
         public NPC SetEquipment(params Equipment[] equipments)
         {
             foreach (var equipment in equipments)

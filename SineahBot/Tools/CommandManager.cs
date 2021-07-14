@@ -175,8 +175,8 @@ namespace SineahBot.Tools
         }
 
         public static List<Command> MetaCommands = new List<Command>() {
-            new CommandMetaInformation(), new CommandMetaInventory(),
-            new CommandMetaLevel(),
+            new CommandMetaInformation(), new CommandMetaInventory(), new CommandMetaEquipment(),
+            new CommandMetaLevel(), new CommandMetaDamage(),
             new CommandMetaSpells(), new CommandMetaClass(), new CommandMetaAlteration(),
             new CommandMetaHelp(), new CommandMetaSettings(),
             new CommandMetaCredits()

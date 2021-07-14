@@ -12,6 +12,7 @@ namespace SineahBot.Data.Templates
             {
                 description = "A dagger lies around.",
                 details = "A sharp, quick dagger. Gives a small damage and mana boost",
+                weaponDamageOverwrite = DamageType.Piercing,
                 bonusDamage = 5,
                 bonusMana = 10,
                 bonusSpells = new List<Spell>() { Data.Spells.Equipment.DeepCut },
@@ -20,6 +21,7 @@ namespace SineahBot.Data.Templates
             {
                 description = "A sword lies around.",
                 details = "A standard, well-made sword. Gives a decent damage and deflect boost.",
+                weaponDamageOverwrite = DamageType.Slashing,
                 bonusDamage = 10,
                 bonusDeflection = 5,
                 bonusSpells = new List<Spell>() { Data.Spells.Equipment.DeepCut },
@@ -28,6 +30,7 @@ namespace SineahBot.Data.Templates
             {
                 description = "A curved sword lies around.",
                 details = "An exotic curved sword. Gives a large damage boost.",
+                weaponDamageOverwrite = DamageType.Slashing,
                 bonusDamage = 20,
                 bonusSpells = new List<Spell>() { Data.Spells.Equipment.DeepCut },
             };
@@ -35,14 +38,16 @@ namespace SineahBot.Data.Templates
             {
                 description = "A axe lies around.",
                 details = "A dangerous looknig axe. Gives a decent damage and health boost.",
+                weaponDamageOverwrite = DamageType.Slashing,
                 bonusDamage = 10,
                 bonusHealth = 20,
-                bonusSpells = new List<Spell>() { Data.Spells.Equipment.DeepCut },
+                bonusSpells = new List<Spell>() { Data.Spells.Equipment.DeepCut, Data.Spells.Equipment.CrushingBlow },
             };
             public static Equipment Mace = new Equipment("Mace", EquipmentSlot.Weapon, new string[] { })
             {
                 description = "A mace lies around.",
                 details = "A reliable mace. Gives a decent damage and a small armor boost.",
+                weaponDamageOverwrite = DamageType.Bludgeoning,
                 bonusDamage = 10,
                 bonusArmor = 5,
                 bonusSpells = new List<Spell>() { Data.Spells.Equipment.CrushingBlow },
@@ -51,6 +56,7 @@ namespace SineahBot.Data.Templates
             {
                 description = "A staff lies around.",
                 details = "A beautiful sculpted staff. Gives a small damage and spell power boost.",
+                weaponDamageOverwrite = DamageType.Bludgeoning,
                 bonusDamage = 5,
                 bonusSpellPower = 5,
             };
@@ -58,15 +64,25 @@ namespace SineahBot.Data.Templates
             {
                 description = "A spear lies around.",
                 details = "A long spear. Gives a small damage and armor boost and a decent health boost.",
+                weaponDamageOverwrite = DamageType.Piercing,
                 bonusDamage = 5,
                 bonusArmor = 5,
                 bonusHealth = 20,
             };
+            public static Equipment Torch = new Equipment("Torch", EquipmentSlot.Weapon, new string[] {})
+            {
+                description = "An unlit torch lies there.",
+                details = "A simple common torch, that can be lit up and used to attack with Fire. Gives a small damage bonus, and the ability to cast Ignite.",
+                weaponDamageOverwrite = DamageType.Fire,
+                bonusDamage = 5,
+                bonusSpells = new List<Spell>() { Data.Spells.Equipment.Ignite },
+            };
             public static Equipment SearingBlade = new Equipment("Searing blade", EquipmentSlot.Weapon, new string[] { "searingblade", "blade" })
             {
-                description = "A holy symbols thrones here.",
-                details = "Blade infused with fire. Gives a small damage bonus, and the ability to cast Ignite.",
-                bonusDamage = 10,
+                description = "A searing blade lies there.",
+                details = "Blade infused with fire. Gives a decent damage bonus, and the ability to cast Ignite.",
+                weaponDamageOverwrite = DamageType.Slashing,
+                bonusDamage = 5,
                 bonusSpells = new List<Spell>() { Data.Spells.Equipment.Ignite },
             };
         }

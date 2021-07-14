@@ -12,16 +12,17 @@ namespace SineahBot.Data.Spells
     {
         public static Spell Ignite = new Spell("Ignite", new string[] { "burn" })
         {
-            manaCost = 3,
+            manaCost = 5,
             needsTarget = true,
             canSelfCast = false,
             effects = new Spell.Effect[] {
-                new Spell.Effect.PureDamage() {
-                    baseDamage = 1
+                new Spell.Effect.SpellDamage() {
+                    baseDamage = 1,
+                    damageType = DamageType.Fire,
                 },
                 new Spell.Effect.AddAlter() {
                     alteration = AlterationType.Burning,
-                    baseDuration = 10,
+                    baseDuration = 30,
                     spellPowerDurationRatio = 0
                 },
             },
@@ -32,6 +33,7 @@ namespace SineahBot.Data.Spells
             manaCost = 10,
             needsTarget = false,
             canSelfCast = true,
+            aggressiveSpell = false,
             effects = new Spell.Effect[] {
                 new Spell.Effect.AddAlter() {
                     alteration = AlterationType.Shrouded,
@@ -48,7 +50,8 @@ namespace SineahBot.Data.Spells
             canSelfCast = false,
             effects = new Spell.Effect[] {
                 new Spell.Effect.AttackDamage() {
-                    baseDamage = 10
+                    baseDamage = 10,
+                    damageTypeOverwrite = DamageType.Bludgeoning,
                 },
                 new Spell.Effect.AddAlter() {
                     alteration = AlterationType.Stunned,
@@ -65,7 +68,8 @@ namespace SineahBot.Data.Spells
             canSelfCast = false,
             effects = new Spell.Effect[] {
                 new Spell.Effect.AttackDamage() {
-                    baseDamage = 10
+                    baseDamage = 10,
+                    damageTypeOverwrite = DamageType.Slashing,
                 },
             },
             description = "Nasty cut that deals a lot of damage to the target."
@@ -77,7 +81,8 @@ namespace SineahBot.Data.Spells
             canSelfCast = false,
             effects = new Spell.Effect[] {
                 new Spell.Effect.AttackDamage() {
-                    baseDamage = 25
+                    baseDamage = 25,
+                    damageTypeOverwrite = DamageType.Bludgeoning,
                 },
             },
             description = "Bashes the target for massive damage. Tiring for the user."

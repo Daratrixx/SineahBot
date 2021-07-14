@@ -54,6 +54,7 @@ namespace SineahBot.Data
         Taunted, // will attack the taunting target every few seconds
         Sleeping, // can't perceive anything nor act, regenerates faster
         Stunned, // can't perceive anything nor act
+        Corroded, // reduced armor
 
         Invisible, // can't be seen by other characters
         Shrouded, // hides identity

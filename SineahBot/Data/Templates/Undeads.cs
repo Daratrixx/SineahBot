@@ -17,6 +17,8 @@ namespace SineahBot.Data.Templates
             alternativeNames = new string[] { "skl" },
             tags = new List<CharacterTag>() { CharacterTag.Undead },
             knowledgeDefaultResponse = null,
+            weaknesses = new List<DamageType> { DamageType.Bludgeoning, DamageType.Divine },
+            resistances = new List<DamageType> { DamageType.Poison },
         };
         public static NPC Zombi = new NPC()
         {
@@ -30,6 +32,8 @@ namespace SineahBot.Data.Templates
             alternativeNames = new string[] { "z" },
             tags = new List<CharacterTag>() { CharacterTag.Undead },
             knowledgeDefaultResponse = null,
+            weaknesses = new List<DamageType> { DamageType.Fire, DamageType.Divine },
+            resistances = new List<DamageType> { DamageType.Poison },
         };
         public static NPC Ghoul = new NPC()
         {
@@ -45,6 +49,8 @@ namespace SineahBot.Data.Templates
             alternativeNames = new string[] { "g","gh" },
             tags = new List<CharacterTag>() { CharacterTag.Undead },
             knowledgeDefaultResponse = "**unearthly screaming**",
+            weaknesses = new List<DamageType> { DamageType.Fire, DamageType.Divine },
+            resistances = new List<DamageType> { DamageType.Poison },
         };
         public static NPC Lich = new NPC()
         {
@@ -59,7 +65,9 @@ namespace SineahBot.Data.Templates
             longDescription = "Powerful undead fiend.",
             alternativeNames = new string[] { },
             tags = new List<CharacterTag>() { CharacterTag.Undead },
-            knowledgeDefaultResponse = "Please leave this place. You're meddling with what you shouldn't.",
+            knowledgeDefaultResponse = "Please leave this place. You are meddling with what you should not.",
+            weaknesses = new List<DamageType> { DamageType.Fire, DamageType.Divine },
+            resistances = new List<DamageType> { DamageType.Poison },
         };
     }
 }

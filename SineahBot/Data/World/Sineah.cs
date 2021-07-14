@@ -905,6 +905,7 @@ namespace SineahBot.Data.World
                 public static Shop Trader = new Shop()
                 .RegisterEntry(Templates.Consumables.Quill, 100, 100)
                 .RegisterEntry(Templates.Equipments.Weapons.Dagger, 50, 10)
+                .RegisterEntry(Templates.Equipments.Weapons.Torch, 30, null)
                 .RegisterEntry(Templates.Equipments.Armor.TravellingCloak, 100, 20)
                 .RegisterEntry(Templates.Consumables.DriedMeat, 3, null)
                 .RegisterEntry(Templates.Consumables.Water, 1, null);

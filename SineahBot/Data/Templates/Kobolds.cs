@@ -18,6 +18,7 @@ namespace SineahBot.Data.Templates
             alternativeNames = new string[] { "kobold", "scout" },
             tags = new List<CharacterTag>() { },
             knowledgeDefaultResponse = null,
+            weaknesses = new List<DamageType> { DamageType.Cold },
         };
         public static NPC KoboldWarrior = new NPC()
         {
@@ -31,6 +32,7 @@ namespace SineahBot.Data.Templates
             alternativeNames = new string[] { "kobold", "warrior" },
             tags = new List<CharacterTag>() { },
             knowledgeDefaultResponse = null,
+            weaknesses = new List<DamageType> { DamageType.Cold },
         };
         public static NPC KoboldLieutenant = new NPC()
         {
@@ -45,6 +47,7 @@ namespace SineahBot.Data.Templates
             alternativeNames = new string[] { "kobold", "lieutenant" },
             tags = new List<CharacterTag>() { },
             knowledgeDefaultResponse = null,
+            weaknesses = new List<DamageType> { DamageType.Cold },
         };
         public static NPC KoboldWarlord = new NPC()
         {
@@ -59,6 +62,7 @@ namespace SineahBot.Data.Templates
             alternativeNames = new string[] { "kobold", "warlord" },
             tags = new List<CharacterTag>() { },
             knowledgeDefaultResponse = null,
+            weaknesses = new List<DamageType> { DamageType.Cold },
         };
     }
 }

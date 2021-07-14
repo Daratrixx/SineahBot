@@ -13,5 +13,6 @@ namespace SineahBot.Interfaces
         bool CanCastSpell(Spell spell);
         void CastSpell(Spell spell);
         void CastSpellOn(Spell spell, Entity target);
+        DamageType GetDamageType();
     }
 }
