@@ -50,21 +50,24 @@ namespace SineahBot.Tools
             // filter words
             foreach (var w in bannedWords)
             {
-                var matches = new Regex(@$"(^|\W){bannedWords}(\W|$)", RegexOptions.IgnoreCase | RegexOptions.Multiline).Matches(message).AsEnumerable();
+                var matches = new Regex(@$"(^|\W)({w})(\W|$)", RegexOptions.IgnoreCase | RegexOptions.Multiline).Matches(message).AsEnumerable();
                 foreach (var match in matches)
                 {
                     builder
-                        .Remove(match.Index, match.Length)
-                        .Insert(match.Index, Stars(match.Length));
+                        .Remove(match.Groups[2].Index, match.Groups[2].Length)
+                        .Insert(match.Groups[2].Index, Stars(match.Groups[2].Length));
                 }
             }
             return builder.ToString();
         }
         public static string Stars(int length)
         {
-            char[] output = new char[length];
+            char[] output = new char[length * 2];
             for (int i = 0; i < length; ++i)
-                output[i] = '*';
+            {
+                output[i * 2] = '\\';
+                output[i * 2 + 1] = '*';
+            }
             return new string(output);
         }
     }
