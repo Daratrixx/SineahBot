@@ -19,6 +19,8 @@ namespace SineahBot.Data.Templates
             tags = new List<CharacterTag>() { },
             knowledgeDefaultResponse = null,
             weaknesses = new List<DamageType> { DamageType.Cold },
+            resistances = new List<DamageType> { DamageType.Slashing }
+            ,
         };
         public static NPC KoboldWarrior = new NPC()
         {
@@ -33,6 +35,7 @@ namespace SineahBot.Data.Templates
             tags = new List<CharacterTag>() { },
             knowledgeDefaultResponse = null,
             weaknesses = new List<DamageType> { DamageType.Cold },
+            resistances = new List<DamageType> { DamageType.Slashing }
         };
         public static NPC KoboldLieutenant = new NPC()
         {
@@ -48,6 +51,7 @@ namespace SineahBot.Data.Templates
             tags = new List<CharacterTag>() { },
             knowledgeDefaultResponse = null,
             weaknesses = new List<DamageType> { DamageType.Cold },
+            resistances = new List<DamageType> { DamageType.Slashing }
         };
         public static NPC KoboldWarlord = new NPC()
         {
@@ -58,11 +62,12 @@ namespace SineahBot.Data.Templates
             gold = 500,
             elite = true,
             shortDescription = "A Kobold Warlord thrones here.",
-            longDescription = "A very large Kobold, heavily armed and protected.",
+            longDescription = "A towering, intimidating Kobold. Heavily armed and protected. Very dangerous.",
             alternativeNames = new string[] { "kobold", "warlord" },
             tags = new List<CharacterTag>() { },
             knowledgeDefaultResponse = null,
             weaknesses = new List<DamageType> { DamageType.Cold },
+            resistances = new List<DamageType> { DamageType.Slashing }
         };
     }
 }

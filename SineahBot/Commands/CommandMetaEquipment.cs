@@ -38,7 +38,7 @@ namespace SineahBot.Commands
 
         public static string GetEquipmentInformation(Equipment e, Character character)
         {
-            return $"> **`({e.slot})` {e.GetName()}** {e.GetFullDescription(character)}";
+            return $"> **{e.GetName()}** {e.GetFullDescription(character)}";
         }
     }
 }

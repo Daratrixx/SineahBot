@@ -15,7 +15,7 @@ namespace SineahBot.Data.Templates
                 weaponDamageOverwrite = DamageType.Piercing,
                 bonusDamage = 5,
                 bonusMana = 10,
-                bonusSpells = new List<Spell>() { Data.Spells.Equipment.DeepCut },
+                bonusSpells = new List<Spell>() { Data.Spells.Equipment.DeepCut, Data.Spells.Equipment.QuickSlash },
             };
             public static Equipment Sword = new Equipment("Sword", EquipmentSlot.Weapon, new string[] { })
             {
@@ -24,7 +24,7 @@ namespace SineahBot.Data.Templates
                 weaponDamageOverwrite = DamageType.Slashing,
                 bonusDamage = 10,
                 bonusDeflection = 5,
-                bonusSpells = new List<Spell>() { Data.Spells.Equipment.DeepCut },
+                bonusSpells = new List<Spell>() { Data.Spells.Equipment.DeepCut, Data.Spells.Equipment.Thrust, Data.Spells.Equipment.Counterweigt },
             };
             public static Equipment CurvedSword = new Equipment("Curved sword", EquipmentSlot.Weapon, new string[] { })
             {
@@ -59,6 +59,7 @@ namespace SineahBot.Data.Templates
                 weaponDamageOverwrite = DamageType.Bludgeoning,
                 bonusDamage = 5,
                 bonusSpellPower = 5,
+                bonusSpells = new List<Spell>() { Data.Spells.Equipment.CrushingBlow, Data.Spells.Equipment.Counterweigt },
             };
             public static Equipment Spear = new Equipment("Spear", EquipmentSlot.Weapon, new string[] { })
             {
@@ -68,6 +69,7 @@ namespace SineahBot.Data.Templates
                 bonusDamage = 5,
                 bonusArmor = 5,
                 bonusHealth = 20,
+                bonusSpells = new List<Spell>() { Data.Spells.Equipment.Thrust, Data.Spells.Equipment.Counterweigt },
             };
             public static Equipment Torch = new Equipment("Torch", EquipmentSlot.Weapon, new string[] {})
             {
@@ -83,7 +85,7 @@ namespace SineahBot.Data.Templates
                 details = "Blade infused with fire. Gives a decent damage bonus, and the ability to cast Ignite.",
                 weaponDamageOverwrite = DamageType.Slashing,
                 bonusDamage = 5,
-                bonusSpells = new List<Spell>() { Data.Spells.Equipment.Ignite },
+                bonusSpells = new List<Spell>() { Data.Spells.Equipment.Ignite, Data.Spells.Equipment.DeepCut, Data.Spells.Equipment.Thrust },
             };
         }
 

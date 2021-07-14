@@ -29,7 +29,11 @@ namespace SineahBot.Data
         }
         public override string GetFullDescription(IAgent agent = null)
         {
-            return base.GetFullDescription(agent) + $"*(equipment: {slot})*";
+            if(weaponDamageOverwrite != null)
+            {
+                return $"(**{weaponDamageOverwrite}**) *{base.GetFullDescription(agent)} (equipment: {slot})*";
+            }
+            return $"*{base.GetFullDescription(agent)} (equipment: {slot})*";
         }
         public void Equip(Character c)
         {

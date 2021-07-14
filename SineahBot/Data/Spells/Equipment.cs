@@ -63,7 +63,7 @@ namespace SineahBot.Data.Spells
         };
         public static Spell DeepCut = new Spell("Deep cut", new string[] { "cut" })
         {
-            manaCost = 5,
+            manaCost = 8,
             needsTarget = true,
             canSelfCast = false,
             effects = new Spell.Effect[] {
@@ -73,6 +73,50 @@ namespace SineahBot.Data.Spells
                 },
             },
             description = "Nasty cut that deals a lot of damage to the target."
+        };
+        public static Spell Thrust = new Spell("Thrust", new string[] { "poke" })
+        {
+            manaCost = 5,
+            needsTarget = true,
+            canSelfCast = false,
+            effects = new Spell.Effect[] {
+                new Spell.Effect.AttackDamage() {
+                    baseDamage = 10,
+                    damageTypeOverwrite = DamageType.Piercing,
+                },
+            },
+            description = "A powerful thrust attack."
+        };
+        public static Spell Counterweigt = new Spell("Counterweigt", new string[] { "counter", "cw" })
+        {
+            manaCost = 5,
+            needsTarget = true,
+            canSelfCast = false,
+            effects = new Spell.Effect[] {
+                new Spell.Effect.AttackDamage() {
+                    baseDamage = 5,
+                    damageTypeOverwrite = DamageType.Bludgeoning,
+                },
+            },
+            description = "A skillful strike using the blunt part of a weapon."
+        };
+        public static Spell QuickSlash = new Spell("Quick slash", new string[] { "qs", "slash" })
+        {
+            manaCost = 15,
+            needsTarget = true,
+            canSelfCast = false,
+            aggressiveSpell = true,
+            effects = new Spell.Effect[] {
+                new Spell.Effect.AttackDamage() {
+                    baseDamage = 2,
+                    damageTypeOverwrite = DamageType.Slashing,
+                },
+                new Spell.Effect.AttackDamage() {
+                    baseDamage = 2,
+                    damageTypeOverwrite = DamageType.Slashing,
+                },
+            },
+            description = "Quickly slashes the target twice."
         };
         public static Spell ShieldBash = new Spell("Shield bash", new string[] { "bash" })
         {
