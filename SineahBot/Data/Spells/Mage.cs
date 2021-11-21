@@ -62,7 +62,7 @@ namespace SineahBot.Data.Spells
                 new Spell.Effect.AddAlter() {
                     alteration = AlterationType.Burning,
                     baseDuration = 10,
-                    spellPowerDurationRatio = 0.25
+                    spellPowerDurationRatio = 0.25f
                 },
             },
         };
@@ -79,7 +79,7 @@ namespace SineahBot.Data.Spells
                 new Spell.Effect.AddAlter() {
                     alteration = AlterationType.Weakened,
                     baseDuration = 10,
-                    spellPowerDurationRatio = 0.5
+                    spellPowerDurationRatio = 0.5f
                 }
             },
         };
@@ -97,7 +97,7 @@ namespace SineahBot.Data.Spells
                 new Spell.Effect.AddAlter() {
                     alteration = AlterationType.Burnt,
                     baseDuration = 10,
-                    spellPowerDurationRatio = 0.25
+                    spellPowerDurationRatio = 0.25f
                 }
             },
         };

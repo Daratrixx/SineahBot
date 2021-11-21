@@ -14,7 +14,7 @@ namespace SineahBot.Tools
         public static CharacterClass[] physicalClass = new CharacterClass[] {CharacterClass.Militian,
         CharacterClass.Guard, CharacterClass.Footman,
         CharacterClass.Knight, CharacterClass.Paladin,
-        CharacterClass.Ranger, CharacterClass.Archer, CharacterClass.Sharpshooter,
+        /*CharacterClass.Ranger, CharacterClass.Archer, CharacterClass.Sharpshooter,*/
         CharacterClass.Druid, CharacterClass.Rogue, CharacterClass.Assassin, CharacterClass.Barbarian };
         public static CharacterClass[] magicalClass = new CharacterClass[] { CharacterClass.Scholar,
         CharacterClass.Abbot, CharacterClass.Prelate, CharacterClass.Bishop,

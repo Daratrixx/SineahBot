@@ -61,7 +61,7 @@ namespace SineahBot.Data.Spells
                 new Spell.Effect.AddAlter() {
                     alteration = AlterationType.Poisoned,
                     baseDuration = 10,
-                    spellPowerDurationRatio = 0.5
+                    spellPowerDurationRatio = 0.5f
                 }
             },
         };

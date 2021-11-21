@@ -151,7 +151,7 @@ namespace SineahBot.Data
             {
                 public AlterationType alteration;
                 public int baseDuration;
-                public double spellPowerDurationRatio = 1;
+                public float spellPowerDurationRatio = 1;
 
                 public override string GetEffectDescription(ICaster caster = null)
                 {

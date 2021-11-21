@@ -23,7 +23,7 @@ namespace SineahBot.Data.Spells
                 new Spell.Effect.AddAlter() {
                     alteration = AlterationType.Weakened,
                     baseDuration = 15,
-                    spellPowerDurationRatio = 0.5
+                    spellPowerDurationRatio = 0.5f
                 }
             },
         };
