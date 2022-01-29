@@ -1,4 +1,6 @@
 ﻿using SineahBot.Data;
+using SineahBot.Database.Entities;
+using SineahBot.Database.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +19,7 @@ namespace SineahBot.Tools
                 return player;
 
             // attempt to load player from database
-            player = Program.database.Players.FirstOrDefault(x => x.userId == userId);
+            player = LoadPlayer(userId);
             // create and return new player
             if (player == null)
             {
@@ -26,8 +28,7 @@ namespace SineahBot.Tools
                     userId = userId,
                     playerStatus = PlayerStatus.None,
                     playerSettings = new PlayerSettings(),
-                }; // todo: try loading from bdd
-                Program.database.Players.Add(player);
+                };
                 players[userId] = player;
                 return player;
             }
@@ -37,32 +38,41 @@ namespace SineahBot.Tools
                 player.character = CharacterManager.GetCharacter(player.idCharacter.Value);
                 player.character.agent = player;
                 player.playerStatus = PlayerStatus.InCharacter;
-                player.playerSettings = player.settings != null ? Newtonsoft.Json.JsonConvert.DeserializeObject<PlayerSettings>(player.settings) : new PlayerSettings();
             }
             players[userId] = player;
             return player;
+        }
+
+        public static Player LoadPlayer(ulong userId)
+        {
+            var playerEntity = Program.Database.LoadPlayer(userId);
+            if (playerEntity == null)
+            {
+                return null;
+            }
+            return Program.Mapper.Map<PlayerEntity, Player>(playerEntity);
+        }
+
+        public static void SavePlayer(Player player)
+        {
+            var playerEntity = Program.Mapper.Map<Player, PlayerEntity>(player);
+            Program.Database.SavePlayer(playerEntity);
+        }
+        public static void SavePlayers()
+        {
+            var playerEntities = players.Values.Select(x => Program.Mapper.Map<Player, PlayerEntity>(x)).ToArray();
+            Program.Database.UpdateRange(playerEntities);
         }
 
         public static void DisconnectPlayer(Player player)
         {
             if (player.character != null && player.character.currentRoomId != Guid.Empty.ToString())
             {
-                CharacterManager.SaveCharacterInventory(player.character);
-                CharacterManager.SaveCharacterEquipment(player.character);
+                CharacterManager.SaveCharacter(player.character);
                 RoomManager.RemoveFromCurrentRoom(player.character, false);
             }
-            player.settings = Newtonsoft.Json.JsonConvert.SerializeObject(player.playerSettings);
-            Program.database.Update(player);
+            SavePlayer(player);
             players.Remove(player.userId);
-        }
-
-        public static void SavePlayers()
-        {
-            foreach (var player in players.Values)
-            {
-                player.settings = Newtonsoft.Json.JsonConvert.SerializeObject(player.playerSettings);
-            }
-            Program.database.UpdateRange(players.Values);
         }
 
         public static Player CreateTestPlayer()

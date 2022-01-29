@@ -85,15 +85,6 @@ namespace SineahBot.Tools
                         player.Message($"Earned {exp} experience.");
                         return true;
                     }
-                    if (m2 == "!boosts")
-                    {
-                        foreach (var c in Program.database.Characters)
-                        {
-                            var exp = ClassProgressionManager.ExperienceForNextLevel(c.level);
-                            c.experience += exp;
-                        }
-                        return true;
-                    }
                 }
                 if (m2.Is("!die", "!kill", "!death", "!suicide", "!reroll") && player.character != null && player.character.currentRoomId != Guid.Empty.ToString())
                 {

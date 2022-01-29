@@ -3,9 +3,7 @@ using SineahBot.Data.Path;
 using SineahBot.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity.Core.Mapping;
 using System.Linq;
-using System.Text;
 
 namespace SineahBot.Data
 {

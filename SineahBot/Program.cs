@@ -1,7 +1,9 @@
-﻿using Discord;
+﻿using AutoMapper;
+using Discord;
 using Discord.WebSocket;
 using SineahBot.Data;
 using SineahBot.Data.World;
+using SineahBot.Database.Extensions;
 using SineahBot.DataContext;
 using SineahBot.Tools;
 using System;
@@ -10,20 +12,21 @@ using System.Threading.Tasks;
 
 namespace SineahBot
 {
-    class Program
+    public class Program
     {
 
         // Scaffold-DbContext "DataSource=../SineahBot.sqlite" Microsoft.EntityFrameworkCore.Sqlite -ContextDir DataContext -OutputDir DataContext -Force
 
         public static readonly bool ONLINE = true;
-        public static readonly SineahBotContext database = new SineahBotContext();
+        public static SineahDbContext Database { get; private set; }
+        public static IMapper Mapper { get; private set; }
 
         public static void SaveData()
         {
-            CharacterManager.SaveLoadedCharacters();
+            CharacterManager.SavePlayerCharacters();
             PlayerManager.SavePlayers();
             RoomManager.SaveRooms();
-            database.SaveChanges();
+            Database.ApplyChanges();
         }
 
         public static void Main(string[] args)
@@ -31,6 +34,8 @@ namespace SineahBot
 
         public async Task MainAsync()
         {
+            ConfigureDatabase();
+            ConfigureAutomapper();
             Worlds.LoadWorlds();
             BehaviourManager.StartBehaviourTimer();
             new MudInterval(300, () =>
@@ -186,6 +191,18 @@ namespace SineahBot
         private Task OnDisconnected(Exception e)
         {
             return Task.CompletedTask;
+        }
+
+        public static void ConfigureDatabase()
+        {
+            Database = new SineahDbContext();
+        }
+
+        public static void ConfigureAutomapper()
+        {
+            var config = new MapperConfiguration(cfg => cfg.AddMaps(typeof(Program).Assembly));
+
+            Program.Mapper = config.CreateMapper();
         }
     }
 }

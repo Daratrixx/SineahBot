@@ -665,21 +665,6 @@ namespace SineahBot.Data
         }
     }
 
-    public class CharacterItem
-    {
-        public Guid id { get; set; }
-        public Guid idCharacter { get; set; }
-        public string ItemName { get; set; }
-        public int StackSize { get; set; }
-    }
-
-    public class CharacterEquipment
-    {
-        public Guid id { get; set; }
-        public Guid idCharacter { get; set; }
-        public string ItemName { get; set; }
-    }
-
     public class CharacterMessage
     {
         public Guid id { get; set; }

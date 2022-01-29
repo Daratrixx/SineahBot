@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SineahBot", "SineahBot\SineahBot.csproj", "{3AEAF738-CD79-4375-8193-5494403C8716}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SineahBotTestsNUnit", "SineahBotTestsNUnit\SineahBotTestsNUnit.csproj", "{1954F3C7-C05C-415D-B472-CBC9A02E5959}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SineahBotTestsNUnit", "SineahBotTestsNUnit\SineahBotTestsNUnit.csproj", "{1954F3C7-C05C-415D-B472-CBC9A02E5959}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SineahBot.Database", "SineahBot.Database\SineahBot.Database.csproj", "{CC1B917C-B042-4EED-BC92-FC61312476C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{1954F3C7-C05C-415D-B472-CBC9A02E5959}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1954F3C7-C05C-415D-B472-CBC9A02E5959}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1954F3C7-C05C-415D-B472-CBC9A02E5959}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC1B917C-B042-4EED-BC92-FC61312476C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC1B917C-B042-4EED-BC92-FC61312476C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC1B917C-B042-4EED-BC92-FC61312476C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC1B917C-B042-4EED-BC92-FC61312476C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

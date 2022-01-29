@@ -23,7 +23,6 @@ namespace SineahBot.Data
         [Key]
         public ulong userId { get; set; }
         public Guid? idCharacter { get; set; }
-        public string settings { get; set; }
 
         public Character character;
         public CancelableMudTimer disconnectTimer = null;

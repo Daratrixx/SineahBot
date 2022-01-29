@@ -1,4 +1,7 @@
-﻿using SineahBot.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using SineahBot.Data;
+using SineahBot.Database.Entities;
+using SineahBot.Database.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,81 +47,39 @@ namespace SineahBot.Tools
                 CharacterManager.characters[character.id] = character;
             }
         }
+        public static void SavePlayerCharacters()
+        {
+            var playerCharacters = characters.Values.Where(x => x.agent is Player).ToArray();
+            foreach (var character in playerCharacters)
+            {
+                SaveCharacter(character);
+            }
+        }
         public static Character GetCharacter(Guid idCharacter)
         {
             if (!characters.ContainsKey(idCharacter))
             {
-                var character = Program.database.Characters.FirstOrDefault(x => x.id == idCharacter);
+                var character = LoadCharacter(idCharacter);
                 if (character == null) throw new Exception($"Impossible to find character with id {idCharacter}");
                 characters[idCharacter] = character;
                 character.pronouns = character.pronouns; // update the properties
                 ClassProgressionManager.ApplyClassProgressionForCharacter(character, true);
-                LoadCharacterInventory(character);
-                LoadCharacterEquipment(character);
-                character.messages.AddRange(Program.database.CharacterMessages.AsQueryable().Where(x => x.idCharacter == character.id));
                 character.faction = FactionManager.CreatePlayerRepFaction();
                 return character;
             }
             return characters[idCharacter];
         }
 
-        public static void SaveLoadedCharacters()
+        public static Character LoadCharacter(Guid id)
         {
-            foreach (var data in characters.Where(x => x.Value.agent is Player))
-            {
-                SaveCharacterInventory(data.Value);
-                SaveCharacterEquipment(data.Value);
-            }
+            var characterEntity = Program.Database.LoadCharacter(id);
+            return Program.Mapper.Map<CharacterEntity, Character>(characterEntity);
         }
 
-        public static void SaveCharacterInventory(Character character)
+        public static void SaveCharacter(Character character)
         {
-            var items = Program.database.CharacterItems.AsQueryable().Where(x => x.idCharacter == character.id);
-            Program.database.CharacterItems.RemoveRange(items);
-            items = character.items.AsQueryable().Where(x => x.Key.permanent).Select(item => new CharacterItem()
-            {
-                id = Guid.NewGuid(),
-                idCharacter = character.id,
-                ItemName = item.Key.name,
-                StackSize = item.Value
-            });
-            Program.database.CharacterItems.AddRange(items);
-        }
-
-        public static void SaveCharacterEquipment(Character character)
-        {
-            var equipment = Program.database.CharacterEquipment.AsQueryable().Where(x => x.idCharacter == character.id);
-            Program.database.CharacterEquipment.RemoveRange(equipment);
-            equipment = character.equipments.Values.AsQueryable().Where(x => x != null).Select(item => new CharacterEquipment()
-            {
-                id = Guid.NewGuid(),
-                idCharacter = character.id,
-                ItemName = item.name,
-            });
-            Program.database.CharacterEquipment.AddRange(equipment);
-        }
-
-        public static void LoadCharacterInventory(Character character)
-        {
-            var items = Program.database.CharacterItems.AsEnumerable().Where(x => x.idCharacter == character.id).ToList();
-            var matchedItems = items.Select(x => new KeyValuePair<Item, int>(ItemManager.GetItem(x.ItemName), x.StackSize))
-                .Where(x => x.Key != null)
-                .Distinct()
-                .ToList();
-            character.items = new Dictionary<Item, int>(matchedItems);
-        }
-
-        public static void LoadCharacterEquipment(Character character)
-        {
-            var equipments = Program.database.CharacterEquipment.AsQueryable().Where(x => x.idCharacter == character.id).ToList();
-            foreach (var equipment in equipments)
-            {
-                var item = character.FindInInventory(equipment.ItemName) as Equipment;
-                if (item != null)
-                {
-                    character.Equip(item);
-                }
-            }
+            var characterEntity = Program.Mapper.Map<Character, CharacterEntity>(character);
+            Program.Database.SaveCharacter(characterEntity);
         }
 
         public static Character CreateCharacterForPlayer(CharacterCreationState state)
@@ -151,7 +112,7 @@ namespace SineahBot.Tools
             character.AddToInventory(Data.Templates.Equipments.Weapons.Dagger);
             character.Equip(Data.Templates.Equipments.Weapons.Dagger);
             characters[character.id] = character;
-            Program.database.Characters.Add(character);
+            SaveCharacter(character);
             character.faction = FactionManager.CreatePlayerRepFaction();
             state.player.idCharacter = character.id;
             state.player.character = character;
@@ -163,12 +124,15 @@ namespace SineahBot.Tools
             if (player == null) throw new Exception("Player cannot be null.");
             if (player.character == null || player.idCharacter == null) throw new Exception("This player doesn't have a character to be deleted.");
             var character = player.character;
+            // clear character context
             characters.Remove(character.id);
             character.agent = null;
+            // clear character data
             RoomManager.RemoveCharacterMessages(character);
-            Program.database.CharacterEquipment.RemoveRange(Program.database.CharacterEquipment.AsQueryable().Where(x => x.idCharacter == character.id));
-            Program.database.CharacterItems.RemoveRange(Program.database.CharacterItems.AsQueryable().Where(x => x.idCharacter == character.id));
-            Program.database.Characters.Remove(character);
+            var characterEntity = Program.Mapper.Map<Character, CharacterEntity>(character);
+            Program.Database.RemoveCharacter(characterEntity);
+
+            // clear player state and prepare for new character
             player.idCharacter = null;
             player.character = null;
             player.playerStatus = PlayerStatus.CharacterCreation;

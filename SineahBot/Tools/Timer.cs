@@ -55,7 +55,7 @@ namespace SineahBot.Tools
         protected int interval;
         public void Interupt()
         {
-            if (thread != null) thread.Abort();
+            if (thread != null) thread.Interrupt();
         }
 
         public bool expired { get; protected set; } = false;
