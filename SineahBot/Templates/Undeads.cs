@@ -21,16 +21,16 @@ namespace SineahBot.Templates
             weaknesses = new List<DamageType> { DamageType.Bludgeoning, DamageType.Divine },
             resistances = new List<DamageType> { DamageType.Poison },
         };
-        public static NPC Zombi = new NPC()
+        public static NPC Zombie = new NPC()
         {
             level = 6,
             baseHealth = 110,
             health = 110,
-            name = "Zombi",
+            name = "Zombie",
             gold = 5,
             shortDescription = "A zombi shambles on its legs.",
             longDescription = "Undead fiend.",
-            alternativeNames = new string[] { "z" },
+            alternativeNames = new string[] { "z", "zombi" },
             tags = new List<CharacterTag>() { CharacterTag.Undead },
             knowledgeDefaultResponse = null,
             weaknesses = new List<DamageType> { DamageType.Fire, DamageType.Divine },

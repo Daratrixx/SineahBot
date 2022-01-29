@@ -820,8 +820,8 @@ namespace SineahBot.Data.World
                 public static NPC Skeleton1 = Templates.Undeads.Skeleton.Clone().SetFaction(FactionManager.Undead); // crumbled
                 public static NPC Skeleton2 = Templates.Undeads.Skeleton.Clone().SetFaction(FactionManager.Undead); // heart
                 public static NPC Skeleton3 = Templates.Undeads.Skeleton.Clone().SetFaction(FactionManager.Undead); // heart
-                public static NPC Zombi1 = Templates.Undeads.Zombi.Clone().SetFaction(FactionManager.Undead); // heart
-                public static NPC Zombi2 = Templates.Undeads.Zombi.Clone().SetFaction(FactionManager.Undead); // heart
+                public static NPC Zombie1 = Templates.Undeads.Zombie.Clone().SetFaction(FactionManager.Undead); // heart
+                public static NPC Zombie2 = Templates.Undeads.Zombie.Clone().SetFaction(FactionManager.Undead); // heart
                 public static NPC Skeleton4 = Templates.Undeads.Skeleton.Clone().SetFaction(FactionManager.Undead); // crypt
                 public static NPC Skeleton5 = Templates.Undeads.Skeleton.Clone().SetFaction(FactionManager.Undead); // crypt
                 public static NPC Ghoul = Templates.Undeads.Ghoul.Clone().SetFaction(FactionManager.AllHostile); // ossuary
@@ -849,8 +849,8 @@ namespace SineahBot.Data.World
                     Characters.Skeleton1,
                     Characters.Skeleton2,
                     Characters.Skeleton3,
-                    Characters.Zombi1,
-                    Characters.Zombi2,
+                    Characters.Zombie1,
+                    Characters.Zombie2,
                     Characters.Skeleton4,
                     Characters.Skeleton5,
                     Characters.Ghoul,
@@ -1320,8 +1320,8 @@ namespace SineahBot.Data.World
             Underground.Rooms.CrumbledCollector.AddToRoom(Underground.Characters.Skeleton1); // skeleton in crumbled
             Underground.Rooms.Heart.AddToRoom(Underground.Characters.Skeleton2); // skeleton in heart
             Underground.Rooms.Heart.AddToRoom(Underground.Characters.Skeleton3); // skeleton in heart
-            Underground.Rooms.Heart.AddToRoom(Underground.Characters.Zombi1); // zombi in heart
-            Underground.Rooms.Heart.AddToRoom(Underground.Characters.Zombi2); // zombi in heart
+            Underground.Rooms.Heart.AddToRoom(Underground.Characters.Zombie1); // zombie in heart
+            Underground.Rooms.Heart.AddToRoom(Underground.Characters.Zombie2); // zombie in heart
             Underground.Rooms.Crypt.AddToRoom(Underground.Characters.Skeleton4); // skeleton in crypt
             Underground.Rooms.Crypt.AddToRoom(Underground.Characters.Skeleton5); // skeleton in crypt
             Underground.Rooms.Ossuary.AddToRoom(Underground.Characters.Ghoul); // ghoul in ossuary
@@ -1415,8 +1415,8 @@ namespace SineahBot.Data.World
             BehaviourManager.RegisterNPC(Underground.Characters.Skeleton3, new Behaviours.MonsterBase());
             BehaviourManager.RegisterNPC(Underground.Characters.Skeleton4, new Behaviours.MonsterBase());
             BehaviourManager.RegisterNPC(Underground.Characters.Skeleton5, new Behaviours.MonsterBase());
-            BehaviourManager.RegisterNPC(Underground.Characters.Zombi1, new Behaviours.MonsterBase());
-            BehaviourManager.RegisterNPC(Underground.Characters.Zombi2, new Behaviours.MonsterBase());
+            BehaviourManager.RegisterNPC(Underground.Characters.Zombie1, new Behaviours.MonsterBase());
+            BehaviourManager.RegisterNPC(Underground.Characters.Zombie2, new Behaviours.MonsterBase());
             BehaviourManager.RegisterNPC(Underground.Characters.Ghoul, new Behaviours.MonsterBase());
         }
     }
