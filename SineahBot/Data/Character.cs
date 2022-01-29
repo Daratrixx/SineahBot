@@ -626,6 +626,11 @@ namespace SineahBot.Data
             return tags.Contains(tag);
         }
 
+        public void AddCharacterTag(CharacterTag tag)
+        {
+            tags.Add(tag);
+        }
+
         public void Equip(Equipment equipment)
         {
             var slot = equipment.slot;

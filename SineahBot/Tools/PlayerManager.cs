@@ -20,6 +20,7 @@ namespace SineahBot.Tools
 
             // attempt to load player from database
             player = LoadPlayer(userId);
+
             // create and return new player
             if (player == null)
             {
@@ -35,9 +36,17 @@ namespace SineahBot.Tools
             // load and returns existing player
             if (player.idCharacter != null)
             {
-                player.character = CharacterManager.GetCharacter(player.idCharacter.Value);
-                player.character.agent = player;
-                player.playerStatus = PlayerStatus.InCharacter;
+                try
+                {
+                    player.character = CharacterManager.GetCharacter(player.idCharacter.Value);
+                    player.character.agent = player;
+                    player.playerStatus = PlayerStatus.InCharacter;
+                }
+                catch
+                {
+                    player.idCharacter = null;
+                    player.playerStatus = PlayerStatus.CharacterCreation;
+                }
             }
             players[userId] = player;
             return player;

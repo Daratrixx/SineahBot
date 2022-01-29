@@ -12,7 +12,7 @@ namespace SineahBot.Data
     {
         public bool active = true;
 
-        public NPC npc;
+        public NPC Npc;
         public Random random = new Random();
         public Room originalRoom;
 
@@ -26,7 +26,7 @@ namespace SineahBot.Data
 
         public virtual void Init(NPC npc)
         {
-            this.npc = npc;
+            this.Npc = npc;
             npc.behaviour = this;
             originalRoom = RoomManager.GetRoomById(npc.currentRoomId);
         }
@@ -108,11 +108,11 @@ namespace SineahBot.Data
             if (dir == MoveDirection.None)
                 return from;
 
-            if (npc.characterStatus == CharacterStatus.Combat
+            if (Npc.characterStatus == CharacterStatus.Combat
             ? Flee(from, dir)
             : Move(from, dir))
             {
-                return RoomManager.GetRoomById(npc.currentRoomId);
+                return RoomManager.GetRoomById(Npc.currentRoomId);
             }
 
             return from;
@@ -122,23 +122,23 @@ namespace SineahBot.Data
 
         public bool Move(Room from, MoveDirection dir)
         {
-            return CommandMove.Move(npc, from, dir);
+            return CommandMove.Move(Npc, from, dir);
         }
         public bool Flee(Room from, MoveDirection dir)
         {
-            return CommandCombatFlee.Flee(npc, from, dir);
+            return CommandCombatFlee.Flee(Npc, from, dir);
         }
         public void Say(Room room, string say)
         {
-            CommandSay.Say(npc, room, say);
+            CommandSay.Say(Npc, room, say);
         }
         public void Act(Room room, string act)
         {
-            CommandAct.Act(npc, room, act);
+            CommandAct.Act(Npc, room, act);
         }
         public void Attack(Room room, Character target)
         {
-            CommandCombatAttack.Attack(npc, room, target);
+            CommandCombatAttack.Attack(Npc, room, target);
         }
     }
 

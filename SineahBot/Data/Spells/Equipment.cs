@@ -1,4 +1,5 @@
 ﻿using SineahBot.Commands;
+using SineahBot.Data.Behaviours;
 using SineahBot.Interfaces;
 using SineahBot.Tools;
 using System;
@@ -130,6 +131,21 @@ namespace SineahBot.Data.Spells
                 },
             },
             description = "Bashes the target for massive damage. Tiring for the user."
+        };
+
+
+        // special
+        public static Spell SummonGuardian = new Spell("Summon guardian", new string[] { "summon" })
+        {
+            manaCost = 10,
+            needsTarget = false,
+            canSelfCast = true,
+            effects = new Spell.Effect[] {
+                new Spell.Effect.Summon<SummonBase>() {
+                    SummonTemplate = Templates.Critters.RabidRat,
+                },
+            },
+            description = "Call forth a protecting spirit!"
         };
     }
 }

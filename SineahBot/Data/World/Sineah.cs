@@ -1314,6 +1314,7 @@ namespace SineahBot.Data.World
             Underground.Rooms.ToxicWaste.AddToRoom(Underground.Characters.GiantRat2); // giant rat in toxic 2
             Underground.Rooms.ToxicWaste.AddToRoom(Underground.Characters.RabidRat4); // rabid rat in toxic 2
             Underground.Rooms.ToxicWaste.AddToRoom(Underground.Characters.RabidRat5); // rabid rat in toxic 2
+            Underground.Rooms.ToxicWaste.AddToRoom(Templates.Equipments.Trinkets.SewerTag); // sewer tag to summon rats!
             Underground.Rooms.CollectingRoom1.AddToRoom(Underground.Characters.Rat4); // rat in collector 1
             Underground.Rooms.DeterioratedDrain.AddToRoom(Underground.Characters.RabidRat6); // rabid rat in deteriorated
             Underground.Rooms.CrumbledCollector.AddToRoom(Underground.Characters.Skeleton1); // skeleton in crumbled

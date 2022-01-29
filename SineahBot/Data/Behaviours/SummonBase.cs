@@ -8,24 +8,21 @@ using System.Text.RegularExpressions;
 
 namespace SineahBot.Data.Behaviours
 {
-    public class MonsterBase : Behaviour
+    public class SummonBase : Behaviour
     {
-        public List<BehaviourMission.Hunt> targets = new List<BehaviourMission.Hunt>();
-        public MonsterBase() : base() { }
+        public Character Summoner = null;
+        public List<BehaviourMission.Hunt> Targets = new List<BehaviourMission.Hunt>();
+        public SummonBase(Character summoner) : base()
+        {
+            this.Summoner = summoner;
+        }
 
         public override void ParseMemory(RoomEvent e)
         {
             switch (e.type)
             {
                 case RoomEventType.CharacterEnters:
-                    if (FactionManager.GetFactionRelation(e.source.faction, Npc.faction) <= FactionRelation.Hostile) // always engage hostile characters
-                    {
-                        if (targets.Count(x => x.target == e.source) == 0)
-                            targets.Add(new BehaviourMission.Hunt(e, e.source));
-                        CombatManager.EngageCombat(Npc, e.source);
-                        return;
-                    }
-                    if (targets.Count == 0 || targets.Count(x => x.target == e.source) == 0) return;
+                    if (Targets.Count == 0 || Targets.Count(x => x.target == e.source) == 0) return;
                     CombatManager.EngageCombat(Npc, e.source);
                     return;
                 case RoomEventType.CharacterCasts:
@@ -45,13 +42,15 @@ namespace SineahBot.Data.Behaviours
 
         public virtual void ParseHostileEvent(RoomEvent e, Character source)
         {
-            if (source.faction == Npc.faction) return; // ignore same-faction events
-            var targetHunt = targets.FirstOrDefault(x => x.target == source);
+            if (source != this.Summoner && e.target != this.Summoner && e.target != this.Npc) return; // ignore events not affecting summoner/summon
+            var hostile = source == this.Summoner ? e.target : e.target == this.Npc ? source : null;
+            if (hostile == this.Summoner || hostile == this.Npc) return; // ignore summon-summoner interactions
+            var targetHunt = Targets.FirstOrDefault(x => x.target == hostile);
             if (targetHunt != null) return;
-            targetHunt = new BehaviourMission.Hunt(e, source);
-            if (targets.Count(x => x.target == source) == 0)
-                targets.Add(targetHunt);
-            CombatManager.EngageCombat(Npc, source);
+            targetHunt = new BehaviourMission.Hunt(e, hostile);
+            if (Targets.Count(x => x.target == hostile) == 0)
+                Targets.Add(targetHunt);
+            CombatManager.EngageCombat(Npc, hostile);
         }
 
         public override void ElectMission()
@@ -67,6 +66,14 @@ namespace SineahBot.Data.Behaviours
 
         public override void RunCurrentMission(Room room)
         {
+            // make sure the summon is in the same room as the summoner
+            if (this.Npc.currentRoomId != this.Summoner.currentRoomId)
+            {
+                var movementResult = RunTravelMove(room, RoomManager.GetRoomById(this.Summoner.currentRoomId));
+                if (movementResult != room) return; // managed to get closer to summoner, nothing else to do
+            }
+
+            // if the summon is in the same room as or can't reach the summoner
             if (currentMission is BehaviourMission.Fighting fighting)
             {
                 if (Npc.characterStatus != CharacterStatus.Combat)
@@ -89,13 +96,8 @@ namespace SineahBot.Data.Behaviours
 
         public override bool OnEnterRoom(Room room)
         {
-            foreach (var character in room.characters.Where(x => FactionManager.GetFactionRelation(x.faction, Npc.faction) <= FactionRelation.Hostile))
-            {
-                if (targets.Count(x => x.target == character) == 0)
-                    targets.Add(new BehaviourMission.Hunt(null, character));
-            }
-            if (targets.Count == 0) return false;
-            var hunted = targets.Where(x => room.characters.Contains(x.target));
+            if (Targets.Count == 0) return false;
+            var hunted = Targets.Where(x => room.characters.Contains(x.target));
             if (hunted.Count() == 0) return false;
             CombatManager.EngageCombat(Npc, hunted.Select(x => x.target).ToArray());
             return true;

@@ -152,6 +152,12 @@ namespace SineahBot.Data
             BehaviourManager.SetActiveForNpc(this, false);
             if (shop != null) shop.CloseShop();
             base.OnKilled(killer);
+            if (this.HasCharacterTag(CharacterTag.Summon))
+            {
+                // don't respawn a summoned unit and remove the behaviour
+                BehaviourManager.RemoveNPC(this);
+                return;
+            }
             var respawnTime = elite ? 300 : 60;
             new MudTimer(respawnTime, () =>
             {

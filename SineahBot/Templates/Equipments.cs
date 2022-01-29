@@ -72,7 +72,7 @@ namespace SineahBot.Templates
                 bonusHealth = 20,
                 bonusSpells = new List<Spell>() { Data.Spells.Equipment.Thrust, Data.Spells.Equipment.Counterweigt },
             };
-            public static Equipment Torch = new Equipment("Torch", EquipmentSlot.Weapon, new string[] {})
+            public static Equipment Torch = new Equipment("Torch", EquipmentSlot.Weapon, new string[] { })
             {
                 description = "An unlit torch lies there.",
                 details = "A simple common torch, that can be lit up and used to attack with Fire. Gives a small damage bonus, and the ability to cast Ignite.",
@@ -121,6 +121,12 @@ namespace SineahBot.Templates
                 description = "An emblem of Sineah throne here.",
                 details = "Emblem bestowed upon heros of Sineah. Gives a large health boost.",
                 bonusHealth = 40,
+            };
+            public static Equipment SewerTag = new Equipment("Sewer tag", EquipmentSlot.Trinket, new string[] { "sewertag", "sewer", "tag", "trinket" })
+            {
+                description = "A rare trinket lays here!",
+                details = "The strongest trinket in the game!",
+                bonusSpells = new List<Spell>() { Data.Spells.Equipment.SummonGuardian },
             };
         }
 
@@ -175,7 +181,7 @@ namespace SineahBot.Templates
 
         public static class Armor
         {
-            public static Equipment KoboldTunic = new Equipment("Kobold tunic", EquipmentSlot.Armor, new string[] { "koboldtunic", "ktunic", "koboldt","tunic","armor" })
+            public static Equipment KoboldTunic = new Equipment("Kobold tunic", EquipmentSlot.Armor, new string[] { "koboldtunic", "ktunic", "koboldt", "tunic", "armor" })
             {
                 description = "A kobold tunic is stored here.",
                 details = "Simple protective gear. Gives a small health regen boost.",

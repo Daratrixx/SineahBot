@@ -33,7 +33,7 @@ namespace SineahBot.Tools
             {
                 if (behaviour.active == active) return;
                 behaviour.active = active;
-                if (active) behaviour.OnEnterRoom(RoomManager.GetRoomById(behaviour.npc.currentRoomId));
+                if (active) behaviour.OnEnterRoom(RoomManager.GetRoomById(behaviour.Npc.currentRoomId));
             }
         }
 
@@ -74,7 +74,7 @@ namespace SineahBot.Tools
         {
             if (!behaviour.active)
                 return;
-            var room = RoomManager.GetRoomById(behaviour.npc.currentRoomId);
+            var room = RoomManager.GetRoomById(behaviour.Npc.currentRoomId);
             behaviour.Run(room);
         }
 

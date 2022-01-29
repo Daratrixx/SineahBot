@@ -1,5 +1,7 @@
-﻿using SineahBot.Data.Spells;
+﻿using SineahBot.Data.Behaviours;
+using SineahBot.Data.Spells;
 using SineahBot.Interfaces;
+using SineahBot.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -192,6 +194,36 @@ namespace SineahBot.Data
                     {
                         var c = target as Character;
                         c.RemoveAlteration(alteration);
+                    }
+                }
+            }
+
+            public class Summon<TBehaviour> : Effect
+                where TBehaviour : SummonBase
+            {
+                public NPC SummonTemplate;
+                public override string GetEffectDescription(ICaster caster = null)
+                {
+                    return $"- Summon a {SummonTemplate.GetName()} that will follow you and protect you.";
+                }
+
+                public override void RunEffect(ICaster caster, Entity target)
+                {
+                    if (caster is Character summoner)
+                    {
+                        // prepare data
+                        var room = RoomManager.GetRoomById(summoner.currentRoomId);
+                        var summon = SummonTemplate.Clone();
+                        summon.AddCharacterTag(CharacterTag.Summon);
+                        var behaviour = (TBehaviour)typeof(TBehaviour).GetConstructor(new Type[] { typeof(Character) }).Invoke(new object[] { summoner });
+
+                        // summon entity
+                        room.AddToRoom(summon, true);
+                        BehaviourManager.RegisterNPC(summon, behaviour);
+                    }
+                    else
+                    {
+                        throw new Exception("Only characters can use summoning spells");
                     }
                 }
             }

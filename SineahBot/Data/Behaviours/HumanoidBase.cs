@@ -62,7 +62,7 @@ namespace SineahBot.Data.Behaviours
         public bool SpreadRumor(Room room, Rumor rumor)
         {
             if (rumor == null || room == null) return false;
-            var characters = room.characters.Where(x => x != npc && !rumor.spreadTo.Contains(x));
+            var characters = room.characters.Where(x => x != Npc && !rumor.spreadTo.Contains(x));
             if (characters.Count() > 0)
             {
                 rumor.spreadTo.AddRange(characters);
@@ -179,7 +179,7 @@ namespace SineahBot.Data.Behaviours
         {
             if (SpreadRumor(room, rumor))
             {
-                CommandSay.Say(npc, room, $"Have you heard? {rumor.rumorText}");
+                CommandSay.Say(Npc, room, $"Have you heard? {rumor.rumorText}");
                 return true;
             }
             return false;
@@ -188,7 +188,7 @@ namespace SineahBot.Data.Behaviours
         {
             if (currentMission is BehaviourMission.Snitch snitch)
             {
-                CommandSay.Say(npc, room, snitch.GetCrimeRumor());
+                CommandSay.Say(Npc, room, snitch.GetCrimeRumor());
                 return true;
             }
             return false;
@@ -218,7 +218,7 @@ namespace SineahBot.Data.Behaviours
                 var source = match.Groups[1].Value;
                 var verb = RoomEvent.GetTypeFromVerb(match.Groups[2].Value);
                 var room = match.Groups[3].Value;
-                Say(RoomManager.GetRoomById(npc.currentRoomId), memoryTracker.ConfirmMemory(source, verb, room));
+                Say(RoomManager.GetRoomById(Npc.currentRoomId), memoryTracker.ConfirmMemory(source, verb, room));
             }
             match = AskTargetEvent.Match(e.speakingContent);
             if (match.Success)
@@ -227,16 +227,16 @@ namespace SineahBot.Data.Behaviours
                 var verb = RoomEvent.GetTypeFromVerb(match.Groups[2].Value);
                 var target = match.Groups[3].Value;
                 var room = match.Groups[4].Value;
-                Say(RoomManager.GetRoomById(npc.currentRoomId), memoryTracker.ConfirmMemory(source, verb, target, room));
+                Say(RoomManager.GetRoomById(Npc.currentRoomId), memoryTracker.ConfirmMemory(source, verb, target, room));
             }
             base.ParseSpeachEvent(e);
         }
 
         public override void ParseHostileEvent(RoomEvent e, Character source)
         {
-            if (npc.faction == source.faction) return;
-            CommandAct.Act(npc, e.room, "is horrified.");
-            CommandSay.Say(npc, e.room, "Oh no!");
+            if (Npc.faction == source.faction) return;
+            CommandAct.Act(Npc, e.room, "is horrified.");
+            CommandSay.Say(Npc, e.room, "Oh no!");
             missions.Add(BehaviourMission.Snitch.New<SnitchType>(e));
         }
     }
@@ -263,8 +263,8 @@ namespace SineahBot.Data.Behaviours
             if (base.OnEnterRoom(room)) return true;
             if (room.characters.Where(x => x.agent is Player).Count() > 0)
             {
-                CommandAct.Act(npc, room, "notices you and smiles.");
-                CommandSay.Say(npc, room, "Go' a coin for a poor soul?");
+                CommandAct.Act(Npc, room, "notices you and smiles.");
+                CommandSay.Say(Npc, room, "Go' a coin for a poor soul?");
                 return true;
             }
             return false;
@@ -286,7 +286,7 @@ namespace SineahBot.Data.Behaviours
             {
                 case RoomEventType.CharacterEnters:
                     if (targets.Count == 0 || targets.Count(x => x.target == e.source) == 0) return;
-                    CombatManager.EngageCombat(npc, e.source);
+                    CombatManager.EngageCombat(Npc, e.source);
                     return;
                 case RoomEventType.CharacterSpeaks:
                     ParseSpeachEvent(e);
@@ -308,19 +308,19 @@ namespace SineahBot.Data.Behaviours
 
         public override void ParseHostileEvent(RoomEvent e, Character source)
         {
-            if (source.faction == npc.faction) return;
+            if (source.faction == Npc.faction) return;
             //if (FactionManager.GetFactionRelation(source.faction, npc.faction) <= FactionRelation.Neutral) return;
             var targetHunt = targets.FirstOrDefault(x => x.target == source);
             if (targetHunt != null) return;
             targetHunt = new BehaviourMission.Hunt(e, source);
             targets.Add(targetHunt);
-            CombatManager.EngageCombat(npc, source);
+            CombatManager.EngageCombat(Npc, source);
         }
 
         public override void ElectMission()
         {
             if (currentMission is BehaviourMission.Fighting) return; // keep fighting mission
-            if (npc.characterStatus == CharacterStatus.Combat) // initiate fighting mission
+            if (Npc.characterStatus == CharacterStatus.Combat) // initiate fighting mission
             {
                 currentMission = new BehaviourMission.Fighting();
                 missions.Add(currentMission);
@@ -337,12 +337,12 @@ namespace SineahBot.Data.Behaviours
         {
             if (currentMission is BehaviourMission.Fighting fighting)
             {
-                if (npc.characterStatus != CharacterStatus.Combat)
+                if (Npc.characterStatus != CharacterStatus.Combat)
                 {
                     CompleteCurrentMission();
                     return;
                 }
-                var enemies = CombatManager.GetOpponents(npc);
+                var enemies = CombatManager.GetOpponents(Npc);
                 if (enemies == null || enemies.Count() == 0)
                 {
                     CompleteCurrentMission();
@@ -350,7 +350,7 @@ namespace SineahBot.Data.Behaviours
                 }
                 var target = room.characters.Where(x => enemies.Contains(x)).GetRandom();
                 if (target != null)
-                    CommandCombatAttack.Attack(npc, room, target);
+                    CommandCombatAttack.Attack(Npc, room, target);
                 return;
             }
             if (currentMission == null)
@@ -369,7 +369,7 @@ namespace SineahBot.Data.Behaviours
             if (targets.Count == 0) return false;
             var hunted = targets.Where(x => room.characters.Contains(x.target));
             if (hunted.Count() == 0) return false;
-            CombatManager.EngageCombat(npc, hunted.Select(x => x.target).ToArray());
+            CombatManager.EngageCombat(Npc, hunted.Select(x => x.target).ToArray());
             return true;
         }
     }
@@ -381,7 +381,7 @@ namespace SineahBot.Data.Behaviours
             switch (e.type)
             {
                 case RoomEventType.CharacterKills:
-                    Say(RoomManager.GetRoomById(npc.currentRoomId), "This is bad!");
+                    Say(RoomManager.GetRoomById(Npc.currentRoomId), "This is bad!");
                     ParseHostileEvent(e, e.source);
                     return;
                 default:
@@ -437,7 +437,7 @@ namespace SineahBot.Data.Behaviours
         public BehaviourMission OnInvestigateRegexMatch(RoomEvent e, Match match)
         {
             // check if the order is targeted toward this NPC
-            if (string.Equals(match.Groups[1].Value, npc.npcName, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(match.Groups[1].Value, Npc.npcName, StringComparison.OrdinalIgnoreCase))
             {
                 var investigationString = match.Groups[2].Value;
                 match = InvestigateCrimeRegex.Match(investigationString);
@@ -458,7 +458,7 @@ namespace SineahBot.Data.Behaviours
         public BehaviourMission OnPatrolRegexMatch(RoomEvent e, Match match)
         {
             // check if the order is targeted toward this NPC
-            if (string.Equals(match.Groups[1].Value, npc.npcName, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(match.Groups[1].Value, Npc.npcName, StringComparison.OrdinalIgnoreCase))
             {
                 var targetRoom = RoomManager.GetRoomByName(match.Groups[2].Value);
                 if (targetRoom != null)
@@ -476,7 +476,7 @@ namespace SineahBot.Data.Behaviours
         public override void ElectMission()
         {
             if (currentMission is BehaviourMission.Fighting) return; // keep fighting mission
-            if (npc.characterStatus == CharacterStatus.Combat) // initiate fighting mission
+            if (Npc.characterStatus == CharacterStatus.Combat) // initiate fighting mission
             {
                 currentMission = new BehaviourMission.Fighting();
                 missions.Add(currentMission);
@@ -494,7 +494,7 @@ namespace SineahBot.Data.Behaviours
                 currentMission = patrol;
                 return;
             }
-            if (npc.npcStatus == 0 || currentMission == null || !(currentMission is BehaviourMission.Report))
+            if (Npc.npcStatus == 0 || currentMission == null || !(currentMission is BehaviourMission.Report))
             {
                 currentMission = missions.FirstOrDefault(x => x is ReportType) as ReportType ?? new ReportType();
                 if (!missions.Contains(currentMission)) missions.Add(currentMission);
@@ -515,9 +515,9 @@ namespace SineahBot.Data.Behaviours
                 {
                     GuardReport(room, report);
                     report.reported = true;
-                    npc.npcStatus = 20;
+                    Npc.npcStatus = 20;
                 }
-                npc.npcStatus += 2; // rest more the longer the guard awaits orders
+                Npc.npcStatus += 2; // rest more the longer the guard awaits orders
                 return;
             }
             if (currentMission is BehaviourMission.Investigate investigate)
@@ -530,7 +530,7 @@ namespace SineahBot.Data.Behaviours
                 InvestigateRoom(room, investigate);
                 CompleteCurrentMission();
             }
-            if (npc.npcStatus > 0) --npc.npcStatus;
+            if (Npc.npcStatus > 0) --Npc.npcStatus;
             if (currentMission is BehaviourMission.Patrol patrol)
             {
                 if (room != patrol.destination)
@@ -538,7 +538,7 @@ namespace SineahBot.Data.Behaviours
                     RunTravel(room, patrol.destination);
                     return;
                 }
-                if (npc.npcStatus == 0)
+                if (Npc.npcStatus == 0)
                     CompleteCurrentMission();
             }
             base.RunCurrentMission(room);
@@ -567,9 +567,9 @@ namespace SineahBot.Data.Behaviours
             }
             if (eventReport.Count == 0)
                 eventReport.Add(emptyReports.GetRandom());
-            string output = $@"Guard {npc.npcName} reporting. {string.Join("; ", eventReport.Where(x => !string.IsNullOrWhiteSpace(x)))}";
+            string output = $@"Guard {Npc.npcName} reporting. {string.Join("; ", eventReport.Where(x => !string.IsNullOrWhiteSpace(x)))}";
 
-            CommandSay.Say(npc, room, output);
+            CommandSay.Say(Npc, room, output);
         }
 
         public string GetInvestigationReport(BehaviourMission.Investigate investigate)
@@ -584,7 +584,7 @@ namespace SineahBot.Data.Behaviours
 
         public void InvestigateRoom(Room room, BehaviourMission.Investigate investigate)
         {
-            CommandAct.Act(npc, room, "investigates the room.");
+            CommandAct.Act(Npc, room, "investigates the room.");
             var victimBody = room.FindInRoom<Container>(investigate.victimName);
             investigate.confirmVictim = victimBody != null;
             var report = missions.FirstOrDefault(x => x is ReportType) as ReportType ?? new ReportType();
@@ -689,7 +689,7 @@ namespace SineahBot.Data.Behaviours
             .Where(x => x.rumorText == rumorText);
             if (existingRumor.Count() == 0)
             {
-                CommandSay.Say(npc, e.room, @$"Trying to confirm an unknown rumor: ""{rumorText}""");
+                CommandSay.Say(Npc, e.room, @$"Trying to confirm an unknown rumor: ""{rumorText}""");
                 return;
             }
             var rumor = existingRumor.FirstOrDefault();
@@ -699,12 +699,12 @@ namespace SineahBot.Data.Behaviours
         {
             if (currentMission is BehaviourMission.Fighting fighting)
             {
-                if (npc.characterStatus != CharacterStatus.Combat)
+                if (Npc.characterStatus != CharacterStatus.Combat)
                 {
                     CompleteCurrentMission();
                     return;
                 }
-                var enemies = CombatManager.GetOpponents(npc);
+                var enemies = CombatManager.GetOpponents(Npc);
                 if (enemies == null || enemies.Count() == 0)
                 {
                     CompleteCurrentMission();
@@ -712,7 +712,7 @@ namespace SineahBot.Data.Behaviours
                 }
                 var target = enemies.Where(x => room.characters.Contains(x)).GetRandom();
                 if (target != null)
-                    CommandCombatAttack.Attack(npc, room, target);
+                    CommandCombatAttack.Attack(Npc, room, target);
                 return;
             }
             if (passiveGuards.Count > 0)
@@ -731,14 +731,14 @@ namespace SineahBot.Data.Behaviours
             if (rumor != null)
             {
                 // send to investigate
-                CommandSay.Say(npc, room, $"Guard {guard.npcName}, investigate {rumor.rumorText}");
+                CommandSay.Say(Npc, room, $"Guard {guard.npcName}, investigate {rumor.rumorText}");
                 rumor.reported = true;
             }
             else
             {
                 // send to a room
                 var patrolRoom = patrolRooms.First();
-                CommandSay.Say(npc, room, $"Guard {guard.npcName}, patrol to {patrolRoom.GetName()}.");
+                CommandSay.Say(Npc, room, $"Guard {guard.npcName}, patrol to {patrolRoom.GetName()}.");
                 // requeue room
                 patrolRooms.Remove(patrolRoom);
                 patrolRooms.Add(patrolRoom);
