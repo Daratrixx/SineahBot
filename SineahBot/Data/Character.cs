@@ -1,5 +1,5 @@
 ﻿using SineahBot.Commands;
-using SineahBot.Data.Templates;
+using SineahBot.Templates;
 using SineahBot.Interfaces;
 using SineahBot.Tools;
 using System;

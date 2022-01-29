@@ -1,9 +1,10 @@
-﻿using SineahBot.Tools;
+﻿using SineahBot.Data;
+using SineahBot.Tools;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SineahBot.Data.Templates
+namespace SineahBot.Templates
 {
     public static class CityFolks
     {

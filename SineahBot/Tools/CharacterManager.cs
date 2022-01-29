@@ -97,20 +97,20 @@ namespace SineahBot.Tools
             ClassProgressionManager.ApplyClassProgressionForCharacter(character, true);
             if (ClassProgressionManager.IsPhysicalClass(character.characterClass))
             {
-                character.AddToInventory(Data.Templates.Consumables.Bread, 3);
-                character.AddToInventory(Data.Templates.Consumables.DriedMeat);
+                character.AddToInventory(Templates.Consumables.Bread, 3);
+                character.AddToInventory(Templates.Consumables.DriedMeat);
             }
             if (ClassProgressionManager.IsMagicalClass(character.characterClass))
             {
-                character.AddToInventory(Data.Templates.Consumables.Bread, 3);
-                character.AddToInventory(Data.Templates.Consumables.Water);
+                character.AddToInventory(Templates.Consumables.Bread, 3);
+                character.AddToInventory(Templates.Consumables.Water);
             }
             if (ClassProgressionManager.IsSecretClass(character.characterClass))
             {
-                character.AddToInventory(Data.Templates.Consumables.Candy);
+                character.AddToInventory(Templates.Consumables.Candy);
             }
-            character.AddToInventory(Data.Templates.Equipments.Weapons.Dagger);
-            character.Equip(Data.Templates.Equipments.Weapons.Dagger);
+            character.AddToInventory(Templates.Equipments.Weapons.Dagger);
+            character.Equip(Templates.Equipments.Weapons.Dagger);
             characters[character.id] = character;
             SaveCharacter(character);
             character.faction = FactionManager.CreatePlayerRepFaction();
