@@ -7,11 +7,15 @@ namespace SineahBot.DataContext
     {
         public SineahDbContext()
         {
+            // apply migrations
+            this.Database.Migrate();
         }
 
         public SineahDbContext(DbContextOptions<SineahDbContext> options)
             : base(options)
         {
+            // apply migrations
+            this.Database.Migrate();
         }
 
         public virtual DbSet<CharacterEntity> Characters { get; set; }
