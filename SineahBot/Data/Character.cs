@@ -366,13 +366,16 @@ namespace SineahBot.Data
         }
         public virtual void OnKilled(Entity killer = null)
         {
-            var corpse = Containers.CreateContainerFromCharacter(this);
-            var room = RoomManager.GetRoomById(currentRoomId);
-            room.AddToRoom(corpse, false);
-            new MudTimer(300, () =>
+            if (!this.HasCharacterTag(CharacterTag.Summon))
             {
-                room.RemoveFromRoom(corpse, false);
-            });
+                var corpse = Containers.CreateContainerFromCharacter(this);
+                var room = RoomManager.GetRoomById(currentRoomId);
+                room.AddToRoom(corpse, false);
+                new MudTimer(300, () =>
+                {
+                    room.RemoveFromRoom(corpse, false);
+                });
+            }
             RoomManager.RemoveFromCurrentRoom(this, false);
             if (killer != null)
             {
