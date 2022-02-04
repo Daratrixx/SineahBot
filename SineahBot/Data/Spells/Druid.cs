@@ -90,5 +90,46 @@ namespace SineahBot.Data.Spells
                 })
             },
         };
+        public static Spell Animate = new Spell("Animate", new string[] { "anim", "summon" })
+        {
+            description = "If you are near vegetation, summons a powerful Ent to protect you.",
+            manaCost = 20,
+            needsTarget = false,
+            canSelfCast = true,
+            aggressiveSpell = false,
+            effects = new Spell.Effect[] {
+                new Spell.Effect.ConditionalEffect(
+                    new Spell.Effect.Summon<Behaviours.SummonBase>()
+                    {
+                        SummonTemplate = Templates.Summons.Ent,
+                    },
+                    new Spell.Effect.Custom(
+                        (caster,target) =>
+                        {
+                            if(caster is Character character)
+                            {
+                                character.RestoreMana(Animate.manaCost, Animate);
+                            }
+                        },
+                        (caster) =>
+                        {
+                            return "If you are not near vegetation, the mana cost is refunded.";
+                        }
+                    ),
+                    (caster, target) =>
+                    {
+                        if(caster is Character character)
+                        {
+                            var room = RoomManager.GetRoomById(character.currentRoomId);
+                            return !room.HasVegetation;
+                        }
+                        return true;
+                    },
+                    (s1, s2, caster) =>
+                    {
+                        return $"{s1}\n{s2}";
+                    })
+            },
+        };
     }
 }

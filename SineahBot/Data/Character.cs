@@ -311,6 +311,10 @@ namespace SineahBot.Data
 
         public int GetHealthRegeneration()
         {
+            if (this.HasCharacterTag(CharacterTag.Summon))
+            {
+                return sleeping ? 4 : 1;
+            }
             var output = 2 + bonusHealthRegen;
             if (sleeping) output *= 4;
             if (ClassProgressionManager.IsPhysicalClass(characterClass)) output += level / 2;

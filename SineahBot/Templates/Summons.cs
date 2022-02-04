@@ -20,13 +20,15 @@ namespace SineahBot.Templates
         };
         public static NPC Ent = new NPC()
         {
-            level = 5,
-            baseHealth = 90,
-            health = 90,
+            level = 6,
+            baseHealth = 110,
+            health = 110,
             name = "Ent",
             shortDescription = "An ent stands guard.",
-            longDescription = "Summoned fighter of nature.",
-            alternativeNames = new string[] { "treant" },
+            longDescription = "Summoned protecter of nature.",
+            alternativeNames = new string[] { "treant", "tree" },
+            bonusDamage = 5,
+            defaultAttackDamageType = DamageType.Bludgeoning,
             tags = new List<CharacterTag>() { CharacterTag.Summon, CharacterTag.Plant }
         };
         public static NPC Guardian = new NPC()

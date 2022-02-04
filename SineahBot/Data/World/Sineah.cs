@@ -964,7 +964,8 @@ namespace SineahBot.Data.World
                 };
                 public static Room shady = new Room("Sineah hidden street", $"{RegionPrefix}_ST_S2")
                 {
-                    description = "A shady back alley. West will lead back to the safety of the Commercial street. A manhole is pried open."
+                    description = "A shady back alley. West will lead back to the safety of the Commercial street. Hidden behind thick bushes, a manhole is pried open, leading underground.",
+                    HasVegetation = true,
                 };
                 public static Room plaza = new Room("Sineah central plaza", $"{RegionPrefix}_ST_PL")
                 {

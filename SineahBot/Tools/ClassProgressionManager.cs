@@ -127,7 +127,8 @@ namespace SineahBot.Tools
             .RegisterSpell(Data.Spells.Druid.Hibernate, 3)
             .RegisterSpell(Data.Spells.Druid.Wrath, 3)
             .RegisterSpell(Data.Spells.Druid.Metabolize, 4)
-            .RegisterSpell(Data.Spells.Druid.VenomousWhip, 5) },
+            .RegisterSpell(Data.Spells.Druid.VenomousWhip, 5)
+            .RegisterSpell(Data.Spells.Druid.Animate, 6) },
             { CharacterClass.Shaman, new ClassProgression(CharacterClass.Shaman, 20, 17, 10, 3)},
             { CharacterClass.Necromancer, new ClassProgression(CharacterClass.Necromancer, 24, 13, 15, 4)
             .RegisterSpell(Data.Spells.Necromancer.WitheringTouch, 2)
