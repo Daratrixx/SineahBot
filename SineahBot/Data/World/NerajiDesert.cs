@@ -53,27 +53,27 @@ namespace SineahBot.Data.World
             {
                 public static Room DesertRoad2 = new Room("Neraji desert", $"{RegionPrefix}_DE_R2")
                 {
-                    description = $"Looking West you can see a road. Every other directions look like endless sand."
+                    description = $"Looking West you can see a road. Every other direction looks like endless sand."
                 };
                 public static Room DesertRoad3 = new Room("Neraji emptiness", $"{RegionPrefix}_DE_R3")
                 {
-                    description = $"You are surounded by sand in every direction. You can make out a road to the West."
+                    description = $"You are surrounded by sand in every direction. You can make out a road to the West."
                 };
                 public static Room DesertRoad4 = new Room("Neraji dunes", $"{RegionPrefix}_DE_R4")
                 {
-                    description = $"You are surounded by sand in every direction."
+                    description = $"You are surrounded by sand in every direction."
                 };
                 public static Room DesertRoad5 = new Room("Neraji plateau", $"{RegionPrefix}_DE_R5")
                 {
-                    description = $"You are surounded by sand in every direction. You see an oasis to the East. Or is it a mirage ?"
+                    description = $"You are surrounded by sand in every direction. You see an oasis to the East. Or is it a mirage ?"
                 };
                 public static Room DesertRoad6 = new Room("Neraji plateau", $"{RegionPrefix}_DE_R6")
                 {
-                    description = $"You are surounded by sand in every direction. You see an oasis to the East. Or is it a mirage ?"
+                    description = $"You are surrounded by sand in every direction. You see an oasis to the East. Or is it a mirage ?"
                 };
                 public static Room DesertRoad7 = new Room("Neraji plateau", $"{RegionPrefix}_DE_R7")
                 {
-                    description = $"You are surounded by sand in every direction. You see an oasis to the East. Or is it a mirage ?"
+                    description = $"You are surrounded by sand in every direction. You see an oasis to the East. Or is it a mirage ?"
                 };
                 public static Room DesertRoad8 = new Room("Neraji plateau", $"{RegionPrefix}_DE_R8")
                 {
@@ -179,7 +179,7 @@ namespace SineahBot.Data.World
                 };
                 public static Room road1 = new Room("Antique road", $"{RegionPrefix}_CA_R1")
                 {
-                    description = "Standing on the timeless stones of this road, you can spot the ruins of a city up North. The ruins are craddled under a mountain burnt by the sun. You can make out the shape of a few streets between the destroyed buildings. Only a singular tower still stands. There is a gigantic pit, larger than the city itself, bordering the ruins."
+                    description = "Standing on the timeless stones of this road, you can spot the ruins of a city up North. The ruins are cradled under a mountain burnt by the sun. You can make out the shape of a few streets between the destroyed buildings. Only a singular tower still stands. There is a gigantic pit, larger than the city itself, bordering the ruins."
                 };
                 public static Room gate = new Room("Crumbled gate", $"{RegionPrefix}_CA_CG")
                 {

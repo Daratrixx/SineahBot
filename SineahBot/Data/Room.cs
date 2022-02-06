@@ -29,6 +29,8 @@ namespace SineahBot.Data
         public string name = "The Void";
         public bool isSpawnRoom = false;
         public bool HasVegetation = false;
+        public bool HasSunDamage = false;
+        public bool HasColdDamage = false;
         public string description = "Pure emptiness.";
 
         public List<Entity> entities = new List<Entity>();
