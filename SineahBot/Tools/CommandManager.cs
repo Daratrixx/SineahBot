@@ -81,7 +81,7 @@ namespace SineahBot.Tools
                     }
                     if (m2 == "!boost" && player.character != null)
                     {
-                        var exp = ClassProgressionManager.ExperienceForNextLevel(player.character.level);
+                        var exp = CharacterClassManager.ExperienceForNextLevel(player.character.level);
                         player.character.experience += exp;
                         player.Message($"Earned {exp} experience.");
                         return true;

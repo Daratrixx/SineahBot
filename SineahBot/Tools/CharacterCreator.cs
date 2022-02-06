@@ -97,11 +97,11 @@ namespace SineahBot.Tools
         // class
         private static string GetPossibleClassList()
         {
-            return String.Join("/", ClassProgressionManager.starterClass.Select(x => $"**{x}**"));
+            return String.Join("/", CharacterClassManager.starterClass.Select(x => $"**{x}**"));
         }
         private static string GetPossibleClassValues()
         {
-            return String.Join("|", ClassProgressionManager.starterClass.Union(ClassProgressionManager.secretClass));
+            return String.Join("|", CharacterClassManager.starterClass.Union(CharacterClassManager.secretClass));
         }
         private static CharacterCreationStep InputClass = new CharacterCreationStep($"What will be your characters starting **class**? (*type a class name such as [{GetPossibleClassList()}]*)",
         $"^({GetPossibleClassValues()})$",

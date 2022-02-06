@@ -19,8 +19,12 @@ namespace SineahBot.Data
         public Container currentContainer = null;
         public int baseHealth;
         public int baseMana;
+        public int basePhysicalPower;
+        public int baseMagicalPower;
+        public int baseHealthRegen;
+        public int baseManaRegen;
         public Dictionary<Item, int> items = new Dictionary<Item, int>();
-        public List<Spell> spells = new List<Spell>() { };
+        public List<Spell> baseSpells = new List<Spell>() { };
         public Dictionary<AlterationType, AlterationInstance> alterations = new Dictionary<AlterationType, AlterationInstance>();
         public List<CharacterTag> tags = new List<CharacterTag>();
         public Dictionary<EquipmentSlot, Equipment> equipments = new Dictionary<EquipmentSlot, Equipment>();
@@ -130,11 +134,11 @@ namespace SineahBot.Data
         public virtual string GetFullDescription(IAgent agent = null)
         {
             List<string> output = new List<string>();
-            if (ClassProgressionManager.IsPhysicalClass(characterClass))
+            if (CharacterClassManager.IsPhysicalClass(characterClass))
                 output.Add($"> {They} seem to have a powerful body.");
-            if (ClassProgressionManager.IsMagicalClass(characterClass))
+            if (CharacterClassManager.IsMagicalClass(characterClass))
                 output.Add($"> {Their} eyes glow with knowledge and power.");
-            if (ClassProgressionManager.IsSecretClass(characterClass))
+            if (CharacterClassManager.IsSecretClass(characterClass))
                 output.Add($"> {They} are shrouded by an aura of mistery.");
             output.Add(GetEquipmentDescription(agent as Character));
             output.Add(GetStateDescription(agent));
@@ -319,7 +323,7 @@ namespace SineahBot.Data
             }
             var output = 2 + bonusHealthRegen;
             if (sleeping) output *= 4;
-            if (ClassProgressionManager.IsPhysicalClass(characterClass)) output += level / 2;
+            if (CharacterClassManager.IsPhysicalClass(characterClass)) output += level / 2;
             if (HasAlteration(AlterationType.Burnt) && !HasCharacterTag(CharacterTag.Mecanical)) output /= 2;
             if (characterStatus == CharacterStatus.Combat) output /= 2;
             return output;
@@ -329,7 +333,7 @@ namespace SineahBot.Data
         {
             var output = 1 + bonusManaRegen;
             if (sleeping) output *= 4;
-            if (ClassProgressionManager.IsMagicalClass(characterClass)) output += level / 4;
+            if (CharacterClassManager.IsMagicalClass(characterClass)) output += level / 4;
             if (HasAlteration(AlterationType.Poisoned) && !HasCharacterTag(CharacterTag.Undead) && !HasCharacterTag(CharacterTag.Mecanical)) output /= 2;
             if (characterStatus == CharacterStatus.Combat) output /= 2;
             return output;
@@ -407,7 +411,7 @@ namespace SineahBot.Data
 
         public virtual int GetExperienceReward()
         {
-            int rewardExp = ClassProgressionManager.ExperienceForNextLevel(level) / 10;
+            int rewardExp = CharacterClassManager.ExperienceForNextLevel(level) / 10;
             if (this.agent is Player)
                 rewardExp += rewardExp / 10;
             else
@@ -479,7 +483,7 @@ namespace SineahBot.Data
 
         public virtual int GetWeaponDamage()
         {
-            var weaponDamage = bonusDamage + (ClassProgressionManager.IsPhysicalClass(characterClass) ? level * 2 : level);
+            var weaponDamage = bonusDamage + (CharacterClassManager.IsPhysicalClass(characterClass) ? level * 2 : level);
             if (HasAlteration(AlterationType.Empowered))
                 weaponDamage = (int)(weaponDamage * 1.5);
             if (HasAlteration(AlterationType.Weakened))
@@ -489,7 +493,7 @@ namespace SineahBot.Data
 
         public IEnumerable<Spell> GetSpells()
         {
-            return spells.Union(bonusSpells);
+            return baseSpells.Union(bonusSpells);
         }
 
         public Spell GetSpell(string spellName)
@@ -520,7 +524,7 @@ namespace SineahBot.Data
 
         public virtual int GetSpellPower()
         {
-            var bonusDamage = bonusSpellPower + (ClassProgressionManager.IsMagicalClass(characterClass) ? level * 2 : level);
+            var bonusDamage = bonusSpellPower + (CharacterClassManager.IsMagicalClass(characterClass) ? level * 2 : level);
             if (HasAlteration(AlterationType.Amplified))
                 bonusDamage = (int)(bonusDamage * 1.5);
             return bonusDamage;

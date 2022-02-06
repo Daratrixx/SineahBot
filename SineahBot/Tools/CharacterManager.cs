@@ -11,7 +11,6 @@ namespace SineahBot.Tools
 {
     public static class CharacterManager
     {
-
         public static int ExpMultiplier = 2;
         public static int GoldMultiplier = 2;
         public static int RegenerationInterval = 10;
@@ -61,7 +60,7 @@ namespace SineahBot.Tools
                 if (character == null) throw new Exception($"Impossible to find character with id {idCharacter}");
                 characters[idCharacter] = character;
                 character.pronouns = character.pronouns; // update the properties
-                ClassProgressionManager.ApplyClassProgressionForCharacter(character, true);
+                CharacterClassManager.ApplyClassProgressionForCharacter(character, true);
                 character.faction = FactionManager.CreatePlayerRepFaction();
                 return character;
             }
@@ -93,18 +92,18 @@ namespace SineahBot.Tools
             character.level = 1;
             character.experience = 0;
             character.gold = 90;
-            ClassProgressionManager.ApplyClassProgressionForCharacter(character, true);
-            if (ClassProgressionManager.IsPhysicalClass(character.characterClass))
+            CharacterClassManager.ApplyClassProgressionForCharacter(character, true);
+            if (CharacterClassManager.IsPhysicalClass(character.characterClass))
             {
                 character.AddToInventory(Templates.Consumables.Bread, 3);
                 character.AddToInventory(Templates.Consumables.DriedMeat);
             }
-            if (ClassProgressionManager.IsMagicalClass(character.characterClass))
+            if (CharacterClassManager.IsMagicalClass(character.characterClass))
             {
                 character.AddToInventory(Templates.Consumables.Bread, 3);
                 character.AddToInventory(Templates.Consumables.Water);
             }
-            if (ClassProgressionManager.IsSecretClass(character.characterClass))
+            if (CharacterClassManager.IsSecretClass(character.characterClass))
             {
                 character.AddToInventory(Templates.Consumables.Candy);
             }

@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace SineahBot.Tools
 {
-    public static class ClassProgressionManager
+    public static class CharacterClassManager
     {
         public static CharacterClass[] starterClass = new CharacterClass[] { CharacterClass.Militian, CharacterClass.Scholar };
         public static CharacterClass[] secretClass = new CharacterClass[] { CharacterClass.Druid, CharacterClass.Necromancer, CharacterClass.Rogue, CharacterClass.Barbarian };
@@ -178,8 +178,8 @@ namespace SineahBot.Tools
             var progression = classProgressions[character.characterClass];
             character.baseHealth = progression.baseHealth + character.level * progression.levelHealth;
             character.baseMana = progression.baseMana + character.level * progression.levelMana;
-            character.spells.Clear();
-            character.spells.AddRange(progression.availableSpells.Where(x => x.Value <= character.level).Select(x => x.Key));
+            character.baseSpells.Clear();
+            character.baseSpells.AddRange(progression.availableSpells.Where(x => x.Value <= character.level).Select(x => x.Key));
             if (maximize)
             {
                 character.health = character.MaxHealth;

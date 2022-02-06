@@ -11,7 +11,7 @@ namespace SineahBotTestsNUnit
 {
     public class CharacterProfilerTests
     {
-        private IEnumerable<CharacterClass> classList = ClassProgressionManager.magicalClass.Union(ClassProgressionManager.physicalClass);
+        private IEnumerable<CharacterClass> classList = CharacterClassManager.magicalClass.Union(CharacterClassManager.physicalClass);
 
         [Test]
         public void TestLevel1Classes()
@@ -29,7 +29,7 @@ namespace SineahBotTestsNUnit
             foreach (var c in classList)
             {
                 Character character = new Character() { characterClass = c, level = level };
-                ClassProgressionManager.ApplyClassProgressionForCharacter(character);
+                CharacterClassManager.ApplyClassProgressionForCharacter(character);
                 var profile = CharacterProfiler.ProfileCharacter(character);
                 var profileStr = $"{c} ({level})\n{profile}";
                 Console.WriteLine(profileStr);

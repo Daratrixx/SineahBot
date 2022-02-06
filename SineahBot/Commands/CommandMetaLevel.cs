@@ -18,13 +18,13 @@ namespace SineahBot.Commands
         {
             var className = GetArgument(2);
 
-            if (character.experience < ClassProgressionManager.ExperienceForNextLevel(character.level))
+            if (character.experience < CharacterClassManager.ExperienceForNextLevel(character.level))
             {
-                character.Message($"You don't have enough experience to level up ({character.experience}/{ClassProgressionManager.ExperienceForNextLevel(character.level)})");
+                character.Message($"You don't have enough experience to level up ({character.experience}/{CharacterClassManager.ExperienceForNextLevel(character.level)})");
                 return;
             }
 
-            var subclasses = ClassProgressionManager.GetAvailableClassChange(character);
+            var subclasses = CharacterClassManager.GetAvailableClassChange(character);
             if (subclasses.Length > 0)
             {
                 if (className == "")
@@ -71,10 +71,10 @@ namespace SineahBot.Commands
         public void LevelUpCharacterAs(Character character, CharacterClass targetClass)
         {
             character.characterClass = targetClass;
-            character.experience -= ClassProgressionManager.ExperienceForNextLevel(character.level);
+            character.experience -= CharacterClassManager.ExperienceForNextLevel(character.level);
             character.level += 1;
-            ClassProgressionManager.ApplyClassProgressionForCharacter(character, true);
-            character.Message($"You are now a level {character.level} {character.characterClass}! You will need a total of {ClassProgressionManager.ExperienceForNextLevel(character.level)} experience to reach the next level.");
+            CharacterClassManager.ApplyClassProgressionForCharacter(character, true);
+            character.Message($"You are now a level {character.level} {character.characterClass}! You will need a total of {CharacterClassManager.ExperienceForNextLevel(character.level)} experience to reach the next level.");
         }
     }
 }

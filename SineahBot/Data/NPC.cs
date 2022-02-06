@@ -195,7 +195,7 @@ namespace SineahBot.Data
                 health = health,
                 baseMana = baseMana,
                 mana = mana,
-                spells = spells,
+                baseSpells = baseSpells,
                 alternativeNames = alternativeNames,
                 characterClass = characterClass,
                 characterStatus = characterStatus,
