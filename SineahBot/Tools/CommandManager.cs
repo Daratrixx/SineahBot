@@ -1,5 +1,6 @@
 ﻿using SineahBot.Commands;
 using SineahBot.Data;
+using SineahBot.Extensions;
 using SineahBot.Interfaces;
 using System;
 using System.Collections.Generic;

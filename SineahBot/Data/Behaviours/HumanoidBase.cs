@@ -1,9 +1,10 @@
 ﻿using SineahBot.Commands;
+using SineahBot.Data.Enums;
+using SineahBot.Extensions;
 using SineahBot.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace SineahBot.Data.Behaviours

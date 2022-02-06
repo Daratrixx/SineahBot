@@ -1,4 +1,5 @@
 ﻿using SineahBot.Data;
+using SineahBot.Data.Enums;
 using SineahBot.Tools;
 using System;
 using System.Linq;

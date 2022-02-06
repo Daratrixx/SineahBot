@@ -1,12 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SineahBot.Data;
+﻿using SineahBot.Data;
+using SineahBot.Data.Enums;
 using SineahBot.Database.Entities;
 using SineahBot.Database.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using static SineahBot.Tools.CharacterCreator;
 
 namespace SineahBot.Tools

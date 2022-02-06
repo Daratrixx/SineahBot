@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
 using SineahBot.Data;
+using SineahBot.Data.Enums;
 using SineahBot.Database.Entities;
 using SineahBot.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SineahBot.Mappings
 {

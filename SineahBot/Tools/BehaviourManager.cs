@@ -1,9 +1,6 @@
-﻿using SineahBot.Commands;
-using SineahBot.Data;
-using System;
+﻿using SineahBot.Data;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace SineahBot.Tools
 {

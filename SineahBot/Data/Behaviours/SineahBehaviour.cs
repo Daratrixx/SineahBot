@@ -1,4 +1,5 @@
 ﻿using SineahBot.Commands;
+using SineahBot.Extensions;
 using SineahBot.Tools;
 using System;
 using System.Collections.Generic;

@@ -1,6 +1,8 @@
 using NUnit.Framework;
 using SineahBot.Data;
+using SineahBot.Data.Enums;
 using SineahBot.Tools;
+using SineahBotTestsNUnit.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;

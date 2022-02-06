@@ -1,9 +1,5 @@
 ﻿using SineahBot.Data;
-using SineahBot.Interfaces;
-using SineahBot.Tools;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using SineahBot.Data.Enums;
 using System.Text.RegularExpressions;
 
 namespace SineahBot.Commands

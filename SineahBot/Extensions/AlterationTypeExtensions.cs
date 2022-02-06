@@ -1,16 +1,10 @@
-﻿using SineahBot.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SineahBot.Data.Enums;
 
-namespace SineahBot.Data
+namespace SineahBot.Extensions
 {
-    public class Alteration : INamed
+    public static class AlterationTypeExtensions
     {
-        public AlterationType alteration;
-        public int remainingTime;
-
-        public static string GetAlterationDescription(AlterationType alteration)
+        public static string GetDescription(this AlterationType alteration)
         {
             switch (alteration)
             {
@@ -33,34 +27,5 @@ namespace SineahBot.Data
                 default: return "Unknown alteration, no description.";
             }
         }
-
-        public string GetName(IAgent agent = null)
-        {
-            return alteration.ToString();
-        }
-    }
-
-    public enum AlterationType
-    {
-        Burning, // get damaged over time
-        Burnt, // get reduced healing
-        Bleeding, // get damaged over time
-        Poisoned, // get reduced mana regen
-        Sickness, // get damaged over time
-        Weakened, // deal reduced damage
-        Blind, // can't see other entities, room descriptions, or directions
-        Deaf, // can't hear character talking, or access being locked/unlocked
-        Frenzied, // will attack a random target every few seconds
-        Taunted, // will attack the taunting target every few seconds
-        Sleeping, // can't perceive anything nor act, regenerates faster
-        Stunned, // can't perceive anything nor act
-        Corroded, // reduced armor
-
-        Invisible, // can't be seen by other characters
-        Shrouded, // hides identity
-        Warded, // get reduced magic damage and heal
-        Amplified, // deal increased magic damage and heal
-        Hardened, // get reduced physical damage
-        Empowered, // deal increased physical damage
     }
 }

@@ -1,7 +1,6 @@
 ﻿using SineahBot.Data;
-using System;
+using SineahBot.Data.Enums;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SineahBot.Templates
 {

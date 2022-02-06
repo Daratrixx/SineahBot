@@ -1,13 +1,14 @@
 ﻿using SineahBot.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace SineahBot.Data
 {
-    public class Entity : DataItem, INamed
+    public class Entity : INamed
     {
+        public Guid id { get; set; }
+        public string name { get; set; }
+
+        public string[] alternativeNames = new string[] { };
         public Entity()
         {
             id = Guid.NewGuid();

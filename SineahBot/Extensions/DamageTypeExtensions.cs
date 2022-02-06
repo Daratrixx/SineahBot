@@ -1,13 +1,10 @@
-﻿using SineahBot.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SineahBot.Data.Enums;
 
-namespace SineahBot.Data
+namespace SineahBot.Extensions
 {
-    public static class Damage
+    public static class DamageTypeExtensions
     {
-        public static string GetDamageTypeDescription(DamageType damageType)
+        public static string GetDescription(this DamageType damageType)
         {
             switch (damageType)
             {
@@ -27,23 +24,5 @@ namespace SineahBot.Data
                 default: return "Unknown damage type, no description.";
             }
         }
-    }
-
-    public enum DamageType
-    {
-        // physical
-        Bludgeoning,
-        Slashing,
-        Piercing,
-        // magical
-        Arcane,
-        Fire,
-        Cold,
-        Divine,
-        // other
-        Lightning,
-        Corrosive,
-        Poison,
-        Pure,
     }
 }

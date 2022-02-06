@@ -1,8 +1,4 @@
 ﻿using SineahBot.Commands;
-using SineahBot.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SineahBot.Data
 {

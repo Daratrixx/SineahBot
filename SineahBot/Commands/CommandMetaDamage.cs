@@ -1,9 +1,7 @@
 ﻿using SineahBot.Data;
-using SineahBot.Interfaces;
-using SineahBot.Tools;
+using SineahBot.Data.Enums;
+using SineahBot.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace SineahBot.Commands
@@ -33,7 +31,7 @@ namespace SineahBot.Commands
                 return;
             }
 
-            character.Message($"**DAMAGE TYPE** - *{damageType}*\n> *{Damage.GetDamageTypeDescription(damageType)}*");
+            character.Message($"**DAMAGE TYPE** - *{damageType}*\n> *{damageType.GetDescription()}*");
         }
     }
 }

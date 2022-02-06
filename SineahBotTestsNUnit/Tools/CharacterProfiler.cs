@@ -1,10 +1,8 @@
 ﻿using SineahBot.Data;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
-namespace SineahBot.Tools
+namespace SineahBotTestsNUnit.Tools
 {
     public static class CharacterProfiler
     {

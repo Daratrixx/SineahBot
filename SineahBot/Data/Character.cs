@@ -6,7 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text;
+using SineahBot.Data.Enums;
+using SineahBot.Extensions;
 
 namespace SineahBot.Data
 {
@@ -20,7 +21,7 @@ namespace SineahBot.Data
         public int baseMana;
         public Dictionary<Item, int> items = new Dictionary<Item, int>();
         public List<Spell> spells = new List<Spell>() { };
-        public Dictionary<AlterationType, Alteration> alterations = new Dictionary<AlterationType, Alteration>();
+        public Dictionary<AlterationType, AlterationInstance> alterations = new Dictionary<AlterationType, AlterationInstance>();
         public List<CharacterTag> tags = new List<CharacterTag>();
         public Dictionary<EquipmentSlot, Equipment> equipments = new Dictionary<EquipmentSlot, Equipment>();
         public Faction faction;
@@ -559,7 +560,7 @@ namespace SineahBot.Data
             foreach (var a in expired)
                 RemoveAlteration(a.alteration);
         }
-        public void OnAlterationTick(Alteration alteration)
+        public void OnAlterationTick(AlterationInstance alteration)
         {
             switch (alteration.alteration)
             {
@@ -607,7 +608,7 @@ namespace SineahBot.Data
         {
             if (!alterations.ContainsKey(alteration))
             {
-                alterations[alteration] = new Alteration() { alteration = alteration, remainingTime = duration };
+                alterations[alteration] = new AlterationInstance() { alteration = alteration, remainingTime = duration };
                 Message($"You are now **{alteration}**.");
             }
             else
@@ -675,63 +676,5 @@ namespace SineahBot.Data
         {
             return $"Character {GetName()}";
         }
-    }
-
-    public class CharacterMessage
-    {
-        public Guid id { get; set; }
-        public Guid idCharacter { get; set; }
-        public string idRoom { get; set; }
-        public string message { get; set; }
-    }
-
-    public enum CharacterStatus
-    {
-        Normal,
-        Combat,
-        Trade,
-        Search,
-        Workbench,
-        Unknown
-    }
-
-    public enum CharacterClass
-    {
-        None,
-        // physical origin
-        Militian,
-        // melee progression
-        Guard,
-        Footman,
-        Knight,
-        // range progression
-        Ranger,
-        Archer,
-        Sharpshooter,
-
-        // mental origin
-        Scholar,
-        // faith progression
-        Abbot,
-        Prelate,
-        Bishop,
-        // magic progression
-        Enchanter,
-        Mage,
-        Wizard,
-
-        // hybrid classes
-        Paladin, // Knight, faith augmentation
-        Fanatic, // Bishop, melee augmentation
-        Heretic, // Bishop, magic augmentation
-
-        // secret class
-        Druid,
-        Shaman,
-        Necromancer,
-        Lich,
-        Rogue,
-        Assassin,
-        Barbarian
     }
 }

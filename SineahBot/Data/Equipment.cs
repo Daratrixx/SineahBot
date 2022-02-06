@@ -1,8 +1,7 @@
-﻿using SineahBot.Interfaces;
+﻿using SineahBot.Data.Enums;
+using SineahBot.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace SineahBot.Data
 {
@@ -72,15 +71,5 @@ namespace SineahBot.Data
 
         public Action<Character> OnEquipped;
         public Action<Character> OnUnequipped;
-    }
-
-    public enum EquipmentSlot
-    {
-        Weapon,
-        Shield,
-        Armor,
-        Trinket,
-        Ring,
-        Familiar
     }
 }

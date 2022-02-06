@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SineahBot.Data.Enums;
 
-namespace SineahBot.Data
+namespace SineahBot.Extensions
 {
-    public class CharacterTags
+    public static class CharacterTagExtensions
     {
 
-        public static string GetTagDescription(CharacterTag tag)
+        public static string GetDescription(this CharacterTag tag)
         {
             switch (tag)
             {
@@ -18,14 +16,5 @@ namespace SineahBot.Data
                 default: return "Unknown tag, no description.";
             }
         }
-    }
-
-    public enum CharacterTag
-    {
-        Undead,
-        Beast,
-        Mecanical,
-        Summon,
-        Plant,
     }
 }
