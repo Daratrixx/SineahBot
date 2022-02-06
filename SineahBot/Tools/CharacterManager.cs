@@ -83,12 +83,13 @@ namespace SineahBot.Tools
         public static Character CreateCharacterForPlayer(CharacterCreationState state)
         {
             var character = new Character();
-            character.agent = state.player;
+            character.agent = state.Player;
             character.id = Guid.NewGuid();
-            character.name = state.name;
-            character.gender = state.gender;
-            character.pronouns = state.pronouns;
-            character.characterClass = state.characterClass;
+            character.name = state.Name;
+            character.gender = state.Gender;
+            character.pronouns = state.Pronouns;
+            character.characterClass = state.CharacterClass;
+            character.characterAncestry = state.CharacterAncestry;
             character.level = 1;
             character.experience = 0;
             character.gold = 90;
@@ -112,8 +113,8 @@ namespace SineahBot.Tools
             characters[character.id] = character;
             SaveCharacter(character);
             character.faction = FactionManager.CreatePlayerRepFaction();
-            state.player.idCharacter = character.id;
-            state.player.character = character;
+            state.Player.idCharacter = character.id;
+            state.Player.character = character;
             return character;
         }
 

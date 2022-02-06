@@ -38,7 +38,7 @@ namespace SineahBot.Data
                 _pronouns = value;
                 var split = value.Split('/');
                 if (split.Length <= 4)
-                    split = CharacterCreator.possiblePronouns[0].Split('/');
+                    split = CharacterCreator.PossiblePronouns[0].Split('/');
                 they = split[0];
                 They = they.Capitalize();
                 them = split[1];
