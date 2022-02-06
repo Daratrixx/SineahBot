@@ -13,6 +13,11 @@ namespace SineahBot.Mappings
     {
         public CharacterEntityProfile()
         {
+            this.CreateMap<string, CharacterAncestry>()
+                .ConstructUsing((str, context) => Enum.Parse<CharacterAncestry>(str))
+                .ReverseMap()
+                .ConstructUsing((characterAncestry, context) => characterAncestry.ToString());
+
             this.CreateMap<string, CharacterClass>()
                 .ConstructUsing((str, context) => Enum.Parse<CharacterClass>(str))
                 .ReverseMap()
@@ -25,6 +30,7 @@ namespace SineahBot.Mappings
 
             this.CreateMap<CharacterEntity, Character>()
                 .ForMember(x => x.id, x => x.MapFrom(x => x.Id))
+                .ForMember(x => x.characterAncestry, x => x.MapFrom(x => x.CharacterAncestry))
                 .ForMember(x => x.characterClass, x => x.MapFrom(x => x.CharacterClass))
                 .ForMember(x => x.gender, x => x.MapFrom(x => x.Gender))
                 .ForMember(x => x.pronouns, x => x.MapFrom(x => x.Pronouns))

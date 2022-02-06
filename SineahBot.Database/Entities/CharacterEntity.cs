@@ -10,6 +10,8 @@ namespace SineahBot.Database.Entities
 
         public string Pronouns { get; set; }
 
+        public string CharacterAncestry { get; set; }
+
         public string CharacterClass { get; set; }
 
         public int Level { get; set; }

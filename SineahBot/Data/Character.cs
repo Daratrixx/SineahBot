@@ -51,6 +51,7 @@ namespace SineahBot.Data
                 Themselves = themselves.Capitalize();
             }
         }
+        public CharacterAncestry characterAncestry { get; set; }
         public CharacterClass characterClass { get; set; }
         public int level { get; set; } = 1;
         public int experience { get; set; } = 0;
