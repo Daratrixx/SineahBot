@@ -11,13 +11,6 @@ namespace SineahBot.DataContext
             this.Database.Migrate();
         }
 
-        public SineahDbContext(DbContextOptions<SineahDbContext> options)
-            : base(options)
-        {
-            // apply migrations
-            this.Database.Migrate();
-        }
-
         public virtual DbSet<CharacterEntity> Characters { get; set; }
 
         public virtual DbSet<PlayerEntity> Players { get; set; }

@@ -509,12 +509,10 @@ namespace SineahBot.Data.World
             {
                 public static Room MainHall = new Room("University main hall", $"{RegionPrefix}_UMH")
                 {
-                    isSpawnRoom = true,
                     description = "This large hall serve as both an entry point and a gathering area. The only door opened to the public is the western door labeled \"**Library**\""
                 };
                 public static Room LibraryEntrance = new Room("Library entrance", $"{RegionPrefix}_ULE")
                 {
-                    isSpawnRoom = true,
                     description = "This is the entrance area for the library. It's not possible to enter yet, but a few books are displayed here for the public to read."
                 };
             }

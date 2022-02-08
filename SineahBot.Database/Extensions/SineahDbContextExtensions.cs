@@ -4,103 +4,192 @@ using SineahBot.DataContext;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace SineahBot.Database.Extensions
 {
     public static class SineahDbContextExtensions
     {
+        private static Mutex DatabaseTranscientLock = new Mutex();
+
         public static PlayerEntity LoadPlayer(this SineahDbContext db, ulong userId)
         {
-            var playerEntity = db.Players
+            DatabaseTranscientLock.WaitOne();
+            try
+            {
+                var playerEntity = db.Players
                 .AsNoTracking()
                 .FirstOrDefault(x => x.UserId == userId);
-            return playerEntity;
+                return playerEntity;
+            }
+            catch
+            {
+                DatabaseTranscientLock.ReleaseMutex();
+                throw;
+            }
         }
 
         public static void SavePlayer(this SineahDbContext db, PlayerEntity playerEntity)
         {
-            var exists = db.Players.AsQueryable()
+            DatabaseTranscientLock.WaitOne();
+            try
+            {
+                var exists = db.Players.AsQueryable()
                 .Where(x => x.UserId == playerEntity.UserId)
                 .Count() > 0;
-            if (exists)
-            {
-                db.Players.Update(playerEntity);
-            }
-            else
-            {
-                db.Players.Add(playerEntity);
-            }
+                if (exists)
+                {
+                    db.Players.Update(playerEntity);
+                }
+                else
+                {
+                    db.Players.Add(playerEntity);
+                }
 
-            db.ApplyChanges();
+                db.SaveChanges();
+                db.ChangeTracker.Clear();
+            }
+            catch
+            {
+                DatabaseTranscientLock.ReleaseMutex();
+                throw;
+            }
         }
 
         public static CharacterEntity LoadCharacter(this SineahDbContext db, Guid id)
         {
-            var characterEntity = db.Characters
+            DatabaseTranscientLock.WaitOne();
+            try
+            {
+                var characterEntity = db.Characters
                 .AsNoTracking()
                 .Include(x => x.Items)
                 .Include(x => x.Equipments)
                 .Include(x => x.Messages)
                 .FirstOrDefault(x => x.Id == id);
-            return characterEntity;
+                return characterEntity;
+            }
+            catch
+            {
+                DatabaseTranscientLock.ReleaseMutex();
+                throw;
+            }
         }
 
         public static void SaveCharacter(this SineahDbContext db, CharacterEntity characterEntity)
         {
-            var exists = db.Characters.AsQueryable()
-                .Where(x => x.Id == characterEntity.Id)
-                .Count() > 0;
-            if (exists)
+            DatabaseTranscientLock.WaitOne();
+            try
             {
-                db.Characters.Update(characterEntity);
-            }
-            else
-            {
-                db.Characters.Add(characterEntity);
-            }
+                var exists = db.Characters.AsQueryable()
+            .Where(x => x.Id == characterEntity.Id)
+            .Count() > 0;
+                if (exists)
+                {
+                    db.Characters.Update(characterEntity);
+                }
+                else
+                {
+                    db.Characters.Add(characterEntity);
+                }
 
-            db.ApplyChanges();
+                db.SaveChanges();
+                db.ChangeTracker.Clear();
+            }
+            catch
+            {
+                DatabaseTranscientLock.ReleaseMutex();
+                throw;
+            }
         }
 
         public static void RemoveCharacter(this SineahDbContext db, CharacterEntity characterEntity)
         {
-            db.CharacterItems.RemoveRange(db.CharacterItems.Where(x => x.IdCharacter == characterEntity.Id));
-            db.CharacterEquipment.RemoveRange(db.CharacterEquipment.Where(x => x.IdCharacter == characterEntity.Id));
-            db.Characters.Remove(characterEntity);
+            DatabaseTranscientLock.WaitOne();
+            try
+            {
+                db.CharacterItems.RemoveRange(db.CharacterItems.Where(x => x.IdCharacter == characterEntity.Id));
+                db.CharacterEquipment.RemoveRange(db.CharacterEquipment.Where(x => x.IdCharacter == characterEntity.Id));
+                db.Characters.Remove(characterEntity);
 
-            db.ApplyChanges();
+                db.SaveChanges();
+                db.ChangeTracker.Clear();
+            }
+            catch
+            {
+                DatabaseTranscientLock.ReleaseMutex();
+                throw;
+            }
         }
 
         public static IReadOnlyCollection<CharacterMessageEntity> LoadRoomMessages(this SineahDbContext db, string idRoom)
         {
-            var roomMessagesEntities = db.CharacterMessages.AsNoTracking()
-                .Where(x => x.IdRoom == idRoom)
-                .ToArray();
-            return roomMessagesEntities;
+            DatabaseTranscientLock.WaitOne();
+            try
+            {
+                var roomMessagesEntities = db.CharacterMessages.AsNoTracking()
+                    .Where(x => x.IdRoom == idRoom)
+                    .ToArray();
+                return roomMessagesEntities;
+            }
+            catch
+            {
+                DatabaseTranscientLock.ReleaseMutex();
+                throw;
+            }
         }
 
         public static void RemoveMessages(this SineahDbContext db, IEnumerable<CharacterMessageEntity> messages)
         {
-            db.CharacterMessages.RemoveRange(messages);
+            DatabaseTranscientLock.WaitOne();
+            try
+            {
+                db.CharacterMessages.RemoveRange(messages);
 
-            db.ApplyChanges();
+                db.SaveChanges();
+                db.ChangeTracker.Clear();
+            }
+            catch
+            {
+                DatabaseTranscientLock.ReleaseMutex();
+                throw;
+            }
         }
 
         public static void SaveRoomMessages(this SineahDbContext db, IEnumerable<CharacterMessageEntity> messages)
         {
-            // purge existing messages
-            db.RemoveMessages(db.CharacterMessages);
+            DatabaseTranscientLock.WaitOne();
+            try
+            {
+                // purge existing messages
+                db.CharacterMessages.RemoveRange(messages);
 
-            // save new messages
-            db.CharacterMessages.AddRange(messages);
+                // save new messages
+                db.CharacterMessages.AddRange(messages);
 
-            db.ApplyChanges();
+                db.SaveChanges();
+                db.ChangeTracker.Clear();
+            }
+            catch
+            {
+                DatabaseTranscientLock.ReleaseMutex();
+                throw;
+            }
         }
 
         public static void ApplyChanges(this SineahDbContext db)
         {
-            db.SaveChanges();
-            db.ChangeTracker.Clear();
+            DatabaseTranscientLock.WaitOne();
+            try
+            {
+                db.SaveChanges();
+                db.ChangeTracker.Clear();
+            }
+            catch
+            {
+                DatabaseTranscientLock.ReleaseMutex();
+                throw;
+            }
         }
     }
 }

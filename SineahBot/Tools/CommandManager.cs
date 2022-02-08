@@ -26,7 +26,7 @@ namespace SineahBot.Tools
                     var character = player.character;
                     if (character.currentRoomId == null)
                     {
-                        room = RoomManager.GetRoomById(RoomManager.GetSpawnRoomId());
+                        room = RoomManager.GetRoomById(RoomManager.GetSpawnRoomId(character.characterAncestry));
                         room.AddToRoom(character, false); // add the player character to room but don't show it to the player
                     }
                     else
