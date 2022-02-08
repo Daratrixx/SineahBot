@@ -60,8 +60,8 @@ namespace SineahBot.Tools
                 if (character == null) throw new Exception($"Impossible to find character with id {idCharacter}");
                 characters[idCharacter] = character;
                 character.pronouns = character.pronouns; // update the properties
-                CharacterClassManager.ApplyClassProgressionForCharacter(character, true);
                 character.faction = FactionManager.CreatePlayerRepFaction();
+                UpdateCharacterBaseStats(character);
                 return character;
             }
             return characters[idCharacter];
@@ -79,6 +79,18 @@ namespace SineahBot.Tools
             Program.Database.SaveCharacter(characterEntity);
         }
 
+        public static void UpdateCharacterBaseStats(Character character)
+        {
+            character.baseHealth = 0;
+            character.baseMana = 0;
+            character.basePhysicalPower = 0;
+            character.baseMagicalPower = 0;
+            character.baseHealthRegen = 0;
+            character.baseManaRegen = 0;
+            CharacterAncestryManager.ApplyAncestryProgressionForCharacter(character, true);
+            CharacterClassManager.ApplyClassProgressionForCharacter(character, true);
+        }
+
         public static Character CreateCharacterForPlayer(CharacterCreationState state)
         {
             var character = new Character();
@@ -92,7 +104,6 @@ namespace SineahBot.Tools
             character.level = 1;
             character.experience = 0;
             character.gold = 90;
-            CharacterClassManager.ApplyClassProgressionForCharacter(character, true);
             if (CharacterClassManager.IsPhysicalClass(character.characterClass))
             {
                 character.AddToInventory(Templates.Consumables.Bread, 3);
@@ -114,6 +125,7 @@ namespace SineahBot.Tools
             character.faction = FactionManager.CreatePlayerRepFaction();
             state.Player.idCharacter = character.id;
             state.Player.character = character;
+            UpdateCharacterBaseStats(character);
             return character;
         }
 

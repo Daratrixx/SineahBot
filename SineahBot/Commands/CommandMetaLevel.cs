@@ -73,7 +73,7 @@ namespace SineahBot.Commands
             character.characterClass = targetClass;
             character.experience -= CharacterClassManager.ExperienceForNextLevel(character.level);
             character.level += 1;
-            CharacterClassManager.ApplyClassProgressionForCharacter(character, true);
+            CharacterManager.UpdateCharacterBaseStats(character);
             character.Message($"You are now a level {character.level} {character.characterClass}! You will need a total of {CharacterClassManager.ExperienceForNextLevel(character.level)} experience to reach the next level.");
         }
     }
