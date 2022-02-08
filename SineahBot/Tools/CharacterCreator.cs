@@ -117,8 +117,8 @@ namespace SineahBot.Tools
             ConfirmGender,
             InputPronouns,
             ConfirmPronons,
-            //InputAncestry,
-            //ConfirmAncestry,
+            InputAncestry,
+            ConfirmAncestry,
             InputClass,
             ConfirmClass,
         };
