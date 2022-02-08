@@ -1,7 +1,9 @@
 ﻿using SineahBot.Commands;
 using SineahBot.Data;
+using SineahBot.Data.Enums;
 using SineahBot.Database.Entities;
 using SineahBot.Database.Extensions;
+using SineahBot.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -113,9 +115,9 @@ namespace SineahBot.Tools
         {
             return Rooms.Values.FirstOrDefault(x => string.Equals(x.name, name, StringComparison.OrdinalIgnoreCase));
         }
-        public static string GetSpawnRoomId()
+        public static string GetSpawnRoomId(CharacterAncestry ancestry)
         {
-            return Rooms.Values.First(x => x.isSpawnRoom).id;
+            return Rooms.Values.Where(x => x.AncestrySpawnRoom == ancestry).GetRandom().id;
         }
     }
 }

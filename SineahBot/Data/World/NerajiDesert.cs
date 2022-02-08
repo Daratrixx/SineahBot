@@ -1,4 +1,5 @@
-﻿using SineahBot.Tools;
+﻿using SineahBot.Data.Enums;
+using SineahBot.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -183,19 +184,20 @@ namespace SineahBot.Data.World
                 };
                 public static Room gate = new Room("Crumbled gate", $"{RegionPrefix}_CA_CG")
                 {
-                    description = ""
+                    description = "Once the only access through the fortifications of this ancient city, the great gate now lays crumbled on the ground, its strong wooden door reduced to dust long ago. The road leads South away from the city, while the main street can be accessed North."
                 };
                 public static Room streets = new Room("Collapsed streets", $"{RegionPrefix}_CA_CS0")
                 {
-                    description = ""
+                    description = "This wide street is littered with stones and debris. North is the centre of the ruins, going south will lead to the city gates."
                 };
                 public static Room plaza = new Room("Ruined plaza", $"{RegionPrefix}_CA_RP0")
                 {
-                    description = ""
+                    description = "Heart of the ruins. Crumbled statues and ravaged monuments evoke images of a once powerful city. North leads to a tall Spire, south reaches the main street connecting the plaza to the city gate."
                 };
-                public static Room tower = new Room("Scorched tower", $"{RegionPrefix}_CA_ST")
+                public static Room spire = new Room("Scorched spire", $"{RegionPrefix}_CA_ST")
                 {
-                    description = ""
+                    AncestrySpawnRoom = CharacterAncestry.Kobold,
+                    description = "This towering spire is the last building standing in the city. Its walls are charred as if a intense fire engulfed the place, contrasting highly with the white stones of the other ruins. South is the central plaza. East is a platform overlooking the pit, with stairs leading down."
                 };
                 public static Room stairs = new Room("Corroded starway", $"{RegionPrefix}_CA_CS1")
                 {
@@ -214,7 +216,7 @@ namespace SineahBot.Data.World
                     Rooms.gate,
                     Rooms.streets,
                     Rooms.plaza,
-                    Rooms.tower,
+                    Rooms.spire,
                     Rooms.stairs,
                     Rooms.platform,
                 };
@@ -242,7 +244,7 @@ namespace SineahBot.Data.World
                     directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.North },
                     directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.South },
                 };
-                public static RoomConnection plazaTower = new RoomConnection(Rooms.plaza, Rooms.tower)
+                public static RoomConnection plazaTower = new RoomConnection(Rooms.plaza, Rooms.spire)
                 {
                     directionFromA = new Commands.MoveDirection[] { Commands.MoveDirection.North },
                     directionFromB = new Commands.MoveDirection[] { Commands.MoveDirection.South },
@@ -348,7 +350,7 @@ namespace SineahBot.Data.World
             CityOfAsh.Rooms.gate.AddToRoom(CityOfAsh.Characters.scout1);
             CityOfAsh.Rooms.plaza.AddToRoom(CityOfAsh.Characters.warrior0);
             CityOfAsh.Rooms.plaza.AddToRoom(CityOfAsh.Characters.warrior1);
-            CityOfAsh.Rooms.tower.AddToRoom(CityOfAsh.Characters.lieutenant);
+            CityOfAsh.Rooms.spire.AddToRoom(CityOfAsh.Characters.lieutenant);
             CityOfAsh.Rooms.stairs.AddToRoom(CityOfAsh.Characters.warrior2);
 
             // signs

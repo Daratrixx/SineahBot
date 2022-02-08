@@ -1,4 +1,5 @@
-﻿using SineahBot.Tools;
+﻿using SineahBot.Data.Enums;
+using SineahBot.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -259,7 +260,7 @@ namespace SineahBot.Data.World
             {
                 public static Room CommonRoom = new Room("The Four Winds common room", $"{RegionPrefix}_ICR")
                 {
-                    isSpawnRoom = true,
+                    AncestrySpawnRoom = CharacterAncestry.Human,
                     description = "Several tables and chairs take most of the space in this large room. Next to the eastern door leading to the back room, a fireplace warms the body and soul on weary travellers. The large western door leads outside, the small northern door leads to the kitchen. On the south wall, a flight of stairs leads to the bedrooms above."
                 };
                 public static Room Kitchen = new Room("Kitchen", $"{RegionPrefix}_IKI")

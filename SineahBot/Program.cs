@@ -63,7 +63,8 @@ namespace SineahBot
         }
         private void OfflinePlay()
         {
-            var player = PlayerManager.CreateTestPlayer();
+            throw new ApplicationException("No longer supported.");
+            /*var player = PlayerManager.CreateTestPlayer();
             var spawnRoom = RoomManager.GetRoomById(RoomManager.GetSpawnRoomId());
             RoomManager.MoveToRoom(player.character, spawnRoom);
             string input = "";
@@ -72,7 +73,7 @@ namespace SineahBot
                 input = Console.ReadLine();
                 CommandManager.ParseUserMessage(0, input);
                 Player.CommitPlayerMessageBuffers();
-            }
+            }*/
         }
         public static DiscordSocketClient DiscordClient;
         private async Task OnlinePlay()

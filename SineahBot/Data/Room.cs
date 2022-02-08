@@ -1,4 +1,5 @@
 ﻿using SineahBot.Commands;
+using SineahBot.Data.Enums;
 using SineahBot.Data.Path;
 using SineahBot.Interfaces;
 using System;
@@ -27,7 +28,7 @@ namespace SineahBot.Data
         }
         public string id = "VOID";
         public string name = "The Void";
-        public bool isSpawnRoom = false;
+        public CharacterAncestry? AncestrySpawnRoom = null;
         public bool HasVegetation = false;
         public bool HasSunDamage = false;
         public bool HasColdDamage = false;
