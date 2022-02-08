@@ -30,7 +30,7 @@ namespace SineahBot.Tools
         public static void ApplyAncestryProgressionForCharacter(Character character, bool maximize = false)
         {
             var progression = AncestryProgressions[character.characterAncestry];
-            progression.ApplyToCharacter(character);
+            progression.ApplyToCharacter(character, maximize);
         }
 
         public static AncestryProgression CreateProgression(CharacterAncestry characterClass)

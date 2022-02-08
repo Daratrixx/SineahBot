@@ -321,7 +321,7 @@ namespace SineahBot.Data
             {
                 return sleeping ? 4 : 1;
             }
-            var output = 2 + bonusHealthRegen;
+            var output = baseHealthRegen + bonusHealthRegen;
             if (sleeping) output *= 4;
             if (CharacterClassManager.IsPhysicalClass(characterClass)) output += level / 2;
             if (HasAlteration(AlterationType.Burnt) && !HasCharacterTag(CharacterTag.Mecanical)) output /= 2;
@@ -331,7 +331,7 @@ namespace SineahBot.Data
 
         public int GetManaRegeneration()
         {
-            var output = 1 + bonusManaRegen;
+            var output = baseManaRegen + bonusManaRegen;
             if (sleeping) output *= 4;
             if (CharacterClassManager.IsMagicalClass(characterClass)) output += level / 4;
             if (HasAlteration(AlterationType.Poisoned) && !HasCharacterTag(CharacterTag.Undead) && !HasCharacterTag(CharacterTag.Mecanical)) output /= 2;
@@ -483,7 +483,7 @@ namespace SineahBot.Data
 
         public virtual int GetWeaponDamage()
         {
-            var weaponDamage = bonusDamage + (CharacterClassManager.IsPhysicalClass(characterClass) ? level * 2 : level);
+            var weaponDamage = basePhysicalPower + bonusDamage;
             if (HasAlteration(AlterationType.Empowered))
                 weaponDamage = (int)(weaponDamage * 1.5);
             if (HasAlteration(AlterationType.Weakened))
@@ -524,7 +524,7 @@ namespace SineahBot.Data
 
         public virtual int GetSpellPower()
         {
-            var bonusDamage = bonusSpellPower + (CharacterClassManager.IsMagicalClass(characterClass) ? level * 2 : level);
+            var bonusDamage = baseMagicalPower + bonusSpellPower;
             if (HasAlteration(AlterationType.Amplified))
                 bonusDamage = (int)(bonusDamage * 1.5);
             return bonusDamage;

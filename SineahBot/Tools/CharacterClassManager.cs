@@ -177,7 +177,7 @@ namespace SineahBot.Tools
         public static void ApplyClassProgressionForCharacter(Character character, bool maximize = false)
         {
             var progression = ClassProgressions[character.characterClass];
-            progression.ApplyToCharacter(character);
+            progression.ApplyToCharacter(character, maximize);
         }
         public static KeyValuePair<CharacterClass, int>[] GetAvailableClassChange(Character character)
         {
