@@ -54,6 +54,7 @@ namespace SineahBot
                 Logging.Log(e.Message);
                 Logging.Log(e.StackTrace);
                 SaveData();
+                Database.Cleanup();
             }
         }
         private Task Log(LogMessage msg)

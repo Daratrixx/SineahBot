@@ -22,10 +22,9 @@ namespace SineahBot.Database.Extensions
                 .FirstOrDefault(x => x.UserId == userId);
                 return playerEntity;
             }
-            catch
+            finally
             {
                 DatabaseTranscientLock.ReleaseMutex();
-                throw;
             }
         }
 
@@ -49,10 +48,9 @@ namespace SineahBot.Database.Extensions
                 db.SaveChanges();
                 db.ChangeTracker.Clear();
             }
-            catch
+            finally
             {
                 DatabaseTranscientLock.ReleaseMutex();
-                throw;
             }
         }
 
@@ -69,10 +67,9 @@ namespace SineahBot.Database.Extensions
                 .FirstOrDefault(x => x.Id == id);
                 return characterEntity;
             }
-            catch
+            finally
             {
                 DatabaseTranscientLock.ReleaseMutex();
-                throw;
             }
         }
 
@@ -96,10 +93,9 @@ namespace SineahBot.Database.Extensions
                 db.SaveChanges();
                 db.ChangeTracker.Clear();
             }
-            catch
+            finally
             {
                 DatabaseTranscientLock.ReleaseMutex();
-                throw;
             }
         }
 
@@ -115,10 +111,9 @@ namespace SineahBot.Database.Extensions
                 db.SaveChanges();
                 db.ChangeTracker.Clear();
             }
-            catch
+            finally
             {
                 DatabaseTranscientLock.ReleaseMutex();
-                throw;
             }
         }
 
@@ -132,10 +127,9 @@ namespace SineahBot.Database.Extensions
                     .ToArray();
                 return roomMessagesEntities;
             }
-            catch
+            finally
             {
                 DatabaseTranscientLock.ReleaseMutex();
-                throw;
             }
         }
 
@@ -149,10 +143,9 @@ namespace SineahBot.Database.Extensions
                 db.SaveChanges();
                 db.ChangeTracker.Clear();
             }
-            catch
+            finally
             {
                 DatabaseTranscientLock.ReleaseMutex();
-                throw;
             }
         }
 
@@ -170,10 +163,9 @@ namespace SineahBot.Database.Extensions
                 db.SaveChanges();
                 db.ChangeTracker.Clear();
             }
-            catch
+            finally
             {
                 DatabaseTranscientLock.ReleaseMutex();
-                throw;
             }
         }
 
@@ -185,11 +177,15 @@ namespace SineahBot.Database.Extensions
                 db.SaveChanges();
                 db.ChangeTracker.Clear();
             }
-            catch
+            finally
             {
                 DatabaseTranscientLock.ReleaseMutex();
-                throw;
             }
+        }
+
+        public static void Cleanup(this SineahDbContext db)
+        {
+            DatabaseTranscientLock.Close();
         }
     }
 }

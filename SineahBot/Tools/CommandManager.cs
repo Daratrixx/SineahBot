@@ -1,5 +1,6 @@
 ﻿using SineahBot.Commands;
 using SineahBot.Data;
+using SineahBot.Database.Extensions;
 using SineahBot.Extensions;
 using SineahBot.Interfaces;
 using System;
@@ -70,6 +71,7 @@ namespace SineahBot.Tools
                     {
                         Program.DiscordClient.StopAsync();
                         Program.SaveData();
+                        Program.Database.Cleanup();
                         Environment.Exit(0);
                     }
                     if (m2 == "!gold" && player.character != null)
