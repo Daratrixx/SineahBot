@@ -170,12 +170,12 @@ namespace SineahBot.Data
 
         public override int GetWeaponDamage()
         {
-            return level * (elite ? 3 : 2);
+            return (elite ? 10 : 5) + level * (elite ? 3 : 2);
         }
 
         public override int GetSpellPower()
         {
-            return level * (elite ? 3 : 2);
+            return (elite ? 10 : 5) + level * (elite ? 3 : 2);
         }
 
 
