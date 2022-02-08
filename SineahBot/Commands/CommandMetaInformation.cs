@@ -25,11 +25,11 @@ namespace SineahBot.Commands
             var damageRedution = character.GetArmorDamageReduction();
             return $@"
 **INFORMATION** - ***{character.name}***
-> *{character.characterClass.ToString().ToUpper()}* *level **{character.level}*** (*{character.experience}/{CharacterClassManager.ExperienceForNextLevel(character.level)} exp*)
+> *{character.characterAncestry.ToString().ToUpper()} {character.characterClass.ToString().ToUpper()}* *level **{character.level}*** (*{character.experience}/{CharacterClassManager.ExperienceForNextLevel(character.level)} exp*)
 > *Health* : **{character.health}/{character.MaxHealth}** (**+{character.bonusHealth}**) *regen*: **{character.GetHealthRegeneration()}** (**+{character.bonusHealthRegen}**)
 > *Mana* : **{character.mana}/{character.MaxMana}** (**+{character.bonusMana}**) *regen*: **{character.GetManaRegeneration()}** (**+{character.bonusManaRegen}**)
-> *Spell power* : **{character.GetSpellPower()}** ({(CharacterClassManager.IsMagicalClass(character.characterClass) ? "2" : "1")} x level **+{character.bonusSpellPower}**)
-> *Physical power* : **{character.GetWeaponDamage()}** ({(CharacterClassManager.IsPhysicalClass(character.characterClass) ? "2" : "1")} x level **+{character.bonusDamage}**)
+> *Spell power* : **{character.GetSpellPower()}** (**+{character.bonusSpellPower}**)
+> *Physical power* : **{character.GetWeaponDamage()}** (**+{character.bonusDamage}**)
 > *Armor*: **{character.bonusArmor}** ({(int)(damageRedution * 100)}% physical damage reduction)
 > *Deflection*: **{character.bonusDeflection}**% chance to halve incoming physical damage.
 > *Evasion*: **{5 + character.bonusEvasion}**% chance to halve incoming area damage.
