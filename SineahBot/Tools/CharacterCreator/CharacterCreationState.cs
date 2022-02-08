@@ -14,7 +14,7 @@ namespace SineahBot.Tools
             public string Gender { get; set; }
             public string Pronouns { get; set; }
             public CharacterClass CharacterClass { get; set; }
-            public CharacterAncestry CharacterAncestry { get; set; }
+            public CharacterAncestry CharacterAncestry { get; set; } = CharacterAncestry.Human;
         }
     }
 }
