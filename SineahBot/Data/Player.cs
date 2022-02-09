@@ -76,7 +76,7 @@ namespace SineahBot.Data
 
             if (Program.ONLINE && output != null)
             {
-                var channel = Program.DiscordClient.GetChannel(channelId) as IMessageChannel;
+                var channel = Application.Discord.DiscordClient.GetChannel(channelId) as IMessageChannel;
                 var result = channel.SendMessageAsync(output).Result;
                 return;
             }

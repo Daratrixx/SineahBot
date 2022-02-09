@@ -59,7 +59,7 @@ namespace SineahBot.Tools
                     {
                         ulong createGuildId = ulong.Parse(create.Groups[1].Value);
                         ulong createUserId = ulong.Parse(create.Groups[2].Value);
-                        Program.CreatePrivateChannel(createGuildId, createUserId);
+                        Application.Discord.CreatePrivateChannel(createGuildId, createUserId);
                         return true;
                     }
                     if (m2 == "!save")
@@ -69,7 +69,7 @@ namespace SineahBot.Tools
                     }
                     if (m2 == "!stop")
                     {
-                        Program.DiscordClient.StopAsync();
+                        Application.Discord.DiscordClient.StopAsync();
                         Program.SaveData();
                         Program.Database.Cleanup();
                         Environment.Exit(0);
