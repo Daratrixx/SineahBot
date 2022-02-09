@@ -15,7 +15,12 @@ namespace SineahBot.Application
         public static DiscordSocketClient DiscordClient;
         public static async Task OnlinePlay()
         {
-            DiscordClient = new DiscordSocketClient();
+            DiscordClient = new DiscordSocketClient(new DiscordSocketConfig()
+            {
+                AlwaysDownloadUsers = true,
+                GuildSubscriptions = false,
+                DefaultRetryMode = RetryMode.RetryRatelimit,
+            });
 
             DiscordClient.Log += Log;
 
@@ -61,6 +66,8 @@ namespace SineahBot.Application
         public static Task CreatePrivateChannel(ulong guildId, ulong userId)
         {
             var guild = DiscordClient.GetGuild(guildId);
+            // try manually fetching user to add ensure its presence in cache?
+            //DiscordClient.GetUser(userId);
             var user = guild.GetUser(userId);
             return CreatePrivateChannel(guild, user);
         }
