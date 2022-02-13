@@ -8,7 +8,5 @@ namespace SineahBot.Database.Entities
         public ulong UserId { get; set; }
         public Guid? IdCharacter { get; set; }
         public string Settings { get; set; }
-
-        public CharacterEntity Character { get; set; }
     }
 }

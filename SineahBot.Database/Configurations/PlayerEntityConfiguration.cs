@@ -11,12 +11,6 @@ namespace SineahBot.Database.Configurations
             builder
                 .HasKey(x => x.UserId);
 
-            builder
-                .HasOne(x => x.Character)
-                .WithOne(x => x.Player)
-                .HasForeignKey<PlayerEntity>(x => x.IdCharacter)
-                .HasPrincipalKey<CharacterEntity>(x => x.Id);
-
             System.Console.WriteLine($"Configure<{nameof(PlayerEntityConfiguration)}>");
         }
     }

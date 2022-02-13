@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SineahBot.DataContext;
 
 namespace SineahBot.Database.Migrations
 {
     [DbContext(typeof(SineahDbContext))]
-    partial class SineahDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220213113720_FixConfiguration")]
+    partial class FixConfiguration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

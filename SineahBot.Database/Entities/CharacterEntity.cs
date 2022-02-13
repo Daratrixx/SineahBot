@@ -20,8 +20,6 @@ namespace SineahBot.Database.Entities
 
         public int Gold { get; set; }
 
-        public PlayerEntity Player { get; set; }
-
         public ICollection<CharacterItemEntity> Items { get; set; }
 
         public ICollection<CharacterEquipmentEntity> Equipments { get; set; }

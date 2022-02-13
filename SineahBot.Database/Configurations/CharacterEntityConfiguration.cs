@@ -26,12 +26,6 @@ namespace SineahBot.Database.Configurations
                 .Property(e => e.CharacterAncestry)
                 .HasDefaultValue("Human");
 
-            builder
-                .HasOne(x => x.Player)
-                .WithOne(x => x.Character)
-                .HasForeignKey<PlayerEntity>(x => x.IdCharacter)
-                .HasPrincipalKey<CharacterEntity>(x => x.Id);
-
             System.Console.WriteLine($"Configure<{nameof(CharacterEntityConfiguration)}>");
         }
     }
