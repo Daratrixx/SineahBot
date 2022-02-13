@@ -1,8 +1,6 @@
 ﻿using SineahBot.Commands;
 using SineahBot.Data;
 using SineahBot.Data.Enums;
-using SineahBot.Database.Entities;
-using SineahBot.Database.Extensions;
 using SineahBot.Extensions;
 using System;
 using System.Collections.Generic;
@@ -25,9 +23,8 @@ namespace SineahBot.Tools
         }
         public static void LoadRoomMessages(Room room)
         {
-            var messageEntities = Program.Database.LoadRoomMessages(room.id);
-            var messages = messageEntities.Select(x => Program.Mapper.Map<CharacterMessageEntity, CharacterMessage>(x));
-            if (messages.Count() == 0) return;
+            var messages = PersistenceManager.GetRoomMessages(room);
+            if (!messages.Any()) return;
             foreach (var message in messages)
             {
                 room.AddToRoom(new Display.PlayerMessage(message.idCharacter, message.message), false);
@@ -41,8 +38,7 @@ namespace SineahBot.Tools
         {
             var displays = Rooms.Values.SelectMany(x => x.displays);
             var messages = displays.Where(x => x is Display.PlayerMessage).Select(x => x as Display.PlayerMessage);
-            var messageEntities = messages.Select(x => Program.Mapper.Map<Display.PlayerMessage, CharacterMessageEntity>(x)).ToArray();
-            Program.Database.SaveRoomMessages(messageEntities);
+            PersistenceManager.SaveRoomMessages(messages);
         }
         public static void RemoveCharacterMessages(Character character)
         {
@@ -51,8 +47,6 @@ namespace SineahBot.Tools
                 var room = Rooms[message.idRoom];
                 room.entities.RemoveAll(x => x is Display.PlayerMessage m && m.idWritter == character.id);
             }
-            var messageEntities = character.messages.Select(x => Program.Mapper.Map<CharacterMessage, CharacterMessageEntity>(x)).ToArray();
-            Program.Database.RemoveMessages(messageEntities);
         }
         public static void LoadRoomConnections(IEnumerable<RoomConnection> roomConnections)
         {

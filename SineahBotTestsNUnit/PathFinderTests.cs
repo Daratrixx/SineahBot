@@ -7,8 +7,7 @@ namespace SineahBotTestsNUnit
         [OneTimeSetUp]
         public void Setup()
         {
-            SineahBot.Program.ConfigureDatabase();
-            SineahBot.Program.ConfigureAutomapper();
+            SineahBot.Tools.PersistenceManager.ForceStaticInit();
             SineahBot.Data.World.Worlds.LoadWorlds();
             SineahBot.Tools.PathBuilder.BuildGraphs();
         }

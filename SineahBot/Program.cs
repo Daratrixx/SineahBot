@@ -18,42 +18,18 @@ namespace SineahBot
         // Scaffold-DbContext "DataSource=../SineahBot.sqlite" Microsoft.EntityFrameworkCore.Sqlite -ContextDir DataContext -OutputDir DataContext -Force
 
         public static readonly bool ONLINE = true;
-        public static SineahDbContext Database { get; private set; }
-        public static IMapper Mapper { get; private set; }
 
 
         public static void Main(string[] args)
        => new Program().MainAsync().GetAwaiter().GetResult();
 
-        public static void ConfigureDatabase()
-        {
-            Database = new SineahDbContext();
-        }
-
-        public static void ConfigureAutomapper()
-        {
-            var config = new MapperConfiguration(cfg => cfg.AddMaps(typeof(Program).Assembly));
-
-            Mapper = config.CreateMapper();
-        }
-
-        public static void SaveData()
-        {
-            CharacterManager.SavePlayerCharacters();
-            PlayerManager.SavePlayers();
-            RoomManager.SaveRooms();
-            Database.ApplyChanges();
-        }
-
         public async Task MainAsync()
         {
-            ConfigureDatabase();
-            ConfigureAutomapper();
             Worlds.LoadWorlds();
             BehaviourManager.StartBehaviourTimer();
             new MudInterval(300, () =>
             {
-                SaveData();
+                PersistenceManager.SaveAll();
             });
             try
             {
@@ -66,8 +42,8 @@ namespace SineahBot
             {
                 Logging.Log(e.Message);
                 Logging.Log(e.StackTrace);
-                SaveData();
-                Database.Cleanup();
+                PersistenceManager.SaveAll();
+                PersistenceManager.Cleanup();
             }
         }
         private void OfflinePlay()

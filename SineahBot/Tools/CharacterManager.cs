@@ -1,7 +1,5 @@
 ﻿using SineahBot.Data;
 using SineahBot.Data.Enums;
-using SineahBot.Database.Entities;
-using SineahBot.Database.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,14 +47,14 @@ namespace SineahBot.Tools
             var playerCharacters = characters.Values.Where(x => x.agent is Player).ToArray();
             foreach (var character in playerCharacters)
             {
-                SaveCharacter(character);
+                PersistenceManager.SaveCharacter(character);
             }
         }
         public static Character GetCharacter(Guid idCharacter)
         {
             if (!characters.ContainsKey(idCharacter))
             {
-                var character = LoadCharacter(idCharacter);
+                var character = PersistenceManager.LoadCharacter(idCharacter);
                 if (character == null) throw new Exception($"Impossible to find character with id {idCharacter}");
                 characters[idCharacter] = character;
                 character.pronouns = character.pronouns; // update the properties
@@ -65,18 +63,6 @@ namespace SineahBot.Tools
                 return character;
             }
             return characters[idCharacter];
-        }
-
-        public static Character LoadCharacter(Guid id)
-        {
-            var characterEntity = Program.Database.LoadCharacter(id);
-            return Program.Mapper.Map<CharacterEntity, Character>(characterEntity);
-        }
-
-        public static void SaveCharacter(Character character)
-        {
-            var characterEntity = Program.Mapper.Map<Character, CharacterEntity>(character);
-            Program.Database.SaveCharacter(characterEntity);
         }
 
         public static void UpdateCharacterBaseStats(Character character)
@@ -121,7 +107,7 @@ namespace SineahBot.Tools
             character.AddToInventory(Templates.Equipments.Weapons.Dagger);
             character.Equip(Templates.Equipments.Weapons.Dagger);
             characters[character.id] = character;
-            SaveCharacter(character);
+            PersistenceManager.SaveCharacter(character);
             character.faction = FactionManager.CreatePlayerRepFaction();
             state.Player.idCharacter = character.id;
             state.Player.character = character;
@@ -139,8 +125,7 @@ namespace SineahBot.Tools
             character.agent = null;
             // clear character data
             RoomManager.RemoveCharacterMessages(character);
-            var characterEntity = Program.Mapper.Map<Character, CharacterEntity>(character);
-            Program.Database.RemoveCharacter(characterEntity);
+            PersistenceManager.RemoveCharacter(character);
 
             // clear player state and prepare for new character
             player.idCharacter = null;

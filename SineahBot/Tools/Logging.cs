@@ -2,28 +2,53 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading;
 
 namespace SineahBot.Tools
 {
     public static class Logging
     {
+        public static readonly string SessionLogfilePath = $"../logs/{DateTime.Now.ToString("yyyy-MM-dd hh-mm-ss")}.log";
+
+        private static readonly Mutex LoggingMutex = new Mutex();
+
         public static void Log(string message)
         {
-            using (var stream = File.AppendText($"../logs/{DateTime.Today.ToString("yyyy-MM-dd hh-mm-ss")}.log"))
+            try
             {
-                stream.WriteLine(message);
+                LoggingMutex.WaitOne();
+                using (var stream = File.AppendText(SessionLogfilePath))
+                {
+                    stream.WriteLine(message);
+                    Console.WriteLine(message);
+                }
             }
-            Console.WriteLine(message);
+            finally
+            {
+                LoggingMutex.ReleaseMutex();
+            }
         }
         public static void Log(Exception e)
         {
-            using (var stream = File.AppendText($"../logs/{DateTime.Today.ToString("yyyy-MM-dd hh-mm-ss")}.log"))
+            try
             {
-                stream.WriteLine(e.Message);
-                stream.WriteLine(e.StackTrace);
+                LoggingMutex.WaitOne();
+                using (var stream = File.AppendText(SessionLogfilePath))
+                {
+                    while (e != null)
+                    {
+                        stream.WriteLine(e.Message);
+                        stream.WriteLine(e.StackTrace);
+                        Console.WriteLine(e.Message);
+                        Console.WriteLine(e.StackTrace);
+                        e = e.InnerException;
+                    }
+                }
             }
-            Console.WriteLine(e.Message);
-            Console.WriteLine(e.StackTrace);
+            finally
+            {
+                LoggingMutex.ReleaseMutex();
+            }
         }
     }
 }

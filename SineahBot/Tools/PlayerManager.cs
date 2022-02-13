@@ -1,6 +1,4 @@
 ﻿using SineahBot.Data;
-using SineahBot.Database.Entities;
-using SineahBot.Database.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +17,7 @@ namespace SineahBot.Tools
                 return player;
 
             // attempt to load player from database
-            player = LoadPlayer(userId);
+            player = PersistenceManager.LoadPlayer(userId);
 
             // create and return new player
             if (player == null)
@@ -31,8 +29,10 @@ namespace SineahBot.Tools
                     playerSettings = new PlayerSettings(),
                 };
                 players[userId] = player;
+                PersistenceManager.SavePlayer(player);
                 return player;
             }
+
             // load and returns existing player
             if (player.idCharacter != null)
             {
@@ -52,35 +52,19 @@ namespace SineahBot.Tools
             return player;
         }
 
-        public static Player LoadPlayer(ulong userId)
-        {
-            var playerEntity = Program.Database.LoadPlayer(userId);
-            if (playerEntity == null)
-            {
-                return null;
-            }
-            return Program.Mapper.Map<PlayerEntity, Player>(playerEntity);
-        }
-
-        public static void SavePlayer(Player player)
-        {
-            var playerEntity = Program.Mapper.Map<Player, PlayerEntity>(player);
-            Program.Database.SavePlayer(playerEntity);
-        }
         public static void SavePlayers()
         {
-            var playerEntities = players.Values.Select(x => Program.Mapper.Map<Player, PlayerEntity>(x)).ToArray();
-            Program.Database.UpdateRange(playerEntities);
+            PersistenceManager.SavePlayers(players.Values);
         }
 
         public static void DisconnectPlayer(Player player)
         {
             if (player.character != null && player.character.currentRoomId != Guid.Empty.ToString())
             {
-                CharacterManager.SaveCharacter(player.character);
+                PersistenceManager.SaveCharacter(player.character);
                 RoomManager.RemoveFromCurrentRoom(player.character, false);
             }
-            SavePlayer(player);
+            PersistenceManager.SavePlayer(player);
             players.Remove(player.userId);
         }
 

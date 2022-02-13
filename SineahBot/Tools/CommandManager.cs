@@ -1,6 +1,5 @@
 ﻿using SineahBot.Commands;
 using SineahBot.Data;
-using SineahBot.Database.Extensions;
 using SineahBot.Extensions;
 using SineahBot.Interfaces;
 using System;
@@ -19,10 +18,10 @@ namespace SineahBot.Tools
             if (ParseAdminCommand(userId, message, channelId)) return;
             var player = PlayerManager.GetPlayer(userId);
             if (channelId.HasValue) player.channelId = channelId.Value;
-            if (ParseMetaCommand(player, message)) return;
             switch (player.playerStatus)
             {
                 case PlayerStatus.InCharacter:
+                    if (ParseMetaCommand(player, message)) break;
                     Room room = null;
                     var character = player.character;
                     if (character.currentRoomId == null)
@@ -64,14 +63,14 @@ namespace SineahBot.Tools
                     }
                     if (m2 == "!save")
                     {
-                        Program.SaveData();
+                        PersistenceManager.SaveAll();
                         return true;
                     }
                     if (m2 == "!stop")
                     {
                         Application.Discord.DiscordClient.StopAsync();
-                        Program.SaveData();
-                        Program.Database.Cleanup();
+                        PersistenceManager.SaveAll();
+                        PersistenceManager.Cleanup();
                         Environment.Exit(0);
                     }
                     if (m2 == "!gold" && player.character != null)
